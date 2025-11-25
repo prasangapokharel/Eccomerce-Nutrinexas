@@ -65,3 +65,8 @@ NGROK_INFO.txt
 # Build files
 /public/css/tailwind.css.map
 /public/js/*.map
+
+# Large binaries
+ngrok.exe
+ngrok
+*.exe
