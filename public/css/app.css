@@ -1,0 +1,357 @@
+
+
+/* @import url('https://fonts.googleapis.com/css2?family=Fjalla+One&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&amp;display=swap');
+* {
+            font-family: 'Lexend', 'sans-serif';
+    }    
+body {
+            display: fixed;
+            font-family: 'Lexend', 'sans-serif';
+  font-weight: 200;
+  font-style: normal
+          
+        }
+        header{
+        display: fixed;
+            font-family: 'Lexend', 'sans-serif';
+
+        }
+        footer{
+            font-family: 'Lexend', 'sans-serif';
+
+        }
+
+    .card{
+background: white;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            /* Updated clip-path for subtle corner clips matching your image */
+    }
+
+    /* Native App Login Page Styles */
+    .login-page {
+        background-attachment: fixed;
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+    
+    /* Smooth transitions for login form */
+    .login-form {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95);
+    }
+    
+    /* Native app input styles */
+    .native-input {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 12px;
+        font-size: 16px; /* Prevents zoom on iOS */
+    }
+    
+    /* Native app button styles */
+    .native-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        border-radius: 12px;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
+    
+
+    .clip{
+        border-radius: 8px;
+            padding: 12px 24px;
+                    clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+overflow: hidden;
+    
+    }
+    .productclip{
+            border-radius: 24px;
+
+overflow: hidden;
+    }
+   /* Base Button Styling for admin and app pages */
+   .btn {
+     display: inline-flex;
+     align-items: center;
+     justify-content: center;
+     height: 2.5rem; /* shadcn default height */
+     padding: 0 1rem; /* shadcn default padding */
+     font-size: 0.875rem; /* shadcn default font size */
+     font-weight: 600;
+     border-radius: 12px;
+     background-color: var(--primary-color, #7C3AED);
+     color: #FFFFFF;
+     border: none;
+     cursor: pointer;
+     transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+     text-decoration: none;
+   }
+   .btn:hover {
+     background-color: var(--primary-light-color, #8B5CF6);
+   }
+   .btn:disabled {
+     opacity: 0.5;
+     cursor: not-allowed;
+   }
+
+   /* Primary Button Styling */
+
+   .cardclip{
+    border-radius: 18px;
+   }
+.input {
+  display: inline-flex;
+  align-items: center;
+  height: 40px;              /* default size (shadcn h-10) */
+  padding: 0 12px;
+  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+  background: #ffffff;
+  font-size: 14px;
+  line-height: 1;
+  color: #111827;
+  box-sizing: border-box;
+  outline: none;
+  box-shadow: 0 1px 2px rgba(16,24,40,0.03);
+  transition: border-color 120ms ease, box-shadow 120ms ease;
+  width: 100%;
+}
+
+.input:focus {
+  border-color: var(--primary-color, #0A3167);
+  box-shadow: 0 0 0 3px rgba(10, 49, 103, 0.1);
+}
+   .btn-primary {
+    background: linear-gradient(to top, var(--primary-color, #7C3AED), var(--primary-light-color, #8B5CF6), var(--primary-color, #7C3AED));
+    color: white;
+            border-radius: 12px;
+            padding: 8px 9px;
+            text-decoration: none;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 90%;
+            font-size: 10px;
+            /* Updated clip-path for a more subtle clipped corner effect */
+            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+            position: relative;
+            overflow: hidden;
+}
+.btn-sale {
+    
+            background: linear-gradient(to top,rgb(253, 254, 255),rgb(255, 255, 255),rgb(255, 255, 255));
+            border-radius: 12px;
+            color: var(--destructive-color, #DC143C);
+            padding: 8px 9px;
+            text-decoration: none;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 90%;
+            font-size: 10px;
+            /* Updated clip-path for a more subtle clipped corner effect */
+            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+            position: relative;
+            overflow: hidden;
+}
+
+
+.btn-accent {
+   background-color: var(--accent-color, #C5A572);
+            color: white;
+            border-radius: 12px;
+            padding: 8px 14px;
+            text-decoration: none;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.1px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 14px;
+            /* Updated clip-path for a more subtle clipped corner effect */
+            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+            position: relative;
+            overflow: hidden;
+}
+.btn-success {
+   background-color: var(--success-color, #059669);
+   color: white;
+            border-radius: 8px;
+            padding: 8px 16px;
+            text-decoration: none;
+            border: none;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-size: 14px;
+            /* Updated clip-path for a more subtle clipped corner effect */
+            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+            position: relative;
+            overflow: hidden;
+}
+
+
+/* Wishlist Heart Icon Button */
+.btn-wishlist {
+    background: none;
+    /* border: 2px solid #e5e7eb; */
+    border-radius: 8px;
+    color: gray;
+    padding: 1px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    width: auto;
+    min-width: 10px;
+    height: 30px;
+    display:fixed;
+}
+
+.btn-wishlist:hover {
+    border-color: #DC143C;
+    background-color: none;
+}
+
+.btn-wishlist.wishlist-active {
+    background-color: #DC143C;
+    border-color: #DC143C;
+    color: white;
+}
+
+.btn-wishlist.wishlist-active:hover {
+    background-color: var(--destructive-dark-color, #B91C3C);
+    border-color: var(--destructive-dark-color, #B91C3C);
+}
+
+.btn-normal{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem; /* shadcn default height */
+  padding: 0 1rem; /* shadcn default padding */
+  font-size: 0.875rem; /* shadcn default font size */
+  font-weight: 600;
+  border-radius: 12px;
+  background-color: var(--primary-color, #7C3AED);
+  color: #FFFFFF;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  text-decoration: none;
+}
+.btn-normal:hover {
+  background-color: var(--primary-light-color, #8B5CF6);
+}
+.btn-normal:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Delete button - shadcn sizing and destructive palette */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 2.5rem; /* shadcn default height */
+  padding: 0 1rem; /* shadcn default padding */
+  font-size: 0.875rem; /* shadcn default font size */
+  font-weight: 600;
+  border-radius: 12px;
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+  text-decoration: none;
+}
+.btn-delete:hover {
+  background-color: hsl(var(--destructive) / 0.9);
+}
+.btn-delete:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.background{
+    background-image: url('<?= ASSETS_URL ?>/images/screen/loginbg.png');
+}
+
+/* Ensure logo visibility and styling */
+.navbar-brand-link {
+    display: flex !important;
+    align-items: center;
+    gap: 0.75rem;
+    text-decoration: none;
+}
+
+.navbar-brand-link:hover {
+    text-decoration: none;
+}
+
+.navbar-brand-link span {
+    display: block !important;
+    visibility: visible !important;
+}
+
+
+
+
+/* Navigation link optimization */
+.nav-link {
+    position: relative;
+    transition: all 0.2s ease-in-out;
+}
+
+.nav-link:hover {
+    transform: translateY(-1px);
+}
+
+/* Action button optimization */
+.nav-action-btn {
+    transition: all 0.2s ease-in-out;
+    position: relative;
+    overflow: hidden;
+}
+
+.nav-action-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-action-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.nav-action-btn:hover::before {
+    left: 100%;
+}

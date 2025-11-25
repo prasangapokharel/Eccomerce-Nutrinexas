@@ -1,0 +1,52 @@
+[
+  {
+    "id": "TC001",
+    "title": "get_admin_dashboard",
+    "description": "Test the GET /admin endpoint to verify that the admin dashboard data is retrieved successfully with a 200 status code and contains accurate real-time statistics and overview."
+  },
+  {
+    "id": "TC002",
+    "title": "get_all_products",
+    "description": "Test the GET /admin/products endpoint to ensure all products are retrieved successfully with a 200 status code and the response contains the complete list of products."
+  },
+  {
+    "id": "TC003",
+    "title": "create_new_product",
+    "description": "Test the POST /admin/products endpoint to create a new product with valid data and verify that the product is created successfully with a 201 status code and the product details are correctly saved."
+  },
+  {
+    "id": "TC004",
+    "title": "get_product_by_id",
+    "description": "Test the GET /admin/products/{id} endpoint to retrieve a product by its ID and verify the response returns the correct product details with a 200 status code."
+  },
+  {
+    "id": "TC005",
+    "title": "update_product",
+    "description": "Test the PUT /admin/products/{id} endpoint to update an existing product's details and verify the product is updated successfully with a 200 status code and changes are reflected."
+  },
+  {
+    "id": "TC006",
+    "title": "delete_product",
+    "description": "Test the DELETE /admin/products/{id} endpoint to delete a product by its ID and verify the product is deleted successfully with a 200 status code and no longer appears in product listings."
+  },
+  {
+    "id": "TC007",
+    "title": "get_all_orders",
+    "description": "Test the GET /admin/orders endpoint to retrieve all orders successfully with a 200 status code and verify the response contains the complete list of orders."
+  },
+  {
+    "id": "TC008",
+    "title": "create_new_order",
+    "description": "Test the POST /admin/orders endpoint to create a new order and verify the order is created successfully with a 201 status code and order details are correctly saved."
+  },
+  {
+    "id": "TC009",
+    "title": "get_order_by_id",
+    "description": "Test the GET /admin/orders/{id} endpoint to retrieve an order by its ID and verify the response returns the correct order details with a 200 status code."
+  },
+  {
+    "id": "TC010",
+    "title": "update_order_status",
+    "description": "Test the PUT /admin/orders/{id} endpoint to update the status of an existing order and verify the order status is updated successfully with a 200 status code and changes are reflected."
+  }
+]

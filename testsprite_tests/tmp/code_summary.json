@@ -1,0 +1,752 @@
+{
+  "tech_stack": [
+    "PHP 7.4+",
+    "Custom MVC Framework",
+    "MySQL Database",
+    "Tailwind CSS",
+    "JavaScript",
+    "PDO",
+    "Composer",
+    "PHPMailer",
+    "Guzzle HTTP",
+    "Khalti Payment SDK",
+    "eSewa Payment SDK",
+    "ImageKit",
+    "DOMPDF",
+    "Intervention Image"
+  ],
+  "features": [
+    {
+      "name": "Admin Dashboard",
+      "description": "Main admin dashboard with statistics and overview",
+      "files": [
+        "App/views/admin/dashboard.php",
+        "App/Controllers/AdminController.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Dashboard API",
+          "version": "1.0.0",
+          "description": "Admin dashboard management system"
+        },
+        "paths": {
+          "/admin": {
+            "get": {
+              "summary": "Get admin dashboard",
+              "responses": {
+                "200": {
+                  "description": "Dashboard data retrieved successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Products Management",
+      "description": "Complete CRUD operations for product management",
+      "files": [
+        "App/views/admin/products/index.php",
+        "App/views/admin/products/add.php",
+        "App/views/admin/products/edit.php",
+        "App/Controllers/AdminProductController.php",
+        "App/Models/Product.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Products API",
+          "version": "1.0.0",
+          "description": "Product management system for admin"
+        },
+        "paths": {
+          "/admin/products": {
+            "get": {
+              "summary": "Get all products",
+              "responses": {
+                "200": {
+                  "description": "Products retrieved successfully"
+                }
+              }
+            },
+            "post": {
+              "summary": "Create new product",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "price": {"type": "number"},
+                        "description": {"type": "string"},
+                        "category": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Product created successfully"
+                }
+              }
+            }
+          },
+          "/admin/products/{id}": {
+            "get": {
+              "summary": "Get product by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Product retrieved successfully"
+                }
+              }
+            },
+            "put": {
+              "summary": "Update product",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Product updated successfully"
+                }
+              }
+            },
+            "delete": {
+              "summary": "Delete product",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Product deleted successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Orders Management",
+      "description": "Order processing and management system",
+      "files": [
+        "App/views/admin/orders/index.php",
+        "App/views/admin/orders/view.php",
+        "App/views/admin/orders/create.php",
+        "App/Controllers/AdminOrderController.php",
+        "App/Models/Order.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Orders API",
+          "version": "1.0.0",
+          "description": "Order management system for admin"
+        },
+        "paths": {
+          "/admin/orders": {
+            "get": {
+              "summary": "Get all orders",
+              "responses": {
+                "200": {
+                  "description": "Orders retrieved successfully"
+                }
+              }
+            },
+            "post": {
+              "summary": "Create new order",
+              "responses": {
+                "201": {
+                  "description": "Order created successfully"
+                }
+              }
+            }
+          },
+          "/admin/orders/{id}": {
+            "get": {
+              "summary": "Get order by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Order retrieved successfully"
+                }
+              }
+            },
+            "put": {
+              "summary": "Update order status",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Order updated successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Users Management",
+      "description": "User account management and administration",
+      "files": [
+        "App/views/admin/users/index.php",
+        "App/Controllers/AdminUserController.php",
+        "App/Models/User.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Users API",
+          "version": "1.0.0",
+          "description": "User management system for admin"
+        },
+        "paths": {
+          "/admin/users": {
+            "get": {
+              "summary": "Get all users",
+              "responses": {
+                "200": {
+                  "description": "Users retrieved successfully"
+                }
+              }
+            }
+          },
+          "/admin/users/{id}": {
+            "get": {
+              "summary": "Get user by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "User retrieved successfully"
+                }
+              }
+            },
+            "put": {
+              "summary": "Update user",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "User updated successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Staff Management",
+      "description": "Staff member management and administration",
+      "files": [
+        "App/views/admin/staff/index.php",
+        "App/views/admin/staff/create.php",
+        "App/views/admin/staff/edit.php",
+        "App/Controllers/AdminStaffController.php",
+        "App/Models/Staff.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Staff API",
+          "version": "1.0.0",
+          "description": "Staff management system for admin"
+        },
+        "paths": {
+          "/admin/staff": {
+            "get": {
+              "summary": "Get all staff",
+              "responses": {
+                "200": {
+                  "description": "Staff retrieved successfully"
+                }
+              }
+            },
+            "post": {
+              "summary": "Create new staff member",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "email": {"type": "string"},
+                        "phone": {"type": "string"},
+                        "password": {"type": "string"},
+                        "address": {"type": "string"},
+                        "status": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Staff created successfully"
+                }
+              }
+            }
+          },
+          "/admin/staff/{id}": {
+            "get": {
+              "summary": "Get staff by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Staff retrieved successfully"
+                }
+              }
+            },
+            "put": {
+              "summary": "Update staff member",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Staff updated successfully"
+                }
+              }
+            },
+            "delete": {
+              "summary": "Delete staff member",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Staff deleted successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Coupons Management",
+      "description": "Coupon and discount management system",
+      "files": [
+        "App/views/admin/coupons/index.php",
+        "App/views/admin/coupons/create.php",
+        "App/views/admin/coupons/edit.php",
+        "App/Controllers/AdminCouponController.php",
+        "App/Models/Coupon.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Coupons API",
+          "version": "1.0.0",
+          "description": "Coupon management system for admin"
+        },
+        "paths": {
+          "/admin/coupons": {
+            "get": {
+              "summary": "Get all coupons",
+              "responses": {
+                "200": {
+                  "description": "Coupons retrieved successfully"
+                }
+              }
+            },
+            "post": {
+              "summary": "Create new coupon",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "code": {"type": "string"},
+                        "discount_type": {"type": "string"},
+                        "discount_value": {"type": "number"},
+                        "expiry_date": {"type": "string"},
+                        "is_active": {"type": "boolean"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Coupon created successfully"
+                }
+              }
+            }
+          },
+          "/admin/coupons/{id}": {
+            "get": {
+              "summary": "Get coupon by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Coupon retrieved successfully"
+                }
+              }
+            },
+            "put": {
+              "summary": "Update coupon",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Coupon updated successfully"
+                }
+              }
+            },
+            "delete": {
+              "summary": "Delete coupon",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Coupon deleted successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Inventory Management",
+      "description": "Inventory and supplier management system",
+      "files": [
+        "App/views/admin/inventory/index.php",
+        "App/views/admin/inventory/suppliers.php",
+        "App/views/admin/inventory/add-supplier.php",
+        "App/views/admin/inventory/products.php",
+        "App/views/admin/inventory/purchases.php",
+        "App/views/admin/inventory/payments.php",
+        "App/Controllers/AdminInventoryController.php",
+        "App/Models/Supplier.php",
+        "App/Models/Purchase.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Inventory API",
+          "version": "1.0.0",
+          "description": "Inventory management system for admin"
+        },
+        "paths": {
+          "/admin/inventory": {
+            "get": {
+              "summary": "Get inventory overview",
+              "responses": {
+                "200": {
+                  "description": "Inventory data retrieved successfully"
+                }
+              }
+            }
+          },
+          "/admin/inventory/suppliers": {
+            "get": {
+              "summary": "Get all suppliers",
+              "responses": {
+                "200": {
+                  "description": "Suppliers retrieved successfully"
+                }
+              }
+            },
+            "post": {
+              "summary": "Create new supplier",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "email": {"type": "string"},
+                        "phone": {"type": "string"},
+                        "address": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Supplier created successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Delivery Management",
+      "description": "Curior and delivery management system",
+      "files": [
+        "App/views/admin/curior/index.php",
+        "App/views/admin/curior/create.php",
+        "App/views/admin/curior/edit.php",
+        "App/Controllers/AdminCuriorController.php",
+        "App/Models/Curior.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Delivery API",
+          "version": "1.0.0",
+          "description": "Delivery management system for admin"
+        },
+        "paths": {
+          "/admin/curior": {
+            "get": {
+              "summary": "Get all delivery boys",
+              "responses": {
+                "200": {
+                  "description": "Delivery boys retrieved successfully"
+                }
+              }
+            },
+            "post": {
+              "summary": "Create new delivery boy",
+              "requestBody": {
+                "required": true,
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "email": {"type": "string"},
+                        "phone": {"type": "string"},
+                        "address": {"type": "string"},
+                        "vehicle_type": {"type": "string"}
+                      }
+                    }
+                  }
+                }
+              },
+              "responses": {
+                "201": {
+                  "description": "Delivery boy created successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Customers Management",
+      "description": "Customer management and administration",
+      "files": [
+        "App/views/admin/customers/index.php",
+        "App/views/admin/customers/create.php",
+        "App/Controllers/AdminCustomerController.php",
+        "App/Models/Customer.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Customers API",
+          "version": "1.0.0",
+          "description": "Customer management system for admin"
+        },
+        "paths": {
+          "/admin/customers": {
+            "get": {
+              "summary": "Get all customers",
+              "responses": {
+                "200": {
+                  "description": "Customers retrieved successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Referral System",
+      "description": "Referral program management",
+      "files": [
+        "App/views/admin/refer/index.php",
+        "App/Controllers/AdminReferController.php",
+        "App/Models/Referral.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Referral API",
+          "version": "1.0.0",
+          "description": "Referral management system for admin"
+        },
+        "paths": {
+          "/admin/refer": {
+            "get": {
+              "summary": "Get referral statistics",
+              "responses": {
+                "200": {
+                  "description": "Referral data retrieved successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "Admin Withdrawals Management",
+      "description": "Withdrawal request management",
+      "files": [
+        "App/views/admin/withdrawals/index.php",
+        "App/views/admin/withdrawals/view.php",
+        "App/Controllers/AdminWithdrawalController.php",
+        "App/Models/Withdrawal.php"
+      ],
+      "api_doc": {
+        "openapi": "3.0.0",
+        "info": {
+          "title": "Admin Withdrawals API",
+          "version": "1.0.0",
+          "description": "Withdrawal management system for admin"
+        },
+        "paths": {
+          "/admin/withdrawals": {
+            "get": {
+              "summary": "Get all withdrawal requests",
+              "responses": {
+                "200": {
+                  "description": "Withdrawals retrieved successfully"
+                }
+              }
+            }
+          },
+          "/admin/withdrawals/{id}": {
+            "get": {
+              "summary": "Get withdrawal by ID",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Withdrawal retrieved successfully"
+                }
+              }
+            },
+            "put": {
+              "summary": "Update withdrawal status",
+              "parameters": [
+                {
+                  "name": "id",
+                  "in": "path",
+                  "required": true,
+                  "schema": {"type": "integer"}
+                }
+              ],
+              "responses": {
+                "200": {
+                  "description": "Withdrawal updated successfully"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}
+
+

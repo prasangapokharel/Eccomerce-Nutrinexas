@@ -1,0 +1,17 @@
+=== Complete Order, Earning, Withdrawal & Cancellation Flow Test ===
+Testing 20 Real-World Scenarios
+
+=== Setup ===
+✓ Referrer: Jaya Pokharel (ID: 5)
+✓ Initial Balance: Rs 150.00
+✓ Product 1: 15% commission, Rs 1000
+✓ Product 2: Default 5% commission, Rs 500
+
+=== Test Scenarios ===
+
+Scenario 1: Order created, pending earning created
+✓ Pending earning created: Rs 150.00
+✓ Balance unchanged: Rs 0
+
+Scenario 2: Order delivered, earning paid
+^C

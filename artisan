@@ -1,0 +1,11 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Nutrinexus Artisan CLI
+ * 
+ * This is the main entry point for the Artisan CLI system.
+ * It's a symbolic link to the main CLI file.
+ */
+
+// Include the main CLI file
+require_once __DIR__ . '/App/cli.php';

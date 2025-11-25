@@ -1,0 +1,343 @@
+/**
+ * Clean UI Components CSS
+ * Black and white theme only - no animations or transitions
+ * Following SADCN patterns for clean, functional design
+ */
+
+/* Reset and base styles */
+* {
+  box-sizing: border-box;
+}
+
+/* Remove all animations and transitions globally */
+*, *::before, *::after {
+  animation-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-duration: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* Button Component Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  border: 0;
+  cursor: pointer;
+  outline: none;
+  text-decoration: none;
+}
+
+.btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Button Variants */
+.btn-primary {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: #1F2937;
+}
+
+.btn-secondary {
+  background-color: #FFFFFF;
+  color: #000000;
+  border: 1px solid #000000;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #F8FAFC;
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: #000000;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: #F1F5F9;
+}
+
+.btn-destructive {
+  background-color: #000000;
+  color: #FFFFFF;
+}
+
+.btn-destructive:hover:not(:disabled) {
+  background-color: #7F1D1D;
+}
+
+/* Button Sizes */
+.btn-sm {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+}
+
+.btn-md {
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  border-radius: 0.5rem;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+}
+
+/* Card Component Styles */
+.card {
+  background-color: #FFFFFF;
+  border: 1px solid #E2E8F0;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.card-elevated {
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+}
+
+.card-bordered {
+  border: 2px solid #CBD5E1;
+}
+
+.card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid #E2E8F0;
+  background-color: #FFFFFF;
+}
+
+.card-content {
+  padding: 1.5rem;
+}
+
+.card-footer {
+  padding: 1.5rem;
+  border-top: 1px solid #E2E8F0;
+  background-color: #F8FAFC;
+}
+
+/* Modal Component Styles */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 50;
+  display: none;
+}
+
+.modal-overlay.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.modal-content {
+  background-color: #FFFFFF;
+  border-radius: 0.5rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 28rem;
+}
+
+.modal-content.lg {
+  max-width: 32rem;
+}
+
+.modal-content.xl {
+  max-width: 36rem;
+}
+
+.modal-content.2xl {
+  max-width: 42rem;
+}
+
+.modal-content.full {
+  max-width: 100%;
+  margin: 0 1rem;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+}
+
+.modal-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.modal-close {
+  color: #9CA3AF;
+  cursor: pointer;
+}
+
+.modal-close:hover {
+  color: #6B7280;
+}
+
+.modal-body {
+  margin-bottom: 1.5rem;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+}
+
+/* Input Component Styles */
+.input-group {
+  margin-bottom: 1rem;
+}
+
+.input-label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.input-label.error {
+  color: #DC2626;
+}
+
+.input-label.success {
+  color: #059669;
+}
+
+.input-required {
+  color: #DC2626;
+}
+
+.input-field {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  background-color: #FFFFFF;
+  color: #111827;
+}
+
+.input-field::placeholder {
+  color: #9CA3AF;
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: #000000;
+  box-shadow: 0 0 0 1px #000000;
+}
+
+.input-field.error {
+  border-color: #DC2626;
+}
+
+.input-field.error:focus {
+  border-color: #DC2626;
+  box-shadow: 0 0 0 1px #DC2626;
+}
+
+.input-field.success {
+  border-color: #059669;
+}
+
+.input-field.success:focus {
+  border-color: #059669;
+  box-shadow: 0 0 0 1px #059669;
+}
+
+.input-field:disabled {
+  background-color: #F3F4F6;
+  cursor: not-allowed;
+  color: #9CA3AF;
+}
+
+.input-error {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #DC2626;
+}
+
+.input-success {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #059669;
+}
+
+/* Utility Classes */
+.text-primary {
+  color: #000000;
+}
+
+.text-secondary {
+  color: #6B7280;
+}
+
+.bg-primary {
+  background-color: #000000;
+}
+
+.bg-secondary {
+  background-color: #F8FAFC;
+}
+
+.border-primary {
+  border-color: #000000;
+}
+
+.border-secondary {
+  border-color: #E2E8F0;
+}
+
+/* Clean shadows */
+.shadow-clean {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+}
+
+.shadow-subtle {
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+/* Remove focus outlines globally */
+*:focus {
+  outline: none;
+}
+
+/* Clean typography */
+.font-clean {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+/* Responsive utilities */
+@media (max-width: 640px) {
+  .modal-content {
+    margin: 1rem;
+    max-width: calc(100% - 2rem);
+  }
+  
+  .card-content,
+  .card-header,
+  .card-footer {
+    padding: 1rem;
+  }
+}

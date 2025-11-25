@@ -1,0 +1,168 @@
+<div class="space-y-6 text-gray-800">
+  <h2 class="text-3xl font-bold text-gray-900 mb-4">HK Vitals Skin Radiance Marine Collagen Supplement Powder</h2>
+  
+  <figure class="mb-6">
+    <img src="https://www.hkvitals.com/dw/image/v2/BKZP_PRD/on/demandware.static/-/Sites-master-catalog/default/dw8a8b8c8c/images/hi-res/SP-99764_1.jpg" alt="HK Vitals Skin Radiance Marine Collagen Orange Flavor" class="w-full h-auto rounded-lg shadow-md">
+    <figcaption class="text-sm text-gray-600 mt-2 text-center">HK Vitals Skin Radiance Marine Collagen - Orange Flavor (200g)</figcaption>
+  </figure>
+
+  <p class="text-lg leading-relaxed">
+    Transform your skin health with HK Vitals Skin Radiance Marine Collagen, India's No.1 Collagen supplement. <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference> This clinically proven collagen drink is designed to enhance skin health by increasing its elasticity and firmness for a more youthful, hydrated and smoother skin.
+  </p>
+
+  <p class="leading-relaxed">
+    Enriched with powerful antioxidants that prevent skin damage by free radicals, this premium marine collagen formula delivers visible results with consistent use. <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference> Experience the confidence that comes with glowing, healthy skin backed by clinical research and third-party testing.
+  </p>
+
+  <div class="bg-blue-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Key Benefits</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Clinically Proven Results:</strong> 48% reduction in fine lines and wrinkles in just 8 weeks <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>4X Smoother Skin:</strong> Dramatically improved skin texture in 8 weeks <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Rapid Glow:</strong> 87% of users experienced glowing skin in just 4 weeks <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Enhanced Elasticity:</strong> Improves skin firmness and reduces signs of aging <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Deep Hydration:</strong> Combats dull and dehydrated skin effectively <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-green-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">How to Use</h3>
+    <ol class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">1.</span>
+        <span>Add one scoop to 200ml of water <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">2.</span>
+        <span>Stir well until fully dissolved and enjoy the drink <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">3.</span>
+        <span>Take one scoop daily for at least 8 weeks to see results <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">4.</span>
+        <span>Best taken in the morning on empty stomach or at night before bed <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+    </ol>
+  </div>
+
+  <div class="bg-yellow-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Ingredients</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Marine Collagen Peptides:</strong> High-quality collagen from marine sources for optimal absorption <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Hyaluronic Acid:</strong> Provides deep hydration and plumps the skin <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Vitamin C:</strong> Powerful antioxidant that supports collagen synthesis <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Vitamin E:</strong> Protects skin from free radical damage <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Biotin:</strong> Supports healthy skin, hair, and nail growth <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-purple-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Who Can Use</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span><strong>Men and Women:</strong> Both can benefit from collagen supplementation as natural collagen levels decline with age <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span><strong>Aging Skin Concerns:</strong> Perfect for those experiencing fine lines, wrinkles, and loss of elasticity <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span><strong>Dull & Dehydrated Skin:</strong> Ideal for improving skin radiance and hydration <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span><strong>Preventive Care:</strong> Great for maintaining healthy skin, joints, and overall vitality</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-red-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Why Choose HK Vitals Collagen</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span><strong>India's No.1 Collagen:</strong> Trusted by thousands of satisfied customers <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span><strong>Clinically Proven:</strong> Backed by research with proven efficacy <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span><strong>Third-Party Tested:</strong> Ensures purity, quality, and safety <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span><strong>No Side Effects:</strong> Safe for daily consumption with no reported adverse effects <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span><strong>Delicious Orange Flavor:</strong> Makes daily supplementation enjoyable</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-indigo-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Product Specifications</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-indigo-600 mr-2">•</span>
+        <span><strong>Size:</strong> 200g container</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-indigo-600 mr-2">•</span>
+        <span><strong>Flavor:</strong> Orange</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-indigo-600 mr-2">•</span>
+        <span><strong>Type:</strong> Vegetarian-friendly marine collagen</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-indigo-600 mr-2">•</span>
+        <span><strong>Dosage:</strong> 5-10 grams per day (follow label instructions) <mcreference link="https://www.hkvitals.com/sv/hk-vitals-skin-radiance-collagen/SP-99764" index="1">1</mcreference></span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="text-sm text-gray-600 italic">
+    *Individual results may vary. This product is not intended to diagnose, treat, cure, or prevent any disease. Avoid if you have fish allergies or specific dietary restrictions. Consult your healthcare provider before use if pregnant, nursing, or have medical conditions.
+  </p>
+
+  <p class="text-xs text-gray-500">
+    Source: Product information from HK Vitals official website
+  </p>
+</div>

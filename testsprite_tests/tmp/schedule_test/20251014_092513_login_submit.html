@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="http://192.168.1.77:8000/css/admin.css">
+    <link rel="stylesheet" href="http://192.168.1.77:8000/css/app.css">
+    <link rel="stylesheet" href="http://192.168.1.77:8000/css/sidebar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Removed TinyMCE (Tiny Cloud) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        golden: {
+                            light: '#f3e8c8',
+                            DEFAULT: '#d4b96c',
+                            dark: '#c4a55d'
+                        },
+                        primary: {
+                            lightest: '#f0f6ff',
+                            light: '#e6f0ff',
+                            DEFAULT: '#0A3167',
+                            dark: '#082850'
+                        },
+                
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    </head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden custom-scroll ">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar text-white shadow-2xl overflow-y-auto">
+            <div class="p-6 flex flex-col h-full">
+                <!-- Logo Section -->
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
+                    <a href="http://192.168.1.77:8000/admin" class="flex items-center space-x-3 min-w-0">
+                        <!-- <div class="w-12 h-12 bg-golden rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                            <i class="fas fa-leaf text-primary text-xl"></i>
+                        </div> -->
+                        <div class="sidebar-text min-w-0">
+                            <h1 class="text-xl font-bold truncate">Nutri Nexus</h1>
+                            <p class="text-xs text-white/70">Admin Panel</p>
+                        </div>
+                    </a>
+                    <button id="toggleSidebar" class="text-white/80 hover:text-white lg:block hidden p-2 rounded-lg hover:bg-white/10 flex-shrink-0">
+                        <i class="fas fa-bars text-sm"></i>
+                    </button>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <nav class="flex-1 space-y-2">
+                    <!-- Dashboard -->
+                    <a href="http://192.168.1.77:8000/admin" class="nav-item flex items-center p-3 rounded-lg" title="Dashboard">
+                        <i class="fas fa-tachometer-alt w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Dashboard</span>
+                    </a>
+                    
+                    <!-- Products -->
+                    <a href="http://192.168.1.77:8000/admin/products" class="nav-item flex items-center p-3 rounded-lg" title="Products">
+                        <i class="fas fa-box w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Products</span>
+                    </a>
+                    
+                    <!-- Orders -->
+                    <a href="http://192.168.1.77:8000/admin/orders" class="nav-item flex items-center p-3 rounded-lg" title="Orders">
+                        <i class="fas fa-shopping-cart w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Orders</span>
+                    </a>
+                    
+                    <!-- Users -->
+                    <a href="http://192.168.1.77:8000/admin/users" class="nav-item flex items-center p-3 rounded-lg" title="Users">
+                        <i class="fas fa-users w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Users</span>
+                    </a>
+                    
+                    <!-- Staff -->
+                    <a href="http://192.168.1.77:8000/admin/staff" class="nav-item flex items-center p-3 rounded-lg" title="Staff">
+                        <i class="fas fa-user-tie w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Staff</span>
+                    </a>
+                    
+                    <!-- Delivery Boys -->
+                    <a href="http://192.168.1.77:8000/admin/deliveryboy" class="nav-item flex items-center p-3 rounded-lg" title="Delivery Boys">
+                        <i class="fas fa-truck w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Delivery Boys</span>
+                    </a>
+                    
+                    <!-- Payment Gateways -->
+                    <a href="http://192.168.1.77:8000/admin/payment" class="nav-item flex items-center p-3 rounded-lg" title="Payment Gateways">
+                        <i class="fas fa-credit-card w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Payment Gateways</span>
+                    </a>
+                    
+                    <!-- Delivery -->
+                    <a href="http://192.168.1.77:8000/admin/delivery" class="nav-item flex items-center p-3 rounded-lg" title="Delivery Charges">
+                        <i class="fas fa-truck w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Delivery</span>
+                    </a>
+                    
+                    <!-- Inventory Management Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('inventoryDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Inventory Management">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-warehouse w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Inventory</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="inventoryChevron"></i>
+                        </button>
+                        <div id="inventoryDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/inventory" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-tachometer-alt w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Dashboard</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/supplier" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-truck w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Suppliers</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/products" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-box w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Products</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/purchases" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-shopping-cart w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Purchases</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/payments" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-credit-card w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Payments</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Coupons Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('couponsDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Coupons">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-tags w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Coupons</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="couponsChevron"></i>
+                        </button>
+                        <div id="couponsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/coupons" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Coupons</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/coupons/create" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Create Coupon</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Blog Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('blogDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Blog">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-newspaper w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Blog</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="blogChevron"></i>
+                        </button>
+                        <div id="blogDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/blog" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Posts</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/blog/create" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Create Post</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Slider Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('sliderDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Sliders">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-images w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Sliders</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="sliderChevron"></i>
+                        </button>
+                        <div id="sliderDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/slider" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Sliders</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/slider/create" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Create Slider</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SMS Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('smsDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="SMS">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-sms w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">SMS</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="smsChevron"></i>
+                        </button>
+                        <div id="smsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/sms" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Templates</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/sms/marketing" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-user w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Marketing</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Withdrawals -->
+                    <a href="http://192.168.1.77:8000/admin/withdrawals" class="nav-item flex items-center p-3 rounded-lg" title="Withdrawals">
+                        <i class="fas fa-money-bill-wave w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Withdrawals</span>
+                    </a>
+                    
+                    <!-- Analytics -->
+                    <a href="http://192.168.1.77:8000/admin/analytics" class="nav-item flex items-center p-3 rounded-lg" title="Analytics">
+                        <i class="fas fa-chart-line w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Analytics</span>
+                    </a>
+                </nav>
+                
+                <!-- Bottom Section -->
+                <div class="mt-auto pt-6 border-t border-white/20 space-y-2">
+                    <a href="http://192.168.1.77:8000/" class="nav-item flex items-center p-3 rounded-lg" title="View Store">
+                        <i class="fas fa-store w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">View Store</span>
+                    </a>
+                    <a href="http://192.168.1.77:8000/admin/settings" class="nav-item flex items-center p-3 rounded-lg" title="Settings">
+                        <i class="fas fa-cog w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Settings</span>
+                    </a>
+                    <a href="http://192.168.1.77:8000/auth/logout" class="nav-item flex items-center p-3 rounded-lg text-red-300 hover:text-red-200 hover:bg-red-500/20" title="Logout">
+                        <i class="fas fa-sign-out-alt w-5 flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div id="mainContent" class="main-content flex flex-col overflow-x-hidden">
+            <!-- Top Navbar -->
+            <header class="bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
+                <div class="flex items-center justify-between p-4 lg:p-6">
+                    <div class="flex items-center space-x-4">
+                        <button id="mobileMenuButton" class="lg:hidden text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        
+                        <!-- Breadcrumb -->
+                        <nav class="hidden md:flex" aria-label="Breadcrumb">
+                            <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                                <li><a href="http://192.168.1.77:8000/admin" class="hover:text-primary transition-colors">Admin</a></li>
+                                <li><i class="fas fa-chevron-right text-xs"></i></li>
+                                <li class="text-gray-900 font-medium">Admin Dashboard</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                        
+                        <!-- User Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleDropdown('userDropdown')" class="flex items-center space-x-2 text-gray-700 hover:text-primary p-2 rounded-lg hover:bg-gray-100">
+                                <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium">
+                                    P                                </div>
+                                <span class="hidden md:block font-medium">Prasanga</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div id="userDropdown" class="dropdown-menu absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20 border border-gray-200">
+                                <a href="http://192.168.1.77:8000/admin/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user w-4 mr-2"></i>Profile
+                                </a>
+                                <a href="http://192.168.1.77:8000/admin/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-cog w-4 mr-2"></i>Settings
+                                </a>
+                                <hr class="my-1">
+                                <a href="http://192.168.1.77:8000/auth/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt w-4 mr-2"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Toast Notifications -->
+                        
+            <!-- Page Content -->
+            <main class="flex-1 overflow-y-auto p-4 lg:p-6">
+                
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+            <p class="mt-1 text-sm text-gray-500">Welcome back! Here's what's happening with your store today.</p>
+        </div>
+        <div class="mt-4 sm:mt-0">
+            <button class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary">
+                <i class="fas fa-plus mr-2"></i>
+                Quick Actions
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <!-- Total Products -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fas fa-box text-xl"></i>
+                </div>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Total Products</p>
+                    <h3 class="text-2xl font-bold text-gray-900">10</h3>
+                    <p class="text-xs text-green-600 mt-1">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        +12% from last month
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Orders -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-green-50 text-green-600">
+                    <i class="fas fa-shopping-cart text-xl"></i>
+                </div>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Total Orders</p>
+                    <h3 class="text-2xl font-bold text-gray-900">2</h3>
+                    <p class="text-xs text-green-600 mt-1">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        +8% from last month
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Users -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                    <i class="fas fa-users text-xl"></i>
+                </div>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Total Users</p>
+                    <h3 class="text-2xl font-bold text-gray-900">0</h3>
+                    <p class="text-xs text-green-600 mt-1">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        +15% from last month
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Sales -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-yellow-50 text-yellow-600">
+                    <i class="fas fa-rupee-sign text-xl"></i>
+                </div>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Total Sales</p>
+                    <h3 class="text-2xl font-bold text-gray-900">Rs0</h3>
+                    <p class="text-xs text-green-600 mt-1">
+                        <i class="fas fa-arrow-up mr-1"></i>
+                        +23% from last month
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Additional Stats Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        <!-- Total Coupons -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Total Coupons</p>
+                    <h3 class="text-xl font-bold text-gray-900">8</h3>
+                </div>
+                <div class="p-3 rounded-xl bg-orange-50 text-orange-600">
+                    <i class="fas fa-tags text-lg"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Active Coupons -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Active Coupons</p>
+                    <h3 class="text-xl font-bold text-gray-900">2</h3>
+                </div>
+                <div class="p-3 rounded-xl bg-teal-50 text-teal-600">
+                    <i class="fas fa-check-circle text-lg"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl shadow-sm p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-white/80">Quick Actions</p>
+                    <h3 class="text-lg font-bold">Manage Store</h3>
+                </div>
+                <div class="p-3 rounded-xl bg-white/20">
+                    <i class="fas fa-bolt text-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <!-- Recent Orders - Takes 2 columns -->
+        <div class="xl:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Recent Orders</h2>
+                    <a href="http://192.168.1.77:8000/admin/orders" class="text-sm text-primary hover:text-primary-dark font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="overflow-x-hidden">
+                <table class="min-w-full divide-y divide-gray-100">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                                                                                    <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">NTX202510132801</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Yuyutsu Mani Timilsina</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">Oct 13, 2025</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">Rs4,150.00</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                            bg-yellow-100 text-yellow-800">
+                                            Pending                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="http://192.168.1.77:8000/admin/viewOrder/234" class="text-primary hover:text-primary-dark">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                                            <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">NTX202510121692</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900">Prasanga Raman Pokharel</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500">Oct 12, 2025</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">Rs2,820.23</div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                            bg-yellow-100 text-yellow-800">
+                                            Pending                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="http://192.168.1.77:8000/admin/viewOrder/231" class="text-primary hover:text-primary-dark">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                                                        </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Low Stock Products - Takes 1 column -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Low Stock Alert</h2>
+                    <a href="http://192.168.1.77:8000/admin/products" class="text-sm text-primary hover:text-primary-dark font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="p-6">
+                                    <div class="space-y-4">
+                                                    <div class="flex items-center space-x-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                           
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        Wellcore – Pure Micronised Creatine Monohydrate (307g, 83 Servings) Kiwi Kick – Rapid Absorption for Strength, Power &amp; Recovery | NutriNexas Nepal                                    </p>
+                                    <p class="text-xs text-red-600">
+                                        Only 1 left in stock
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="http://192.168.1.77:8000/admin/editProduct/43" 
+                                       class="text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700">
+                                        Restock
+                                    </a>
+                                </div>
+                            </div>
+                                                    <div class="flex items-center space-x-3 p-3 bg-red-50 rounded-lg border border-red-100">
+                           
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        Wellcore – Pure Micronised Creatine Monohydrate (307g, 83 Servings) Tropical Tango – Fast Absorption for Strength &amp; Endurance | NutriNexas Nepal                                    </p>
+                                    <p class="text-xs text-red-600">
+                                        Only 5 left in stock
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0">
+                                    <a href="http://192.168.1.77:8000/admin/editProduct/6" 
+                                       class="text-xs bg-red-600 text-white px-2 py-1 rounded hover:bg-red-700">
+                                        Restock
+                                    </a>
+                                </div>
+                            </div>
+                                            </div>
+                            </div>
+        </div>
+    </div>
+</div>
+
+            </main>
+        </div>
+    </div>
+    
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+    
+    <script>
+        // Cookie utility functions
+        function setCookie(name, value, days = 30) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+        
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const toast = document.getElementById('toast');
+            
+            // Load sidebar state from cookie
+            const sidebarCollapsed = getCookie('sidebar_collapsed') === 'true';
+            
+            // Apply saved state on page load
+            if (sidebarCollapsed && window.innerWidth >= 1024) {
+                sidebar.classList.add('sidebar-collapsed');
+                mainContent.classList.add('collapsed');
+            }
+            
+            // Toast notification
+            if (toast) {
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    closeToast();
+                }, 5000);
+            }
+            
+            // Toggle sidebar on desktop
+            if (toggleSidebar) {
+                toggleSidebar.addEventListener('click', function() {
+                    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                    
+                    if (isCollapsed) {
+                        // Expand sidebar
+                        sidebar.classList.remove('sidebar-collapsed');
+                        mainContent.classList.remove('collapsed');
+                        setCookie('sidebar_collapsed', 'false');
+                    } else {
+                        // Collapse sidebar
+                        sidebar.classList.add('sidebar-collapsed');
+                        mainContent.classList.add('collapsed');
+                        setCookie('sidebar_collapsed', 'true');
+                    }
+                });
+            }
+            
+            // Toggle sidebar on mobile
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', function() {
+                    sidebar.classList.toggle('mobile-open');
+                    mobileOverlay.classList.toggle('hidden');
+                });
+            }
+            
+            // Close sidebar when clicking overlay
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('mobile-open');
+                    mobileOverlay.classList.add('hidden');
+                });
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth < 1024) {
+                    // Mobile view - reset classes
+                    sidebar.classList.remove('sidebar-collapsed');
+                    mainContent.classList.remove('collapsed');
+                } else {
+                    // Desktop view - apply saved state
+                    const sidebarCollapsed = getCookie('sidebar_collapsed') === 'true';
+                    if (sidebarCollapsed) {
+                        sidebar.classList.add('sidebar-collapsed');
+                        mainContent.classList.add('collapsed');
+                    }
+                    // Close mobile menu if open
+                    sidebar.classList.remove('mobile-open');
+                    mobileOverlay.classList.add('hidden');
+                }
+            });
+            
+            // Set active nav item based on current URL
+            setActiveNavItem();
+        });
+        
+        // Toggle dropdown menus
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const chevron = document.getElementById(dropdownId.replace('Dropdown', 'Chevron'));
+            
+            if (!dropdown) return;
+            
+            dropdown.classList.toggle('open');
+            if (chevron) {
+                chevron.style.transform = dropdown.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+            
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== dropdownId) {
+                    menu.classList.remove('open');
+                    const otherChevron = document.getElementById(menu.id.replace('Dropdown', 'Chevron'));
+                    if (otherChevron) {
+                        otherChevron.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+        }
+        
+        // Close toast notification
+        function closeToast() {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
+        }
+        
+        // Set active navigation item
+        function setActiveNavItem() {
+            const currentPath = window.location.pathname;
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const mainLink = item.querySelector('a');
+                const dropdownButton = item.querySelector('button[onclick*="toggleDropdown"]');
+                let isActive = false;
+
+                // Check if the main link matches the current path
+                if (mainLink && mainLink.getAttribute('href')) {
+                    const linkPath = new URL(mainLink.getAttribute('href'), window.location.origin).pathname;
+                    if (currentPath === linkPath || (linkPath === '/admin' && (currentPath === '/admin/' || currentPath === '/admin'))) {
+                        isActive = true;
+                    }
+                }
+
+                // Check if any dropdown sub-item matches the current path
+                const dropdownLinks = item.querySelectorAll('.dropdown-menu a');
+                dropdownLinks.forEach(subLink => {
+                    if (subLink.getAttribute('href')) {
+                        const subLinkPath = new URL(subLink.getAttribute('href'), window.location.origin).pathname;
+                        if (currentPath === subLinkPath) {
+                            isActive = true;
+                            // If a sub-item is active, ensure its parent dropdown is open
+                            const dropdown = subLink.closest('.dropdown-menu');
+                            if (dropdown && !dropdown.classList.contains('open')) {
+                                toggleDropdown(dropdown.id);
+                            }
+                        }
+                    }
+                });
+
+                if (isActive) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.relative') && !event.target.closest('[onclick*="toggleDropdown"]')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('open');
+                    const chevron = document.getElementById(menu.id.replace('Dropdown', 'Chevron'));
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                });
+            }
+        });
+    </script>
+        
+    <!-- Admin Enhancements -->
+    
+<!-- Toast Notification System -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+<!-- Confirmation Dialog Modal -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-gray-900" id="confirmationTitle">Confirm Action</h3>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <p class="text-sm text-gray-500" id="confirmationMessage">Are you sure you want to perform this action?</p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="confirmationCancel"
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="button" id="confirmationConfirm"
+                            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global Toast Notification System
+function showToast(message, type = 'success', duration = 5000) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    
+    const bgColor = type === 'success' ? 'bg-green-500' : 
+                    type === 'error' ? 'bg-red-500' : 
+                    type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+    const icon = type === 'success' ? 'fas fa-check-circle' : 
+                type === 'error' ? 'fas fa-exclamation-circle' : 
+                type === 'warning' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
+    
+    toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform transition-all duration-300 translate-x-full`;
+    toast.innerHTML = `
+        <i class="${icon}"></i>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+// Global Confirmation Dialog System
+function showConfirmation(title, message, onConfirm, onCancel = null) {
+    const modal = document.getElementById('confirmationModal');
+    const titleEl = document.getElementById('confirmationTitle');
+    const messageEl = document.getElementById('confirmationMessage');
+    const confirmBtn = document.getElementById('confirmationConfirm');
+    const cancelBtn = document.getElementById('confirmationCancel');
+    
+    titleEl.textContent = title;
+    messageEl.textContent = message;
+    
+    modal.classList.remove('hidden');
+    
+    // Remove existing event listeners
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    
+    // Add new event listeners
+    newConfirmBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        if (onConfirm) onConfirm();
+    });
+    
+    newCancelBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        if (onCancel) onCancel();
+    });
+}
+
+// Enhanced Form Validation
+function validateField(field, errorId, customValidation = null) {
+    const value = field.value.trim();
+    const errorElement = document.getElementById(errorId);
+    let isValid = true;
+    let errorMessage = '';
+    
+    if (field.hasAttribute('required') && !value) {
+        isValid = false;
+        errorMessage = 'This field is required';
+    } else if (field.type === 'email' && value && !isValidEmail(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid email address';
+    } else if (field.type === 'tel' && value && !isValidPhone(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid phone number';
+    } else if (customValidation) {
+        const customResult = customValidation(value);
+        if (!customResult.isValid) {
+            isValid = false;
+            errorMessage = customResult.message;
+        }
+    }
+    
+    if (isValid) {
+        field.classList.remove('border-red-500');
+        field.classList.add('border-gray-300');
+        if (errorElement) {
+            errorElement.classList.add('hidden');
+        }
+    } else {
+        field.classList.remove('border-gray-300');
+        field.classList.add('border-red-500');
+        if (errorElement) {
+            errorElement.textContent = errorMessage;
+            errorElement.classList.remove('hidden');
+        }
+    }
+    
+    return isValid;
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidPhone(phone) {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+// Enhanced Form Submission with Loading States
+function enhanceFormSubmission(formId, options = {}) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : '';
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate required fields
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            const errorId = field.getAttribute('aria-describedby');
+            if (!validateField(field, errorId)) {
+                isValid = false;
+            }
+        });
+        
+        if (!isValid) {
+            showToast('Please fix the errors before submitting', 'error');
+            return;
+        }
+        
+        // Show loading state
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+        }
+        
+        // Submit form
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (options.successCallback) {
+                options.successCallback(data);
+            } else {
+                if (data.includes('successfully') || data.includes('created') || data.includes('updated')) {
+                    showToast(options.successMessage || 'Operation completed successfully!', 'success');
+                    if (options.redirectUrl) {
+                        setTimeout(() => {
+                            window.location.href = options.redirectUrl;
+                        }, 1500);
+                    }
+                } else {
+                    showToast(options.errorMessage || 'Operation failed. Please try again.', 'error');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('An error occurred. Please try again.', 'error');
+        })
+        .finally(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    });
+}
+
+// Real-time validation for forms
+function addRealTimeValidation(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    
+    const fields = form.querySelectorAll('input, select, textarea');
+    fields.forEach(field => {
+        const errorId = field.getAttribute('aria-describedby');
+        if (errorId) {
+            field.addEventListener('blur', () => validateField(field, errorId));
+            field.addEventListener('input', () => {
+                if (field.classList.contains('border-red-500')) {
+                    validateField(field, errorId);
+                }
+            });
+        }
+    });
+}
+
+// Bulk Actions Enhancement
+function enhanceBulkActions(containerId, options = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    const selectAllCheckbox = container.querySelector('.select-all-checkbox');
+    const itemCheckboxes = container.querySelectorAll('.item-checkbox');
+    const bulkActionBtn = container.querySelector('.bulk-action-btn');
+    
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateBulkActionState();
+        });
+    }
+    
+    itemCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateBulkActionState);
+    });
+    
+    function updateBulkActionState() {
+        const checkedItems = container.querySelectorAll('.item-checkbox:checked');
+        if (bulkActionBtn) {
+            bulkActionBtn.disabled = checkedItems.length === 0;
+        }
+    }
+}
+
+// Initialize enhancements when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add real-time validation to all forms with id
+    const forms = document.querySelectorAll('form[id]');
+    forms.forEach(form => {
+        addRealTimeValidation(form.id);
+    });
+    
+    // Initialize bulk actions
+    const bulkContainers = document.querySelectorAll('[id$="-bulk-container"]');
+    bulkContainers.forEach(container => {
+        enhanceBulkActions(container.id);
+    });
+});
+</script>
+
+<style>
+/* Enhanced form styling */
+.border-red-500 {
+    border-color: #ef4444 !important;
+}
+
+.border-green-500 {
+    border-color: #10b981 !important;
+}
+
+/* Loading states */
+.btn-loading {
+    display: none;
+}
+
+.btn-loading.show {
+    display: inline-block;
+}
+
+/* Toast animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.toast-slide-in {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.toast-slide-out {
+    animation: slideOutRight 0.3s ease-in;
+}
+</style>
+
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "status": "commited",
+  "type": "backend",
+  "scope": "codebase",
+  "localEndpoint": "http://localhost:8000",
+  "backendAuthType": "public",
+  "executionArgs": {
+    "projectName": "Nutrinexus",
+    "projectPath": "C:\\Users\\godsu\\Desktop\\home\\Nutrinexus",
+    "testIds": [],
+    "additionalInstruction": "Comprehensive testing of all admin pages including dashboard, products, orders, users, staff, coupons, inventory, delivery, customers, referrals, and withdrawals. Test all CRUD operations, authentication, validation, error handling, and UI functionality. Ensure production readiness.",
+    "envs": {
+      "API_KEY": "sk-user-yzTBNKySpdTUWnfSBV-tzp8Vkjv3XhkqkIV9RPg3A23NP6cly2qtdfHpNGjIJqdcJfwX_kuw3NktfEuGsTsTTlfSd-N6_GRxyMRcjrDJzPxraMoCZJnclb6bUVr7XONeWsI"
+    }
+  },
+  "proxy": "http://14eb203f-2f8c-49d4-a45f-ab925287c469:hqD5jUlGL2D9JW5GDSOaNieoWkcmqIhG@tun.testsprite.com:8080"
+}

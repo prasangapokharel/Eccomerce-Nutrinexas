@@ -1,0 +1,146 @@
+/* Navbar Dropdown Styles - Click Based */
+[data-dropdown] {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    margin-top: 0.5rem;
+}
+
+.dropdown-menu.hidden {
+    display: none;
+}
+
+.dropdown-menu.block {
+    display: block;
+}
+
+/* Dropdown button styles */
+.dropdown-toggle {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.dropdown-toggle:focus {
+    outline: 2px solid #6366F1;
+    outline-offset: 2px;
+}
+
+/* Profile Dropdown */
+[data-profile-dropdown] {
+    position: relative;
+}
+
+[data-profile-menu].hidden {
+    display: none;
+}
+
+[data-profile-menu].block {
+    display: block;
+}
+
+/* Navbar Links */
+.nav-link {
+    position: relative;
+    transition: color 0.2s ease;
+}
+
+.nav-link:hover {
+    color: #14B8A6;
+}
+
+.nav-action-btn {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.nav-action-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #14B8A6;
+}
+
+/* Dropdown Menu Items */
+.dropdown-item {
+    transition: background-color 0.15s ease;
+    text-decoration: none;
+    display: block;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background-color: #F3F4F6;
+}
+
+.dropdown-item:focus {
+    outline: 2px solid #6366F1;
+    outline-offset: -2px;
+}
+
+/* Search Suggestions */
+#desktopSearchSuggestions {
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, visibility 0.2s ease, transform 0.2s ease;
+}
+
+#desktopSearchSuggestions:not(.hidden) {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    display: block !important;
+}
+
+#desktopSearchSuggestions.hidden {
+    display: none !important;
+    opacity: 0;
+    visibility: hidden;
+}
+
+/* Ensure dropdowns appear above content */
+.dropdown-menu,
+[data-profile-menu],
+#desktopSearchSuggestions {
+    z-index: 9999;
+    pointer-events: auto;
+}
+
+/* Fix for navbar container */
+header nav {
+    position: relative;
+    z-index: 50;
+    overflow: visible !important;
+}
+
+/* Ensure dropdown containers don't clip */
+[data-dropdown] {
+    overflow: visible !important;
+}
+
+/* Smooth transitions for all interactive elements */
+.navbar-brand-link,
+.navbar-logo {
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.navbar-brand-link:hover {
+    opacity: 0.9;
+}
+
+/* Prevent dropdown from being clipped */
+header {
+    overflow: visible !important;
+}
+
+header > div,
+header > div > div {
+    overflow: visible !important;
+}
+
+/* Ensure nav container doesn't clip */
+header nav {
+    overflow: visible !important;
+}

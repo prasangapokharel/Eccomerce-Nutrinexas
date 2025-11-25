@@ -1,0 +1,142 @@
+<div class="space-y-6 text-gray-800">
+  <h2 class="text-3xl font-bold text-gray-900 mb-4">Wellcore Pure Micronised Creatine Monohydrate - Kiwi Kick</h2>
+  
+  <figure class="mb-6">
+    <img src="https://wellversed.in/cdn/shop/files/Wellcore-Creatine-Kiwi-Kick-Front.jpg" alt="Wellcore Pure Micronised Creatine Monohydrate Kiwi Kick" class="w-full h-auto rounded-lg shadow-md">
+    <figcaption class="text-sm text-gray-600 mt-2 text-center">Wellcore Pure Micronised Creatine Monohydrate - Kiwi Kick (307g, 83 Servings)</figcaption>
+  </figure>
+
+  <p class="text-lg leading-relaxed">
+    Fuel your physical performance with Wellcore Pure Micronised Creatine Monohydrate in refreshing Kiwi Kick flavor. <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference> This premium quality supplement delivers rapid absorption, enhanced muscle strength & power, fast recovery, and increased muscle mass to help you train harder, lift heavier, and recover faster.
+  </p>
+
+  <p class="leading-relaxed">
+    Experience the perfect combination of performance and taste with our micronised creatine formula that ensures optimal absorption while the refreshing zest of kiwi and citrus makes every workout session enjoyable. <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference>
+  </p>
+
+  <div class="bg-blue-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Key Benefits</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Builds Muscle & Strength:</strong> Every scoop delivers fuel for enhanced physical performance, helping you train harder and lift heavier <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Faster Recovery:</strong> Helps replenish energy, reduce fatigue, and promote muscle repair for quicker gym returns <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Premium Quality:</strong> No sugar & no fillers - pure, high-quality creatine supplement <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Trustified Certified:</strong> Third-party lab tested for purity and accuracy, meeting highest standards <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-blue-600 mr-2">•</span>
+        <span><strong>Rapid Absorption:</strong> Micronised form ensures optimal absorption and effectiveness <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-green-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">How to Use</h3>
+    <ol class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">1.</span>
+        <span>Take one scoop (3g) of Wellcore Creatine Monohydrate <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">2.</span>
+        <span>Mix with 200ml of water or juice for optimal dissolution <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">3.</span>
+        <span>Stir well until completely dissolved</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-green-600 mr-2 font-semibold">4.</span>
+        <span>Consume daily for best results, preferably post-workout</span>
+      </li>
+    </ol>
+  </div>
+
+  <div class="bg-yellow-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Product Highlights</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Size:</strong> 307g container providing 83 servings</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Flavor:</strong> Refreshing Kiwi Kick with citrus notes <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Form:</strong> Micronised powder for enhanced solubility</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-yellow-600 mr-2">•</span>
+        <span><strong>Purity:</strong> No artificial fillers, sugars, or unnecessary additives</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-purple-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Who Can Use</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span>Gym enthusiasts looking to enhance performance <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span>Athletes seeking improved strength and power output</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span>Fitness enthusiasts wanting faster recovery between workouts</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-purple-600 mr-2">•</span>
+        <span>Individuals aiming to increase muscle mass and strength</span>
+      </li>
+    </ul>
+  </div>
+
+  <div class="bg-red-50 p-6 rounded-lg">
+    <h3 class="text-xl font-semibold text-gray-900 mb-4">Why Choose Wellcore Creatine</h3>
+    <ul class="space-y-2 text-gray-700">
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span>Scientifically proven creatine monohydrate formula</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span>Third-party tested and Trustified certified for quality assurance <mcreference link="https://wellversed.in/products/wellcore-pure-micronised-creatine-monohydrate-kiwi-kick-307-83-servings-rapid-absorption-enhanced-muscle-strength-power-fast-recovery-increased-muscle-mass" index="0">0</mcreference></span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span>Delicious Kiwi Kick flavor makes supplementation enjoyable</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span>Micronised for superior mixing and absorption</span>
+      </li>
+      <li class="flex items-start">
+        <span class="text-red-600 mr-2">•</span>
+        <span>Essential supplement for serious fitness goals</span>
+      </li>
+    </ul>
+  </div>
+
+  <p class="text-sm text-gray-600 italic">
+    *Individual results may vary. This product is not intended to diagnose, treat, cure, or prevent any disease. Store in a cool, dry place away from excessive heat. Avoid if you have any known allergies to the ingredients.
+  </p>
+
+  <p class="text-xs text-gray-500">
+    Source: Product information from Wellversed official website
+  </p>
+</div>

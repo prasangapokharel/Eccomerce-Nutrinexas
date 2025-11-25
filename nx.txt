@@ -1,0 +1,41 @@
+NutriNexus System Cost & Banner Ads Proposal Draft
+=================================================
+
+1) Estimated Module Pricing (one-time build cost unless noted)
+- Core Platform & Infrastructure ................................ NPR 420,000
+- Product Catalog & Inventory (incl. variants, digital goods) ... NPR 260,000
+- Seller Center & Wallet (commissions, withdrawals) ............. NPR 310,000
+- Order Lifecycle & Logistics (tracking, delivery apps) ......... NPR 280,000
+- Payment Hub (Omnipay + local gateways, compliance) ............ NPR 190,000
+- Marketing & Discovery (search, filters, personalization) ...... NPR 210,000
+- Analytics & Admin Intelligence (dashboards, exports) .......... NPR 175,000
+- Notification & Messaging Suite (push/SMS/email) ............... NPR 120,000
+- Testing & Benchmarks (automation, staging, perf tests) ........ NPR 95,000
+- Contingency & Hardening Reserve (10%) .......................... NPR 206,000
+Total program estimate ........................................... NPR 2,266,000
+
+2) Ongoing Operating Envelope (monthly)
+- Cloud infra + CDN reserve ..................................... NPR 95,000
+- Support & SLA staffing (Tier 1/2) .............................. NPR 110,000
+- Continuous optimization budget ................................. NPR 60,000
+
+3) Banner Ads Business Pitch Outline
+- Objective: Sell always-on inventory for homepage hero, category tiles, sponsored listings, retargeting.
+- Pricing tiers: 
+  * Tier A (Homepage hero, 100% share of voice) ......... NPR 120,000 / month
+  * Tier B (Category mastheads, carousel slots) ......... NPR 65,000 / month
+  * Tier C (Sponsored products, search badges) ......... NPR 35,000 / month + CPC add-on
+- Performance guarantees: impression floors, fraud-protected clicks, live dashboards.
+- Optimization lever: weighted bids (quality score x bid x stock health).
+
+4) Suggested Narrative for Banner Ads Proposal
+- Hook: “NutriNexus reaches 250k+ health-focused visitors monthly; owning the hero banners captures high-intent buyers within 3 seconds.”
+- Pain & solution: highlight brands’ struggle with attribution; show how our ads pair sales logs + wallet payouts for transparent ROI.
+- Package story: bundle Tier A hero + Tier B category for launchers, upsell Tier C retargeting for always-on conversions.
+- KPI table: CPM, CTR, assisted sales %, top-funnel reach.
+- Next steps CTA: “Reserve Q1 placements before 15 Dec; includes creative QA, A/B copies, and weekly optimization standups.”
+
+Use this draft to tailor pricing during negotiations; adjust contingency % if scope or SLAs expand. Keep txt updated whenever costs shift.***
+
+
+

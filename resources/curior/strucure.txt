@@ -1,0 +1,147 @@
+2. Courier Dashboard (Home)
+
+Today’s assigned orders
+
+Pending pickups
+
+Deliveries in-progress
+
+Completed deliveries
+
+COD pending amount
+
+Quick actions
+
+3. Assigned Orders Page
+
+List of all orders assigned to this courier
+
+Filters: pending, picked, in-transit, delivered, cancelled
+
+Sort by newest, distance, delivery date
+
+4. Order Details Page
+
+Buyer name, phone, address
+
+Seller name and pickup address
+
+Product list
+
+Weight, size
+
+Delivery type (Standard, Express, Same-day)
+
+Payment type (COD / Prepaid)
+
+Status timeline
+
+Map view (optional)
+
+5. Pickup Management Page
+
+Orders waiting for pickup
+
+Mark Picked
+
+Upload pickup proof (photo)
+
+Print/download shipping label
+
+6. Delivery Workflow Page
+
+Mark Out for Delivery
+
+Mark Delivery Attempted (reason required)
+
+Mark Delivered
+
+Upload delivery proof (signature, photo)
+
+OTP delivery verification (optional)
+
+7. Returns & RTO Page
+
+Orders marked for return
+
+Pickup from customer
+
+Drop-off to seller
+
+Update return status
+
+Upload return proof
+
+8. COD Collection Page
+
+COD amount to collect
+
+Amount collected
+
+Pending settlement
+
+Cash handover history
+
+9. Settlements Page
+
+Completed COD settlements
+
+Pending COD settlements
+
+Summary for admin reconciliation
+
+10. Route Planning Page
+
+(optional but good for Nepal)
+
+Map based route
+
+Optimize pickups/deliveries
+
+Distance calculation
+
+Estimated time per location
+
+11. Notifications Page
+
+New order assigned
+
+Urgent delivery updates
+
+COD reminders
+
+Return pickup alerts
+
+12. Profile Page
+
+Courier name
+
+Phone, email
+
+Photo
+
+Vehicle info
+
+Change password
+
+Availability status (online/offline)
+
+13. Help & Support Page
+
+Contact admin
+
+Raise issue
+
+Delivery dispute form
+
+Technical support
+
+14. Log / History Page
+
+All completed orders
+
+All attempted deliveries
+
+All pickups
+
+Filters for date and status

@@ -1,0 +1,221 @@
+-- Wallet Table
+CREATE TABLE seller_wallet (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    balance DECIMAL(10,2) DEFAULT 0,
+    total_earnings DECIMAL(10,2) DEFAULT 0,
+    total_withdrawals DECIMAL(10,2) DEFAULT 0,
+    pending_withdrawals DECIMAL(10,2) DEFAULT 0,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_seller (seller_id),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+);
+
+-- Wallet Transactions
+CREATE TABLE seller_wallet_transactions (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    type ENUM('credit','debit') DEFAULT 'credit',
+    amount DECIMAL(10,2),
+    description VARCHAR(255),
+    order_id INT NULL,
+    withdraw_request_id INT NULL,
+    balance_after DECIMAL(10,2),
+    status ENUM('pending','completed','failed') DEFAULT 'completed',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_seller (seller_id),
+    INDEX idx_type (type),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+);
+
+-- Withdrawal Requests
+CREATE TABLE seller_withdraw_requests (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    amount DECIMAL(10,2),
+    payment_method ENUM('bank_transfer','paypal','upi') DEFAULT 'bank_transfer',
+    bank_account_id INT NULL,
+    account_details TEXT,
+    status ENUM('pending','processing','approved','rejected','completed') DEFAULT 'pending',
+    admin_comment TEXT,
+    requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    processed_at TIMESTAMP NULL,
+    INDEX idx_seller (seller_id),
+    INDEX idx_status (status),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+);
+
+-- Bank Accounts
+CREATE TABLE seller_bank_accounts (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    account_holder_name VARCHAR(255),
+    bank_name VARCHAR(255),
+    account_number VARCHAR(50),
+    ifsc_code VARCHAR(20),
+    branch_name VARCHAR(255),
+    account_type ENUM('savings','current') DEFAULT 'savings',
+    is_default TINYINT(1) DEFAULT 0,
+    is_verified TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_seller (seller_id),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+);
+
+-- Support Tickets
+CREATE TABLE seller_support_tickets (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    ticket_number VARCHAR(50) UNIQUE,
+    subject VARCHAR(255),
+    category ENUM('technical','billing','orders','general') DEFAULT 'general',
+    priority ENUM('low','medium','high','urgent') DEFAULT 'medium',
+    status ENUM('open','in_progress','waiting_reply','closed') DEFAULT 'open',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_seller (seller_id),
+    INDEX idx_status (status),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+);
+
+-- Ticket Replies
+CREATE TABLE seller_ticket_replies (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    ticket_id INT,
+    user_id INT,
+    user_type ENUM('seller','admin') DEFAULT 'seller',
+    message TEXT,
+    attachment VARCHAR(255),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_ticket (ticket_id),
+    FOREIGN KEY (ticket_id) REFERENCES seller_support_tickets(id) ON DELETE CASCADE
+);
+
+-- Notifications
+CREATE TABLE seller_notifications (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    type VARCHAR(50),
+    title VARCHAR(255),
+    message TEXT,
+    link VARCHAR(255),
+    icon VARCHAR(50),
+    is_read TINYINT(1) DEFAULT 0,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_seller (seller_id),
+    INDEX idx_read (is_read),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+);
+
+-- Seller Settings
+CREATE TABLE seller_settings (
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    seller_id INT,
+    setting_key VARCHAR(100),
+    setting_value TEXT,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_setting (seller_id, setting_key),
+    FOREIGN KEY (seller_id) REFERENCES sellers(id) ON DELETE CASCADE
+); 
+
+Critical Rules:
+ALWAYS Follow These:
+
+Every query MUST filter by seller_id:
+
+Routes= seller/dashboard
+seller/products
+seller/orders
+seller/inventory
+seller/customers
+seller/reviews
+seller/analytics
+seller/marketing
+seller/wallet
+seller/wallet/transactions
+seller/withdraw-requests
+seller/withdraw-requests/create
+seller/withdraw-requests/detail/{id}
+seller/support
+seller/support/create
+seller/support/detail/{id}
+seller/notifications
+seller/settings
+
+seller_wallet
+- id
+- seller_id
+- balance
+- total_earnings
+- pending_withdrawals
+- updated_at
+
+seller_wallet_transactions
+- id
+- seller_id
+- type (credit/debit)
+- amount
+- description
+- order_id (nullable)
+- status
+- created_at
+
+seller_withdraw_requests
+- id
+- seller_id
+- amount
+- payment_method
+- bank_account_id
+- status (pending/processing/approved/rejected/completed)
+- admin_comment
+- requested_at
+- processed_at
+
+seller_bank_accounts
+- id
+- seller_id
+- account_holder_name
+- bank_name
+- account_number
+- ifsc_code
+- is_default
+
+seller_reviews
+- id
+- product_id
+- seller_id
+- customer_id
+- rating (1-5)
+- review_text
+- seller_reply
+- status (pending/approved)
+- created_at
+
+seller_support_tickets
+- id
+- seller_id
+- subject
+- category
+- priority
+- status
+- created_at
+- updated_at
+
+seller_ticket_replies
+- id
+- ticket_id
+- user_id
+- user_type (seller/admin)
+- message
+- attachment
+- created_at
+
+seller_notifications
+- id
+- seller_id
+- type
+- title
+- message
+- link
+- is_read
+- created_at 

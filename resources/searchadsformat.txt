@@ -1,0 +1,130 @@
+Here is the **clean, simple, real Flipkart-style explanation** of **Search Ads Product Format + Formula + Ranking Logic**.
+This is the system Flipkart, Amazon, and Daraz follow.
+
+---
+
+# ✅ **1. What Is Search Ads Product (Flipkart Style)?**
+
+When a user searches “mobile”, Flipkart mixes **paid products** inside the search result list.
+
+These paid products show a small **“Sponsored”** badge.
+
+Placement looks natural so the user clicks more.
+
+---
+
+# ✅ **2. Where Flipkart Shows Search Ads**
+
+Flipkart inserts sponsored products at fixed intervals:
+
+* **1st position**
+* **3rd position**
+* **6th position**
+* Then every **10th** position
+* Only inside search relevant products
+
+This gives the highest click rate.
+
+---
+
+# ✅ **3. Flipkart Search Ads Formula (Ranking Rule)**
+
+Flipkart uses a simple weighted formula:
+
+```
+Ad Rank = Bid Amount + (Product Score × Weight)
+```
+
+Where:
+
+* **Bid Amount** = how much seller paid for search ads
+* **Product Score** = (rating + sales + CTR history)
+* **Weight** = a small booster value (0.1 to 0.5)
+
+**Higher Ad Rank = Higher position in search.**
+
+---
+
+# ✅ **4. Flipkart Product Score Formula**
+
+This is the simple calculation most marketplaces follow:
+
+```
+Product Score = (Rating × 0.6) + (Sales × 0.3) + (CTR × 0.1)
+```
+
+Example:
+
+* Rating: 4.5
+* Monthly Sales: 320
+* CTR: 1.8%
+
+Product score becomes:
+
+```
+(4.5 × 0.6) + (320 × 0.3) + (1.8 × 0.1)
+≈ 99.08
+```
+
+This is optional but helps put ads in better positions.
+
+---
+
+# ✅ **5. Sponsored Product Display Format (Flipkart Style)**
+
+Your search result product card should include:
+
+* Product image
+* Title
+* Price
+* Rating
+* Small label: **Sponsored**
+* Highlighted border very thin (only 1px lighter)
+
+**Example Layout:**
+
+```
+[ Product Image ]
+Product Title  
+Rs. 1299  
+★★★★☆ (321 reviews)
+Sponsored
+```
+
+The “Sponsored” badge must be subtle.
+
+---
+
+# ✅ **6. How Flipkart Ensures Results Still Look Real**
+
+Flipkart always mixes:
+
+* Organic products
+* Sponsored products
+* Best match products
+
+Sponsored products **never fill the whole page**.
+
+Only 10–15% of the search result.
+
+---
+
+# ✅ **7. Easy Version You Can Use for Your System**
+
+Use this logic:
+
+1. Pick **top active ads** for the keyword
+2. Sort by **highest bid**
+3. Insert at positions:
+
+   * 1
+   * 3
+   * 6
+4. Fill remaining ads every **10th** position
+5. Mark with **Sponsored**
+6. If no ads, show normal product list
+
+This is lightweight and works perfectly for Nepal ecommerce.
+
+---
+

@@ -1,0 +1,1741 @@
+{
+  "base_url": "https://nutrinexas.shop",
+  "started_at": "2025-10-14 09:58:11",
+  "page_count": 30,
+  "average_overall_score": 8.57,
+  "worst_overall_score": 7.5,
+  "results": [
+    {
+      "url": "https://nutrinexas.shop",
+      "status": 200,
+      "load_time": 1.927,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.18% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "NutriNexas - Premium Supplements & Nutrition",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 1100,
+      "keyword": "nutrinexas premium supplements",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+        "https://cdn.jsdelivr.net/npm/notyf/notyf.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Creatine",
+      "status": 200,
+      "load_time": 1.773,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Creatine Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Creatine",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Creatine",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 264,
+      "keyword": "creatine products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/privacy",
+      "status": 200,
+      "load_time": 1.719,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.27% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Privacy Policy - NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/pages/privacy",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/pages/privacy",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 733,
+      "keyword": "privacy policy nutrinexas",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/terms",
+      "status": 200,
+      "load_time": 1.623,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.00% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Terms and Conditions - NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/pages/terms",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/pages/terms",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 339,
+      "keyword": "terms conditions nutrinexas",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/about",
+      "status": 200,
+      "load_time": 1.619,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.65% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "About Us - NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/about",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/about",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 307,
+      "keyword": "about us nutrinexas",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/cellucor-c4-original-pre-workout-powder-in-nepal",
+      "status": 200,
+      "load_time": 1.757,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.33% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Cellucor C4 Pre Workout in Nepal | Nutri Nexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog/view/cellucor-c4-original-pre-workout-powder-in-nepal",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog/view/cellucor-c4-original-pre-workout-powder-in-nepal",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 908,
+      "keyword": "cellucor c4 pre",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog",
+      "status": 200,
+      "load_time": 1.724,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.20% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Blog - Health & Nutrition Articles | NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 984,
+      "keyword": "blog health nutrition",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Peanut",
+      "status": 200,
+      "load_time": 1.732,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Peanut Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Peanut",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Peanut",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 168,
+      "keyword": "peanut products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/ultimate-guide-choosing-protein-supplement",
+      "status": 200,
+      "load_time": 1.642,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.00% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "The Ultimate Guide to Choosing the Right Protein Supplement: Whey vs. Casein vs. Plant-Based",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog/view/ultimate-guide-choosing-protein-supplement",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog/view/ultimate-guide-choosing-protein-supplement",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 1018,
+      "keyword": "ultimate guide choosing",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/cart",
+      "status": 200,
+      "load_time": 1.697,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Shopping Cart",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/cart",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/cart",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 122,
+      "keyword": "shopping cart",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/shipping",
+      "status": 200,
+      "load_time": 1.606,
+      "scores": {
+        "meta": 9,
+        "content": 6,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.25
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300).",
+          "Keyword density 0.69% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Shipping Policy - NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/pages/shipping",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/pages/shipping",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 289,
+      "keyword": "shipping policy nutrinexas",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Pre-Workout",
+      "status": 200,
+      "load_time": 1.799,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Pre-Workout Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Pre-Workout",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Pre-Workout",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 175,
+      "keyword": "pre workout products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Accessories",
+      "status": 200,
+      "load_time": 1.663,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Accessories Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Accessories",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Accessories",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 171,
+      "keyword": "accessories products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/buy-whey-protein-in-nepal",
+      "status": 200,
+      "load_time": 1.749,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.92% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Buy Whey Protein in Nepal | Nutri Nexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog/view/buy-whey-protein-in-nepal",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog/view/buy-whey-protein-in-nepal",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 977,
+      "keyword": "buy whey protein",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/bmi-guide-calculate-your-body-mass-index-understand-your-results",
+      "status": 200,
+      "load_time": 1.65,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.40% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "BMI Guide: Calculate Your Body Mass Index & Understand Your Results",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog/view/bmi-guide-calculate-your-body-mass-index-understand-your-results",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog/view/bmi-guide-calculate-your-body-mass-index-understand-your-results",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 1004,
+      "keyword": "bmi guide calculate",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/",
+      "status": 200,
+      "load_time": 2.002,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.18% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "NutriNexas - Premium Supplements & Nutrition",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 1082,
+      "keyword": "nutrinexas premium supplements",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css",
+        "https://cdn.jsdelivr.net/npm/notyf/notyf.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/wishlist",
+      "status": 200,
+      "load_time": 2.742,
+      "scores": {
+        "meta": 9,
+        "content": 5,
+        "speed": 6,
+        "mobile": 10,
+        "overall": 7.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300).",
+          "Keyword density 3.12% outside 1–3% range."
+        ],
+        "speed": [
+          "Slow response (>2.5s). Optimize caching/compression/CDN."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Login",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/auth/login",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/auth/login",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 128,
+      "keyword": "login",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/creatine-price-in-nepal",
+      "status": 200,
+      "load_time": 1.659,
+      "scores": {
+        "meta": 9,
+        "content": 9,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 9.0
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Readability may be suboptimal (avg word length heuristic)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "क्रिएटिन: फाइदा, प्रयोग गर्ने तरिका र सही डोज नेपालमै",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog/view/creatine-price-in-nepal",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog/view/creatine-price-in-nepal",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 1057,
+      "keyword": "क र एट",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/view/wellcore-pure-micronised-creatine-monohydrate-307g-83-servings-kiwi-kick-rapid-absorption-for-strength-power-recovery-nutrinexas-nepal-687fba2873fab",
+      "status": 200,
+      "load_time": 2.847,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 6,
+        "mobile": 10,
+        "overall": 8.25
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.59% outside 1–3% range."
+        ],
+        "speed": [
+          "Slow response (>2.5s). Optimize caching/compression/CDN."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "All Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 339,
+      "keyword": "all products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/contact",
+      "status": 200,
+      "load_time": 1.69,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Contact Us - NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/pages/contact",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/pages/contact",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 136,
+      "keyword": "contact us nutrinexas",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/collagen",
+      "status": 200,
+      "load_time": 1.679,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "collagen Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/collagen",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/collagen",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 183,
+      "keyword": "collagen products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Supplements",
+      "status": 200,
+      "load_time": 1.719,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Supplements Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Supplements",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Supplements",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 167,
+      "keyword": "supplements products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/zeng-stay-safe-on-behalf-of-morcha-victims-19-dead-in-kathmandu-protests-sept-2025",
+      "status": 200,
+      "load_time": 1.684,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.37% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "ZenG Stay Safe: On Behalf of Today’s Fallen – Mourning the Victims of the Kathmandu Morcha and Calls for Safer Streets",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/blog/view/zeng-stay-safe-on-behalf-of-morcha-victims-19-dead-in-kathmandu-protests-sept-2025",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/blog/view/zeng-stay-safe-on-behalf-of-morcha-victims-19-dead-in-kathmandu-protests-sept-2025",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 1337,
+      "keyword": "zeng stay safe",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/faq",
+      "status": 200,
+      "load_time": 1.572,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.70% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Frequently Asked Questions - NutriNexas",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/pages/faq",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/pages/faq",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 426,
+      "keyword": "frequently asked questions",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/auth/login",
+      "status": 200,
+      "load_time": 1.61,
+      "scores": {
+        "meta": 9,
+        "content": 5,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.0
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300).",
+          "Keyword density 3.12% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Login",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/auth/login",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/auth/login",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 128,
+      "keyword": "login",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Vitamins",
+      "status": 200,
+      "load_time": 1.832,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Vitamins Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Vitamins",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Vitamins",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 149,
+      "keyword": "vitamins products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products",
+      "status": 200,
+      "load_time": 1.804,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Keyword density 0.59% outside 1–3% range."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "All Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 339,
+      "keyword": "all products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Protein",
+      "status": 200,
+      "load_time": 1.839,
+      "scores": {
+        "meta": 9,
+        "content": 8,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.75
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Protein Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Protein",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Protein",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 233,
+      "keyword": "protein products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Fat-Burners",
+      "status": 200,
+      "load_time": 1.701,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Fat-Burners Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Fat-Burners",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Fat-Burners",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 152,
+      "keyword": "fat burners products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Combo",
+      "status": 200,
+      "load_time": 1.732,
+      "scores": {
+        "meta": 9,
+        "content": 7,
+        "speed": 8,
+        "mobile": 10,
+        "overall": 8.5
+      },
+      "issues": {
+        "meta": [
+          "Meta description length suboptimal (expect 50–160 chars)."
+        ],
+        "content": [
+          "Low content word count (<300)."
+        ],
+        "speed": [
+          "Consider optimizing for sub-1s TTFB/first paint."
+        ],
+        "mobile": []
+      },
+      "meta": {
+        "title": "Combo Products",
+        "description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "keywords": "NutriNexas, supplements Nepal, protein powder Nepal, MuscleBlaze Nepal, Wellcore Nepal, authentic supplements Nepal, nutrition store Kathmandu",
+        "robots": "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1",
+        "viewport": "width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no",
+        "canonical": "https://nutrinexas.shop/products/category/Combo",
+        "og:title": "NutriNexas Nepal - Top Supplements Store | MuscleBlaze, Wellcore, Protein &amp; Vitamins",
+        "og:description": "NutriNexas is Nepal&#039;s leading online store for premium nutrition supplements. Discover authentic MuscleBlaze, Wellcore, protein powders, vitamins, and health products with fast delivery across Nepal.",
+        "og:image": "https://nutrinexas.shop/images/store-image.jpg",
+        "og:url": "https://nutrinexas.shop/products/category/Combo",
+        "twitter:card": "summary_large_image"
+      },
+      "word_count": 167,
+      "keyword": "combo products",
+      "css_links": [
+        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      ]
+    }
+  ],
+  "suggestions": [
+    {
+      "url": "https://nutrinexas.shop",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop",
+      "category": "content",
+      "message": "Keyword density 0.18% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Creatine",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Creatine",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Creatine",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/privacy",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/privacy",
+      "category": "content",
+      "message": "Keyword density 0.27% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/privacy",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/terms",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/terms",
+      "category": "content",
+      "message": "Keyword density 0.00% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/terms",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/about",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/about",
+      "category": "content",
+      "message": "Keyword density 0.65% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/about",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/cellucor-c4-original-pre-workout-powder-in-nepal",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/cellucor-c4-original-pre-workout-powder-in-nepal",
+      "category": "content",
+      "message": "Keyword density 0.33% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/cellucor-c4-original-pre-workout-powder-in-nepal",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog",
+      "category": "content",
+      "message": "Keyword density 0.20% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Peanut",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Peanut",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Peanut",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/ultimate-guide-choosing-protein-supplement",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/ultimate-guide-choosing-protein-supplement",
+      "category": "content",
+      "message": "Keyword density 0.00% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/ultimate-guide-choosing-protein-supplement",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/cart",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/cart",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/cart",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/shipping",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/shipping",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/shipping",
+      "category": "content",
+      "message": "Keyword density 0.69% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/shipping",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Pre-Workout",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Pre-Workout",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Pre-Workout",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Accessories",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Accessories",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Accessories",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/buy-whey-protein-in-nepal",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/buy-whey-protein-in-nepal",
+      "category": "content",
+      "message": "Keyword density 0.92% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/buy-whey-protein-in-nepal",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/bmi-guide-calculate-your-body-mass-index-understand-your-results",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/bmi-guide-calculate-your-body-mass-index-understand-your-results",
+      "category": "content",
+      "message": "Keyword density 0.40% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/bmi-guide-calculate-your-body-mass-index-understand-your-results",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/",
+      "category": "content",
+      "message": "Keyword density 0.18% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/wishlist",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/wishlist",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/wishlist",
+      "category": "content",
+      "message": "Keyword density 3.12% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/wishlist",
+      "category": "speed",
+      "message": "Slow response (>2.5s). Optimize caching/compression/CDN."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/creatine-price-in-nepal",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/creatine-price-in-nepal",
+      "category": "content",
+      "message": "Readability may be suboptimal (avg word length heuristic)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/creatine-price-in-nepal",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/view/wellcore-pure-micronised-creatine-monohydrate-307g-83-servings-kiwi-kick-rapid-absorption-for-strength-power-recovery-nutrinexas-nepal-687fba2873fab",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/view/wellcore-pure-micronised-creatine-monohydrate-307g-83-servings-kiwi-kick-rapid-absorption-for-strength-power-recovery-nutrinexas-nepal-687fba2873fab",
+      "category": "content",
+      "message": "Keyword density 0.59% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/view/wellcore-pure-micronised-creatine-monohydrate-307g-83-servings-kiwi-kick-rapid-absorption-for-strength-power-recovery-nutrinexas-nepal-687fba2873fab",
+      "category": "speed",
+      "message": "Slow response (>2.5s). Optimize caching/compression/CDN."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/contact",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/contact",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/contact",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/collagen",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/collagen",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/collagen",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Supplements",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Supplements",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Supplements",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/zeng-stay-safe-on-behalf-of-morcha-victims-19-dead-in-kathmandu-protests-sept-2025",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/zeng-stay-safe-on-behalf-of-morcha-victims-19-dead-in-kathmandu-protests-sept-2025",
+      "category": "content",
+      "message": "Keyword density 0.37% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/blog/view/zeng-stay-safe-on-behalf-of-morcha-victims-19-dead-in-kathmandu-protests-sept-2025",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/faq",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/faq",
+      "category": "content",
+      "message": "Keyword density 0.70% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/pages/faq",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/auth/login",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/auth/login",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/auth/login",
+      "category": "content",
+      "message": "Keyword density 3.12% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/auth/login",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Vitamins",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Vitamins",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Vitamins",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products",
+      "category": "content",
+      "message": "Keyword density 0.59% outside 1–3% range."
+    },
+    {
+      "url": "https://nutrinexas.shop/products",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Protein",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Protein",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Protein",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Fat-Burners",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Fat-Burners",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Fat-Burners",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Combo",
+      "category": "meta",
+      "message": "Meta description length suboptimal (expect 50–160 chars)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Combo",
+      "category": "content",
+      "message": "Low content word count (<300)."
+    },
+    {
+      "url": "https://nutrinexas.shop/products/category/Combo",
+      "category": "speed",
+      "message": "Consider optimizing for sub-1s TTFB/first paint."
+    }
+  ]
+}

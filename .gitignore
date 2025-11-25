@@ -1,0 +1,67 @@
+# Dependencies
+/vendor
+/node_modules
+composer.lock
+package-lock.json
+
+# Environment files
+.env
+.env.local
+.env.development
+.env.production
+.env.*.local
+
+# Database files
+*.sql
+/oldedataabse.sql
+/database.sql
+*.db
+*.sqlite
+
+# Logs
+*.log
+/logs
+/storage/logs
+
+# Cache
+/storage/cache
+/tmp
+/cache
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Deployment files
+/QUICK_DEPLOYMENT_GUIDE.md
+/DEPLOYMENT_CHECKLIST.md
+/HOSTING_SETUP.md
+
+# Test files
+/test_endpoints.php
+/test-components.php
+/composer.php
+
+# Migration backups
+/Migration/README.md
+/Migration/importmigration.php
+/Migration/importmigration.php.bak
+/Migration/importmigration.php.bak.bak
+
+# Sensitive files
+SELLER_CREDENTIALS.txt
+NGROK_INFO.txt
+*.key
+*.pem
+
+# Build files
+/public/css/tailwind.css.map
+/public/js/*.map

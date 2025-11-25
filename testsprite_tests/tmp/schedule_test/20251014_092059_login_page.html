@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Discover premium supplements, health products, and wellness solutions at NutriNexus. Quality products for a healthier lifestyle with fast delivery across Nepal.">
+    <meta name="keywords" content="supplements, health products, wellness, vitamins, protein, fitness, nutrition, Nepal, online shopping, premium quality">
+    <meta name="author" content="NutriNexus">
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Login">
+    <meta property="og:description" content="Discover premium supplements, health products, and wellness solutions at NutriNexus. Quality products for a healthier lifestyle.">
+    <meta property="og:url" content="http://192.168.1.77:8000/auth/login">
+    <meta property="og:site_name" content="NutriNexus">
+    <meta property="og:image" content="http://192.168.1.77:8000/images/og-image.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="NutriNexus - Premium Supplements & Health Products">
+    <meta property="og:locale" content="en_US">
+    
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Login">
+    <meta name="twitter:description" content="Discover premium supplements, health products, and wellness solutions at NutriNexus.">
+    <meta name="twitter:image" content="http://192.168.1.77:8000/images/og-image.jpg">
+    <meta name="twitter:image:alt" content="NutriNexus - Premium Supplements & Health Products">
+    
+    <!-- Additional SEO Meta Tags -->
+    <meta name="theme-color" content="#0A3167">
+    <meta name="msapplication-TileColor" content="#0A3167">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="NutriNexus">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="http://192.168.1.77:8000/auth/login">
+    
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "NutriNexus",
+        "url": "http://192.168.1.77:8000",
+        "logo": "http://192.168.1.77:8000/images/logo.png",
+        "description": "Premium supplements, health products, and wellness solutions",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "NP"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer service",
+            "availableLanguage": ["English", "Nepali"]
+        },
+        "sameAs": [
+            "https://facebook.com/nutrinexus",
+            "https://instagram.com/nutrinexus"
+        ]
+    }
+    </script>
+    <!-- Use Tailwind CDN for now -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="https://nutrinexas.shop/favicon.ico" type="image/x-icon">
+    <link rel="icon" type="image/png" sizes="32x32" href="https://nutrinexas.shop/favicon-32x32.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="http://192.168.1.77:8000/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="http://192.168.1.77:8000/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="http://192.168.1.77:8000/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="http://192.168.1.77:8000/images/favicon/site.webmanifest">
+    <link rel="mask-icon" href="http://192.168.1.77:8000/images/favicon/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" href="http://192.168.1.77:8000/images/favicon/icon.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        golden: {
+                            light: '#f3e8c8',
+                            DEFAULT: '#d4b96c',
+                            dark: '#c4a55d'
+                        },
+                        primary: {
+                            lightest: '#f0f6ff',
+                            light: '#e6f0ff',
+                            DEFAULT: '#0A3167',
+                            dark: '#082850'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    },
+                    screens: {
+                        'xs': '390px',  // Extra small devices (phones)
+                        'sm': '640px',  // Small devices (tablets)
+                        'md': '768px',  // Medium devices (landscape tablets)
+                        'lg': '1024px', // Large devices (laptops/desktops)
+                        'xl': '1280px', // Extra large devices (large laptops and desktops)
+                        '2xl': '1536px' // Extra extra large devices
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Typography System */
+        /* Heading 03 */
+        .h3-bold { font-size: 20px; font-weight: 700; line-height: 1.2; }
+        .h3-semibold { font-size: 20px; font-weight: 600; line-height: 1.2; }
+        .h3-medium { font-size: 20px; font-weight: 500; line-height: 1.2; }
+        .h3-regular { font-size: 20px; font-weight: 400; line-height: 1.2; }
+        
+        /* Heading 04 */
+        .h4-bold { font-size: 18px; font-weight: 700; line-height: 1.3; }
+        .h4-semibold { font-size: 18px; font-weight: 600; line-height: 1.3; }
+        .h4-medium { font-size: 18px; font-weight: 500; line-height: 1.3; }
+        .h4-regular { font-size: 18px; font-weight: 400; line-height: 1.3; }
+        
+        /* Body 01 */
+        .body1-semibold { font-size: 16px; font-weight: 600; line-height: 1.4; }
+        .body1-medium { font-size: 16px; font-weight: 500; line-height: 1.4; }
+        .body1-regular { font-size: 16px; font-weight: 400; line-height: 1.4; }
+        
+        /* Body 02 */
+        .body2-semibold { font-size: 14px; font-weight: 600; line-height: 1.4; }
+        .body2-medium { font-size: 14px; font-weight: 500; line-height: 1.4; }
+        .body2-regular { font-size: 14px; font-weight: 400; line-height: 1.4; }
+        
+        /* Label */
+        .label-medium { font-size: 12px; font-weight: 500; line-height: 1.3; }
+        .label-regular { font-size: 12px; font-weight: 400; line-height: 1.3; }
+        
+        /* Button */
+        .button1 { font-size: 14px; font-weight: 500; line-height: 1.2; }
+        .button2 { font-size: 12px; font-weight: 500; line-height: 1.2; }
+        
+        /* Base styles */
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            overflow-x: hidden;
+        }
+        
+        /* Product image styling with improved responsive behavior */
+        .product-image-container {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background-color: white;
+        }
+        
+        .product-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            transition: none;
+        }
+
+        .product-card {
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-card:active {
+            background-color: rgba(0, 0, 0, 0.05);
+        }
+
+        .product-image {
+            transform: none !important;
+        }
+        
+        /* Text truncation for product titles */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Improved touch targets for mobile */
+        button, a, input[type="button"], input[type="submit"] {
+            touch-action: manipulation;
+        }
+
+        /* Responsive typography */
+        @media (max-width: 640px) {
+            h1 {
+                font-size: 1.5rem !important;
+            }
+            h2 {
+                font-size: 1.25rem !important;
+            }
+            h3 {
+                font-size: 1.125rem !important;
+            }
+            p, span, a {
+                font-size: 0.9375rem !important;
+            }
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Focus states for accessibility */
+        a:focus, button:focus, input:focus, textarea:focus, select:focus {
+            outline: 2px solid #0A3167;
+            outline-offset: 2px;
+        }
+
+        /* Safe area insets for modern devices */
+        @supports (padding: max(0px)) {
+            body {
+                padding-left: min(1rem, env(safe-area-inset-left));
+                padding-right: min(1rem, env(safe-area-inset-right));
+            }
+        }
+
+        /* Footer - Desktop only */
+        footer {
+            display: none; /* Hidden by default */
+        }
+
+        /* Show footer only on desktop */
+        @media (min-width: 1024px) {
+            footer {
+                display: block;
+            }
+        }
+    </style>
+    </head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+    <header class="sticky top-0 z-50 w-full bg-white shadow-sm">
+        <!-- Desktop Only Navbar with Theme CSS and Tailwind Classes -->
+<link rel="stylesheet" href="http://192.168.1.77:8000/css/theme.css">
+<link rel="preload" href="http://192.168.1.77:8000/css/app.css" as="style">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: {
+                        DEFAULT: '#0A3167',
+                        dark: '#082850',
+                        light: '#1A4B87'
+                    },
+                    accent: {
+                        DEFAULT: '#C5A572',
+                        dark: '#B89355',
+                        light: '#D4B888'
+                    },
+                    success: {
+                        DEFAULT: '#059669',
+                        dark: '#047857',
+                        light: '#10B981'
+                    },
+                    destructive: {
+                        DEFAULT: '#DC143C',
+                        dark: '#B91C3C',
+                        light: '#EF4444'
+                    },
+                    sale: {
+                        DEFAULT: '#0A3167',
+                        //  DEFAULT: '#DC143C',
+                        dark: '#B91C3C',
+                        light: '#F87171'
+                    }
+                },
+                fontFamily: {
+                    'heading': ['Playfair Display', 'serif'],
+                    'body': ['MFjalla One', 'sans-serif'],
+                },
+                fontSize: {
+                    'xs': ['0.55rem', { lineHeight: '1.1rem' }],
+                    'sm': ['0.875rem', { lineHeight: '1.25rem' }],
+                    'base': ['1rem', { lineHeight: '1.5rem' }],
+                    'lg': ['0.9rem', { lineHeight: '1.75rem' }],
+                    'xl': ['1.5rem', { lineHeight: '2rem' }],
+                }
+            }
+    }
+}
+</script>
+ 
+
+<header class="hidden lg:block sticky top-0 z-50 w-full bg-primary border-b border-white/10 py-3 px-4 sm:px-6 min-h-[75px]">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex items-center justify-between gap-4">
+            <!-- Logo -->
+            <div class="flex items-center gap-4">
+                <a href="http://192.168.1.77:8000" class="flex items-center gap-3 navbar-brand-link">
+                    <div class="w-12 h-12  rounded-full overflow-hidden flex items-center justify-center  navbar-logo">
+                        <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg"
+                             alt="Nutri Nexas"
+                             class="w-full h-full rounded-full"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                     
+                    </div>
+                    <div class="flex flex-col">
+                        <span class="text-white font-bold text-lg leading-tight">NutriNexus</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Navigation -->
+            <nav class="flex items-center gap-6 whitespace-nowrap overflow-x-auto lg:overflow-visible">
+                <!-- Supplements -->
+                <div class="relative" data-dropdown>
+                    <button type="button" class="flex items-center gap-2 text-white hover:text-accent text-sm leading-tight font-medium transition-colors duration-200 nav-link" aria-haspopup="true" aria-expanded="false">
+                        Supplements
+                        <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 hidden" data-menu>
+                        <ul class="py-2 text-sm">
+                            <li><a href="http://192.168.1.77:8000/products/category/Protein" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Protein</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/Creatine" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Creatine</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/Pre-workout" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Pre-workout</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/BCAA" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">BCAA</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Beauty -->
+                <div class="relative" data-dropdown>
+                    <button type="button" class="flex items-center gap-2 text-white hover:text-accent text-sm leading-tight font-medium transition-colors duration-200 nav-link" aria-haspopup="true" aria-expanded="false">
+                        Beauty
+                        <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 hidden" data-menu>
+                        <ul class="py-2 text-sm">
+                            <li><a href="http://192.168.1.77:8000/products/category/Collagen" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Collagen</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/Glutamine" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Glutamine</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Accessories -->
+                <div class="relative" data-dropdown>
+                    <button type="button" class="flex items-center gap-2 text-white hover:text-accent text-sm leading-tight font-medium transition-colors duration-200 nav-link" aria-haspopup="true" aria-expanded="false">
+                        Accessories
+                        <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 hidden" data-menu>
+                        <ul class="py-2 text-sm">
+                            <li><a href="http://192.168.1.77:8000/products/category/T-shirt" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">T-shirt</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/Compression%20wear" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Compression wear</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Natural Protein -->
+                <div class="relative" data-dropdown>
+                    <button type="button" class="flex items-center gap-2 text-white hover:text-accent text-sm leading-tight font-medium transition-colors duration-200 nav-link" aria-haspopup="true" aria-expanded="false">
+                        Clean Protein
+                        <svg class="w-4 h-4" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.25 8.29a.75.75 0 01-.02-1.08z" clip-rule="evenodd"/></svg>
+                    </button>
+                    <div class="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-200 hidden" data-menu>
+                        <ul class="py-2 text-sm">
+                            <li><a href="http://192.168.1.77:8000/products/category/Oats" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Oats</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/Protein%20bar" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Protein bar</a></li>
+                            <li><a href="http://192.168.1.77:8000/products/category/Sattu" class="block px-4 py-2 text-gray-800 hover:bg-gray-100">Sattu</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Standalone links -->
+                <a href="http://192.168.1.77:8000/coupons" class="text-white hover:text-accent text-sm font-medium transition-colors duration-200 nav-link">Coupon</a>
+                <a href="http://192.168.1.77:8000/blogs" class="text-white hover:text-accent text-sm font-medium transition-colors duration-200 nav-link">Blog</a>
+            </nav>
+
+            <!-- Desktop Search and Actions -->
+            <div class="flex items-center gap-4">
+                <!-- Search -->
+                <div class="relative">
+                    <form action="http://192.168.1.77:8000/products/search" method="get" id="desktopSearchForm">
+                        <input 
+                            type="search" 
+                            name="q"
+                            id="desktopSearchInput"
+                            class="design px-3 py-2 rounded-lg text-white placeholder:text-white/70 w-48 text-sm border border-white/20 focus:bg-white/20 focus:outline-none"
+                            placeholder="SEARCH SUPPLEMENTS..."
+                            autocomplete="off"
+                        />
+                    </form>
+                    
+                    <!-- Search Suggestions Dropdown -->
+                    <div id="desktopSearchSuggestions" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 hidden">
+                        <div id="desktopSuggestionsList" class="max-h-60 overflow-y-auto">
+                            <!-- Suggestions will be populated here -->
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Wishlist -->
+                <a href="http://192.168.1.77:8000/wishlist" class="flex items-center gap-1 text-white hover:text-accent transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-white/10 nav-action-btn">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                    </svg>
+                    <span class="text-sm font-medium">Wishlist</span>
+                </a>
+                
+                <!-- Cart -->
+                <button onclick="openCartDrawer()" class="flex items-center gap-1 text-white hover:text-accent transition-colors duration-200 px-3 py-2 rounded-lg hover:bg-white/10 nav-action-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                    <span class="text-sm font-medium">Cart</span>
+                </button>
+                
+                <!-- Profile or Sign In -->
+                                    <!-- Sign In (when not logged in) -->
+                    <a href="http://192.168.1.77:8000/auth/login" class="clip bg-accent hover:bg-accent-dark text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 shadow-lg hover:shadow-xl nav-action-btn">
+                        Sign In
+                    </a>
+                            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Mobile Search Component -->
+<!-- Mobile Search Component - Extracted from Header.php Pattern -->
+<div class="lg:hidden bg-[#0A3167] px-4 py-3">
+    <div class="flex items-center gap-3">
+        <a href="http://192.168.1.77:8000" class="flex-shrink-0">
+            <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg" alt="Nutri Nexas" class="w-10 h-10 rounded-full" />
+        </a>
+        <div class="flex-1 relative">
+            <form action="http://192.168.1.77:8000/products/search" method="get" id="mobileSearchForm">
+                <input 
+                    type="search" 
+                    name="q"
+                    id="mobileSearchInput"
+                    class="w-full design border-white/20 focus:bg-white/20 rounded-full px-4 py-2 text-white placeholder:text-white/70 outline-none"
+                    placeholder="SEARCH SUPPLEMENTS..."
+                    autocomplete="off"
+                />
+            </form>
+            
+            <!-- Search Suggestions Dropdown -->
+            <div id="mobileSearchSuggestions" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-lg border border-gray-200 z-50 hidden">
+                <div id="mobileSuggestionsList" class="max-h-60 overflow-y-auto">
+                    <!-- Suggestions will be populated here -->
+                </div>
+            </div>
+        </div>
+        <a href="http://192.168.1.77:8000/cart" class="flex-shrink-0 text-white">
+            <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+            </svg>
+        </a>
+    </div>
+</div>
+
+<!-- Mobile Search JavaScript -->
+<script>
+// Mobile Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileSearchInput = document.getElementById('mobileSearchInput');
+    const mobileSearchSuggestions = document.getElementById('mobileSearchSuggestions');
+    const mobileSuggestionsList = document.getElementById('mobileSuggestionsList');
+    let mobileSearchTimeout;
+    
+    if (mobileSearchInput) {
+        mobileSearchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            // Clear previous timeout
+            clearTimeout(mobileSearchTimeout);
+            
+            if (query.length < 2) {
+                mobileSearchSuggestions.classList.add('hidden');
+                return;
+            }
+            
+            // Debounce search requests
+            mobileSearchTimeout = setTimeout(() => {
+                fetchMobileSearchSuggestions(query);
+            }, 300);
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!mobileSearchInput.contains(e.target) && !mobileSearchSuggestions.contains(e.target)) {
+                mobileSearchSuggestions.classList.add('hidden');
+            }
+        });
+        
+        // Handle suggestion clicks
+        mobileSuggestionsList.addEventListener('click', function(e) {
+            if (e.target.classList.contains('mobile-suggestion-item')) {
+                const productName = e.target.textContent;
+                mobileSearchInput.value = productName;
+                mobileSearchSuggestions.classList.add('hidden');
+                document.getElementById('mobileSearchForm').submit();
+            }
+        });
+    }
+    
+    function fetchMobileSearchSuggestions(query) {
+        fetch('http://192.168.1.77:8000/products/liveSearch?q=' + encodeURIComponent(query), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.suggestions.length > 0) {
+                displayMobileSuggestions(data.suggestions);
+            } else {
+                mobileSearchSuggestions.classList.add('hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Mobile search suggestions error:', error);
+            mobileSearchSuggestions.classList.add('hidden');
+        });
+    }
+    
+    function displayMobileSuggestions(suggestions) {
+        mobileSuggestionsList.innerHTML = '';
+        
+        suggestions.forEach(suggestion => {
+            const item = document.createElement('div');
+            item.className = 'mobile-suggestion-item px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700';
+            item.textContent = suggestion.name;
+            mobileSuggestionsList.appendChild(item);
+        });
+        
+        mobileSearchSuggestions.classList.remove('hidden');
+    }
+});
+</script>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="fixed top-20 right-4 z-50 w-80 md:w-96 space-y-3"></div>
+
+<!-- JavaScript -->
+<script>
+// Desktop Search functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const desktopSearchInput = document.getElementById('desktopSearchInput');
+    const desktopSearchSuggestions = document.getElementById('desktopSearchSuggestions');
+    const desktopSuggestionsList = document.getElementById('desktopSuggestionsList');
+    let desktopSearchTimeout;
+    
+    if (desktopSearchInput) {
+        desktopSearchInput.addEventListener('input', function() {
+            const query = this.value.trim();
+            
+            // Clear previous timeout
+            clearTimeout(desktopSearchTimeout);
+            
+            if (query.length < 2) {
+                desktopSearchSuggestions.classList.add('hidden');
+                return;
+            }
+            
+            // Debounce search requests
+            desktopSearchTimeout = setTimeout(() => {
+                fetchDesktopSearchSuggestions(query);
+            }, 300);
+        });
+        
+        // Hide suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!desktopSearchInput.contains(e.target) && !desktopSearchSuggestions.contains(e.target)) {
+                desktopSearchSuggestions.classList.add('hidden');
+            }
+        });
+        
+        // Handle suggestion clicks
+        desktopSuggestionsList.addEventListener('click', function(e) {
+            if (e.target.classList.contains('desktop-suggestion-item')) {
+                const productName = e.target.textContent;
+                desktopSearchInput.value = productName;
+                desktopSearchSuggestions.classList.add('hidden');
+                document.getElementById('desktopSearchForm').submit();
+            }
+        });
+    }
+    
+    function fetchDesktopSearchSuggestions(query) {
+        fetch('http://192.168.1.77:8000/products/liveSearch?q=' + encodeURIComponent(query), {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success && data.suggestions.length > 0) {
+                displayDesktopSuggestions(data.suggestions);
+            } else {
+                desktopSearchSuggestions.classList.add('hidden');
+            }
+        })
+        .catch(error => {
+            console.error('Desktop search suggestions error:', error);
+            desktopSearchSuggestions.classList.add('hidden');
+        });
+    }
+    
+    function displayDesktopSuggestions(suggestions) {
+        desktopSuggestionsList.innerHTML = '';
+        
+        suggestions.forEach(suggestion => {
+            const item = document.createElement('div');
+            item.className = 'desktop-suggestion-item px-4 py-2 hover:bg-gray-100 cursor-pointer text-sm text-gray-700';
+            item.textContent = suggestion.name;
+            desktopSuggestionsList.appendChild(item);
+        });
+        
+        desktopSearchSuggestions.classList.remove('hidden');
+    }
+});
+
+// Simple toast function
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `p-4 rounded-lg text-white text-sm ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+    toast.textContent = message;
+    
+    const container = document.getElementById('toastContainer');
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.remove();
+    }, 3000);
+}
+
+// Ensure logo is visible on desktop
+document.addEventListener('DOMContentLoaded', function() {
+    const logoElement = document.querySelector('header a[href="http://192.168.1.77:8000"]');
+    if (logoElement) {
+        logoElement.style.display = 'flex';
+        logoElement.style.alignItems = 'center';
+        logoElement.style.gap = '0.75rem';
+    }
+});
+</script>
+
+<script>
+// Navigation dropdown interactions (hover + keyboard + touch)
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdowns = document.querySelectorAll('[data-dropdown]');
+    dropdowns.forEach(container => {
+        const btn = container.querySelector('button');
+        const menu = container.querySelector('[data-menu]');
+        if (!btn || !menu) return;
+
+        let hideTimer;
+        const showMenu = () => {
+            clearTimeout(hideTimer);
+            menu.classList.remove('hidden');
+            btn.setAttribute('aria-expanded', 'true');
+        };
+        const hideMenu = () => {
+            hideTimer = setTimeout(() => {
+                menu.classList.add('hidden');
+                btn.setAttribute('aria-expanded', 'false');
+            }, 120);
+        };
+
+        // Hover across button and menu without flicker
+        container.addEventListener('mouseenter', showMenu);
+        container.addEventListener('mouseleave', hideMenu);
+        menu.addEventListener('mouseenter', showMenu);
+        menu.addEventListener('mouseleave', hideMenu);
+
+        // Keyboard
+        btn.addEventListener('focus', showMenu);
+        btn.addEventListener('blur', hideMenu);
+        btn.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideMenu(); });
+
+        // Touch / small screens: toggle on click
+        const isTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 1024;
+        btn.addEventListener('click', (e) => {
+            if (isTouch) {
+                e.preventDefault();
+                if (menu.classList.contains('hidden')) showMenu(); else hideMenu();
+            }
+        });
+    });
+
+    // Click outside closes all
+    document.addEventListener('click', (e) => {
+        dropdowns.forEach(container => {
+            if (!container.contains(e.target)) {
+                const btn = container.querySelector('button');
+                const menu = container.querySelector('[data-menu]');
+                if (btn && menu) {
+                    menu.classList.add('hidden');
+                    btn.setAttribute('aria-expanded', 'false');
+                }
+            }
+        });
+    });
+});
+</script>
+    </header>
+ 
+    <main class="flex-grow">
+                
+        <div class="w-full max-w-6xl mx-auto  sm:px-6  sm:py-6">
+            
+<!-- Native App Style Login Page -->
+<div class="min-h-screen relative flex items-center justify-center px-4 py-2 login-page fixed login-bg">
+    
+    <!-- Overlay for better text readability -->
+    <div class="absolute inset-0 bg-white bg-opacity-20"></div>
+    
+    <!-- Login Form Container -->
+    <div class="relative z-5 w-full max-w-sm mx-auto mb-40 fixed overflow-hidden">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-[#0A3167] mb-2">Login here</h1>
+            <p class="text-[#626262] text-base">Welcome back you've been missed!</p>
+        </div>
+
+        <!-- Flash Messages -->
+        
+        
+        <!-- Login Form -->
+        <div class="login-form bg-white rounded-2xl shadow-xl p-8">
+            <form action="http://192.168.1.77:8000/auth/login" method="post" class="space-y-6">
+                <!-- Phone Field -->
+                <div>
+                    <input type="tel" name="phone" id="phone" value="" 
+                           class="native-input w-full px-4 py-4 bg-[#F1F4FF] border border-[#ECECEC] rounded-xl text-[#0A3167] placeholder-[#626262] focus:outline-none focus:border-[#0A3167] transition-colors" 
+                           placeholder="Phone" required>
+                </div>
+
+                <!-- Password Field -->
+                <div>
+                    <input type="password" name="password" id="password" 
+                           class="native-input w-full px-4 py-4 bg-[#F1F4FF] border border-[#ECECEC] rounded-xl text-[#0A3167] placeholder-[#626262] focus:outline-none focus:border-[#0A3167] transition-colors" 
+                           placeholder="Password" required>
+                </div>
+
+                <!-- Forgot Password Link -->
+                <div class="text-right">
+                    <a href="http://192.168.1.77:8000/auth/forgotPassword" class="text-sm text-[#0A3167] font-medium">
+                        Forgot your password?
+                    </a>
+                </div>
+
+                <!-- Sign In Button -->
+                <button type="submit" class="native-button w-full bg-[#0A3167] text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:bg-[#082850] transition-colors">
+                    Sign in
+                </button>
+
+                <!-- Create Account Link -->
+                <div class="text-center">
+                    <p class="text-[#626262] text-sm">
+                        Don't have an account? 
+                        <a href="http://192.168.1.77:8000/auth/register" class="text-[#0A3167] font-semibold">
+                            Create new account
+                        </a>
+                    </p>
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+        </div>
+    </main>
+
+
+    <footer class="mt-auto bg-primary-dark text-white">
+        <footer class="font-header tracking-wide text-white px-10 pt-12 pb-6 mt-12">
+        <div class="flex flex-wrap justify-between gap-10">
+            <div class="max-w-md">
+                <a href='http://192.168.1.77:8000'>
+<img src="http://192.168.1.77:8000/images/logo/logo.min.svg" alt="Nutri Nexas" class='w-16 h-16 sm:w-20 sm:h-20 rounded-full' />
+                </a>
+                <div class="mt-6">
+                    <p class="text-gray-300 leading-relaxed text-sm">Nutri Nexas is your trusted source for premium quality supplements. We offer a wide range of products to support your health and fitness journey, from protein powders to vitamins and everything in between.</p>
+                </div>
+                <ul class="mt-10 flex space-x-5">
+                    <li>
+                        <a href='https://www.facebook.com/people/Nutri-Nexas/61565815894156/?ref=pro_upsell_xav_ig_profile_page_web' class="text-accent hover:text-accent-dark">
+                            <i class="fab fa-facebook-f text-xl"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='https://www.tiktok.com/@nutrinexas' class="text-accent hover:text-accent-dark">
+                            <i class="fab fa-tiktok text-xl"></i>
+                        </a>
+                    </li>
+                    <li>
+                        <a href='https://www.instagram.com/nutrinexasnp/' class="text-accent hover:text-accent-dark">
+                            <i class="fab fa-instagram text-xl"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="max-lg:min-w-[140px]">
+                <h4 class="text-accent font-semibold text-base relative max-sm:cursor-pointer">Products</h4>
+
+                <ul class="mt-6 space-y-4">
+                    <li>
+                        <a href='http://192.168.1.77:8000/products/category/Protein' class='hover:text-accent text-gray-300 text-sm'>Protein</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/products/category/Creatine' class='hover:text-accent text-gray-300 text-sm'>Creatine</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/products/category/Pre-Workout' class='hover:text-accent text-gray-300 text-sm'>Pre-Workout</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/products/category/Vitamins' class='hover:text-accent text-gray-300 text-sm'>Vitamins</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/products/category/Fat-Burners' class='hover:text-accent text-gray-300 text-sm'>Fat Burners</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="max-lg:min-w-[140px]">
+                <h4 class="text-accent font-semibold text-base relative max-sm:cursor-pointer">Support</h4>
+                <ul class="space-y-4 mt-6">
+                    <li>
+                        <a href='http://192.168.1.77:8000/pages/faq' class='hover:text-accent text-gray-300 text-sm'>FAQ</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/pages/shipping' class='hover:text-accent text-gray-300 text-sm'>Shipping</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/pages/returns' class='hover:text-accent text-gray-300 text-sm'>Returns</a>
+                    </li>
+                    <li>
+                        <a href='http://192.168.1.77:8000/pages/contact' class='hover:text-accent text-gray-300 text-sm'>Contact Us</a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="max-lg:min-w-[140px]">
+                <h4 class="text-accent font-semibold text-base relative max-sm:cursor-pointer">Newsletter</h4>
+
+                <form class="mt-6" action="http://192.168.1.77:8000/newsletter/subscribe" method="post">
+                    <div class="relative max-w-xs">
+                        <input type="email" name="email" placeholder="Enter your email" class="w-full px-4 py-2 text-gray-700 bg-white border rounded-none focus:border-accent" required />
+                        <button type="submit" class="absolute inset-y-0 right-0 px-3 text-sm font-medium text-white bg-accent rounded-r-md hover:bg-accent-dark">
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <hr class="mt-10 mb-6 border-gray-700" />
+
+        <div class="flex flex-wrap max-md:flex-col gap-4">
+            <ul class="md:flex md:space-x-6 max-md:space-y-2">
+                <li>
+                    <a href='http://192.168.1.77:8000/pages/terms' class='hover:text-accent text-gray-300 text-sm'>Terms of Service</a>
+                </li>
+                <li>
+                    <a href='http://192.168.1.77:8000/pages/privacy' class='hover:text-accent text-gray-300 text-sm'>Privacy Policy</a>
+                </li>
+                <li>
+                    <a href='http://192.168.1.77:8000/pages/cookies' class='hover:text-accent text-gray-300 text-sm'>Cookie Policy</a>
+                </li>
+            </ul>
+
+            <p class='text-gray-300 text-sm md:ml-auto'>© 2025 Nutri Nexas. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Removed non-existent main.js to prevent 404; use optimized bundle if needed -->
+    <script src="http://192.168.1.77:8000/js/optimized.js"></script>
+    </footer>
+    
+    <!-- Bottom Navigation for Mobile -->
+    <script>document.body.classList.add("no-bottom-nav");</script>    
+    <!-- Mobile navigation drawer overlay (hidden by default) -->
+    <div id="mobileNavOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden" onclick="closeMobileNav()"></div>
+    
+    <script>
+        // Mobile navigation toggle functions
+        function openMobileNav() {
+            document.getElementById('mobileNav').classList.remove('translate-x-full');
+            document.getElementById('mobileNavOverlay').classList.remove('hidden');
+            document.body.classList.add('overflow-hidden');
+        }
+        
+        function closeMobileNav() {
+            document.getElementById('mobileNav').classList.add('translate-x-full');
+            document.getElementById('mobileNavOverlay').classList.add('hidden');
+            document.body.classList.remove('overflow-hidden');
+        }
+        
+        // Check for iOS safe area
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/)) {
+            document.documentElement.classList.add('has-safe-area');
+        }
+
+        // Add resize listener for dynamic adjustments
+        window.addEventListener('resize', function() {
+            if (window.innerWidth >= 768) {
+                closeMobileNav();
+            }
+        });
+
+        // Footer visibility handled by CSS media queries
+    </script>
+    
+        
+    <!-- Session Recovery Script -->
+            
+        <script>
+        // Check for persistent token in localStorage
+        if (typeof(Storage) !== 'undefined') {
+            const persistentToken = localStorage.getItem('nutrinexus_persistent_token');
+            if (persistentToken && !document.cookie.includes('PHPSESSID')) {
+                // Send token to server for validation
+                fetch('http://192.168.1.77:8000/auth/recover-session', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: JSON.stringify({
+                        persistent_token: persistentToken
+                    })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        // Reload page to restore session
+                        window.location.reload();
+                    }
+                })
+                .catch(error => {
+                    console.log('Session recovery failed:', error);
+                });
+            }
+        }
+        </script>    </body>
+</html>

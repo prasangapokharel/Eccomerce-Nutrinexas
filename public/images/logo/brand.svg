@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128">
+  <!-- Minimal, clean mark: navy circle with gold ring and NX monogram -->
+  <defs>
+    <style>
+      .navy{fill:#0e2c59}
+      .gold{stroke:#d9a85c;stroke-width:6;fill:none}
+      .mark{stroke:#ffffff;stroke-width:8;stroke-linecap:round;stroke-linejoin:round;fill:none}
+    </style>
+  </defs>
+  <circle cx="64" cy="64" r="60" class="navy"/>
+  <circle cx="64" cy="64" r="56" class="gold"/>
+  <!-- N -->
+  <path class="mark" d="M40 88 V40 L64 88 V40"/>
+  <!-- X -->
+  <path class="mark" d="M68 40 L92 88 M92 40 L68 88"/>
+</svg>

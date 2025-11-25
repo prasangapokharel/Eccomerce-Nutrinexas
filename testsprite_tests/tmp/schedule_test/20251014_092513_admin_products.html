@@ -1,0 +1,2254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Products</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="http://192.168.1.77:8000/css/admin.css">
+    <link rel="stylesheet" href="http://192.168.1.77:8000/css/app.css">
+    <link rel="stylesheet" href="http://192.168.1.77:8000/css/sidebar.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Removed TinyMCE (Tiny Cloud) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        golden: {
+                            light: '#f3e8c8',
+                            DEFAULT: '#d4b96c',
+                            dark: '#c4a55d'
+                        },
+                        primary: {
+                            lightest: '#f0f6ff',
+                            light: '#e6f0ff',
+                            DEFAULT: '#0A3167',
+                            dark: '#082850'
+                        },
+                
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    </head>
+<body class="bg-gray-50">
+    <div class="flex h-screen overflow-hidden custom-scroll ">
+        <!-- Sidebar -->
+        <aside id="sidebar" class="sidebar text-white shadow-2xl overflow-y-auto">
+            <div class="p-6 flex flex-col h-full">
+                <!-- Logo Section -->
+                <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">
+                    <a href="http://192.168.1.77:8000/admin" class="flex items-center space-x-3 min-w-0">
+                        <!-- <div class="w-12 h-12 bg-golden rounded-xl flex items-center justify-center shadow-lg flex-shrink-0">
+                            <i class="fas fa-leaf text-primary text-xl"></i>
+                        </div> -->
+                        <div class="sidebar-text min-w-0">
+                            <h1 class="text-xl font-bold truncate">Nutri Nexus</h1>
+                            <p class="text-xs text-white/70">Admin Panel</p>
+                        </div>
+                    </a>
+                    <button id="toggleSidebar" class="text-white/80 hover:text-white lg:block hidden p-2 rounded-lg hover:bg-white/10 flex-shrink-0">
+                        <i class="fas fa-bars text-sm"></i>
+                    </button>
+                </div>
+                
+                <!-- Navigation Menu -->
+                <nav class="flex-1 space-y-2">
+                    <!-- Dashboard -->
+                    <a href="http://192.168.1.77:8000/admin" class="nav-item flex items-center p-3 rounded-lg" title="Dashboard">
+                        <i class="fas fa-tachometer-alt w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Dashboard</span>
+                    </a>
+                    
+                    <!-- Products -->
+                    <a href="http://192.168.1.77:8000/admin/products" class="nav-item flex items-center p-3 rounded-lg" title="Products">
+                        <i class="fas fa-box w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Products</span>
+                    </a>
+                    
+                    <!-- Orders -->
+                    <a href="http://192.168.1.77:8000/admin/orders" class="nav-item flex items-center p-3 rounded-lg" title="Orders">
+                        <i class="fas fa-shopping-cart w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Orders</span>
+                    </a>
+                    
+                    <!-- Users -->
+                    <a href="http://192.168.1.77:8000/admin/users" class="nav-item flex items-center p-3 rounded-lg" title="Users">
+                        <i class="fas fa-users w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Users</span>
+                    </a>
+                    
+                    <!-- Staff -->
+                    <a href="http://192.168.1.77:8000/admin/staff" class="nav-item flex items-center p-3 rounded-lg" title="Staff">
+                        <i class="fas fa-user-tie w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Staff</span>
+                    </a>
+                    
+                    <!-- Delivery Boys -->
+                    <a href="http://192.168.1.77:8000/admin/deliveryboy" class="nav-item flex items-center p-3 rounded-lg" title="Delivery Boys">
+                        <i class="fas fa-truck w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Delivery Boys</span>
+                    </a>
+                    
+                    <!-- Payment Gateways -->
+                    <a href="http://192.168.1.77:8000/admin/payment" class="nav-item flex items-center p-3 rounded-lg" title="Payment Gateways">
+                        <i class="fas fa-credit-card w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Payment Gateways</span>
+                    </a>
+                    
+                    <!-- Delivery -->
+                    <a href="http://192.168.1.77:8000/admin/delivery" class="nav-item flex items-center p-3 rounded-lg" title="Delivery Charges">
+                        <i class="fas fa-truck w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Delivery</span>
+                    </a>
+                    
+                    <!-- Inventory Management Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('inventoryDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Inventory Management">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-warehouse w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Inventory</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="inventoryChevron"></i>
+                        </button>
+                        <div id="inventoryDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/inventory" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-tachometer-alt w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Dashboard</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/supplier" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-truck w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Suppliers</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/products" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-box w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Products</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/purchases" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-shopping-cart w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Purchases</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/inventory/payments" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-credit-card w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Payments</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Coupons Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('couponsDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Coupons">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-tags w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Coupons</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="couponsChevron"></i>
+                        </button>
+                        <div id="couponsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/coupons" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Coupons</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/coupons/create" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Create Coupon</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Blog Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('blogDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Blog">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-newspaper w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Blog</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="blogChevron"></i>
+                        </button>
+                        <div id="blogDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/blog" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Posts</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/blog/create" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Create Post</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Slider Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('sliderDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="Sliders">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-images w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">Sliders</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="sliderChevron"></i>
+                        </button>
+                        <div id="sliderDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/slider" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Sliders</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/slider/create" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Create Slider</span>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- SMS Dropdown -->
+                    <div class="nav-item">
+                        <button onclick="toggleDropdown('smsDropdown')" class="w-full flex items-center justify-between p-3 rounded-lg" title="SMS">
+                            <div class="flex items-center min-w-0">
+                                <i class="fas fa-sms w-5 text-golden flex-shrink-0"></i>
+                                <span class="ml-3 sidebar-text font-medium">SMS</span>
+                            </div>
+                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="smsChevron"></i>
+                        </button>
+                        <div id="smsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
+                            <a href="http://192.168.1.77:8000/admin/sms" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">All Templates</span>
+                            </a>
+                            <a href="http://192.168.1.77:8000/admin/sms/marketing" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                                <i class="fas fa-user w-4 text-golden/80 flex-shrink-0"></i>
+                                <span class="ml-2 text-sm">Marketing</span>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <!-- Withdrawals -->
+                    <a href="http://192.168.1.77:8000/admin/withdrawals" class="nav-item flex items-center p-3 rounded-lg" title="Withdrawals">
+                        <i class="fas fa-money-bill-wave w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Withdrawals</span>
+                    </a>
+                    
+                    <!-- Analytics -->
+                    <a href="http://192.168.1.77:8000/admin/analytics" class="nav-item flex items-center p-3 rounded-lg" title="Analytics">
+                        <i class="fas fa-chart-line w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Analytics</span>
+                    </a>
+                </nav>
+                
+                <!-- Bottom Section -->
+                <div class="mt-auto pt-6 border-t border-white/20 space-y-2">
+                    <a href="http://192.168.1.77:8000/" class="nav-item flex items-center p-3 rounded-lg" title="View Store">
+                        <i class="fas fa-store w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">View Store</span>
+                    </a>
+                    <a href="http://192.168.1.77:8000/admin/settings" class="nav-item flex items-center p-3 rounded-lg" title="Settings">
+                        <i class="fas fa-cog w-5 text-golden flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Settings</span>
+                    </a>
+                    <a href="http://192.168.1.77:8000/auth/logout" class="nav-item flex items-center p-3 rounded-lg text-red-300 hover:text-red-200 hover:bg-red-500/20" title="Logout">
+                        <i class="fas fa-sign-out-alt w-5 flex-shrink-0"></i>
+                        <span class="ml-3 sidebar-text font-medium">Logout</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <div id="mainContent" class="main-content flex flex-col overflow-x-hidden">
+            <!-- Top Navbar -->
+            <header class="bg-white shadow-sm border-b border-gray-200 flex-shrink-0">
+                <div class="flex items-center justify-between p-4 lg:p-6">
+                    <div class="flex items-center space-x-4">
+                        <button id="mobileMenuButton" class="lg:hidden text-gray-600 hover:text-gray-900 p-2 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-bars text-xl"></i>
+                        </button>
+                        
+                        <!-- Breadcrumb -->
+                        <nav class="hidden md:flex" aria-label="Breadcrumb">
+                            <ol class="flex items-center space-x-2 text-sm text-gray-500">
+                                <li><a href="http://192.168.1.77:8000/admin" class="hover:text-primary transition-colors">Admin</a></li>
+                                <li><i class="fas fa-chevron-right text-xs"></i></li>
+                                <li class="text-gray-900 font-medium">Manage Products</li>
+                            </ol>
+                        </nav>
+                    </div>
+                    
+                    <div class="flex items-center space-x-4">
+                        <!-- Notifications -->
+                        <button class="relative p-2 text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-100">
+                            <i class="fas fa-bell text-lg"></i>
+                            <span class="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">3</span>
+                        </button>
+                        
+                        <!-- User Dropdown -->
+                        <div class="relative">
+                            <button onclick="toggleDropdown('userDropdown')" class="flex items-center space-x-2 text-gray-700 hover:text-primary p-2 rounded-lg hover:bg-gray-100">
+                                <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-medium">
+                                    P                                </div>
+                                <span class="hidden md:block font-medium">Prasanga</span>
+                                <i class="fas fa-chevron-down text-xs"></i>
+                            </button>
+                            <div id="userDropdown" class="dropdown-menu absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 z-20 border border-gray-200">
+                                <a href="http://192.168.1.77:8000/admin/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-user w-4 mr-2"></i>Profile
+                                </a>
+                                <a href="http://192.168.1.77:8000/admin/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    <i class="fas fa-cog w-4 mr-2"></i>Settings
+                                </a>
+                                <hr class="my-1">
+                                <a href="http://192.168.1.77:8000/auth/logout" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                                    <i class="fas fa-sign-out-alt w-4 mr-2"></i>Logout
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>
+            
+            <!-- Toast Notifications -->
+                        
+            <!-- Page Content -->
+            <main class="flex-1 overflow-y-auto p-4 lg:p-6">
+                
+<div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Manage Products</h1>
+            <p class="mt-1 text-sm text-gray-500">Manage your product inventory and details</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <a href="http://192.168.1.77:8000/admin/addProduct" 
+               class="btn">
+                <i class="fas fa-plus mr-2"></i>
+                Add Product
+            </a>
+        </div>
+    </div>
+
+    <!-- Bulk Actions -->
+    <div id="products-bulk-container" class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6 hidden">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <span class="text-sm text-gray-600" id="selected-count">0 products selected</span>
+                <div class="flex space-x-2">
+                    <button onclick="bulkUpdateStatus('active')" class="px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200">
+                        <i class="fas fa-check mr-1"></i>Activate
+                    </button>
+                    <button onclick="bulkUpdateStatus('inactive')" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded text-sm hover:bg-yellow-200">
+                        <i class="fas fa-pause mr-1"></i>Deactivate
+                    </button>
+                    <button onclick="bulkDelete()" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+                        <i class="fas fa-trash mr-1"></i>Delete
+                    </button>
+                </div>
+            </div>
+            <button onclick="clearSelection()" class="text-gray-500 hover:text-gray-700">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fas fa-box text-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Total Products</p>
+                    <h3 class="text-xl font-bold text-gray-900">11</h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-green-50 text-green-600">
+                    <i class="fas fa-check-circle text-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">In Stock</p>
+                    <h3 class="text-xl font-bold text-gray-900">
+                        11                    </h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-red-50 text-red-600">
+                    <i class="fas fa-exclamation-triangle text-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Low Stock</p>
+                    <h3 class="text-xl font-bold text-gray-900">
+                        2                    </h3>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-yellow-50 text-yellow-600">
+                    <i class="fas fa-star text-lg"></i>
+                </div>
+                <div class="ml-4">
+                    <p class="text-sm font-medium text-gray-500">Featured</p>
+                    <h3 class="text-xl font-bold text-gray-900">
+                        8                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Products Table -->
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <!-- Table Header -->
+        <div class="p-6 border-b border-gray-100">
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <h2 class="text-lg font-semibold text-gray-900">Product List</h2>
+                
+                <!-- Search and Filters -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="relative">
+                        <input type="text" 
+                               id="searchInput" 
+                               placeholder="Search products..." 
+                               class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                               style="-webkit-appearance: none; appearance: none; -webkit-border-radius: 0.5rem; border-radius: 0.5rem;">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
+                        <button id="searchButton" 
+                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition-colors">
+                            <i class="fas fa-times text-sm hidden" id="clearSearch"></i>
+                        </button>
+                    </div>
+                    
+                    <select id="categoryFilter" 
+                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                            style="-webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>'); background-repeat: no-repeat; background-position: right 0.7rem center; background-size: 0.65rem auto; padding-right: 2.5rem;">
+                        <option value="">All Categories</option>
+                                                    <option value="Protein">Protein</option>
+                                                    <option value="Combo">Combo</option>
+                                                    <option value="BCAA">BCAA</option>
+                                                    <option value="Supplements">Supplements</option>
+                                                    <option value="Vitamins">Vitamins</option>
+                                                    <option value="collagen">collagen</option>
+                                                    <option value="creatine">creatine</option>
+                                                    <option value="Pre-Workout">Pre-Workout</option>
+                                            </select>
+
+                    <select id="statusFilter"
+                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
+                            style="-webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>'); background-repeat: no-repeat; background-position: right 0.7rem center; background-size: 0.65rem auto; padding-right: 2.5rem;">
+                                                <option value="" selected>All Statuses</option>
+                        <option value="active" >Active</option>
+                        <option value="inactive" >Inactive</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Table Content -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-100">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th scope="col" class="px-4 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <input type="checkbox" id="selectAll" class="form-checkbox">
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Product
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Category
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Price
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Stock
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Status
+                        </th>
+                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Actions
+                        </th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-100" id="productsTableBody">
+                                                                        <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="scheduled auto test 20251014_092513"
+                                data-category="protein">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="70">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="http://192.168.1.77:8000/images/placeholder-product.jpg" 
+                                                 alt="Scheduled Auto Test 20251014_092513"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Scheduled Auto Test 20251014_092513                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 70                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Protein                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs1,799.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs1,999.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        12                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="70" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/70" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(70)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/70" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="70" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="dashain combo offer - creatine , collagen, atom whey protein"
+                                data-category="combo">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="68">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/products/dashbain.jpg" 
+                                                 alt="Dashain Combo Offer - Creatine , Collagen, Atom Whey Protein"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Dashain Combo Offer - Creatine , Collagen, Atom Whey Protein                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 68                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Combo                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs7,499.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs8,599.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        12                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="68" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/68" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(68)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/68" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="68" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="xteend bca"
+                                data-category="bcaa">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="66">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://cellucor.com/cdn/shop/files/XTEND_1119_Ecomm_XTEND_BCAAoriginal_PDP_Refresh-WhatareBCAAs.png?v=1753909055&amp;width=990" 
+                                                 alt="Xteend BCA"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Xteend BCA                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 66                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        BCAA                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs2,200.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs2,900.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        12                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="66" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/66" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(66)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/66" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="66" >
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="nutrex lipo6 black ultra concentrate fat destroyer - 60 capsules"
+                                data-category="supplements">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="63">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://vitamins.lv/cdn/shop/files/prod_679aefdd-0c47-4983-869a-caaf6587a1d6.jpg?crop=center&amp;height=600&amp;v=1746875084&amp;width=600" 
+                                                 alt="Nutrex Lipo6 Black Ultra Concentrate Fat Destroyer - 60 Capsules"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Nutrex Lipo6 Black Ultra Concentrate Fat Destroyer - 60 Capsules                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 63                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Supplements                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs4,200.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs5,100.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        12                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="63" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/63" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(63)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/63" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="63" >
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="nitro tech 100% whey gold 5lbs (2.23 kg) - 69 servings"
+                                data-category="protein">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="60">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://img.drz.lazcdn.com/g/kf/S923b5ff9648b4a4abc471899c8e038aeB.jpg_720x720q80.jpg" 
+                                                 alt="Nitro Tech 100% Whey Gold 5Lbs (2.23 Kg) - 69 Servings"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Nitro Tech 100% Whey Gold 5Lbs (2.23 Kg) - 69 Servings                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 60                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Protein                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs16,200.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs18,500.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        12                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="60" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/60" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(60)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/60" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="60" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="atom whey protein | usa labdoor certified for accuracy &amp; purity"
+                                data-category="protein">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="53">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/products/atom.svg" 
+                                                 alt="ATOM Whey Protein | USA Labdoor Certified For Accuracy &amp; Purity"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                ATOM Whey Protein | USA Labdoor Certified For Accuracy &amp; Purity                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 53                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Protein                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs4,150.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs4,650.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-exclamation mr-1"></i>
+                                        10                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="53" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/53" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(53)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/53" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="53" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="carbamide forte chelated magnesium glycinate 2000mg tablets(60 veg tablets)"
+                                data-category="vitamins">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="51">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://images-static.nykaa.com/media/catalog/product/6/e/6e19277NYKCAF0000055_01.jpg?tr=w-344,h-344,cm-pad_resize" 
+                                                 alt="Carbamide Forte Chelated Magnesium Glycinate 2000mg Tablets(60 Veg Tablets)"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Carbamide Forte Chelated Magnesium Glycinate 2000mg Tablets(60 Veg Tablets)                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 51                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Vitamins                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs2,400.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs2,800.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <i class="fas fa-check mr-1"></i>
+                                        12                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="51" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/51" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(51)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/51" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="51" >
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-600">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="hk vitals skin radiance marine collagen supplement (orange,200g)|vitamin c,e,sodium hyaluronate|for healthy skin,hair &amp; nails,powder,1 count,25 servings"
+                                data-category="collagen">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="44">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://img10.hkrtcdn.com/39889/prd_3988809-HK-Vitals-Skin-Radiance-Collagen-Marine-Collagen-200-g-Orange_o.jpg" 
+                                                 alt="Hk vitals Skin Radiance Marine Collagen Supplement (Orange,200g)|Vitamin C,E,Sodium Hyaluronate|For Healthy Skin,Hair &amp; Nails,powder,1 count,25 Servings"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Hk vitals Skin Radiance Marine Collagen Supplement (Orange,200g)|Vitamin C,E,Sodium Hyaluronate|For Healthy Skin,Hair &amp; Nails,powder,1 count,25 Servings                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 44                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        collagen                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs2,250.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs2,850.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-exclamation mr-1"></i>
+                                        10                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="44" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/44" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(44)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/44" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="44" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="wellcore – pure micronised creatine monohydrate (307g, 83 servings) kiwi kick – rapid absorption for strength, power &amp; recovery | nutrinexas nepal"
+                                data-category="creatine">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="43">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://wellversed.in/cdn/shop/files/P-1_KK83servings_Creatine_Listing_Wellcore_1200x1200.jpg?v=1748154115" 
+                                                 alt="Wellcore – Pure Micronised Creatine Monohydrate (307g, 83 Servings) Kiwi Kick – Rapid Absorption for Strength, Power &amp; Recovery | NutriNexas Nepal"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Wellcore – Pure Micronised Creatine Monohydrate (307g, 83 Servings) Kiwi Kick – Rapid Absorption for Strength, Power &amp; Recovery | NutriNexas Nepal                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 43                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        creatine                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <span class="font-medium">Rs2,099.00</span>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-exclamation mr-1"></i>
+                                        1                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="43" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/43" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(43)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/43" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="43" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="wellcore – pure micronised creatine monohydrate (307g, 83 servings) tropical tango – fast absorption for strength &amp; endurance | nutrinexas nepal"
+                                data-category="creatine">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="6">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://wellversed.in/cdn/shop/files/Front___83Serv___Tropical_Tango_CREATINE___LISTING___WELLCORE___WELLVERSED_773x837.jpg?v=1730139755" 
+                                                 alt="Wellcore – Pure Micronised Creatine Monohydrate (307g, 83 Servings) Tropical Tango – Fast Absorption for Strength &amp; Endurance | NutriNexas Nepal"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Wellcore – Pure Micronised Creatine Monohydrate (307g, 83 Servings) Tropical Tango – Fast Absorption for Strength &amp; Endurance | NutriNexas Nepal                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 6                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        creatine                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs2,099.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs2,400.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-exclamation mr-1"></i>
+                                        5                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="6" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/6" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(6)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/6" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="6" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                    <tr class="hover:bg-gray-50 transition-colors product-row" 
+                                data-name="cellucor c4 the original explosive pre-workout, 360 g (0.80 lb)"
+                                data-category="pre-workout">
+                                <td class="px-4 py-4">
+                                    <input type="checkbox" class="product-checkbox" value="5">
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center">
+                                        <div class="flex-shrink-0 h-12 w-12">
+                                                                                        <img class="h-12 w-12 rounded-lg object-cover border border-gray-200" 
+                                                 src="https://img.drz.lazcdn.com/g/kf/S4761ff3e570b47fa9165a119e37edc2dx.jpg_720x720q80.jpg" 
+                                                 alt="Cellucor C4 The Original Explosive Pre-Workout, 360 g (0.80 lb)"
+                                                 onerror="this.src='http://192.168.1.77:8000/images/placeholder-product.jpg'">
+                                        </div>
+                                        <div class="ml-4 min-w-0 flex-1">
+                                            <div class="text-sm font-medium text-gray-900 truncate" style="max-width: 220px;">
+                                                Cellucor C4 The Original Explosive Pre-Workout, 360 g (0.80 lb)                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                ID: 5                                                                                                    <span class="ml-2 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                        <i class="fas fa-star mr-1"></i>Featured
+                                                    </span>
+                                                                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                                        Pre-Workout                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="text-sm text-gray-900">
+                                                                                    <div class="flex items-center space-x-2">
+                                                <span class="font-medium text-green-600">Rs5,499.00</span>
+                                                <span class="text-xs text-gray-500 line-through">Rs8,900.00</span>
+                                            </div>
+                                                                            </div>
+                                </td>
+                                <td class="px-6 py-4">
+                                                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                        <i class="fas fa-exclamation mr-1"></i>
+                                        10                                    </span>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <label class="inline-flex items-center cursor-pointer">
+                                        <input type="checkbox" class="status-toggle sr-only" data-product-id="5" checked>
+                                        <span class="relative inline-block w-10 h-5 bg-primary rounded-full transition-colors">
+                                            <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full shadow transform transition-transform translate-x-5"></span>
+                                        </span>
+                                        <span class="ml-2 text-xs text-primary">
+                                            Active                                        </span>
+                                    </label>
+                                </td>
+                                <td class="px-6 py-4">
+                                    <div class="flex items-center space-x-3">
+                                        <a href="http://192.168.1.77:8000/admin/editProduct/5" 
+                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           title="Edit Product">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button onclick="confirmDelete(5)" 
+                                                class="text-red-600 hover:text-red-800 transition-colors"
+                                                title="Delete Product">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <a href="http://192.168.1.77:8000/product/5" 
+                                           target="_blank"
+                                           class="text-gray-600 hover:text-gray-800 transition-colors"
+                                           title="View Product">
+                                            <i class="fas fa-external-link-alt"></i>
+                                        </a>
+                                        <label class="inline-flex items-center cursor-pointer" title="Toggle Featured">
+                                            <input type="checkbox" class="featured-toggle sr-only" data-product-id="5" checked>
+                                            <span class="ml-1 inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-yellow-100 text-yellow-800">
+                                                <i class="fas fa-star"></i>
+                                            </span>
+                                        </label>
+                                    </div>
+                                </td>
+                            </tr>
+                                                            </tbody>
+            </table>
+        </div>
+
+        <!-- Table Footer -->
+                <div class="px-6 py-4 border-t border-gray-100 bg-gray-50">
+            <div class="flex items-center justify-between text-sm text-gray-500">
+                <span>Showing 11 products</span>
+                <div class="flex items-center space-x-4">
+                    <span>Total Images: 32</span>
+                    <span>•</span>
+                    <span>Total Value: Rs543,160.00</span>
+                </div>
+            </div>
+        </div>
+            </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
+    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white">
+        <div class="mt-3 text-center">
+            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+                <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <h3 class="text-lg font-medium text-gray-900 mt-4">Delete Product</h3>
+            <div class="mt-2 px-7 py-3">
+                <p class="text-sm text-gray-500">
+                    Are you sure you want to delete this product? This action cannot be undone and will remove all associated images and data.
+                </p>
+            </div>
+            <div class="items-center px-4 py-3">
+                <button id="confirmDeleteBtn" 
+                        class="btn">
+                    Delete
+                </button>
+                <button id="cancelDeleteBtn" 
+                        class="btn">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+let productToDelete = null;
+
+function confirmDelete(productId) {
+    productToDelete = productId;
+    document.getElementById('deleteModal').classList.remove('hidden');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const searchInput = document.getElementById('searchInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+    const clearSearch = document.getElementById('clearSearch');
+    const deleteModal = document.getElementById('deleteModal');
+    const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+    const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const productsTableBody = document.getElementById('productsTableBody');
+    
+    // Search functionality
+    function filterProducts() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedCategory = categoryFilter.value.toLowerCase();
+        const rows = document.querySelectorAll('.product-row');
+        let visibleCount = 0;
+        
+        rows.forEach(row => {
+            const productName = row.dataset.name;
+            const productCategory = row.dataset.category;
+            
+            const matchesSearch = !searchTerm || productName.includes(searchTerm);
+            const matchesCategory = !selectedCategory || productCategory === selectedCategory;
+            
+            if (matchesSearch && matchesCategory) {
+                row.style.display = '';
+                visibleCount++;
+            } else {
+                row.style.display = 'none';
+            }
+        });
+        
+        // Show/hide clear button
+        if (searchTerm) {
+            clearSearch.classList.remove('hidden');
+        } else {
+            clearSearch.classList.add('hidden');
+        }
+        
+        // Show no results message
+        const noProductsRow = document.getElementById('noProductsRow');
+        if (visibleCount === 0 && rows.length > 0) {
+            if (!document.getElementById('noResultsRow')) {
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.id = 'noResultsRow';
+                noResultsRow.innerHTML = `
+                    <td colspan="6" class="px-6 py-12 text-center">
+                        <div class="flex flex-col items-center">
+                            <i class="fas fa-search text-4xl text-gray-300 mb-4"></i>
+                            <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+                            <p class="text-gray-500">Try adjusting your search or filter criteria.</p>
+                        </div>
+                    </td>
+                `;
+                productsTableBody.appendChild(noResultsRow);
+            }
+        } else {
+            const noResultsRow = document.getElementById('noResultsRow');
+            if (noResultsRow) {
+                noResultsRow.remove();
+            }
+        }
+    }
+    
+    // Event listeners
+    searchInput.addEventListener('input', filterProducts);
+    categoryFilter.addEventListener('change', filterProducts);
+    statusFilter.addEventListener('change', function() {
+        const baseUrl = 'http://192.168.1.77:8000/admin/products';
+        const status = statusFilter.value;
+        const url = status ? `${baseUrl}?status=${encodeURIComponent(status)}` : baseUrl;
+        window.location.href = url;
+    });
+    
+    clearSearch.addEventListener('click', function() {
+        searchInput.value = '';
+        filterProducts();
+        searchInput.focus();
+    });
+    
+    // Delete modal handlers
+    confirmDeleteBtn.addEventListener('click', function() {
+        if (productToDelete) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://192.168.1.77:8000/admin/deleteProduct/' + productToDelete;
+            document.body.appendChild(form);
+            form.submit();
+        }
+    });
+    
+    cancelDeleteBtn.addEventListener('click', function() {
+        deleteModal.classList.add('hidden');
+        productToDelete = null;
+    });
+    
+    // Close modal on outside click
+    deleteModal.addEventListener('click', function(e) {
+        if (e.target === deleteModal) {
+            deleteModal.classList.add('hidden');
+            productToDelete = null;
+        }
+    });
+    
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            deleteModal.classList.add('hidden');
+            productToDelete = null;
+        }
+        if (e.ctrlKey && e.key === 'k') {
+            e.preventDefault();
+            searchInput.focus();
+        }
+    });
+});
+</script>
+
+<style>
+/* iOS Safari specific fixes */
+input[type="text"], 
+input[type="search"], 
+select, 
+textarea {
+    -webkit-appearance: none;
+    appearance: none;
+    -webkit-border-radius: 0;
+    border-radius: 0.5rem;
+}
+
+/* Custom select arrow for better cross-browser compatibility */
+select {
+    background-image: url("data:image/svg+xml;charset=US-ASCII,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 4 5'><path fill='%23666' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>");
+    background-repeat: no-repeat;
+    background-position: right 0.7rem center;
+    background-size: 0.65rem auto;
+    padding-right: 2.5rem;
+}
+
+/* Smooth transitions */
+.product-row {
+    transition: background-color 0.15s ease-in-out;
+}
+
+/* Mobile responsive table */
+@media (max-width: 640px) {
+    .overflow-x-auto {
+        -webkit-overflow-scrolling: touch;
+    }
+}
+</style>
+
+<script>
+// Bulk Actions for Products
+function updateBulkActionState() {
+    const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+    const bulkContainer = document.getElementById('products-bulk-container');
+    const selectedCount = document.getElementById('selected-count');
+    
+    if (checkedBoxes.length > 0) {
+        bulkContainer.classList.remove('hidden');
+        selectedCount.textContent = `${checkedBoxes.length} product${checkedBoxes.length > 1 ? 's' : ''} selected`;
+    } else {
+        bulkContainer.classList.add('hidden');
+    }
+}
+
+function clearSelection() {
+    const checkboxes = document.querySelectorAll('.product-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.checked = false;
+    });
+    updateBulkActionState();
+}
+
+function bulkUpdateStatus(status) {
+    const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+    if (checkedBoxes.length === 0) {
+        showToast('Please select at least one product', 'error');
+        return;
+    }
+    const action = status === 'active' ? 'activate' : 'deactivate';
+    showConfirmation(
+        `${action.charAt(0).toUpperCase() + action.slice(1)} Products`,
+        `Are you sure you want to ${action} ${checkedBoxes.length} product${checkedBoxes.length > 1 ? 's' : ''}?`,
+        () => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://192.168.1.77:8000/admin/products/bulkUpdate';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            form.appendChild(actionInput);
+
+            Array.from(checkedBoxes).forEach(checkbox => {
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'product_ids[]';
+                idInput.value = checkbox.value;
+                form.appendChild(idInput);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    );
+}
+
+function bulkDelete() {
+    const checkedBoxes = document.querySelectorAll('.product-checkbox:checked');
+    if (checkedBoxes.length === 0) {
+        showToast('Please select at least one product', 'error');
+        return;
+    }
+    showConfirmation(
+        'Delete Products',
+        `Are you sure you want to delete ${checkedBoxes.length} product${checkedBoxes.length > 1 ? 's' : ''}? This action cannot be undone.`,
+        () => {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://192.168.1.77:8000/admin/products/bulkUpdate';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = 'delete';
+            form.appendChild(actionInput);
+
+            Array.from(checkedBoxes).forEach(checkbox => {
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'product_ids[]';
+                idInput.value = checkbox.value;
+                form.appendChild(idInput);
+            });
+
+            document.body.appendChild(form);
+            form.submit();
+        }
+    );
+}
+
+// Initialize bulk actions
+document.addEventListener('DOMContentLoaded', function() {
+    const checkboxes = document.querySelectorAll('.product-checkbox');
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateBulkActionState);
+    });
+
+    // Select all handling
+    const selectAll = document.getElementById('selectAll');
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            const rows = document.querySelectorAll('.product-checkbox');
+            rows.forEach(cb => { cb.checked = selectAll.checked; });
+            updateBulkActionState();
+        });
+    }
+
+    // Status toggle handling
+    document.querySelectorAll('.status-toggle').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const id = this.dataset.productId;
+            const action = this.checked ? 'activate' : 'deactivate';
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://192.168.1.77:8000/admin/products/bulkUpdate';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            form.appendChild(actionInput);
+
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'product_ids[]';
+            idInput.value = id;
+            form.appendChild(idInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+
+    // Featured toggle handling
+    document.querySelectorAll('.featured-toggle').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const id = this.dataset.productId;
+            const action = this.checked ? 'feature_on' : 'feature_off';
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'http://192.168.1.77:8000/admin/products/bulkUpdate';
+
+            const actionInput = document.createElement('input');
+            actionInput.type = 'hidden';
+            actionInput.name = 'action';
+            actionInput.value = action;
+            form.appendChild(actionInput);
+
+            const idInput = document.createElement('input');
+            idInput.type = 'hidden';
+            idInput.name = 'product_ids[]';
+            idInput.value = id;
+            form.appendChild(idInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    });
+});
+</script>
+
+            </main>
+        </div>
+    </div>
+    
+    <!-- Mobile Overlay -->
+    <div id="mobileOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden lg:hidden"></div>
+    
+    <script>
+        // Cookie utility functions
+        function setCookie(name, value, days = 30) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + (days * 24 * 60 * 60 * 1000));
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+        }
+        
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('mainContent');
+            const toggleSidebar = document.getElementById('toggleSidebar');
+            const mobileMenuButton = document.getElementById('mobileMenuButton');
+            const mobileOverlay = document.getElementById('mobileOverlay');
+            const toast = document.getElementById('toast');
+            
+            // Load sidebar state from cookie
+            const sidebarCollapsed = getCookie('sidebar_collapsed') === 'true';
+            
+            // Apply saved state on page load
+            if (sidebarCollapsed && window.innerWidth >= 1024) {
+                sidebar.classList.add('sidebar-collapsed');
+                mainContent.classList.add('collapsed');
+            }
+            
+            // Toast notification
+            if (toast) {
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    closeToast();
+                }, 5000);
+            }
+            
+            // Toggle sidebar on desktop
+            if (toggleSidebar) {
+                toggleSidebar.addEventListener('click', function() {
+                    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+                    
+                    if (isCollapsed) {
+                        // Expand sidebar
+                        sidebar.classList.remove('sidebar-collapsed');
+                        mainContent.classList.remove('collapsed');
+                        setCookie('sidebar_collapsed', 'false');
+                    } else {
+                        // Collapse sidebar
+                        sidebar.classList.add('sidebar-collapsed');
+                        mainContent.classList.add('collapsed');
+                        setCookie('sidebar_collapsed', 'true');
+                    }
+                });
+            }
+            
+            // Toggle sidebar on mobile
+            if (mobileMenuButton) {
+                mobileMenuButton.addEventListener('click', function() {
+                    sidebar.classList.toggle('mobile-open');
+                    mobileOverlay.classList.toggle('hidden');
+                });
+            }
+            
+            // Close sidebar when clicking overlay
+            if (mobileOverlay) {
+                mobileOverlay.addEventListener('click', function() {
+                    sidebar.classList.remove('mobile-open');
+                    mobileOverlay.classList.add('hidden');
+                });
+            }
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                if (window.innerWidth < 1024) {
+                    // Mobile view - reset classes
+                    sidebar.classList.remove('sidebar-collapsed');
+                    mainContent.classList.remove('collapsed');
+                } else {
+                    // Desktop view - apply saved state
+                    const sidebarCollapsed = getCookie('sidebar_collapsed') === 'true';
+                    if (sidebarCollapsed) {
+                        sidebar.classList.add('sidebar-collapsed');
+                        mainContent.classList.add('collapsed');
+                    }
+                    // Close mobile menu if open
+                    sidebar.classList.remove('mobile-open');
+                    mobileOverlay.classList.add('hidden');
+                }
+            });
+            
+            // Set active nav item based on current URL
+            setActiveNavItem();
+        });
+        
+        // Toggle dropdown menus
+        function toggleDropdown(dropdownId) {
+            const dropdown = document.getElementById(dropdownId);
+            const chevron = document.getElementById(dropdownId.replace('Dropdown', 'Chevron'));
+            
+            if (!dropdown) return;
+            
+            dropdown.classList.toggle('open');
+            if (chevron) {
+                chevron.style.transform = dropdown.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+            }
+            
+            // Close other dropdowns
+            document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                if (menu.id !== dropdownId) {
+                    menu.classList.remove('open');
+                    const otherChevron = document.getElementById(menu.id.replace('Dropdown', 'Chevron'));
+                    if (otherChevron) {
+                        otherChevron.style.transform = 'rotate(0deg)';
+                    }
+                }
+            });
+        }
+        
+        // Close toast notification
+        function closeToast() {
+            const toast = document.getElementById('toast');
+            if (toast) {
+                toast.style.transform = 'translateX(100%)';
+                setTimeout(() => {
+                    toast.remove();
+                }, 300);
+            }
+        }
+        
+        // Set active navigation item
+        function setActiveNavItem() {
+            const currentPath = window.location.pathname;
+            const navItems = document.querySelectorAll('.nav-item');
+            
+            navItems.forEach(item => {
+                const mainLink = item.querySelector('a');
+                const dropdownButton = item.querySelector('button[onclick*="toggleDropdown"]');
+                let isActive = false;
+
+                // Check if the main link matches the current path
+                if (mainLink && mainLink.getAttribute('href')) {
+                    const linkPath = new URL(mainLink.getAttribute('href'), window.location.origin).pathname;
+                    if (currentPath === linkPath || (linkPath === '/admin' && (currentPath === '/admin/' || currentPath === '/admin'))) {
+                        isActive = true;
+                    }
+                }
+
+                // Check if any dropdown sub-item matches the current path
+                const dropdownLinks = item.querySelectorAll('.dropdown-menu a');
+                dropdownLinks.forEach(subLink => {
+                    if (subLink.getAttribute('href')) {
+                        const subLinkPath = new URL(subLink.getAttribute('href'), window.location.origin).pathname;
+                        if (currentPath === subLinkPath) {
+                            isActive = true;
+                            // If a sub-item is active, ensure its parent dropdown is open
+                            const dropdown = subLink.closest('.dropdown-menu');
+                            if (dropdown && !dropdown.classList.contains('open')) {
+                                toggleDropdown(dropdown.id);
+                            }
+                        }
+                    }
+                });
+
+                if (isActive) {
+                    item.classList.add('active');
+                } else {
+                    item.classList.remove('active');
+                }
+            });
+        }
+        
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.relative') && !event.target.closest('[onclick*="toggleDropdown"]')) {
+                document.querySelectorAll('.dropdown-menu').forEach(menu => {
+                    menu.classList.remove('open');
+                    const chevron = document.getElementById(menu.id.replace('Dropdown', 'Chevron'));
+                    if (chevron) {
+                        chevron.style.transform = 'rotate(0deg)';
+                    }
+                });
+            }
+        });
+    </script>
+        
+    <!-- Admin Enhancements -->
+    
+<!-- Toast Notification System -->
+<div id="toast-container" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+<!-- Confirmation Dialog Modal -->
+<div id="confirmationModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen p-4">
+        <div class="bg-white rounded-lg shadow-xl max-w-md w-full">
+            <div class="p-6">
+                <div class="flex items-center mb-4">
+                    <div class="flex-shrink-0">
+                        <i class="fas fa-exclamation-triangle text-yellow-500 text-xl"></i>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-lg font-medium text-gray-900" id="confirmationTitle">Confirm Action</h3>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <p class="text-sm text-gray-500" id="confirmationMessage">Are you sure you want to perform this action?</p>
+                </div>
+                <div class="flex justify-end space-x-3">
+                    <button type="button" id="confirmationCancel"
+                            class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors">
+                        Cancel
+                    </button>
+                    <button type="button" id="confirmationConfirm"
+                            class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                        Confirm
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Global Toast Notification System
+function showToast(message, type = 'success', duration = 5000) {
+    const container = document.getElementById('toast-container');
+    const toast = document.createElement('div');
+    
+    const bgColor = type === 'success' ? 'bg-green-500' : 
+                    type === 'error' ? 'bg-red-500' : 
+                    type === 'warning' ? 'bg-yellow-500' : 'bg-blue-500';
+    const icon = type === 'success' ? 'fas fa-check-circle' : 
+                type === 'error' ? 'fas fa-exclamation-circle' : 
+                type === 'warning' ? 'fas fa-exclamation-triangle' : 'fas fa-info-circle';
+    
+    toast.className = `${bgColor} text-white px-6 py-3 rounded-lg shadow-lg flex items-center space-x-2 transform transition-all duration-300 translate-x-full`;
+    toast.innerHTML = `
+        <i class="${icon}"></i>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="ml-4 text-white hover:text-gray-200">
+            <i class="fas fa-times"></i>
+        </button>
+    `;
+    
+    container.appendChild(toast);
+    
+    // Animate in
+    setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+    }, 100);
+    
+    // Auto remove
+    setTimeout(() => {
+        toast.classList.add('translate-x-full');
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}
+
+// Global Confirmation Dialog System
+function showConfirmation(title, message, onConfirm, onCancel = null) {
+    const modal = document.getElementById('confirmationModal');
+    const titleEl = document.getElementById('confirmationTitle');
+    const messageEl = document.getElementById('confirmationMessage');
+    const confirmBtn = document.getElementById('confirmationConfirm');
+    const cancelBtn = document.getElementById('confirmationCancel');
+    
+    titleEl.textContent = title;
+    messageEl.textContent = message;
+    
+    modal.classList.remove('hidden');
+    
+    // Remove existing event listeners
+    const newConfirmBtn = confirmBtn.cloneNode(true);
+    const newCancelBtn = cancelBtn.cloneNode(true);
+    confirmBtn.parentNode.replaceChild(newConfirmBtn, confirmBtn);
+    cancelBtn.parentNode.replaceChild(newCancelBtn, cancelBtn);
+    
+    // Add new event listeners
+    newConfirmBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        if (onConfirm) onConfirm();
+    });
+    
+    newCancelBtn.addEventListener('click', () => {
+        modal.classList.add('hidden');
+        if (onCancel) onCancel();
+    });
+}
+
+// Enhanced Form Validation
+function validateField(field, errorId, customValidation = null) {
+    const value = field.value.trim();
+    const errorElement = document.getElementById(errorId);
+    let isValid = true;
+    let errorMessage = '';
+    
+    if (field.hasAttribute('required') && !value) {
+        isValid = false;
+        errorMessage = 'This field is required';
+    } else if (field.type === 'email' && value && !isValidEmail(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid email address';
+    } else if (field.type === 'tel' && value && !isValidPhone(value)) {
+        isValid = false;
+        errorMessage = 'Please enter a valid phone number';
+    } else if (customValidation) {
+        const customResult = customValidation(value);
+        if (!customResult.isValid) {
+            isValid = false;
+            errorMessage = customResult.message;
+        }
+    }
+    
+    if (isValid) {
+        field.classList.remove('border-red-500');
+        field.classList.add('border-gray-300');
+        if (errorElement) {
+            errorElement.classList.add('hidden');
+        }
+    } else {
+        field.classList.remove('border-gray-300');
+        field.classList.add('border-red-500');
+        if (errorElement) {
+            errorElement.textContent = errorMessage;
+            errorElement.classList.remove('hidden');
+        }
+    }
+    
+    return isValid;
+}
+
+function isValidEmail(email) {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+}
+
+function isValidPhone(phone) {
+    const phoneRegex = /^[\+]?[1-9][\d]{0,15}$/;
+    return phoneRegex.test(phone.replace(/\s/g, ''));
+}
+
+// Enhanced Form Submission with Loading States
+function enhanceFormSubmission(formId, options = {}) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn ? submitBtn.innerHTML : '';
+    
+    form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // Validate required fields
+        const requiredFields = form.querySelectorAll('[required]');
+        let isValid = true;
+        
+        requiredFields.forEach(field => {
+            const errorId = field.getAttribute('aria-describedby');
+            if (!validateField(field, errorId)) {
+                isValid = false;
+            }
+        });
+        
+        if (!isValid) {
+            showToast('Please fix the errors before submitting', 'error');
+            return;
+        }
+        
+        // Show loading state
+        if (submitBtn) {
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing...';
+        }
+        
+        // Submit form
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.text())
+        .then(data => {
+            if (options.successCallback) {
+                options.successCallback(data);
+            } else {
+                if (data.includes('successfully') || data.includes('created') || data.includes('updated')) {
+                    showToast(options.successMessage || 'Operation completed successfully!', 'success');
+                    if (options.redirectUrl) {
+                        setTimeout(() => {
+                            window.location.href = options.redirectUrl;
+                        }, 1500);
+                    }
+                } else {
+                    showToast(options.errorMessage || 'Operation failed. Please try again.', 'error');
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showToast('An error occurred. Please try again.', 'error');
+        })
+        .finally(() => {
+            if (submitBtn) {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
+    });
+}
+
+// Real-time validation for forms
+function addRealTimeValidation(formId) {
+    const form = document.getElementById(formId);
+    if (!form) return;
+    
+    const fields = form.querySelectorAll('input, select, textarea');
+    fields.forEach(field => {
+        const errorId = field.getAttribute('aria-describedby');
+        if (errorId) {
+            field.addEventListener('blur', () => validateField(field, errorId));
+            field.addEventListener('input', () => {
+                if (field.classList.contains('border-red-500')) {
+                    validateField(field, errorId);
+                }
+            });
+        }
+    });
+}
+
+// Bulk Actions Enhancement
+function enhanceBulkActions(containerId, options = {}) {
+    const container = document.getElementById(containerId);
+    if (!container) return;
+    
+    const selectAllCheckbox = container.querySelector('.select-all-checkbox');
+    const itemCheckboxes = container.querySelectorAll('.item-checkbox');
+    const bulkActionBtn = container.querySelector('.bulk-action-btn');
+    
+    if (selectAllCheckbox) {
+        selectAllCheckbox.addEventListener('change', function() {
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateBulkActionState();
+        });
+    }
+    
+    itemCheckboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateBulkActionState);
+    });
+    
+    function updateBulkActionState() {
+        const checkedItems = container.querySelectorAll('.item-checkbox:checked');
+        if (bulkActionBtn) {
+            bulkActionBtn.disabled = checkedItems.length === 0;
+        }
+    }
+}
+
+// Initialize enhancements when DOM is loaded
+document.addEventListener('DOMContentLoaded', function() {
+    // Add real-time validation to all forms with id
+    const forms = document.querySelectorAll('form[id]');
+    forms.forEach(form => {
+        addRealTimeValidation(form.id);
+    });
+    
+    // Initialize bulk actions
+    const bulkContainers = document.querySelectorAll('[id$="-bulk-container"]');
+    bulkContainers.forEach(container => {
+        enhanceBulkActions(container.id);
+    });
+});
+</script>
+
+<style>
+/* Enhanced form styling */
+.border-red-500 {
+    border-color: #ef4444 !important;
+}
+
+.border-green-500 {
+    border-color: #10b981 !important;
+}
+
+/* Loading states */
+.btn-loading {
+    display: none;
+}
+
+.btn-loading.show {
+    display: inline-block;
+}
+
+/* Toast animations */
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(100%);
+    }
+}
+
+.toast-slide-in {
+    animation: slideInRight 0.3s ease-out;
+}
+
+.toast-slide-out {
+    animation: slideOutRight 0.3s ease-in;
+}
+</style>
+
+</body>
+</html>

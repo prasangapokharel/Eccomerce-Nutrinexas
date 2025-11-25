@@ -1,0 +1,75 @@
+<div class="space-y-6 text-gray-800">
+  <h2 class="text-xl sm:text-2xl font-semibold">AS-IT-IS ATOM Whey Protein 1kg — Double Rich Chocolate</h2>
+
+  <figure class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+    <img src="https://m.media-amazon.com/images/S/aplus-media-library-service-media/b8989482-ea17-4f16-950c-fd36fc40b89d.__CR0,0,970,600_PT0_SX970_V1___.jpg" alt="AS-IT-IS ATOM Whey Protein with Digestive Enzymes" class="mx-auto w-full max-w-md object-contain rounded" />
+    <figcaption class="sr-only">AS-IT-IS ATOM Whey Protein 1kg Double Rich Chocolate</figcaption>
+  </figure>
+
+  <figure class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+    <img src="https://m.media-amazon.com/images/S/aplus-media-library-service-media/1712406f-1922-4b03-b2e2-3afe14c47536.__CR0,0,970,600_PT0_SX970_V1___.jpg" alt="AS-IT-IS ATOM Whey Protein Nutritional Information" class="mx-auto w-full max-w-md object-contain rounded" />
+    <figcaption class="sr-only">ATOM Whey Protein Benefits and Features</figcaption>
+  </figure>
+
+  <p class="text-gray-700">AS-IT-IS ATOM Whey Protein is a premium quality supplement that delivers 27g of high-quality protein per serving with enhanced digestive enzymes for superior absorption and bioavailability.</p>
+  <p class="text-gray-700">USA Labdoor certified for accuracy and purity, this whey protein features the highest PDCAA score of 1.0, ensuring optimal protein quality for muscle growth and recovery.</p>
+  <p class="text-gray-700">Enriched with 5.7g BCAA and 4.8g glutamine, it supports muscle protein synthesis while minimizing protein breakdown, making it perfect for both aerobic and resistance training enthusiasts.</p>
+
+  <div>
+    <h3 class="text-lg font-semibold text-gray-900">Key Benefits</h3>
+    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+      <li>Delivers 27g of premium whey protein per serving for optimal muscle growth.</li>
+      <li>Contains 5.7g BCAA to maximize muscle protein synthesis and recovery.</li>
+      <li>Includes 4.8g glutamine for enhanced muscle repair and immune support.</li>
+      <li>Features digestive enzymes for superior bioavailability and absorption.</li>
+      <li>Minimal calories, low fat, and no added sugar for clean nutrition.</li>
+      <li>USA Labdoor certified for guaranteed purity and accuracy.</li>
+    </ul>
+  </div>
+
+  <div>
+    <h3 class="text-lg font-semibold text-gray-900">How to Use</h3>
+    <ol class="list-decimal pl-5 space-y-1 text-gray-700">
+      <li>Mix 1 scoop (30g) with 200-250ml of water or milk.</li>
+      <li>Shake or stir well until completely dissolved.</li>
+      <li>Consume within 30 minutes post-workout or between meals for optimal results.</li>
+      <li>Use consistently as part of your daily fitness routine.</li>
+    </ol>
+  </div>
+
+  <div>
+    <h3 class="text-lg font-semibold text-gray-900">Nutritional Highlights</h3>
+    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+      <li>Protein: 27g per serving</li>
+      <li>BCAA: 5.7g for muscle recovery</li>
+      <li>Glutamine: 4.8g for muscle repair</li>
+      <li>PDCAA Score: 1.0 (highest rating)</li>
+      <li>Net Weight: 1kg (35.2 Oz)</li>
+      <li>Flavor: Double Rich Chocolate</li>
+    </ul>
+  </div>
+
+  <div>
+    <h3 class="text-lg font-semibold text-gray-900">Who Can Use</h3>
+    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+      <li>Athletes and fitness enthusiasts seeking muscle growth and recovery.</li>
+      <li>Bodybuilders looking for high-quality protein supplementation.</li>
+      <li>Individuals engaged in regular aerobic or resistance training.</li>
+      <li>Anyone looking to increase daily protein intake with clean nutrition.</li>
+    </ul>
+  </div>
+
+  <div>
+    <h3 class="text-lg font-semibold text-gray-900">Why You'll Love It</h3>
+    <ul class="list-disc pl-5 space-y-1 text-gray-700">
+      <li>Delicious Double Rich Chocolate flavor that mixes easily.</li>
+      <li>Superior bioavailability with digestive enzymes for better absorption.</li>
+      <li>Third-party tested and certified for quality assurance.</li>
+      <li>Clean formula with minimal calories and no added sugar.</li>
+      <li>Proven results backed by the highest PDCAA protein quality score.</li>
+    </ul>
+  </div>
+
+  <p class="text-xs text-gray-500">Note: Store in a cool, dry place. Consult your healthcare professional before use if pregnant, nursing, or have medical conditions.</p>
+  <p class="text-xs text-gray-400">Source: Amazon product listing (AS-IT-IS ATOM Whey Protein with Digestive Enzymes, USA Labdoor Certified).</p>
+</div>

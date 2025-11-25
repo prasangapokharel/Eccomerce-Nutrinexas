@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Shipping Label</title>
+    <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        @page {
+            size: 110mm 150mm;
+            margin: 0;
+        }
+        
+        @media print {
+            html, body {
+                width: 110mm;
+                height: 150mm;
+                margin: 0;
+                padding: 0;
+                overflow: hidden;
+            }
+            
+            .label-container {
+                width: 110mm;
+                height: 150mm;
+                margin: 0;
+                padding: 3mm;
+                page-break-inside: avoid;
+            }
+            
+            table {
+                page-break-inside: avoid;
+            }
+            
+            .no-print {
+                display: none !important;
+            }
+        }
+        
+        body {
+            width: 110mm;
+            height: 150mm;
+            margin: 0 auto;
+            padding: 3mm;
+            font-family: Arial, sans-serif;
+            font-size: 10pt;
+            color: #000000;
+            background: #FFFFFF;
+        }
+        
+        .label-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 1px solid #000000;
+        }
+        
+        td, th {
+            vertical-align: top;
+            padding: 2mm;
+            border: 1px solid #000000;
+        }
+        
+        .top-table {
+            margin-bottom: 2mm;
+        }
+        
+        .logo-container {
+            margin-bottom: 1mm;
+            text-align: center;
+            padding: 1mm;
+            border: 1px solid #000000;
+            min-height: 15mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .logo-container img {
+            max-width: 100%;
+            max-height: 15mm;
+            object-fit: contain;
+        }
+        
+        .logo-placeholder {
+            font-weight: bold;
+            font-size: 11pt;
+            color: #666;
+        }
+        
+        .shipping-from {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 1mm;
+        }
+        
+        .address-line {
+            font-size: 10pt;
+            margin-bottom: 0.3mm;
+            line-height: 1.2;
+        }
+        
+        .barcode-number {
+            font-family: monospace;
+            font-size: 10pt;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .right-info {
+            text-align: right;
+        }
+        
+        .shipping-date, .weight {
+            font-size: 9pt;
+            margin-bottom: 0.5mm;
+            line-height: 1.3;
+        }
+        
+        .tracking-table {
+            margin: 2mm 0;
+        }
+        
+        .tracking-cell {
+            text-align: center;
+        }
+        
+        .tracking-label {
+            font-weight: bold;
+            font-size: 10pt;
+            margin-bottom: 0.5mm;
+        }
+        
+        .tracking-number {
+            font-family: monospace;
+            font-size: 11pt;
+            font-weight: bold;
+        }
+        
+        .bottom-table {
+            margin-top: 2mm;
+        }
+        
+        .shipping-to {
+            font-weight: bold;
+            font-size: 11pt;
+            margin-bottom: 1mm;
+        }
+        
+        .recipient-name {
+            font-size: 10pt;
+            margin-bottom: 0.3mm;
+            line-height: 1.2;
+        }
+        
+        .recipient-address {
+            font-size: 10pt;
+            line-height: 1.2;
+        }
+        
+        .barcode-bottom {
+            width: 100%;
+            height: 10mm;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .barcode-bottom svg {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="label-container">
+        <table class="top-table">
+            <tr>
+                <td style="width: 40%;">
+                    <div class="logo-container">
+                        {{LOGO_IMAGE}}
+                    </div>
+                    <div class="shipping-from">Shipping From:</div>
+                    <div class="address-line">{{COMPANY NAME}}</div>
+                    <div class="address-line">{{YOUR STREET ADDRESS}}</div>
+                    <div class="address-line">{{CITY, STATE, ZIP CODE}}</div>
+                </td>
+                <td style="width: 30%;" class="barcode-number">
+                    <div>4711081517432</div>
+                </td>
+                <td style="width: 30%;" class="right-info">
+                    <div class="shipping-date">Shipping Date: {Date}</div>
+                    <div class="weight">Weight: {}</div>
+                </td>
+            </tr>
+        </table>
+        
+        <table class="tracking-table">
+            <tr>
+                <td class="tracking-cell">
+                    <div class="tracking-label">Tracking no:</div>
+                    <div class="tracking-number">00000-0000-0000-000</div>
+                </td>
+            </tr>
+        </table>
+        
+        <table class="bottom-table">
+            <tr>
+                <td style="width: 50%;">
+                    <div class="shipping-to">Shipping To:</div>
+                    <div class="recipient-name">{{Type Recipient Name Here}}</div>
+                    <div class="recipient-address">{{STREET ADDRESS}}</div>
+                </td>
+                <td style="width: 50%;">
+                    <div class="barcode-bottom">
+                        <svg id="barcode-bottom"></svg>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+        window.addEventListener('load', function() {
+            JsBarcode("#barcode-bottom", "4711081517432", {
+                format: "CODE128",
+                width: 1,
+                height: 10,
+                displayValue: false,
+                margin: 0
+            });
+        });
+        
+        window.addEventListener('beforeprint', function() {
+            setTimeout(function() {
+                var barcode = document.getElementById('barcode-bottom');
+                if (barcode && !barcode.querySelector('svg')) {
+                    JsBarcode("#barcode-bottom", "4711081517432", {
+                        format: "CODE128",
+                        width: 1,
+                        height: 10,
+                        displayValue: false,
+                        margin: 0
+                    });
+                }
+            }, 100);
+        });
+    </script>
+</body>
+</html>

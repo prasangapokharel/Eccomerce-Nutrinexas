@@ -1,0 +1,45 @@
+{
+  "name": "nutri-nexus/mvc-app",
+  "description": "Nutri Nexus - Premium Supplements Store",
+  "type": "project",
+  "require": {
+    "php": ">=7.4",
+    "phpmailer/phpmailer": "^6.10",
+    "vlucas/phpdotenv": "^5.5",
+    "guzzlehttp/guzzle": "^7.9",
+    "khalti/php-sdk": "^1.1",
+    "phpfastcache/phpfastcache": "^9.2",
+    "symfony/cache": "^7.2",
+    "spatie/async": "^1.6",
+    "bacon/bacon-qr-code": "^3.0",
+    "dompdf/dompdf": "^3.1",
+    "mpdf/mpdf": "^8.2",
+    "intervention/image": "^3.11",
+    "imagekit/imagekit": "^4.0",
+    "league/commonmark": "^2.7",
+    "remotemerge/esewa-php-sdk": "^3.1",
+    "auth0/auth0-php": "^8.0",
+    "phpoffice/phpword": "^1.3",
+    "respect/validation": "^2.4",
+    "omnipay/omnipay": "3.2",
+    "omnipay/common": "3.2",
+    "omnipay/paypal": "3"
+  },
+  "autoload": {
+    "psr-4": {
+      "App\\": "App/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Nutri Nexus Team",
+      "email": "info@nutrinexus.com"
+    }
+  ],
+  "minimum-stability": "stable",
+  "config": {
+    "allow-plugins": {
+      "php-http/discovery": true
+    }
+  }
+}
