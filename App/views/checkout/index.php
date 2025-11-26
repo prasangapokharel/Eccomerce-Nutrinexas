@@ -64,7 +64,10 @@ if (isset($_COOKIE['guest_postal_code'])) {
 }
 ?>
 <div class="bg-gray-50 min-h-screen">
-    <div class="max-w-md mx-auto bg-white min-h-screen">
+    <div class="max-w-7xl mx-auto px-4 py-6">
+        <div class="bg-white rounded-3xl shadow-sm">
+            <div class="flex max-md:flex-col gap-8">
+                <div class="flex-1 max-md:-order-1 px-4 py-6">
         
         <!-- Progress Indicator -->
         <!-- <div class="bg-white border-b border-gray-200 px-4 py-4">
@@ -370,115 +373,111 @@ if (isset($_COOKIE['guest_postal_code'])) {
                           placeholder="Any special instructions for your order..."></textarea>
             </div>
 
-            <!-- Order Summary -->
-            <div class="px-4 py-4">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Summary</h2>
-                
-                <div class="space-y-3 mb-4">
+        </form>
+    </div>
+
+    <aside class="bg-gray-100 rounded-2xl p-6 flex-1 md:order-2 md:min-w-[360px] md:max-w-[420px] md:sticky md:top-6">
+        <div class="space-y-6">
+            <div>
+                <h2 class="text-lg font-semibold text-slate-900">Order Details</h2>
+                <p class="text-sm text-slate-500">Review items and totals before placing your order</p>
+            </div>
+
+            <div class="space-y-4">
+                <?php if (empty($cartItems)): ?>
+                    <div class="p-4 bg-white rounded-lg border border-dashed border-gray-300 text-center text-sm text-gray-500">
+                        Your cart is empty.
+                    </div>
+                <?php else: ?>
                     <?php foreach ($cartItems as $item): ?>
-                        <div id="checkout-item-<?= $item['id'] ?>" class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg">
-                            <div class="w-12 h-12 overflow-hidden bg-gray-100 rounded-lg">
+                        <div class="flex items-center gap-4 bg-white rounded-xl p-3 border border-gray-100">
+                            <div class="w-16 h-16 flex p-2 bg-gray-50 rounded-lg">
                                 <?php $imageUrl = htmlspecialchars(getProductImageUrl($item['product'])); ?>
                                 <img src="<?= $imageUrl ?>"
                                      alt="<?= htmlspecialchars($item['product']['product_name']) ?>"
-                                     class="w-12 h-12 object-cover">
+                                     class="w-full h-full object-contain rounded-md">
                             </div>
                             <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate"><?= htmlspecialchars($item['product']['product_name']) ?></p>
-                                <p class="text-xs text-gray-500">Qty: <?= $item['quantity'] ?> × <?= CurrencyHelper::format($item['product']['sale_price'] ?? $item['product']['price']) ?></p>
+                                <p class="text-sm font-semibold text-slate-900 truncate"><?= htmlspecialchars($item['product']['product_name']) ?></p>
+                                <p class="text-xs text-slate-500 mt-1">Qty <?= $item['quantity'] ?> • <?= CurrencyHelper::format($item['product']['sale_price'] ?? $item['product']['price']) ?></p>
                             </div>
-                            <div class="flex items-center space-x-2">
-                                <p class="text-sm font-medium text-primary"><?= CurrencyHelper::format($item['subtotal']) ?></p>
-                                <button type="button"
-                                        class="text-gray-400 hover:text-red-600"
-                                        aria-label="Remove item"
-                                        onclick="removeCheckoutItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>, 'checkout-item-<?= $item['id'] ?>')">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                    </svg>
-                                </button>
+                            <div class="text-sm font-semibold text-slate-900">
+                                <?= CurrencyHelper::format($item['subtotal']) ?>
                             </div>
                         </div>
                     <?php endforeach; ?>
-                </div>
+                <?php endif; ?>
+            </div>
 
-                <!-- Coupon Section -->
-                <div class="mb-4 p-3 bg-primary/5 border border-primary/20 rounded-lg" id="coupon-section">
-                    <div class="flex items-center mb-2">
-                        <svg class="w-4 h-4 text-primary mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                        </svg>
-                        <span class="font-medium text-primary text-sm">Have a coupon?</span>
+            <div id="coupon-section" class="space-y-3">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-slate-900">Promo Code</h3>
+                </div>
+                <?php if (isset($appliedCoupon) && $appliedCoupon): ?>
+                    <div id="applied-coupon" class="flex items-center justify-between p-3 bg-primary/10 border border-primary/20 rounded-lg">
+                        <div>
+                            <p class="text-sm font-medium text-primary"><?= htmlspecialchars($appliedCoupon['code']) ?></p>
+                            <p class="text-xs text-primary/70">You saved <?= CurrencyHelper::format($couponDiscount) ?></p>
+                        </div>
+                        <button type="button" id="remove-coupon-btn" class="text-red-600" aria-label="Remove coupon">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                            </svg>
+                        </button>
                     </div>
-                    <?php if (isset($appliedCoupon) && $appliedCoupon): ?>
-                        <div id="applied-coupon" class="flex items-center justify-between p-2 bg-accent/10 border border-accent/30 rounded">
-                            <div class="flex items-center">
-                                <svg class="w-4 h-4 text-accent mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <div>
-                                    <p class="text-sm font-medium text-accent"><?= htmlspecialchars($appliedCoupon['code']) ?></p>
-                                    <p class="text-xs text-accent/70">Discount: <?= CurrencyHelper::format($couponDiscount) ?></p>
-                                </div>
-                            </div>
-                            <button type="button" id="remove-coupon-btn" class="text-red-600">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                </svg>
+                <?php else: ?>
+                    <div id="coupon-form" class="bg-white border border-gray-200 rounded-xl p-3">
+                        <div class="flex gap-2">
+                            <input type="text" id="coupon-code" placeholder="Enter code"
+                                   class="flex-1 px-3 py-2 border border-primary/30 rounded text-sm focus:ring-2 focus:ring-primary focus:border-primary uppercase"
+                                   style="text-transform: uppercase;">
+                            <button type="button" id="apply-coupon-btn"
+                                    class="px-3 py-2 bg-primary text-white text-sm font-medium rounded-lg hover:bg-primary-dark">
+                                Apply
                             </button>
                         </div>
-                    <?php else: ?>
-                        <div id="coupon-form">
-                            <div class="flex space-x-2">
-                                <input type="text" id="coupon-code" placeholder="Enter coupon code"
-                                       class="flex-1 px-3 py-2 border border-primary/30 rounded text-sm focus:ring-2 focus:ring-primary focus:border-primary uppercase"
-                                       style="text-transform: uppercase;">
-                                <button type="button" id="apply-coupon-btn"
-                                        class="px-3 py-2 bg-primary text-white text-sm font-medium rounded hover:bg-primary-dark">
-                                    Apply
-                                </button>
-                            </div>
-                            <div id="coupon-message" class="mt-2 text-sm hidden"></div>
-                        </div>
-                    <?php endif; ?>
-                </div>
+                        <div id="coupon-message" class="mt-2 text-sm hidden"></div>
+                    </div>
+                <?php endif; ?>
+            </div>
 
-                <!-- Totals -->
-                <div class="space-y-2 text-sm">
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Subtotal (<?= count($cartItems) ?> items)</span>
-                        <span class="font-medium text-gray-900"><?= CurrencyHelper::format($total) ?></span>
+            <div class="space-y-3 text-sm text-slate-600">
+                <div class="flex justify-between">
+                    <span>Subtotal (<?= count($cartItems) ?> items)</span>
+                    <span class="font-semibold text-slate-900">रु<span id="subtotal"><?= number_format($total, 2) ?></span></span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Tax (<?= (new \App\Models\Setting())->get('tax_rate', 13) ?>%)</span>
+                    <span class="font-semibold text-slate-900">रु<span id="tax"><?= number_format($tax, 2) ?></span></span>
+                </div>
+                <?php if (isset($couponDiscount) && $couponDiscount > 0): ?>
+                    <div class="flex justify-between text-green-600">
+                        <span>Coupon Discount</span>
+                        <span>-<?= CurrencyHelper::format($couponDiscount) ?></span>
                     </div>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Tax (<?= (new \App\Models\Setting())->get('tax_rate', 13) ?>%)</span>
-                        <span class="font-medium text-gray-900"><?= CurrencyHelper::format($tax) ?></span>
-                    </div>
-                    <?php if (isset($couponDiscount) && $couponDiscount > 0): ?>
-                        <div class="flex justify-between">
-                            <span class="text-green-600">Coupon Discount</span>
-                            <span class="font-medium text-green-600">-<?= CurrencyHelper::format($couponDiscount) ?></span>
-                        </div>
-                    <?php endif; ?>
-                    <div class="flex justify-between">
-                        <span class="text-gray-600">Delivery Fee</span>
-                        <span id="delivery-fee" class="font-medium text-gray-900">रु0.00</span>
-                    </div>
-                    <div class="border-t border-gray-200 pt-2">
-                        <div class="flex justify-between">
-                            <span class="text-lg font-semibold text-gray-900">Total</span>
-                            <span id="final-total" class="text-xl font-bold text-primary"><?= CurrencyHelper::format($finalTotal) ?></span>
-                        </div>
-                    </div>
+                <?php endif; ?>
+                <div class="flex justify-between">
+                    <span>Delivery Fee</span>
+                    <span id="delivery-fee" class="font-semibold text-slate-900">रु0.00</span>
+                </div>
+                <div class="border-t border-gray-200 pt-3 flex items-center justify-between">
+                    <span class="text-base font-semibold text-slate-900">Total</span>
+                    <span id="final-total" class="text-xl font-bold text-primary"><?= CurrencyHelper::format($finalTotal) ?></span>
                 </div>
             </div>
 
-            <!-- Place Order Button -->
-            <div class="px-4 pb-20">
-                <!-- Spacer for sticky button -->
+            <button type="button"
+                    class="hidden md:flex w-full justify-center mt-4 px-4 py-3 rounded-xl bg-slate-900 text-white font-semibold text-sm tracking-wide hover:bg-slate-800"
+                    onclick="document.getElementById('place-order-btn').click();">
+                Complete Purchase
+            </button>
+        </div>
+    </aside>
             </div>
-        </form>
+        </div>
     </div>
-    
+</div>
+
     <!-- Trust Signals -->
     <!-- <div class="fixed bottom-20 left-0 right-0 bg-white border-t border-gray-100 p-4 z-40">
         <div class="flex items-center justify-center space-x-6 text-xs text-gray-600">
@@ -504,7 +503,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
     </div> -->
 
     <!-- Sticky Place Order Button -->
-    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50">
+    <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50 lg:hidden">
         <div class="grid grid-cols-2 gap-3">
             <button type="button" id="cod-quick-btn" class="w-full bg-accent hover:bg-accent-dark border border-accent text-white px-6 py-3 rounded-2xl font-semibold text-sm flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
