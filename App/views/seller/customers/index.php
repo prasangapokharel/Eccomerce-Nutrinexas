@@ -14,7 +14,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <!-- Table Header -->
         <div class="p-6 border-b border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <h2 class="text-lg font-semibold text-gray-900">Customer List</h2>
                 
                 <!-- Search -->
@@ -22,8 +22,8 @@
                     <input type="text" 
                            id="searchInput" 
                            placeholder="Search customers by name, email..." 
-                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                           style="appearance: none; -webkit-appearance: none; border-radius: 0.5rem; -webkit-border-radius: 0.5rem;">
+                           class="input native-input"
+                           style="padding-left: 2.5rem;">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>

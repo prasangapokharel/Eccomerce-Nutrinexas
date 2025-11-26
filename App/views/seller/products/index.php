@@ -43,7 +43,7 @@
 
         <!-- Table Header -->
         <div class="p-6 border-b border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <div class="flex items-center gap-4">
                     <label class="flex items-center cursor-pointer">
                         <input type="checkbox" 
@@ -65,10 +65,6 @@
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400 text-sm"></i>
                         </div>
-                        <button id="searchButton" 
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition-colors">
-                            <i class="fas fa-times text-sm hidden" id="clearSearch"></i>
-                        </button>
                     </div>
                     
                     <select id="statusFilter"

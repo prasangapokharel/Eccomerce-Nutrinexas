@@ -2,47 +2,53 @@
 <?php $page = 'stock-movement'; ?>
 
 <div class="space-y-6">
-    <div class="page-header">
-        <h1 class="page-title">Stock Movement Log</h1>
-        <p class="text-gray-600">Track all stock changes for your products</p>
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Stock Movement Log</h1>
+            <p class="mt-1 text-sm text-gray-500">Track all stock changes for your products</p>
+        </div>
     </div>
 
     <!-- Filters -->
-    <div class="bg-white rounded-lg shadow p-4">
-        <form method="GET" class="flex flex-col sm:flex-row gap-4">
-            <div class="flex-1">
-                <label for="product_id" class="block text-sm font-medium text-gray-700 mb-1">Product</label>
-                <select id="product_id" name="product_id" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm">
-                    <option value="">All Products</option>
-                    <?php foreach ($products as $product): ?>
-                        <option value="<?= $product['id'] ?>" <?= $productFilter == $product['id'] ? 'selected' : '' ?>>
-                            <?= htmlspecialchars($product['product_name']) ?>
-                        </option>
-                    <?php endforeach; ?>
-                </select>
-            </div>
-            <div class="flex-1">
-                <label for="type" class="block text-sm font-medium text-gray-700 mb-1">Movement Type</label>
-                <select id="type" name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm">
-                    <option value="">All Types</option>
-                    <option value="in" <?= $typeFilter === 'in' ? 'selected' : '' ?>>Stock In</option>
-                    <option value="out" <?= $typeFilter === 'out' ? 'selected' : '' ?>>Stock Out</option>
-                    <option value="sale" <?= $typeFilter === 'sale' ? 'selected' : '' ?>>Sale</option>
-                    <option value="return" <?= $typeFilter === 'return' ? 'selected' : '' ?>>Return</option>
-                    <option value="cancellation" <?= $typeFilter === 'cancellation' ? 'selected' : '' ?>>Cancellation</option>
-                    <option value="adjustment" <?= $typeFilter === 'adjustment' ? 'selected' : '' ?>>Adjustment</option>
-                </select>
-            </div>
-            <div class="flex items-end">
-                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">
-                    Filter
-                </button>
-            </div>
-        </form>
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+        <div class="p-6 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
+            <form method="GET" class="flex flex-col sm:flex-row gap-4">
+                <div class="flex-1">
+                    <label for="product_id" class="block text-sm font-medium text-gray-700 mb-2">Product</label>
+                    <select id="product_id" name="product_id" class="input native-input">
+                        <option value="">All Products</option>
+                        <?php foreach ($products as $product): ?>
+                            <option value="<?= $product['id'] ?>" <?= $productFilter == $product['id'] ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($product['product_name']) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Movement Type</label>
+                    <select id="type" name="type" class="input native-input">
+                        <option value="">All Types</option>
+                        <option value="in" <?= $typeFilter === 'in' ? 'selected' : '' ?>>Stock In</option>
+                        <option value="out" <?= $typeFilter === 'out' ? 'selected' : '' ?>>Stock Out</option>
+                        <option value="sale" <?= $typeFilter === 'sale' ? 'selected' : '' ?>>Sale</option>
+                        <option value="return" <?= $typeFilter === 'return' ? 'selected' : '' ?>>Return</option>
+                        <option value="cancellation" <?= $typeFilter === 'cancellation' ? 'selected' : '' ?>>Cancellation</option>
+                        <option value="adjustment" <?= $typeFilter === 'adjustment' ? 'selected' : '' ?>>Adjustment</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button type="submit" class="btn">
+                        Filter
+                    </button>
+                </div>
+            </form>
+        </div>
     </div>
 
     <!-- Stock Movements Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="overflow-x-auto">
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-50">

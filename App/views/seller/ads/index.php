@@ -2,24 +2,30 @@
 <?php $page = 'ads'; ?>
 
 <div class="space-y-6">
-    <div class="flex justify-between items-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">My Ads</h1>
-        <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="bg-primary text-white px-4 py-2 rounded-2xl hover:bg-primary-dark transition-colors">
-            <i class="fas fa-plus mr-2"></i>Create New Ad
-        </a>
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">My Ads</h1>
+            <p class="mt-1 text-sm text-gray-500">Manage your product advertisements</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="btn">
+                <i class="fas fa-plus mr-2"></i>Create New Ad
+            </a>
+        </div>
     </div>
 
     <?php if (empty($ads)): ?>
-        <div class="bg-white rounded-lg shadow p-8 text-center">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-8 text-center">
             <i class="fas fa-ad text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-700 mb-2">No Ads Yet</h3>
             <p class="text-gray-500 mb-4">Create your first ad to promote your products</p>
-            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="inline-block bg-primary text-white px-6 py-2 rounded-2xl hover:bg-primary-dark transition-colors">
+            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="btn">
                 Create Ad
             </a>
         </div>
     <?php else: ?>
-        <div class="bg-white rounded-lg shadow overflow-hidden">
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
