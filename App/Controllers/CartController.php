@@ -8,6 +8,8 @@ use App\Models\Cart;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Setting;
+use App\Models\Coupon;
+use Exception;
 
 /**
  * Cart Controller
@@ -19,6 +21,7 @@ class CartController extends Controller
         private $cartModel;
         private $productImageModel;
         private $settingModel;
+        private $couponModel;
 
         public function __construct()
         {
@@ -27,6 +30,7 @@ class CartController extends Controller
             $this->cartModel = new Cart();
             $this->productImageModel = new ProductImage();
             $this->settingModel = new Setting();
+            $this->couponModel = new Coupon();
         }
 
         /**
@@ -137,12 +141,33 @@ class CartController extends Controller
             $taxRate = $this->settingModel->get('tax_rate', 12) / 100; // Get tax rate from settings, default to 12%
             $tax = $total * $taxRate;
             $finalTotal = $total + $tax;
+            $originalTotals = [
+                'subtotal' => $total,
+                'tax' => $tax,
+                'final' => $finalTotal
+            ];
+
+            $appliedCoupon = $_SESSION['applied_coupon'] ?? null;
+            $couponDiscount = 0;
+
+            if (!empty($appliedCoupon) && is_array($appliedCoupon)) {
+                $couponDiscount = $this->couponModel->calculateDiscount($appliedCoupon, $total);
+                $discountedSubtotal = max(0, $total - $couponDiscount);
+                $discountedTax = $discountedSubtotal * $taxRate;
+                $total = $discountedSubtotal;
+                $tax = $discountedTax;
+                $finalTotal = $discountedSubtotal + $discountedTax;
+            }
             
             $this->view('cart/index', [
                 'cartItems' => $enhancedItems,
                 'total' => $total,
                 'tax' => $tax,
                 'finalTotal' => $finalTotal,
+                'taxRate' => $taxRate,
+                'appliedCoupon' => $appliedCoupon,
+                'couponDiscount' => $couponDiscount,
+                'originalTotals' => $originalTotals,
                 'title' => 'Shopping Cart',
             ]);
         }
@@ -649,7 +674,8 @@ respond_after_delete:
                     $_SESSION['cart_count'] = 0;
                 } else {
                     // Clear user cart
-                    $this->cartModel->clear();
+                    $userId = Session::get('user_id');
+                    $this->cartModel->clearCart($userId);
                     $_SESSION['cart_count'] = 0;
                 }
 
@@ -677,13 +703,14 @@ respond_after_delete:
          */
         public function getCount()
         {
-            $count = $this->cartModel->getCartCount($userId);
-            $_SESSION['cart_count'] = $count;
+        $cartMiddleware = new \App\Middleware\CartMiddleware();
+        $count = $cartMiddleware->getCartCount();
+        $_SESSION['cart_count'] = $count;
 
-            $this->jsonResponse([
-                'success' => true,
-                'cart_count' => $count
-            ]);
+        $this->jsonResponse([
+            'success' => true,
+            'cart_count' => $count
+        ]);
         }
 
         /**
@@ -924,16 +951,22 @@ respond_after_delete:
 
             try {
                 $userId = Session::get('user_id');
-                $currentQuantity = $this->cartModel->getItemQuantity($productId);
+                $existingItem = $this->cartModel->getByUserAndProduct($userId, $productId);
+
+                if (!$existingItem) {
+                    $this->jsonResponse(['success' => false, 'message' => 'Item not found in cart']);
+                    return;
+                }
+
+                $cartItemId = $existingItem['id'];
+                $currentQuantity = (int)($existingItem['quantity'] ?? 0);
                 $newQuantity = $currentQuantity + $change;
 
                 if ($newQuantity <= 0) {
-                    // Remove item if quantity becomes 0 or negative
-                    $this->cartModel->remove($productId);
+                    $this->cartModel->removeItem($cartItemId);
                     $message = 'Item removed from cart';
                 } else {
-                    // Update quantity
-                    $this->cartModel->update($productId, $newQuantity);
+                    $this->cartModel->updateQuantity($cartItemId, $newQuantity);
                     $message = 'Quantity updated';
                 }
 

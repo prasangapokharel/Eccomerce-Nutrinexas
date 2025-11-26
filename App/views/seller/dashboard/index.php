@@ -3,8 +3,8 @@
 
 <div class="space-y-6">
     <!-- Stats Cards -->
-    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 2xl:grid-cols-6">
-        <div class="card">
+    <div class="flex flex-wrap gap-4">
+        <div class="card flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Total Orders</p>
@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Pending Orders</p>
@@ -28,7 +28,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Completed Orders</p>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Total Earnings</p>
@@ -52,7 +52,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Wallet Balance</p>
@@ -64,7 +64,7 @@
             </div>
         </div>
 
-        <div class="card">
+        <div class="card flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-gray-600">Products Count</p>
@@ -78,8 +78,8 @@
     </div>
 
     <!-- Top Products -->
-    <div class="grid grid-cols-1">
-        <div class="card">
+    <div class="flex flex-col lg:flex-row gap-6">
+        <div class="card flex-1">
             <h3 class="card-title">Top Products</h3>
             <div class="space-y-4">
                 <?php if (empty($topProducts)): ?>
@@ -102,9 +102,9 @@
     </div>
 
     <!-- Recent Orders & Products -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+    <div class="flex flex-col lg:flex-row gap-6">
         <!-- Recent Orders -->
-        <div class="card">
+        <div class="card flex-1">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="card-title" style="margin: 0;">Recent Orders</h3>
                 <a href="<?= \App\Core\View::url('seller/orders') ?>" class="link-primary text-sm">View All</a>
@@ -132,7 +132,7 @@
         </div>
 
         <!-- Recent Products -->
-        <div class="card">
+        <div class="card flex-1">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="card-title" style="margin: 0;">Recent Products</h3>
                 <a href="<?= \App\Core\View::url('seller/products') ?>" class="link-primary text-sm">View All</a>

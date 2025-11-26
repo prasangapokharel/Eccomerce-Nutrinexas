@@ -38,7 +38,7 @@
                         <input type="text" 
                                id="product_name" 
                                name="product_name" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                placeholder="Enter product name"
                                required>
                     </div>
@@ -49,7 +49,7 @@
                         </label>
                         <select id="category" 
                                 name="category" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                 required>
                             <option value="">Select Main Category</option>
                             <?php foreach (CategoryHelper::getMainCategories() as $key => $value): ?>
@@ -68,7 +68,7 @@
                         <input type="text" 
                                id="subcategory" 
                                name="subcategory" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                placeholder="Enter custom subcategory (e.g., Whey Protein, Resistance Bands)">
                         <p class="text-xs text-gray-500 mt-1">Keep this field unique—enter your own descriptive subcategory.</p>
                     </div>
@@ -80,7 +80,7 @@
                             </label>
                             <select id="product_type_main" 
                                     name="product_type_main" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                    class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                     onchange="handleProductTypeChange()">
                                 <option value="">-- Select Product Type --</option>
                                 <option value="Supplements">Supplements</option>
@@ -98,7 +98,7 @@
                             <input type="text" 
                                    id="product_type" 
                                    name="product_type" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                    placeholder="e.g., Whey, Bulking Cycle, Resistance Bands">
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                             <input type="text" 
                                    id="colors" 
                                    name="colors" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                    placeholder="Red, Blue, Green or #FF0000, #0000FF, #00FF00">
                             <p class="text-xs text-gray-500 mt-1">Enter colors separated by commas</p>
                         </div>
@@ -151,7 +151,7 @@
                                        name="price" 
                                        step="0.01" 
                                        min="0"
-                                       class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                       class="input native-input w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                        placeholder="0.00"
                                        required>
                             </div>
@@ -170,7 +170,7 @@
                                        name="sale_price" 
                                        step="0.01" 
                                        min="0"
-                                       class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                       class="input native-input w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                        placeholder="0.00">
                             </div>
                         </div>
@@ -187,7 +187,7 @@
                                id="stock_quantity" 
                                name="stock_quantity" 
                                min="0"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                placeholder="0"
                                required>
                         <p class="text-xs text-gray-500 mt-1">
@@ -258,7 +258,7 @@
                         <textarea id="description"
                                   name="description"
                                   rows="8"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-y"
+                                  class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-y"
                                   placeholder="Detailed information about the product, benefits, and usage. Markdown syntax is supported."></textarea>
                         <p class="text-xs text-gray-500 mt-2">Supports Markdown formatting. Use CDN image URLs for images.</p>
                     </div>
@@ -275,7 +275,7 @@
                         <input type="url" 
                                id="image_url" 
                                name="image_url" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                placeholder="https://example.com/image.jpg"
                                required>
                         <p class="text-xs text-gray-500 mt-1">Enter the full CDN URL for the product image</p>
@@ -286,7 +286,7 @@
                         <textarea id="additional_images" 
                                   name="additional_images" 
                                   rows="4"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-none"
+                                  class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-none"
                                   placeholder="Enter image URLs, one per line (press Enter for each new link)"></textarea>
                         <p class="text-xs text-gray-500 mt-1">Enter one URL per line. We also accept comma-separated values.</p>
                     </div>
@@ -306,7 +306,7 @@
                                    step="0.1"
                                    min="0"
                                    max="100"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                    placeholder="Leave empty to use default">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                 <span class="text-gray-500 text-sm">%</span>
@@ -326,7 +326,7 @@
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
                         <select id="status" 
                                 name="status" 
-                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                 required>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
