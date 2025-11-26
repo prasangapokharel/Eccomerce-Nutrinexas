@@ -82,7 +82,7 @@
                                     </p>
                                     <?php if (!$lowStockFilter): ?>
                                         <a href="<?= \App\Core\View::url('seller/products/create') ?>" 
-                                           class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark">
+                                           class="btn">
                                             <i class="fas fa-plus mr-2"></i>
                                             Add Product
                                         </a>

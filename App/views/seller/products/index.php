@@ -10,7 +10,7 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
             <a href="<?= \App\Core\View::url('seller/products/bulk-upload') ?>" 
-               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+               class="btn btn-outline">
                 <i class="fas fa-upload mr-2"></i>
                 Bulk Upload
             </a>
@@ -34,7 +34,7 @@
                         <i class="fas fa-trash mr-2"></i>Delete Selected
                     </button>
                     <button id="clearSelectionBtn" 
-                            class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors">
+                            class="btn btn-outline">
                         Clear Selection
                     </button>
                 </div>
@@ -133,7 +133,7 @@
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
                                     <p class="text-gray-500 mb-4">Get started by adding your first product.</p>
                                     <a href="<?= \App\Core\View::url('seller/products/create') ?>" 
-                                       class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-lg text-white bg-primary hover:bg-primary-dark">
+                                       class="btn">
                                         <i class="fas fa-plus mr-2"></i>
                                         Add Product
                                     </a>
@@ -285,10 +285,10 @@
                 </div>
                 <div class="flex gap-2">
                     <?php if ($currentPage > 1): ?>
-                        <a href="?page=<?= $currentPage - 1 ?>" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+                        <a href="?page=<?= $currentPage - 1 ?>" class="btn btn-outline">Previous</a>
                     <?php endif; ?>
                     <?php if ($currentPage < $totalPages): ?>
-                        <a href="?page=<?= $currentPage + 1 ?>" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Next</a>
+                        <a href="?page=<?= $currentPage + 1 ?>" class="btn btn-outline">Next</a>
                     <?php endif; ?>
                 </div>
             </div>

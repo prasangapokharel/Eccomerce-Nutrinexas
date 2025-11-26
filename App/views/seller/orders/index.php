@@ -228,10 +228,10 @@
                 </div>
                 <div class="flex gap-2">
                     <?php if ($currentPage > 1): ?>
-                        <a href="?page=<?= $currentPage - 1 ?><?= $statusFilter ? '&status=' . $statusFilter : '' ?>" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+                        <a href="?page=<?= $currentPage - 1 ?><?= $statusFilter ? '&status=' . $statusFilter : '' ?>" class="btn btn-outline">Previous</a>
                     <?php endif; ?>
                     <?php if ($currentPage < $totalPages): ?>
-                        <a href="?page=<?= $currentPage + 1 ?><?= $statusFilter ? '&status=' . $statusFilter : '' ?>" class="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">Next</a>
+                        <a href="?page=<?= $currentPage + 1 ?><?= $statusFilter ? '&status=' . $statusFilter : '' ?>" class="btn btn-outline">Next</a>
                     <?php endif; ?>
                 </div>
             </div>

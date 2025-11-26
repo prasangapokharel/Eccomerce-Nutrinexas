@@ -107,7 +107,7 @@
                 <div class="space-y-3">
                     <a href="<?= \App\Core\View::url('orders/receipt/' . $order['id']) ?>" 
                        target="_blank"
-                       class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                       class="btn w-full">
                         <i class="fas fa-file-invoice mr-2"></i>Print Invoice
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders/print-shipping-label/' . $order['id']) ?>" 
@@ -180,7 +180,7 @@
                           required></textarea>
             </div>
             <div class="flex justify-end gap-3">
-                <button type="button" onclick="hideRejectModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                <button type="button" onclick="hideRejectModal()" class="btn btn-outline">
                     Cancel
                 </button>
                 <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
