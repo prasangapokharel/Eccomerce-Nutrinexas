@@ -48,7 +48,7 @@
                 </div>
 
                 <!-- Send Reset Link Button -->
-                <button type="submit" class="native-button w-full bg-primary text-white font-bold py-4 px-6 rounded-xl shadow-lg hover:bg-primary-dark transition-colors">
+                <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                     Send Reset Link
                 </button>
 
@@ -104,7 +104,7 @@
                                placeholder="Enter username or email" required>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 shadow-lg">
+                    <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                         Send Reset Link
                     </button>
 
@@ -172,7 +172,7 @@
                                placeholder="Enter username or email" required>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 shadow-lg">
+                    <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                         Send Reset Link
                     </button>
 
@@ -240,7 +240,7 @@
                                placeholder="Enter username or email" required>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 shadow-lg">
+                    <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                         Send Reset Link
                     </button>
 
@@ -308,7 +308,7 @@
                                placeholder="Enter username or email" required>
                     </div>
 
-                    <button type="submit" class="btn-primary w-full bg-primary hover:bg-primary-dark text-white font-bold py-3 px-4 shadow-lg">
+                    <button type="submit" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                         Send Reset Link
                     </button>
 

@@ -134,6 +134,61 @@
             </div>
         </div>
 
+        <!-- Maintenance Settings -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900">Maintenance Mode</h2>
+                <p class="text-sm text-gray-500 mt-1">Enable maintenance mode to block site access</p>
+            </div>
+            <div class="p-6">
+                <form id="maintenanceSettingsForm" class="space-y-6">
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                        <div>
+                            <h3 class="text-sm font-medium text-gray-900">Enable Maintenance Mode</h3>
+                            <p class="text-sm text-gray-500">Block entire site except admin routes</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" 
+                                   id="maintenance_mode" 
+                                   name="maintenance_mode" 
+                                   <?= ($settings['maintenance_mode'] ?? 'false') === 'true' ? 'checked' : '' ?>
+                                   class="sr-only peer">
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-primary/20 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                        </label>
+                        <script>
+                        document.getElementById('maintenance_mode').addEventListener('change', function() {
+                            const isEnabled = this.checked;
+                            fetch('<?= BASE_URL ?>/admin/settings/update', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'ngrok-skip-browser-warning': 'true',
+                                },
+                                body: JSON.stringify({
+                                    maintenance_mode: isEnabled
+                                })
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                if (data.success) {
+                                    showNotification('Maintenance mode ' + (isEnabled ? 'enabled' : 'disabled') + ' successfully!');
+                                } else {
+                                    showNotification('Error updating maintenance mode', 'error');
+                                    this.checked = !isEnabled;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error:', error);
+                                showNotification('Error updating maintenance mode', 'error');
+                                this.checked = !isEnabled;
+                            });
+                        });
+                        </script>
+                    </div>
+                </form>
+            </div>
+        </div>
+
         <!-- Login Settings -->
         <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
             <div class="p-6 border-b border-gray-200">
@@ -251,6 +306,7 @@ document.getElementById('saveAllSettings').addEventListener('click', function() 
     const commissionSettings = new FormData(document.getElementById('commissionSettingsForm'));
     const loginSettings = new FormData(document.getElementById('loginSettingsForm'));
     const websiteSettings = new FormData(document.getElementById('websiteSettingsForm'));
+    const maintenanceSettings = new FormData(document.getElementById('maintenanceSettingsForm'));
     
     // Combine all settings
     const allSettings = {
@@ -260,7 +316,8 @@ document.getElementById('saveAllSettings').addEventListener('click', function() 
         commission_rate: commissionSettings.get('commission_rate'),
         tax_rate: commissionSettings.get('tax_rate'),
         remember_token_days: loginSettings.get('remember_token_days'),
-        enable_remember_me: document.getElementById('enable_remember_me').checked
+        enable_remember_me: document.getElementById('enable_remember_me').checked,
+        maintenance_mode: document.getElementById('maintenance_mode').checked
     };
     
     // Send data to server

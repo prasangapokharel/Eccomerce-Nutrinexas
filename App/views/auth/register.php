@@ -222,7 +222,7 @@
 
                 <!-- Submit Button -->
                 <button type="submit" 
-                        class="w-full px-6 py-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-primary-dark transition-colors">
+                        class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                     Create Account
                 </button>
             </form>

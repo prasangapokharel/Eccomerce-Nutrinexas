@@ -7,9 +7,9 @@
  */
 ?>
 
-<div class="bg-white mx-2 rounded-3xl shadow-sm mb-2 overflow-hidden border border-gray-100/50">
+<div class="bg-white mx-2 rounded-3xl shadow-sm mb-0 overflow-hidden border border-gray-100/50">
     <div class="px-4 py-3 border-b border-gray-100/60">
-        <h3 class="text-lg font-semibold text-[#0A3167] tracking-tight">Shop by Category</h3>
+        <h3 class="text-sm font-semibold text-primary tracking-tight">Shop by Category</h3>
     </div>
 
     <div class="p-3 sm:p-4 overflow-hidden">

@@ -9,7 +9,7 @@ include __DIR__ . '/../components/pricing-helper.php';
         
         <!-- Header -->
         <div class="mb-6">
-            <h1 class="text-2xl font-bold text-gray-900 mb-2">Affiliate Products</h1>
+            <h1 class="text-2xl font-bold text-primary mb-2">Affiliate Products</h1>
             <p class="text-gray-600 text-sm">Earn commission on these products. Default commission: <?= number_format($defaultCommissionRate, 1) ?>%</p>
         </div>
 

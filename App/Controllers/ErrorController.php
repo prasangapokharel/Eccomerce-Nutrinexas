@@ -64,6 +64,21 @@ class ErrorController extends Controller
     }
 
     /**
+     * Handle maintenance mode
+     */
+    public function maintenance()
+    {
+        http_response_code(503);
+        $maintenanceView = dirname(dirname(__DIR__)) . '/App/views/errors/maintenance.php';
+        if (file_exists($maintenanceView)) {
+            include $maintenanceView;
+        } else {
+            echo '<h1>Maintenance Mode</h1><p>The site is currently under maintenance. Please check back later.</p>';
+        }
+        exit;
+    }
+
+    /**
      * Generic error handler
      */
     public function error($code = 500, $message = 'An error occurred')

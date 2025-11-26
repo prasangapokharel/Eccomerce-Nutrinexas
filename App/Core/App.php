@@ -76,6 +76,9 @@ class App
         // Guide routes
         $this->router->get('guide', 'GuideController@index');
 
+        // Maintenance route
+        $this->router->get('maintenance', 'ErrorController@maintenance');
+
         // Ads routes
         $this->router->get('ads', 'AdsController@index');
         
@@ -414,6 +417,10 @@ class App
         $this->router->get('curior/pickup', 'Curior\Pickup@index');
         $this->router->post('curior/pickup/mark-picked', 'Curior\Pickup@markPicked');
         
+        // Curior Delivery routes
+        $this->router->get('curior/delivery', 'Curior\Delivery@index');
+        $this->router->post('curior/delivery/out-for-delivery', 'Curior\Delivery@outForDelivery');
+        
         // Curior Returns routes
         $this->router->get('curior/returns', 'Curior\Returns@index');
         
@@ -747,6 +754,9 @@ class App
 
     private function resolveRoute()
     {
+        // Check maintenance mode before routing
+        $this->checkMaintenanceMode();
+        
         $route = $this->router->resolve();
         
         if ($route) {
@@ -816,6 +826,36 @@ class App
             'uri' => $_SERVER['REQUEST_URI'] ?? '',
             'method_type' => $_SERVER['REQUEST_METHOD'] ?? 'GET'
         ];
+    }
+    
+    /**
+     * Check maintenance mode
+     */
+    private function checkMaintenanceMode()
+    {
+        try {
+            $settingModel = new \App\Models\Setting();
+            $maintenanceMode = $settingModel->get('maintenance_mode', 'false');
+            
+            if ($maintenanceMode === 'true' || $maintenanceMode === true) {
+                $routePath = $_SERVER['REQUEST_URI'] ?? '';
+                $routePath = strtok($routePath, '?');
+                $routePath = ltrim($routePath, '/');
+                
+                if (strpos($routePath, 'admin') === 0) {
+                    return;
+                }
+                
+                if ($routePath === 'maintenance') {
+                    return;
+                }
+                
+                header('Location: /maintenance');
+                exit;
+            }
+        } catch (\Exception $e) {
+            error_log('Maintenance mode check error: ' . $e->getMessage());
+        }
     }
     
     /**

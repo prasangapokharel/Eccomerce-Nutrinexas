@@ -74,7 +74,7 @@ $khaltiLogo = PaymentGatewayHelper::getGatewayLogo('Khalti');
         </div>
 
         <div class="flex justify-center">
-            <button id="payment-button" class="btn-primary px-8 py-3 text-white shadow-lg text-sm font-medium flex items-center justify-center">
+            <button id="payment-button" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg flex items-center justify-center">
                 <span class="mr-2">Pay with Khalti</span>
                 <img src="<?= htmlspecialchars($khaltiLogo) ?>" alt="Khalti" class="h-6 w-auto" onerror="this.style.display='none';">
             </button>

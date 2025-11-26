@@ -9,9 +9,9 @@
 ?>
 
 <div id="infinite-products-section">
-    <div class="bg-white mx-2 rounded-xl shadow-sm mb-4 border border-primary/10">
+    <div class="bg-white mx-2 rounded-xl shadow-sm mb-2 border border-primary/10">
         <div class="flex items-center justify-between p-3 border-b border-gray-100 bg-primary/5">
-            <h3 class="text-lg font-semibold text-gray-900">More Products</h3>
+            <h3 class="text-sm font-semibold text-primary">More Products</h3>
             <a href="<?= \App\Core\View::url('products') ?>"
                class="inline-flex items-center gap-1 text-accent font-semibold text-sm hover:text-accent/80 transition-colors">
                 <span>View All</span>

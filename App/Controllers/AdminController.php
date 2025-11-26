@@ -1282,19 +1282,9 @@ class AdminController extends Controller
                     
                     $referralService->processReferralEarning($order['id']);
                     
-                    // Process seller balance release (will check wait period)
-                    try {
-                        $sellerBalanceService = new \App\Services\SellerBalanceService();
-                        $balanceResult = $sellerBalanceService->processBalanceRelease($order['id']);
-                        
-                        if ($balanceResult['success']) {
-                            error_log("Seller balance released for order #{$order['id']}: रु " . ($balanceResult['total_released'] ?? 0));
-                        } else {
-                            error_log("Seller balance release pending for order #{$order['id']}: " . ($balanceResult['message'] ?? 'Wait period not complete'));
-                        }
-                    } catch (\Exception $balanceException) {
-                        error_log("Seller balance service error for order #{$order['id']}: " . $balanceException->getMessage());
-                    }
+                    // NOTE: Seller balance release is NOT triggered when admin sets status to delivered
+                    // Balance release only happens when courier marks order as delivered (via processPostDelivery)
+                    // This ensures balance is only released after actual delivery, not just admin status change
                 }
 
                 // 2) If moved to an in-progress state, ensure a pending earning exists once per order
@@ -1480,6 +1470,27 @@ class AdminController extends Controller
                     } catch (Exception $smsException) {
                         error_log("SMS notification error for payment status change on order #{$id}: " . $smsException->getMessage());
                         // Don't fail the payment update if SMS fails
+                    }
+                    
+                    // If payment status is set to "paid" and order is already delivered, trigger balance release
+                    // This represents admin verifying payment/delivery (admin auto-verifies or manually verifies)
+                    // Balance release will only proceed if:
+                    // - Order status is "delivered" (courier must have marked it first)
+                    // - Wait period (24 hours) has passed
+                    // - No active return/refund exists
+                    if ($paymentStatus === 'paid' && $order['status'] === 'delivered') {
+                        try {
+                            $sellerBalanceService = new \App\Services\SellerBalanceService();
+                            $balanceResult = $sellerBalanceService->processBalanceRelease($id);
+                            
+                            if ($balanceResult['success']) {
+                                error_log("Seller balance released for order #{$id} after admin payment verification: रु " . ($balanceResult['total_released'] ?? 0));
+                            } else {
+                                error_log("Seller balance release pending for order #{$id} after admin payment verification: " . ($balanceResult['message'] ?? 'Wait period not complete'));
+                            }
+                        } catch (\Exception $balanceException) {
+                            error_log("Seller balance service error for order #{$id} after admin payment verification: " . $balanceException->getMessage());
+                        }
                     }
                 }
                 
@@ -2988,30 +2999,42 @@ class AdminController extends Controller
             $input = $_POST;
         }
 
-        // Normalize and validate inputs
-        $websiteUrl = trim($input['website_url'] ?? '');
-        $minWithdrawal = isset($input['min_withdrawal']) ? (int)$input['min_withdrawal'] : null;
-        $commissionRate = isset($input['commission_rate']) ? (float)$input['commission_rate'] : null;
-        $rememberDays = isset($input['remember_token_days']) ? (int)$input['remember_token_days'] : null;
-        $autoApprove = isset($input['auto_approve']) ? (bool)$input['auto_approve'] : false;
-        $enableRemember = isset($input['enable_remember_me']) ? (bool)$input['enable_remember_me'] : false;
-
-        // Persist settings using Setting model
-        if ($websiteUrl !== '') {
-            $this->settingModel->set('website_url', $websiteUrl);
+        // Normalize and validate inputs - only update provided fields
+        if (isset($input['website_url'])) {
+            $websiteUrl = trim($input['website_url']);
+            if ($websiteUrl !== '') {
+                $this->settingModel->set('website_url', $websiteUrl);
+            }
         }
-        if ($minWithdrawal !== null) {
+        if (isset($input['min_withdrawal'])) {
+            $minWithdrawal = (int)$input['min_withdrawal'];
             $this->settingModel->set('min_withdrawal', $minWithdrawal);
         }
-        if ($commissionRate !== null) {
+        if (isset($input['commission_rate'])) {
+            $commissionRate = (float)$input['commission_rate'];
             $this->settingModel->set('commission_rate', $commissionRate);
         }
-        if ($rememberDays !== null) {
+        if (isset($input['remember_token_days'])) {
+            $rememberDays = (int)$input['remember_token_days'];
             $this->settingModel->set('remember_token_days', $rememberDays);
         }
+        if (isset($input['tax_rate'])) {
+            $taxRate = (float)$input['tax_rate'];
+            $this->settingModel->set('tax_rate', $taxRate);
+        }
         // Store booleans as 'true'/'false' strings for consistency with views
-        $this->settingModel->set('auto_approve', $autoApprove ? 'true' : 'false');
-        $this->settingModel->set('enable_remember_me', $enableRemember ? 'true' : 'false');
+        if (isset($input['auto_approve'])) {
+            $autoApprove = (bool)$input['auto_approve'];
+            $this->settingModel->set('auto_approve', $autoApprove ? 'true' : 'false');
+        }
+        if (isset($input['enable_remember_me'])) {
+            $enableRemember = (bool)$input['enable_remember_me'];
+            $this->settingModel->set('enable_remember_me', $enableRemember ? 'true' : 'false');
+        }
+        if (isset($input['maintenance_mode'])) {
+            $maintenanceMode = (bool)$input['maintenance_mode'];
+            $this->settingModel->set('maintenance_mode', $maintenanceMode ? 'true' : 'false');
+        }
 
         // Return JSON response for AJAX requests
         if (isset($_SERVER['HTTP_X_REQUESTED_WITH']) || stripos($contentType, 'application/json') !== false) {

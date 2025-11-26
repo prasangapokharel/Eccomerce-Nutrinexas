@@ -30,13 +30,11 @@ use App\Helpers\CurrencyHelper;
                             <?= $data['order']['payment_status'] === 'paid' ? 'Paid' : ucfirst(htmlspecialchars($data['order']['status'])) ?>
                         </span>
                         <a href="<?= URLROOT ?>/receipt/download/<?= $data['order']['id'] ?>" 
-                           class="flex items-center justify-between text-white text-sm h-10 w-36 pl-4 clip  bg-primary hover:bg-primary-dark border border-primary/30">
+                           class="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
+                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                            </svg>
                             Download
-                            <div class="bg-primary/20 h-full flex items-center justify-center px-3">
-                                <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M17.5 13.125v3.5c0 .464-.176.91-.488 1.237a1.63 1.63 0 0 1-1.179.513H4.167c-.442 0-.866-.184-1.179-.513a1.8 1.8 0 0 1-.488-1.237v-3.5M5.833 8.75 10 13.125m0 0 4.167-4.375M10 13.125v-10.5" stroke="#fff" stroke-opacity=".8" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </div>
                         </a>
                     </div>
                 </div>
@@ -186,14 +184,14 @@ use App\Helpers\CurrencyHelper;
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center">
             <a href="<?= URLROOT ?>/orders" 
-               class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 transition-colors duration-200">
+               class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-2xl font-semibold text-sm text-gray-700 bg-white hover:bg-gray-50 transition-colors shadow-lg">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
                 </svg>
                 View All Orders
             </a>
             <a href="<?= URLROOT ?>/products" 
-               class="inline-flex items-center justify-center px-6 py-3 border border-accent rounded-md shadow-sm text-sm font-medium text-white clip bg-accent hover:bg-accent-dark">
+               class="inline-flex items-center justify-center px-6 py-3 bg-accent text-white rounded-2xl font-semibold text-sm hover:bg-accent-dark transition-colors shadow-lg">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                 </svg>

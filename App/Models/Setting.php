@@ -21,8 +21,14 @@ class Setting extends Model
         $result = $this->db->query($sql)->bind([$key])->single();
         
         if ($result) {
-            // Try to decode JSON value
             $value = $result['value'];
+            
+            // Handle boolean strings ('true'/'false') - keep as strings for consistency
+            if ($value === 'true' || $value === 'false') {
+                return $value;
+            }
+            
+            // Try to decode JSON value
             $decoded = json_decode($value, true);
             
             // Return decoded value if it's valid JSON, otherwise return the raw value
@@ -85,8 +91,15 @@ class Setting extends Model
         
         $settings = [];
         foreach ($results as $row) {
-            // Try to decode JSON values
             $value = $row['value'];
+            
+            // Handle boolean strings ('true'/'false') - keep as strings for consistency
+            if ($value === 'true' || $value === 'false') {
+                $settings[$row['key']] = $value;
+                continue;
+            }
+            
+            // Try to decode JSON values
             $decoded = json_decode($value, true);
             
             // Store decoded value if it's valid JSON, otherwise store the raw value

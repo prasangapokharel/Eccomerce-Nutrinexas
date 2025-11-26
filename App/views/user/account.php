@@ -169,7 +169,7 @@ function renderAccountIcon($name)
             <?php endforeach; ?>
         </section>
 
-        <a href="<?= \App\Core\View::url('auth/logout') ?>" class="w-full bg-destructive/10 text-destructive font-semibold py-3 rounded-2xl text-center border border-destructive/20 block">
+        <a href="<?= \App\Core\View::url('auth/logout') ?>" class="w-full bg-destructive/10 text-destructive font-semibold px-6 py-3 rounded-2xl text-sm text-center border border-destructive/20 block">
             Log Out
         </a>
     </div>

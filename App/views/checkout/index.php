@@ -506,13 +506,13 @@ if (isset($_COOKIE['guest_postal_code'])) {
     <!-- Sticky Place Order Button -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50">
         <div class="grid grid-cols-2 gap-3">
-            <button type="button" id="cod-quick-btn" class="w-full bg-accent hover:bg-accent-dark border border-accent text-white py-3 rounded-2xl font-semibold text-sm flex items-center justify-center">
+            <button type="button" id="cod-quick-btn" class="w-full bg-accent hover:bg-accent-dark border border-accent text-white px-6 py-3 rounded-2xl font-semibold text-sm flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
                 COD
             </button>
-            <button type="submit" form="checkout-form" id="place-order-btn" class="w-full  bg-primary hover:bg-primary-dark text-white py-3 rounded-2xl font-semibold text-base flex items-center justify-center">
+            <button type="submit" form="checkout-form" id="place-order-btn" class="w-full bg-primary hover:bg-primary-dark text-white px-6 py-3 rounded-2xl font-semibold text-sm flex items-center justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
                 </svg>

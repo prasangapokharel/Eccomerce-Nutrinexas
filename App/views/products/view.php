@@ -46,6 +46,16 @@ $productBrand = 'NutriNexus';
 // Check if product is scheduled
 $isScheduled = isset($product['is_scheduled']) && $product['is_scheduled'] == 1;
 $isAvailable = isset($product['stock_quantity']) && $product['stock_quantity'] > 0 && !$isScheduled;
+
+// Calculate remaining days for scheduled products
+$remainingDays = 0;
+if ($isScheduled && !empty($product['scheduled_date'])) {
+    $scheduledTimestamp = strtotime($product['scheduled_date']);
+    $currentTimestamp = time();
+    if ($scheduledTimestamp > $currentTimestamp) {
+        $remainingDays = ceil(($scheduledTimestamp - $currentTimestamp) / (60 * 60 * 24));
+    }
+}
 $productSku = $product['id'] ?? '';
 $productSlug = $product['slug'] ?? $product['id'] ?? '';
 $productUrl = \App\Core\View::url('products/view/' . $productSlug);
@@ -289,7 +299,7 @@ ob_start();
                 <!-- Product Info -->
                 <div class="p-4 lg:p-6 flex flex-col">
         <!-- Product Title -->
-                    <h1 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-3"><?= $productName ?></h1>
+                    <h1 class="text-2xl lg:text-3xl font-bold text-primary mb-3"><?= $productName ?></h1>
                     
                     <!-- Seller Info -->
                     <?php if (!empty($seller)): ?>
@@ -592,10 +602,145 @@ ob_start();
                                 <span class="text-xs text-gray-500">Max: <?= min(3, $product['stock_quantity'] ?? 1) ?> per order</span>
                             </div>
                             </div>
+                            
+                            <!-- Desktop Sticky Action Buttons & QR Code -->
+                            <div class="hidden lg:block mt-6 space-y-4">
+                                <!-- Action Buttons -->
+                                <div class="sticky top-4 z-10 space-y-3">
+                                    <?php if ($isScheduled): ?>
+                                        <button type="button" class="w-full bg-primary text-white px-6 py-3 rounded-2xl font-semibold text-sm cursor-not-allowed shadow-lg">
+                                            <div class="flex items-center justify-center gap-2">
+                                                <i class="fas fa-clock"></i>
+                                                <span>
+                                                    <?php if ($remainingDays > 0): ?>
+                                                        Launching in <?= $remainingDays ?> <?= $remainingDays == 1 ? 'day' : 'days' ?>
+                                                    <?php else: ?>
+                                                        Coming Soon
+                                                    <?php endif; ?>
+                                                </span>
+                                            </div>
+                                        </button>
+                                    <?php elseif ($isAvailable): ?>
+                                        <button type="button" class="w-full bg-primary text-white px-6 py-3 rounded-2xl font-semibold text-sm add-to-cart hover:bg-primary-dark transition-colors duration-200 shadow-lg hover:shadow-xl" 
+                                                data-product-id="<?= $product['id'] ?? '' ?>" 
+                                                data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
+                                                data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
+                                            <span class="btn-text">Add to Cart</span>
+                                            <span class="btn-loading hidden">Adding...</span>
+                                        </button>
+                                        <button type="button" class="w-full bg-accent text-white px-6 py-3 rounded-2xl font-semibold text-sm direct-checkout hover:bg-accent-dark transition-colors duration-200 border border-accent shadow-lg hover:shadow-xl" 
+                                                data-product-id="<?= $product['id'] ?? '' ?>" 
+                                                data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
+                                                data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
+                                            <span class="btn-text">Order Now</span>
+                                            <span class="btn-loading hidden">Processing...</span>
+                                        </button>
+                                    <?php else: ?>
+                                        <button type="button" disabled class="w-full bg-gray-400 text-white px-6 py-3 rounded-2xl font-medium text-sm cursor-not-allowed shadow-lg">
+                                            Out of Stock
+                                        </button>
+                                    <?php endif; ?>
+                                    
+                                    <!-- QR Code & Share Section -->
+                                    <div class="rounded-2xl p-4">
+                                        <div class="flex items-center justify-between mb-3">
+                                            <h3 class="text-sm font-semibold text-gray-900">Share Product</h3>
+                                            <!-- Share Icon -->
+                                            <button type="button" 
+                                                    id="share-product-link" 
+                                                    class="p-2 text-gray-600 hover:text-primary cursor-pointer"
+                                                    title="Copy link">
+                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                                                </svg>
+                                            </button>
+                                            <input type="hidden" id="product-url-copy" value="<?= htmlspecialchars($absoluteProductUrl) ?>">
+                                        </div>
+                                        
+                                        <!-- Flex Layout: QR Left, Badges Right -->
+                                        <div class="flex items-start gap-4">
+                                            <!-- QR Code (Left) -->
+                                            <div class="flex-shrink-0">
+                                                <div class="flex flex-col items-center">
+                                                    <div class="bg-white p-3 rounded-lg border-2 border-gray-200 shadow-sm mb-2">
+                                                        <img id="product-qr-code" 
+                                                             src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=<?= urlencode($absoluteProductUrl) ?>&color=000000&bgcolor=ffffff&margin=1" 
+                                                             alt="Product QR Code" 
+                                                             class="w-32 h-32 object-contain">
+                                                    </div>
+                                                    <div class="flex items-center gap-1.5 text-xs text-gray-600">
+                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                                        </svg>
+                                                        <span>Scan with mobile</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                            <!-- Trust Badges (Right) -->
+                                            <div class="flex-1 space-y-2">
+                                                <!-- Cash on Delivery Badge -->
+                                                <div class="flex items-center gap-2 px-3 py-2 border border-green-200 rounded-lg">
+                                                    <svg class="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="text-xs font-medium text-green-700">Cash on Delivery Available</span>
+                                                </div>
+                                                
+                                                <!-- Seller Trust Badge -->
+                                                <?php 
+                                                $sellerTrustPercent = 95; // Default
+                                                if (!empty($seller) && !empty($seller['id'])) {
+                                                    $db = \App\Core\Database::getInstance();
+                                                    // Calculate seller trust based on reviews and ratings
+                                                    $sellerStats = $db->query(
+                                                        "SELECT 
+                                                            AVG(r.rating) as avg_rating,
+                                                            COUNT(DISTINCT r.id) as review_count,
+                                                            COUNT(DISTINCT o.id) as order_count
+                                                         FROM sellers s
+                                                         LEFT JOIN products p ON s.id = p.seller_id
+                                                         LEFT JOIN reviews r ON p.id = r.product_id
+                                                         LEFT JOIN order_items oi ON p.id = oi.product_id
+                                                         LEFT JOIN orders o ON oi.order_id = o.id AND o.status = 'delivered'
+                                                         WHERE s.id = ?
+                                                         GROUP BY s.id",
+                                                        [$seller['id']]
+                                                    )->single();
+                                                    
+                                                    if ($sellerStats) {
+                                                        $avgRating = (float)($sellerStats['avg_rating'] ?? 0);
+                                                        $reviewCount = (int)($sellerStats['review_count'] ?? 0);
+                                                        $orderCount = (int)($sellerStats['order_count'] ?? 0);
+                                                        
+                                                        // Calculate trust percentage: base 80% + rating bonus + review bonus
+                                                        $sellerTrustPercent = 80;
+                                                        if ($avgRating > 0) {
+                                                            $sellerTrustPercent += min(15, ($avgRating - 3) * 5); // Up to 15% from rating
+                                                        }
+                                                        if ($reviewCount > 0) {
+                                                            $sellerTrustPercent += min(5, min(5, $reviewCount / 10)); // Up to 5% from reviews
+                                                        }
+                                                        $sellerTrustPercent = min(100, max(80, round($sellerTrustPercent)));
+                                                    }
+                                                }
+                                                ?>
+                                                <div class="flex items-center gap-2 px-3 py-2 border border-blue-200 rounded-lg">
+                                                    <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                                                    </svg>
+                                                    <span class="text-xs font-medium text-blue-700">Seller Trusted <?= $sellerTrustPercent ?>%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                                 </div>
                     </div>
                 </div>
                 
+
         <!-- Product Description -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-4">
             <div class="p-4">
@@ -799,47 +944,6 @@ ob_start();
         </div>
     </div>
 
-<!-- Desktop Action Buttons -->
-<div class="hidden lg:block max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6">
-    <div class="bg-white rounded-lg shadow-sm p-4">
-        <div class="flex gap-3">
-            <?php if ($isScheduled): ?>
-                <button type="button" class="flex-1 bg-primary text-white px-6 py-3 rounded-2xl font-semibold text-sm cursor-not-allowed">
-                    <div class="flex items-center justify-between w-full">
-                        <span>
-                            <i class="fas fa-clock mr-2"></i>
-                            <?php if ($remainingDays > 0): ?>
-                                Launching in <?= $remainingDays ?> <?= $remainingDays == 1 ? 'day' : 'days' ?>
-                            <?php else: ?>
-                                Coming Soon
-                            <?php endif; ?>
-                        </span>
-                        <span class="text-xs text-white/80 launch-countdown">Launches soon</span>
-                    </div>
-                </button>
-            <?php elseif ($isAvailable): ?>
-                <button type="button" class="flex-1  bg-primary text-white px-6 py-3 rounded-2xl font-semibold text-sm add-to-cart hover:bg-primary-dark transition-colors duration-200 shadow-lg hover:shadow-xl" 
-                        data-product-id="<?= $product['id'] ?? '' ?>" 
-                        data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
-                        data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
-                    <span class="btn-text">Add to Cart</span>
-                    <span class="btn-loading hidden">Adding...</span>
-                </button>
-                <button type="button" class="flex-1 bg-accent text-white px-6 py-3 rounded-2xl font-semibold text-sm direct-checkout hover:bg-accent-dark transition-colors duration-200 border border-accent" 
-                        data-product-id="<?= $product['id'] ?? '' ?>" 
-                        data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
-                        data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
-                    <span class="btn-text">Order Now</span>
-                    <span class="btn-loading hidden">Processing...</span>
-                </button>
-                        <?php else: ?>
-                <button type="button" disabled class="flex-1 bg-gray-400 text-white px-6 py-3 rounded-2xl font-medium text-sm cursor-not-allowed">
-                    Out of Stock
-                </button>
-                        <?php endif; ?>
-        </div>
-</div>
-</div>
 
 <!-- Review Drawer Form -->
 <?php if ($isLoggedIn && !$userReview && $productId): ?>
@@ -898,7 +1002,7 @@ ob_start();
 <?php endif; ?>
 
 <!-- Power Suggestions -->
-<?php if (!empty($relatedProducts)): ?>
+<?php if (!empty($relatedProducts) || !empty($internalProductAd)): ?>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-10">
         <div class="flex items-center justify-between mb-4">
             <div>
@@ -917,7 +1021,24 @@ ob_start();
             <div class="overflow-x-auto pb-3 -mx-1" id="power-suggestions">
                 <div class="flex gap-3 px-1 snap-x snap-mandatory">
                     <?php $originalProductContext = $product; ?>
-                    <?php foreach ($relatedProducts as $related): ?>
+                    <?php 
+                    // Mix 3 related products + 1 ad
+                    $suggestionProducts = [];
+                    $relatedCount = 0;
+                    foreach ($relatedProducts as $related) {
+                        if ($relatedCount < 3) {
+                            $suggestionProducts[] = $related;
+                            $relatedCount++;
+                        }
+                    }
+                    
+                    // Insert ad after 2nd product (or at end if less than 2)
+                    if (!empty($internalProductAd)) {
+                        $insertPosition = min(2, count($suggestionProducts));
+                        array_splice($suggestionProducts, $insertPosition, 0, [$internalProductAd]);
+                    }
+                    ?>
+                    <?php foreach ($suggestionProducts as $suggestion): ?>
                         <div class="min-w-[220px] max-w-[240px] snap-start">
                             <?php
                             $cardOptions = [
@@ -925,7 +1046,13 @@ ob_start();
                                 'showCta' => false,
                                 'cardClass' => 'w-full h-full border border-gray-100 shadow-sm hover:shadow-md transition-shadow duration-200'
                             ];
-                            $product = $related;
+                            
+                            // Add AD badge for sponsored products
+                            if (!empty($suggestion['is_sponsored']) || !empty($suggestion['ad_id'])) {
+                                $cardOptions['topRightBadge'] = ['label' => 'AD'];
+                            }
+                            
+                            $product = $suggestion;
                             include dirname(__DIR__) . '/home/sections/shared/product-card.php';
                             ?>
                         </div>
@@ -1600,7 +1727,47 @@ document.addEventListener('DOMContentLoaded', function() {
                     });
         });
     });
+    
+    // Share Product Link Functionality (Native, no animation)
+    const shareLinkBtn = document.getElementById('share-product-link');
+    const productUrlCopy = document.getElementById('product-url-copy');
+    
+    if (shareLinkBtn && productUrlCopy) {
+        shareLinkBtn.addEventListener('click', function() {
+            const url = productUrlCopy.value;
+            
+            // Use Clipboard API if available
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url);
+            } else {
+                // Fallback for older browsers
+                const textArea = document.createElement('textarea');
+                textArea.value = url;
+                textArea.style.position = 'fixed';
+                textArea.style.left = '-999999px';
+                textArea.style.top = '-999999px';
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+            }
+        });
+    }
     });
+    
+    // Product card redirect function for suggestions
+    if (typeof redirectToProduct === 'undefined') {
+        function redirectToProduct(url, adId) {
+            // Track ad click if product is sponsored
+            if (adId) {
+                if (typeof trackAdClick !== 'undefined') {
+                    trackAdClick(adId);
+                }
+            }
+            window.location.href = url;
+        }
+    }
     </script>
 
     
