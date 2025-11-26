@@ -58,7 +58,7 @@
                                 </option>
                             <?php endforeach; ?>
                         </select>
-                        <p class="text-xs text-gray-500 mt-1">Select the main product category</p>
+                        <p class="text-xs text-gray-500 mt-1">Allowed categories: Supplements, Accessories, Protein, Clean Protein, Cycle, Equipments</p>
                     </div>
 
                     <div>
@@ -69,24 +69,25 @@
                                id="subcategory" 
                                name="subcategory" 
                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
-                               placeholder="Enter subcategory (e.g., Protein, Creatine, Pre-workout)">
-                        <p class="text-xs text-gray-500 mt-1">Enter a flexible subcategory for better product organization</p>
+                               placeholder="Enter custom subcategory (e.g., Whey Protein, Resistance Bands)">
+                        <p class="text-xs text-gray-500 mt-1">Keep this field unique—enter your own descriptive subcategory.</p>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="product_type_main" class="block text-sm font-medium text-gray-700 mb-2">
-                                Product Type <span class="text-gray-400 text-xs">(Recommended)</span>
+                                Product Type <span class="text-gray-400 text-xs">(Optional)</span>
                             </label>
                             <select id="product_type_main" 
                                     name="product_type_main" 
                                     class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
                                     onchange="handleProductTypeChange()">
                                 <option value="">-- Select Product Type --</option>
-                                <option value="Supplement">Supplement (Protein, Creatine, etc.)</option>
-                                <option value="Vitamins">Vitamins (Multivitamins, etc.)</option>
-                                <option value="Accessories">Accessories (Clothing, Equipment, etc.)</option>
-                                <option value="Digital">Digital (E-books, Courses, Software)</option>
+                                <option value="Supplements">Supplements</option>
+                                <option value="Protein">Protein</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Cycle">Cycle</option>
+                                <option value="Digital">Digital</option>
                             </select>
                         </div>
 
@@ -98,7 +99,7 @@
                                    id="product_type" 
                                    name="product_type" 
                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
-                                   placeholder="e.g., Protein, Clothing, Equipment">
+                                   placeholder="e.g., Whey, Bulking Cycle, Resistance Bands">
                         </div>
                     </div>
 
@@ -236,21 +237,6 @@
                     </div>
                 </div>
 
-                <!-- Featured Product -->
-                <div class="space-y-4">
-                    <div class="flex items-center p-4 border border-gray-200 rounded-lg">
-                        <input type="checkbox" 
-                               id="is_featured" 
-                               name="is_featured" 
-                               value="1"
-                               class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
-                        <label for="is_featured" class="ml-3">
-                            <div class="text-sm font-medium text-gray-900">Featured Product</div>
-                            <div class="text-xs text-gray-500">Display prominently on homepage</div>
-                        </label>
-                    </div>
-                </div>
-
                 <!-- Descriptions -->
                 <div class="space-y-4">
                     <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Product Descriptions</h3>
@@ -301,8 +287,8 @@
                                   name="additional_images" 
                                   rows="4"
                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-none"
-                                  placeholder="Enter image URLs, one per line:&#10;https://example.com/image1.jpg&#10;https://example.com/image2.jpg"></textarea>
-                        <p class="text-xs text-gray-500 mt-1">Enter one URL per line. Make sure URLs are publicly accessible.</p>
+                                  placeholder="Enter image URLs, one per line (press Enter for each new link)"></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Enter one URL per line. We also accept comma-separated values.</p>
                     </div>
                 </div>
 

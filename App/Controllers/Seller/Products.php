@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Setting;
 use Exception;
+use App\Helpers\CategoryHelper;
 
 class Products extends BaseSellerController
 {
@@ -552,6 +553,11 @@ class Products extends BaseSellerController
      */
     private function prepareProductData()
     {
+        $selectedCategory = trim($_POST['category'] ?? '');
+        if (!CategoryHelper::isValidMainCategory($selectedCategory)) {
+            $selectedCategory = array_key_first(CategoryHelper::getMainCategories());
+        }
+
         $data = [
             'product_name' => trim($_POST['product_name'] ?? ''),
             'description' => trim($_POST['description'] ?? ''),
@@ -559,7 +565,7 @@ class Products extends BaseSellerController
             'price' => (float)($_POST['price'] ?? 0),
             'sale_price' => !empty($_POST['sale_price']) ? (float)$_POST['sale_price'] : null,
             'stock_quantity' => (int)($_POST['stock_quantity'] ?? 0),
-            'category' => trim($_POST['category'] ?? ''),
+            'category' => $selectedCategory,
             'subcategory' => trim($_POST['subcategory'] ?? ''),
             'product_type_main' => trim($_POST['product_type_main'] ?? ''),
             'product_type' => trim($_POST['product_type'] ?? ''),
@@ -568,7 +574,7 @@ class Products extends BaseSellerController
             'weight' => trim($_POST['weight'] ?? ''),
             'serving' => trim($_POST['serving'] ?? ''),
             'flavor' => trim($_POST['flavor'] ?? ''),
-            'is_featured' => isset($_POST['is_featured']) ? 1 : 0,
+            'is_featured' => 0,
             'status' => 'pending', // Seller products must be approved by admin
             'approval_status' => 'pending',
             'seller_id' => $this->sellerId
@@ -595,6 +601,11 @@ class Products extends BaseSellerController
      */
     private function prepareProductDataForUpdate()
     {
+        $selectedCategory = trim($_POST['category'] ?? '');
+        if (!CategoryHelper::isValidMainCategory($selectedCategory)) {
+            $selectedCategory = array_key_first(CategoryHelper::getMainCategories());
+        }
+
         $data = [
             'product_name' => trim($_POST['product_name'] ?? ''),
             'description' => trim($_POST['description'] ?? ''),
@@ -602,7 +613,7 @@ class Products extends BaseSellerController
             'price' => (float)($_POST['price'] ?? 0),
             'sale_price' => !empty($_POST['sale_price']) ? (float)$_POST['sale_price'] : null,
             'stock_quantity' => (int)($_POST['stock_quantity'] ?? 0),
-            'category' => trim($_POST['category'] ?? ''),
+            'category' => $selectedCategory,
             'status' => trim($_POST['status'] ?? 'active')
         ];
         
@@ -686,13 +697,14 @@ class Products extends BaseSellerController
         
         // Handle additional image URLs if provided
         if (!empty($_POST['additional_images'])) {
-            $additionalImages = is_array($_POST['additional_images']) 
-                ? $_POST['additional_images'] 
-                : explode(',', $_POST['additional_images']);
+            $additionalImagesInput = $_POST['additional_images'];
+            $additionalImages = is_array($additionalImagesInput) 
+                ? $additionalImagesInput
+                : preg_split('/[\r\n,]+/', $additionalImagesInput);
             
-            foreach ($additionalImages as $index => $imageUrl) {
+            foreach ($additionalImages as $imageUrl) {
                 $imageUrl = trim($imageUrl);
-                if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
+                if ($imageUrl !== '' && filter_var($imageUrl, FILTER_VALIDATE_URL)) {
                     $this->productImageModel->create([
                         'product_id' => $productId,
                         'image_url' => $imageUrl,

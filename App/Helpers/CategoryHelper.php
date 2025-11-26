@@ -10,8 +10,10 @@ class CategoryHelper
     const MAIN_CATEGORIES = [
         'Supplements' => 'Supplements',
         'Accessories' => 'Accessories', 
-        'Beauty' => 'Beauty',
-        'Clean Protein' => 'Clean Protein'
+        'Protein' => 'Protein',
+        'Clean Protein' => 'Clean Protein',
+        'Cycle' => 'Cycle',
+        'Equipments' => 'Equipments'
     ];
 
     /**
@@ -36,17 +38,31 @@ class CategoryHelper
             'Apparel' => 'Apparel',
             'Storage' => 'Storage'
         ],
-        'Beauty' => [
-            'Collagen' => 'Collagen',
-            'Skin Care' => 'Skin Care',
-            'Hair Care' => 'Hair Care',
-            'Anti-Aging' => 'Anti-Aging'
+        'Protein' => [
+            'Whey Protein' => 'Whey Protein',
+            'Isolate Protein' => 'Isolate Protein',
+            'Mass Gainer' => 'Mass Gainer',
+            'Vegan Protein' => 'Vegan Protein',
+            'Casein Protein' => 'Casein Protein'
         ],
         'Clean Protein' => [
             'Whey Protein' => 'Whey Protein',
             'Plant Protein' => 'Plant Protein',
             'Casein Protein' => 'Casein Protein',
             'Organic Protein' => 'Organic Protein'
+        ],
+        'Cycle' => [
+            'Bulking Cycle' => 'Bulking Cycle',
+            'Cutting Cycle' => 'Cutting Cycle',
+            'Maintenance Cycle' => 'Maintenance Cycle',
+            'PCT' => 'PCT'
+        ],
+        'Equipments' => [
+            'Gym Equipment' => 'Gym Equipment',
+            'Resistance Bands' => 'Resistance Bands',
+            'Weights' => 'Weights',
+            'Machines' => 'Machines',
+            'Accessories' => 'Accessories'
         ]
     ];
 
