@@ -64,11 +64,11 @@
                 <div class="space-y-6 mt-6" id="orders-list">
                     <?php 
                     $statusColors = [
-                        'pending' => 'bg-yellow-100 text-yellow-800',
-                        'processing' => 'bg-blue-100 text-blue-800',
-                        'shipped' => 'bg-purple-100 text-purple-800',
-                        'delivered' => 'bg-green-100 text-green-800',
-                        'cancelled' => 'bg-red-100 text-red-800'
+                        'pending' => 'bg-accent/10 text-accent border border-accent/30',
+                        'processing' => 'bg-primary/10 text-primary border border-primary/30',
+                        'shipped' => 'bg-primary/10 text-primary border border-primary/30',
+                        'delivered' => 'bg-accent/10 text-accent border border-accent/30',
+                        'cancelled' => 'bg-red-50 text-red-600 border border-red-200'
                     ];
                     ?>
                     <?php foreach ($orders as $order): 
@@ -101,13 +101,15 @@
                                 <div class="flex flex-wrap items-center gap-8">
                                     <?php foreach ($order['items_preview'] as $item): 
                                         $image = $item['product_image'] ?? null;
-                                        if ($image && !filter_var($image, FILTER_VALIDATE_URL)) {
-                                            $image = ASSETS_URL . '/images/products/' . $image;
+                                        if (!$image) {
+                                            $image = ASSETS_URL . '/images/products/default.jpg';
+                                        } elseif (!filter_var($image, FILTER_VALIDATE_URL)) {
+                                            $image = ASSETS_URL . '/' . ltrim($image, '/');
                                         }
                                         ?>
                                         <div class="flex items-center gap-4">
-                                            <div class="w-16 h-16 bg-gray-100 p-1 rounded-md overflow-hidden">
-                                                <img src="<?= htmlspecialchars($image ?? ASSETS_URL . '/images/products/default.jpg') ?>" alt="<?= htmlspecialchars($item['product_name'] ?? 'Product') ?>" class="w-full h-full object-contain"
+                                            <div class="w-16 h-16 bg-white p-1 rounded-md overflow-hidden border border-primary/20">
+                                                <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($item['product_name'] ?? 'Product') ?>" class="w-full h-full object-contain"
                                                      onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
                                             </div>
                                             <div>
