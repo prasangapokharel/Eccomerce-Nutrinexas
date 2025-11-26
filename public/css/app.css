@@ -91,17 +91,43 @@ overflow: hidden;
      border-radius: 12px;
      background-color: var(--primary-color, #7C3AED);
      color: #FFFFFF;
-     border: none;
+     border: 1px solid transparent;
      cursor: pointer;
-     transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out;
+     transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out;
      text-decoration: none;
+     line-height: 1.1;
    }
    .btn:hover {
      background-color: var(--primary-light-color, #8B5CF6);
    }
    .btn:disabled {
-     opacity: 0.5;
+     opacity: 0.55;
      cursor: not-allowed;
+   }
+   .btn-outline {
+     background-color: #fff;
+     color: #0f172a;
+     border-color: rgba(15, 23, 42, 0.08);
+   }
+   .btn-outline:hover {
+     border-color: var(--primary-color, #7C3AED);
+     color: var(--primary-color, #7C3AED);
+   }
+   .btn-accent {
+     background-color: var(--accent-color, #C5A572);
+     color: #fff;
+     border-color: transparent;
+   }
+   .btn-accent:hover {
+     background-color: #a67849;
+   }
+   .btn-light {
+     background-color: #f5f6fb;
+     color: #0f172a;
+     border-color: rgba(15, 23, 42, 0.05);
+   }
+   .btn-light:hover {
+     border-color: rgba(15, 23, 42, 0.12);
    }
 
    /* Primary Button Styling */
@@ -172,25 +198,6 @@ overflow: hidden;
 }
 
 
-.btn-accent {
-   background-color: var(--accent-color, #C5A572);
-            color: white;
-            border-radius: 12px;
-            padding: 8px 14px;
-            text-decoration: none;
-            border: none;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.1px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            font-size: 14px;
-            /* Updated clip-path for a more subtle clipped corner effect */
-            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
-            position: relative;
-            overflow: hidden;
-}
 .btn-success {
    background-color: var(--success-color, #059669);
    color: white;

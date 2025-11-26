@@ -62,6 +62,10 @@ class OrderController extends Controller
         foreach ($orders as &$order) {
             $items = $this->orderModel->getOrderItems($order['id']);
             $order['items_preview'] = array_slice($items, 0, 3);
+            foreach ($order['items_preview'] as &$previewItem) {
+                $previewItem['image_url'] = $this->resolveOrderItemImage($previewItem);
+            }
+            unset($previewItem);
             $order['items_count'] = array_sum(array_map(function ($item) {
                 return (int)($item['quantity'] ?? 1);
             }, $items));
@@ -72,6 +76,49 @@ class OrderController extends Controller
             'orders' => $orders,
             'title' => 'My Orders'
         ]);
+    }
+
+    /**
+     * Resolve the best available image for an order item
+     *
+     * @param array $item
+     * @return string
+     */
+    private function resolveOrderItemImage(array $item): string
+    {
+        $image = $item['product_image'] ?? $item['image'] ?? null;
+
+        if ($image) {
+            return $this->normalizeImageUrl($image);
+        }
+
+        if (!empty($item['product_id'])) {
+            $primaryImage = $this->productImageModel->getPrimaryImage($item['product_id']);
+            if ($primaryImage && !empty($primaryImage['image_url'])) {
+                return $this->normalizeImageUrl($primaryImage['image_url']);
+            }
+        }
+
+        return \App\Core\View::asset('images/products/default.jpg');
+    }
+
+    /**
+     * Normalize relative/absolute product image URLs
+     *
+     * @param string $path
+     * @return string
+     */
+    private function normalizeImageUrl(string $path): string
+    {
+        if (filter_var($path, FILTER_VALIDATE_URL)) {
+            return $path;
+        }
+
+        if (strpos($path, '/') === 0) {
+            return $path;
+        }
+
+        return '/' . ltrim($path, '/');
     }
 
     /**
