@@ -40,11 +40,11 @@ use App\Helpers\CurrencyHelper;
 
                                     <div id="cart-items-container" class="sm:space-y-6 space-y-8">
                                         <?php foreach ($cartItems as $item): ?>
-                                            <div class="cart-item grid sm:grid-cols-3 items-center gap-4 bg-white rounded-xl border border-transparent hover:border-primary/30 transition-all p-4" data-product-id="<?= $item['product']['id'] ?>">
-                                                <div class="sm:col-span-2 flex sm:items-center max-sm:flex-col gap-4 w-full">
+                                            <div class="cart-item grid sm:grid-cols-3 items-center gap-4 max-sm:gap-3 bg-white rounded-xl border border-transparent hover:border-primary/30 transition-all p-4 max-sm:p-3" data-product-id="<?= $item['product']['id'] ?>">
+                                                <div class="sm:col-span-2 flex sm:items-center max-sm:flex-col gap-4 max-sm:gap-3 w-full">
                                                     <div class="flex items-start gap-3 w-full">
                                                         <input type="checkbox" class="item-checkbox w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0 mt-1" checked>
-                                                        <div class="w-20 h-20 sm:w-24 sm:h-24 shrink-0 bg-white p-2 rounded-md border">
+                                                        <div class="w-16 h-16 sm:w-24 sm:h-24 shrink-0 bg-white p-2 rounded-md border">
                                                             <?php $imageUrl = htmlspecialchars($item['product']['image_url'] ?? \App\Core\View::asset('images/products/default.jpg')); ?>
                                                             <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($item['product']['product_name']) ?>" class="w-full h-full object-contain" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'; this.onerror=null;">
                                                         </div>
