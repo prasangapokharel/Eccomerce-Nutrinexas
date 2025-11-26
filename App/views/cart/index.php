@@ -19,103 +19,98 @@ use App\Helpers\CurrencyHelper;
                     </a>
                 </div>
             <?php else: ?>
-                <!-- Cart Items Section -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-6">
-                    <div class="p-4 border-b border-gray-100">
-                        <div class="flex items-center justify-between">
-                            <div class="flex items-center">
-                                <input type="checkbox" id="selectAll" class="w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0">
-                                <label for="selectAll" class="ml-3 text-gray-800 body2-semibold">Select all</label>
-                            </div>
-                            <span class="text-gray-600 body2-medium" id="selectedCount">0 selected</span>
-                        </div>
-                    </div>
-                            
-                    <div id="cart-items-container" class="p-4 space-y-4">
-                        <?php 
-                        $displayItems = array_slice($cartItems, 0, 2);
-                        $remainingCount = count($cartItems) - 2;
-                        ?>
-                        <?php foreach ($displayItems as $item): ?>
-                            <div class="cart-item bg-gray-50 rounded-lg p-4 flex items-center border border-gray-100" data-product-id="<?= $item['product']['id'] ?>">
-                                <input type="checkbox" class="item-checkbox w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0 mr-4" checked>
-                                
-                                <div class="w-16 h-16 rounded-lg overflow-hidden mr-4 flex-shrink-0">
-                                    <?php 
-                                        $imageUrl = htmlspecialchars($item['product']['image_url'] ?? \App\Core\View::asset('images/products/default.jpg'));
-                                    ?>
-                                    <img src="<?= $imageUrl ?>" 
-                                         onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'; this.onerror=null;" 
-                                         alt="<?= htmlspecialchars($item['product']['product_name']) ?>" 
-                                         class="w-full h-full object-cover">
-                                </div>
-                                
-                                <div class="flex-1 min-w-0">
-                                    <h3 class="font-medium text-gray-900 text-sm truncate">
-                                        <?= htmlspecialchars($item['product']['product_name']) ?>
-                                    </h3>
-                                    <p class="text-primary font-semibold text-sm">
-                                        रु<?= number_format($item['product']['sale_price'] ?? $item['product']['price'], 2) ?>
-                                    </p>
-                                </div>
-                                
-                                <div class="flex items-center space-x-2">
-                                    <div class="flex items-center bg-gray-100 rounded-lg">
-                                        <button type="button" 
-                                                onclick="updateCartItem(<?= $item['product']['id'] ?>, 'decrease')" 
-                                                class="px-3 py-2 text-white bg-primary hover:bg-primary-dark rounded-l-lg" 
-                                                aria-label="Decrease quantity">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4"></path>
-                                            </svg>
-                                        </button>
-                                        <span class="px-4 py-2 text-sm font-medium bg-white border-t border-b border-gray-200 quantity-display-main" data-product-id="<?= $item['product']['id'] ?>"><?= $item['quantity'] ?></span>
-                                        <button type="button" 
-                                                onclick="updateCartItem(<?= $item['product']['id'] ?>, 'increase')" 
-                                                class="px-3 py-2 text-white bg-primary hover:bg-primary-dark rounded-r-lg" 
-                                                aria-label="Increase quantity">
-                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                            </svg>
-                                        </button>
+                <!-- Responsive Cart Layout -->
+                <div class="lg:max-w-5xl max-lg:max-w-2xl mx-auto w-full">
+                    <div class="grid lg:grid-cols-3 gap-6">
+                        <div class="lg:col-span-2">
+                            <div class="rounded-2xl border border-gray-100 bg-white shadow-sm">
+                                <div class="bg-gray-100 rounded-2xl p-4 sm:p-6 space-y-6">
+                                    <div class="flex flex-col gap-3">
+                                    <div class="flex flex-wrap items-center justify-between gap-4">
+                                        <h3 class="text-lg font-semibold text-slate-900">Your Cart</h3>
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex items-center">
+                                                <input type="checkbox" id="selectAll" class="w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0">
+                                                <label for="selectAll" class="ml-3 text-gray-800 text-sm font-semibold">Select all</label>
+                                            </div>
+                                            <span class="text-gray-600 text-sm font-medium" id="selectedCount">0 selected</span>
+                                        </div>
                                     </div>
-                                    <button type="button" 
-                                            onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)" 
-                                            class="p-2 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors" 
-                                            aria-label="Remove item">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                        </svg>
-                                    </button>
+                                    <hr class="border-gray-300 hidden lg:block">
+                                    </div>
+                                    
+                    <div id="cart-items-container" class="sm:space-y-6 space-y-8">
+                        <?php foreach ($cartItems as $item): ?>
+                            <div class="cart-item grid sm:grid-cols-3 items-center gap-4 bg-white rounded-xl border border-transparent hover:border-primary/30 transition-all p-4" data-product-id="<?= $item['product']['id'] ?>">
+                                <div class="sm:col-span-2 flex sm:items-center max-sm:flex-col gap-4 w-full">
+                                    <div class="flex items-start gap-3 w-full">
+                                        <input type="checkbox" class="item-checkbox w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0 mt-1" checked>
+                                        <div class="w-24 h-24 shrink-0 bg-white p-2 rounded-md border">
+                                            <?php $imageUrl = htmlspecialchars($item['product']['image_url'] ?? \App\Core\View::asset('images/products/default.jpg')); ?>
+                                            <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($item['product']['product_name']) ?>" class="w-full h-full object-contain" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'; this.onerror=null;">
+                                        </div>
+                                        <div class="space-y-2 flex-1 min-w-0">
+                                            <h4 class="text-[15px] font-semibold text-slate-900 truncate">
+                                                <?= htmlspecialchars($item['product']['product_name']) ?>
+                                            </h4>
+                                            <button type="button" class="text-xs font-medium text-red-500" onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)">Remove</button>
+                                            <div class="flex flex-wrap items-center gap-3 mt-2">
+                                                <div class="relative group">
+                                                    <button type="button" class="flex items-center px-2.5 py-1.5 border border-gray-300 text-slate-900 text-xs font-medium bg-white rounded-md">
+                                                        <?= htmlspecialchars($item['product']['category'] ?? 'General') ?>
+                                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 fill-gray-500 inline ml-2.5" viewBox="0 0 24 24">
+                                                            <path fill-rule="evenodd" d="M11.99997 18.1669a2.38 2.38 0 0 1-1.68266-.69733l-9.52-9.52a2.38 2.38 0 1 1 3.36532-3.36532l7.83734 7.83734 7.83734-7.83734a2.38 2.38 0 1 1 3.36532 3.36532l-9.52 9.52a2.38 2.38 0 0 1-1.68266.69734z" clip-rule="evenodd" />
+                                                        </svg>
+                                                    </button>
+                                                </div>
+                                                <div>
+                                                    <div class="flex items-center px-2.5 py-1.5 border border-gray-300 text-slate-900 text-xs rounded-md bg-white">
+                                                        <span class="cursor-pointer" onclick="updateCartItem(<?= $item['product']['id'] ?>, 'decrease')">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 fill-current" viewBox="0 0 124 124">
+                                                                <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"></path>
+                                                            </svg>
+                                                        </span>
+                                                        <span class="mx-3 quantity-display-main" data-product-id="<?= $item['product']['id'] ?>"><?= $item['quantity'] ?></span>
+                                                        <span class="cursor-pointer" onclick="updateCartItem(<?= $item['product']['id'] ?>, 'increase')">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" class="w-2.5 fill-current" viewBox="0 0 42 42">
+                                                                <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"></path>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="sm:ml-auto flex flex-col items-start sm:items-end gap-2">
+                                    <h4 class="text-[15px] font-semibold text-slate-900">रु<?= number_format($item['product']['sale_price'] ?? $item['product']['price'], 2) ?></h4>
+                                    <p class="text-xs text-slate-500">Inclusive of taxes</p>
                                 </div>
                             </div>
                         <?php endforeach; ?>
-                        
-                        <?php if ($remainingCount > 0): ?>
-                            <div class="flex items-center justify-between py-2">
-                                <button onclick="openCartModal()" class="text-primary text-sm font-medium">+ <?= $remainingCount ?> More</button>
-                                <a href="<?= \App\Core\View::url('cart') ?>" class="text-primary text-sm font-medium">Edit</a>
-                            </div>
-                        <?php endif; ?>
                     </div>
-                </div>
-                
-                <!-- Order Summary Section -->
-                <div class="bg-gray-50 rounded-xl shadow-sm border border-gray-100 overflow-hidden mb-20">
-                    <div class="p-6">
-                        <div class="space-y-3 mb-6">
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 text-sm">Subtotal</span>
-                                <span class="font-semibold text-gray-900 text-sm">रु<span id="subtotal"><?= number_format($total, 2) ?></span></span>
+                                </div>
                             </div>
-                            <div class="flex justify-between items-center">
-                                <span class="text-gray-600 text-sm">Tax (<?= number_format(($tax / $total) * 100, 0) ?>%)</span>
-                                <span class="font-semibold text-gray-900 text-sm">रु<span id="tax"><?= number_format($tax, 2) ?></span></span>
+                        </div>
+                        
+                        <!-- Order summary -->
+                        <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5 sm:p-6 md:sticky md:top-6 h-max">
+                            <h3 class="text-lg font-semibold text-slate-900">Order details</h3>
+                            <hr class="border-gray-300 mt-4 mb-6">
+                            <ul class="text-slate-500 font-medium space-y-4 text-sm">
+                                <li class="flex flex-wrap gap-4">Subtotal <span class="ml-auto text-slate-900 font-semibold">रु<span id="subtotal"><?= number_format($total, 2) ?></span></span></li>
+                                <li class="flex flex-wrap gap-4">Tax (<?= number_format(($tax / $total) * 100, 0) ?>%) <span class="ml-auto text-slate-900 font-semibold">रु<span id="tax"><?= number_format($tax, 2) ?></span></span></li>
+                                <li class="flex flex-wrap gap-4 text-slate-900">Total <span class="ml-auto font-semibold">रु<span id="final-total"><?= number_format($finalTotal, 2) ?></span></span></li>
+                            </ul>
+                            <div class="mt-6 space-y-3">
+                                <a href="<?= \App\Core\View::url('checkout') ?>" class="text-sm px-4 py-2.5 w-full font-medium tracking-wide bg-primary hover:bg-primary-dark text-white rounded-md text-center block">Checkout</a>
+                                <a href="<?= \App\Core\View::url('products') ?>" class="text-sm px-4 py-2.5 w-full font-medium tracking-wide bg-transparent text-slate-900 border border-gray-300 rounded-md text-center block">Continue Shopping</a>
                             </div>
-                            <div class="border-t border-gray-200 pt-3">
-                                <div class="flex justify-between items-center">
-                                    <span class="font-semibold text-gray-900">Total</span>
-                                    <span class="font-bold text-primary">रु<span id="final-total"><?= number_format($finalTotal, 2) ?></span></span>
+                            <div class="mt-6">
+                                <p class="text-slate-900 text-sm font-medium mb-2">Do you have a promo code?</p>
+                                <div class="flex border border-primary overflow-hidden rounded-md">
+                                    <input type="text" placeholder="Promo code" class="w-full outline-0 bg-white text-slate-600 text-sm px-4 py-2.5">
+                                    <button type="button" class="flex items-center justify-center font-medium tracking-wide bg-primary hover:bg-primary-dark px-4 text-sm text-white">Apply</button>
                                 </div>
                             </div>
                         </div>
@@ -123,7 +118,7 @@ use App\Helpers\CurrencyHelper;
                 </div>
                 
                 <!-- Sticky Checkout + Info -->
-                <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50">
+                <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50 lg:hidden">
                     <div class="flex items-center gap-3">
                         <button type="button" id="orderStepsBtn" class="p-3 rounded-2xl border border-gray-200 text-gray-700 hover:bg-gray-50 hover:text-primary flex items-center gap-2">
 <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
