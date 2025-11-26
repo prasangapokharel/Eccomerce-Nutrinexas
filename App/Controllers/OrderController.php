@@ -58,6 +58,15 @@ class OrderController extends Controller
         
         $userId = Session::get('user_id');
         $orders = $this->orderModel->getOrdersByUserId($userId);
+
+        foreach ($orders as &$order) {
+            $items = $this->orderModel->getOrderItems($order['id']);
+            $order['items_preview'] = array_slice($items, 0, 3);
+            $order['items_count'] = array_sum(array_map(function ($item) {
+                return (int)($item['quantity'] ?? 1);
+            }, $items));
+        }
+        unset($order);
         
         $this->view('orders/index', [
             'orders' => $orders,

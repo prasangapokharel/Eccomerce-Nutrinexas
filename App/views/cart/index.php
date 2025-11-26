@@ -128,38 +128,40 @@ use App\Helpers\CurrencyHelper;
                                             <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">Total <span class="ml-auto">रु<span id="final-total" data-original="<?= $originalTotals['final'] ?>" data-current="<?= $finalTotal ?>"><?= number_format($finalTotal, 2) ?></span></span></li>
                                         </ul>
 
-                                        <div class="mt-6 space-y-3">
-                                            <div id="cart-applied-coupon" class="<?= $hasCoupon ? '' : 'hidden' ?> flex items-center justify-between p-3 bg-primary/5 border border-primary/20 rounded-lg">
-                                                <div>
-                                                    <p class="text-sm font-semibold text-primary" id="cart-applied-code"><?= $hasCoupon ? htmlspecialchars($appliedCoupon['code']) : '' ?></p>
-                                                    <p class="text-xs text-primary/70" id="cart-applied-discount"><?= $hasCoupon ? 'Saved रु' . number_format($couponDiscount, 2) : '' ?></p>
-                                                </div>
-                                                <button type="button" id="cart-remove-coupon-btn" class="text-red-600 hover:text-red-700" aria-label="Remove coupon">
-                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                                                    </svg>
+                                    <div class="mt-6 space-y-3">
+                                        <div id="cart-applied-coupon" class="<?= $hasCoupon ? '' : 'hidden' ?> flex items-center justify-between p-3 bg-primary/5 border border-primary/20 rounded-lg">
+                                            <div>
+                                                <p class="text-sm font-semibold text-primary" id="cart-applied-code"><?= $hasCoupon ? htmlspecialchars($appliedCoupon['code']) : '' ?></p>
+                                                <p class="text-xs text-primary/70" id="cart-applied-discount"><?= $hasCoupon ? 'Saved रु' . number_format($couponDiscount, 2) : '' ?></p>
+                                            </div>
+                                            <button type="button" id="cart-remove-coupon-btn" class="text-red-600 hover:text-red-700" aria-label="Remove coupon">
+                                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                                                </svg>
+                                            </button>
+                                        </div>
+
+                                        <div id="cart-coupon-form" class="space-y-2 <?= $hasCoupon ? 'hidden' : '' ?>">
+                                            <p class="text-slate-900 text-sm font-medium">Do you have a promo code?</p>
+                                            <div class="flex border border-primary overflow-hidden rounded-md">
+                                                <input type="text" id="cart-coupon-code" placeholder="Promo code"
+                                                       class="flex-1 outline-0 bg-white text-slate-600 text-sm px-4 py-2.5 uppercase" autocomplete="off">
+                                                <button type="button" id="cart-apply-coupon-btn"
+                                                        class="flex items-center justify-center font-medium tracking-wide bg-primary hover:bg-primary-dark px-4 text-sm text-white">
+                                                    Apply
                                                 </button>
                                             </div>
+                                            <p id="cart-coupon-message" class="hidden text-sm"></p>
+                                        </div>
 
-                        <div id="cart-coupon-form" class="space-y-2 <?= $hasCoupon ? 'hidden' : '' ?>">
-                            <p class="text-slate-900 text-sm font-medium">Do you have a promo code?</p>
-                            <div class="flex border border-primary overflow-hidden rounded-md">
-                                <input type="text" id="cart-coupon-code" placeholder="Promo code"
-                                       class="flex-1 outline-0 bg-white text-slate-600 text-sm px-4 py-2.5 uppercase" autocomplete="off">
-                                <button type="button" id="cart-apply-coupon-btn"
-                                        class="flex items-center justify-center font-medium tracking-wide bg-primary hover:bg-primary-dark px-4 text-sm text-white">
-                                    Apply
-                                </button>
-                            </div>
-                            <p id="cart-coupon-message" class="hidden text-sm"></p>
-                        </div>
-
-                                        <a href="<?= \App\Core\View::url('checkout') ?>" class="block rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-primary text-center text-white hover:bg-primary-dark">
-                                            Proceed to Checkout
-                                        </a>
-                                        <a href="<?= \App\Core\View::url('products') ?>" class="block rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-transparent border border-gray-300 text-center text-slate-900 hover:bg-gray-50">
-                                            Continue Shopping
-                                        </a>
+                                        <div class="space-y-3 hidden lg:block">
+                                            <a href="<?= \App\Core\View::url('checkout') ?>" class="block rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-primary text-center text-white hover:bg-primary-dark">
+                                                Proceed to Checkout
+                                            </a>
+                                            <a href="<?= \App\Core\View::url('products') ?>" class="block rounded-md px-4 py-2.5 w-full text-sm font-medium tracking-wide bg-transparent border border-gray-300 text-center text-slate-900 hover:bg-gray-50">
+                                                Continue Shopping
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

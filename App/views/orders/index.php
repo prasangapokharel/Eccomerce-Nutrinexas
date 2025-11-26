@@ -1,42 +1,68 @@
 <?php ob_start(); ?>
 
-<div class="min-h-screen bg-gray-50">
+<div class="bg-gray-50 min-h-screen">
+    <div class="bg-gray-50 px-4 py-8">
+        <div class="max-w-screen-xl mx-auto">
+            <?php if (isset($_SESSION['flash_message'])): ?>
+                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 flex items-center gap-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                    <span><?= $_SESSION['flash_message'] ?></span>
+                </div>
+                <?php unset($_SESSION['flash_message']); ?>
+            <?php endif; ?>
 
-    <div class="container mx-auto px-4 py-6 max-w-4xl">
-        <?php if (isset($_SESSION['flash_message'])): ?>
-            <div class="bg-green-50 border-l-4 border-green-400 text-green-800 px-3 py-2 rounded-lg mb-4 shadow-sm">
-                <div class="flex items-center">
-                    <svg class="w-3 h-3 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="font-medium text-xs"><?= $_SESSION['flash_message'] ?></span>
+            <?php if (empty($orders)): ?>
+                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-10 text-center max-w-lg mx-auto mt-8">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-4">
+                        <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293A1 1 0 005.4 17H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                        </svg>
+                    </div>
+                    <h2 class="text-xl font-semibold text-slate-900 mb-2">No orders yet</h2>
+                    <p class="text-sm text-slate-600 mb-6">You haven't placed any orders yet. Start shopping to see your history here.</p>
+                    <a href="<?= \App\Core\View::url('products') ?>" class="inline-flex items-center gap-2 px-5 py-3 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
+                        </svg>
+                        Start Shopping
+                    </a>
                 </div>
-            </div>
-            <?php unset($_SESSION['flash_message']); ?>
-        <?php endif; ?>
-        
-        <?php if (empty($orders)): ?>
-            <!-- Empty State -->
-            <div class="bg-white rounded-xl shadow-lg p-8 text-center mt-8 max-w-md mx-auto">
-                <div class="text-gray-400 mb-4">
-                    <svg class="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
+            <?php else: ?>
+                <div class="flex flex-wrap justify-between items-center gap-6">
+                    <div class="max-w-96">
+                        <h2 class="text-slate-900 text-2xl font-bold mb-3">Order History</h2>
+                        <p class="text-base text-slate-600">View and manage your past orders</p>
+                    </div>
+                    <div class="w-full sm:w-auto">
+                        <input
+                            type="text"
+                            id="order-search"
+                            class="px-4 py-2.5 bg-white border border-gray-300 text-slate-900 w-full text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            placeholder="Search orders..."
+                        />
+                    </div>
                 </div>
-                <h2 class="text-lg font-semibold text-gray-900 mb-2">No orders yet</h2>
-                <p class="text-accent text-xs mb-4">You haven't placed any orders yet. Start shopping to see your orders here.</p>
-                <a href="<?= \App\Core\View::url('products') ?>" class="inline-flex items-center px-4 py-2 bg-primary text-white rounded-xl font-semibold text-xs">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
-                    </svg>
-                    Start Shopping
-                </a>
-            </div>
-        <?php else: ?>
-            <!-- Orders List -->
-            <div class="space-y-2">
-                <?php foreach ($orders as $order): ?>
-                    <?php
+
+                <div class="flex flex-wrap items-center gap-8 mt-12">
+                    <div class="flex flex-wrap items-center gap-3" id="order-filters">
+                        <span class="text-[15px] font-medium text-slate-600">Filter by:</span>
+                        <button class="filter-btn px-4 py-2 cursor-pointer bg-indigo-600 border border-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition" data-filter="all">All Orders</button>
+                        <button class="filter-btn px-4 py-2 cursor-pointer bg-white border border-gray-300 text-slate-900 rounded-md text-sm font-medium hover:bg-gray-50 transition" data-filter="delivered">Completed</button>
+                        <button class="filter-btn px-4 py-2 cursor-pointer bg-white border border-gray-300 text-slate-900 rounded-md text-sm font-medium hover:bg-gray-50 transition" data-filter="processing">Processing</button>
+                        <button class="filter-btn px-4 py-2 cursor-pointer bg-white border border-gray-300 text-slate-900 rounded-md text-sm font-medium hover:bg-gray-50 transition" data-filter="cancelled">Cancelled</button>
+                    </div>
+                    <div class="ml-auto w-full sm:w-auto">
+                        <select id="order-sort" class="appearance-none px-4 py-2.5 bg-white border border-gray-300 text-slate-900 w-full text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer">
+                            <option value="newest">Sort by: Newest</option>
+                            <option value="oldest">Sort by: Oldest</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="space-y-6 mt-6" id="orders-list">
+                    <?php 
                     $statusColors = [
                         'pending' => 'bg-yellow-100 text-yellow-800',
                         'processing' => 'bg-blue-100 text-blue-800',
@@ -44,108 +70,103 @@
                         'delivered' => 'bg-green-100 text-green-800',
                         'cancelled' => 'bg-red-100 text-red-800'
                     ];
-                    $statusColor = $statusColors[$order['status']] ?? 'bg-gray-100 text-gray-800';
                     ?>
-                    <div class="bg-white rounded-xl shadow-sm border border-gray-100">
-                        <div class="flex items-center p-3">
-                            <!-- Order Icon -->
-                            <div class="w-12 h-12 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0 mr-3">
-                                <img src="<?= ASSETS_URL ?>/images/icons/order.png" 
-                                     alt="Order" 
-                                     class="w-full h-full object-contain p-2"
-                                     onerror="this.src='<?= ASSETS_URL ?>/images/icons/orders.png'">
+                    <?php foreach ($orders as $order): 
+                        $statusKey = strtolower($order['status']);
+                        $statusColor = $statusColors[$statusKey] ?? 'bg-gray-100 text-gray-800';
+                        $invoice = $order['invoice'] ?? ('NTX' . str_pad($order['id'], 6, '0', STR_PAD_LEFT));
+                        $itemsCount = $order['items_count'] ?? 0;
+                    ?>
+                        <div class="bg-white rounded-xl border border-gray-300 overflow-hidden p-6 order-card"
+                             data-status="<?= $statusKey ?>"
+                             data-invoice="<?= strtolower($invoice) ?>"
+                             data-total="<?= strtolower(number_format($order['total_amount'], 2)) ?>"
+                             data-date="<?= strtotime($order['created_at']) ?>">
+                            <div class="flex flex-wrap justify-between gap-6">
+                                <div class="max-w-96">
+                                    <div class="flex items-center gap-4">
+                                        <span class="text-[15px] font-semibold text-slate-600">Order <?= htmlspecialchars($invoice) ?></span>
+                                        <span class="px-3 py-1.5 text-xs font-medium rounded-md <?= $statusColor ?>"><?= ucfirst($order['status']) ?></span>
+                                    </div>
+                                    <p class="text-slate-600 text-sm mt-3">Placed on <?= date('M j, Y \\a\\t g:i A', strtotime($order['created_at'])) ?></p>
+                                </div>
+                                <div class="text-right">
+                                    <p class="text-lg font-semibold text-slate-900">रु<?= number_format($order['total_amount'], 2) ?></p>
+                                    <p class="text-slate-600 text-sm mt-2"><?= $itemsCount ?> item<?= $itemsCount === 1 ? '' : 's' ?></p>
+                                </div>
                             </div>
-                            
-                            <!-- Order Details -->
-                            <div class="flex-1 min-w-0">
-                                <h4 class="text-sm font-medium text-gray-900 truncate">
-                                    Order #<?= $order['id'] ?>
-                                </h4>
-                                <p class="text-xs text-gray-500"><?= date('M j, Y', strtotime($order['created_at'])) ?></p>
-                                <p class="text-sm font-semibold text-primary">रु <?= number_format($order['total_amount'], 0) ?></p>
-                            </div>
-                            
-                            <!-- Order Status & Actions -->
-                            <div class="text-right flex flex-col items-end">
-                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium <?= $statusColor ?> mb-2">
-                                    <?= ucfirst($order['status']) ?>
-                                </span>
-                                <!-- Download Receipt Button -->
-                                <a href="<?= \App\Core\View::url('receipt/' . $order['id']) ?>" 
-                                   class="inline-flex items-center px-2 py-1 text-xs text-primary hover:text-blue-800 transition-colors"
-                                   title="Download Receipt">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+
+                            <?php if (!empty($order['items_preview'])): ?>
+                                <hr class="border-gray-300 my-6" />
+                                <div class="flex flex-wrap items-center gap-8">
+                                    <?php foreach ($order['items_preview'] as $item): 
+                                        $image = $item['product_image'] ?? null;
+                                        if ($image && !filter_var($image, FILTER_VALIDATE_URL)) {
+                                            $image = ASSETS_URL . '/images/products/' . $image;
+                                        }
+                                        ?>
+                                        <div class="flex items-center gap-4">
+                                            <div class="w-16 h-16 bg-gray-100 p-1 rounded-md overflow-hidden">
+                                                <img src="<?= htmlspecialchars($image ?? ASSETS_URL . '/images/products/default.jpg') ?>" alt="<?= htmlspecialchars($item['product_name'] ?? 'Product') ?>" class="w-full h-full object-contain"
+                                                     onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                                            </div>
+                                            <div>
+                                                <p class="text-[15px] font-medium text-slate-900"><?= htmlspecialchars($item['product_name'] ?? 'Product') ?></p>
+                                                <p class="text-xs text-slate-600 mt-1">Qty: <?= $item['quantity'] ?? 1 ?></p>
+                                            </div>
+                                        </div>
+                                    <?php endforeach; ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="mt-8 flex flex-wrap gap-4">
+                                <a href="<?= \App\Core\View::url('orders/view/' . $order['id']) ?>" class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-slate-900 font-medium cursor-pointer hover:bg-gray-50 transition flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512">
+                                        <path d="M508.7 246c-4.6-6.3-113.6-153.2-252.7-153.2S7.8 239.8 3.2 246a16.9 16.9 0 0 0 0 19.9c4.6 6.3 113.6 153.2 252.7 153.2s248.2-146.9 252.7-153.2a16.9 16.9 0 0 0 0-19.9zM256 385.4c-102.5 0-191.3-97.5-217.6-129.4 26.3-31.9 114.9-129.4 217.6-129.4 102.5 0 191.3 97.5 217.6 129.4-26.3 31.9-115 129.4-217.6 129.4z"/>
+                                        <path d="M256 154.7c-55.8 0-101.3 45.4-101.3 101.3s45.5 101.3 101.3 101.3 101.3-45.4 101.3-101.3S311.8 154.7 256 154.7zm0 168.8c-37.2 0-67.5-30.3-67.5-67.5s30.3-67.5 67.5-67.5 67.5 30.3 67.5 67.5-30.3 67.5-67.5 67.5z"/>
                                     </svg>
+                                    View Details
                                 </a>
-                                <!-- Cancel Button (if order can be cancelled) -->
+
+                                <a href="<?= \App\Core\View::url('orders/reorder/' . $order['id']) ?>" class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-slate-900 font-medium cursor-pointer hover:bg-gray-50 transition flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24">
+                                        <path d="M12.005 23.8c-3.186 0-6.136-1.18-8.378-3.422-.472-.472-.472-1.18 0-1.652s1.18-.472 1.652 0c1.888 1.77 4.248 2.714 6.726 2.714 5.192 0 9.44-4.248 9.44-9.44s-4.248-9.44-9.44-9.44c-2.478 0-4.838.944-6.726 2.714-.944.944-2.95 3.304-3.068 3.422-.472.472-1.18.59-1.652.118s-.59-1.18-.118-1.652c.118-.118 2.124-2.478 3.186-3.422C5.869 1.38 8.819.2 12.005.2c6.49 0 11.8 5.31 11.8 11.8s-5.31 11.8-11.8 11.8z" />
+                                        <path d="M6.105 9.05H1.385c-.708 0-1.18-.472-1.18-1.18V3.15c0-.708.472-1.18 1.18-1.18s1.18.472 1.18 1.18v3.54h3.54c.708 0 1.18.472 1.18 1.18s-.472 1.18-1.18 1.18z" />
+                                    </svg>
+                                    Reorder
+                                </a>
+
+                                <a href="<?= \App\Core\View::url('receipt/' . $order['id']) ?>" class="px-4 py-2 bg-white border border-gray-300 rounded-md text-sm text-slate-900 font-medium cursor-pointer hover:bg-gray-50 transition flex items-center gap-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 512 512">
+                                        <path d="m433.8 106.3-96.4-91.2C327.1 5.3 313.7 0 299.6 0H116C85.7 0 61 24.7 61 55v402c0 30.3 24.7 55 55 55h280c30.3 0 55-24.7 55-55V146.2c0-15.1-6.3-29.6-17.2-39.9zM404.7 120H330c-2.8 0-5-2.2-5-5V44.6z"/>
+                                        <path d="M363 200H143c-8.3 0-15 6.7-15 15s6.7 15 15 15h220c8.3 0 15-6.7 15-15s-6.7-15-15-15zm0 80H143c-8.3 0-15 6.7-15 15s6.7 15 15 15h220c8.3 0 15-6.7 15-15s-6.7-15-15-15zm-147.3 80H143c-8.3 0-15 6.7-15 15s6.7 15 15 15h72.7c8.3 0 15-6.7 15-15s-6.7-15-15-15z"/>
+                                    </svg>
+                                    Invoice
+                                </a>
+
                                 <?php 
                                 $cancellableStatuses = ['pending', 'confirmed', 'processing', 'unpaid'];
-                                if (in_array($order['status'], $cancellableStatuses)): 
-                                ?>
-                                    <button onclick="openCancelDrawer(<?= $order['id'] ?>)"
-                                            class="mt-2 inline-flex items-center px-3 py-1 text-xs rounded-lg bg-red-500 text-white hover:bg-red-600 transition-colors"
-                                            title="Cancel Order">
-                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                if (in_array($order['status'], $cancellableStatuses)): ?>
+                                    <button onclick="openCancelDrawer(<?= $order['id'] ?>)" class="px-4 py-2 bg-white border border-red-300 text-red-600 rounded-md text-sm font-medium hover:bg-red-50 transition flex items-center gap-2">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                         </svg>
                                         Cancel
                                     </button>
                                 <?php endif; ?>
-                                <!-- One-click Reorder -->
-                                <a href="<?= \App\Core\View::url('orders/reorder/' . $order['id']) ?>"
-                                   class="mt-2 inline-flex items-center px-3 py-1 text-xs rounded-lg bg-primary text-white hover:bg-green-700 transition-colors"
-                                   title="Reorder these items">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-  <path stroke-linecap="round" stroke-linejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
-</svg>
-
-                                    Reorder
-                                </a>
                             </div>
                         </div>
-                    </div>
-                <?php endforeach; ?>
-            </div>
-        <?php endif; ?>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
+        </div>
     </div>
 </div>
-
-<style>
-/* Custom scrollbar for mobile */
-@media (max-width: 1023px) {
-    .overflow-x-auto::-webkit-scrollbar {
-        height: 4px;
-    }
-    
-    .overflow-x-auto::-webkit-scrollbar-track {
-        background: #f1f5f9;
-    }
-    
-    .overflow-x-auto::-webkit-scrollbar-thumb {
-        background: #cbd5e1;
-        border-radius: 2px;
-    }
-}
-
-/* Status badge animations */
-.status-badge {
-    transition: all 0.2s ease-in-out;
-}
-
-/* Order card hover effects for desktop only */
-@media (min-width: 1024px) {
-    .order-card:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-    }
-}
-</style>
 
 <!-- Cancel Order Bottom Drawer -->
 <div id="cancelDrawer" class="fixed inset-0 z-50 hidden">
     <div class="absolute inset-0 bg-black/50" onclick="closeCancelDrawer()"></div>
-    <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl transform transition-transform duration-300 ease-out" id="cancelDrawerContent">
+    <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl transform transition-transform duration-300 ease-out translate-y-full" id="cancelDrawerContent">
         <div class="p-6">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Cancel Order</h3>
@@ -172,7 +193,7 @@
                     <button type="button" 
                             onclick="closeCancelDrawer()"
                             class="flex-1 px-4 py-3 bg-gray-100 text-gray-700 rounded-xl font-medium hover:bg-gray-200 transition-colors">
-                        Cancel
+                        Close
                     </button>
                     <button type="submit" 
                             class="flex-1 px-4 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors">
@@ -192,7 +213,8 @@ function openCancelDrawer(orderId) {
     document.getElementById('cancelOrderId').value = orderId;
     document.getElementById('cancelReason').value = '';
     document.getElementById('cancelDrawer').classList.remove('hidden');
-    document.getElementById('cancelDrawerContent').classList.remove('translate-y-full');
+    const drawer = document.getElementById('cancelDrawerContent');
+    drawer.classList.remove('translate-y-full');
     document.body.style.overflow = 'hidden';
 }
 
@@ -241,7 +263,53 @@ function submitCancelOrder(event) {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Orders page loaded');
+    const filterButtons = document.querySelectorAll('#order-filters .filter-btn');
+    const searchInput = document.getElementById('order-search');
+    const sortSelect = document.getElementById('order-sort');
+    const listContainer = document.getElementById('orders-list');
+
+    function applyFilters() {
+        const activeFilter = document.querySelector('#order-filters .filter-btn.active')?.dataset.filter || 'all';
+        const term = (searchInput.value || '').toLowerCase();
+
+        document.querySelectorAll('.order-card').forEach(card => {
+            const matchesStatus = activeFilter === 'all' || card.dataset.status === activeFilter;
+            const matchesSearch = !term || card.dataset.invoice.includes(term);
+            card.classList.toggle('hidden', !(matchesStatus && matchesSearch));
+        });
+    }
+
+    function setActiveButton(activeBtn) {
+        filterButtons.forEach(btn => {
+            btn.classList.remove('active', 'bg-indigo-600', 'text-white', 'border-indigo-600');
+            btn.classList.add('bg-white', 'text-slate-900', 'border-gray-300');
+        });
+        activeBtn.classList.remove('bg-white', 'text-slate-900', 'border-gray-300');
+        activeBtn.classList.add('active', 'bg-indigo-600', 'text-white', 'border-indigo-600');
+    }
+
+    filterButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            setActiveButton(btn);
+            applyFilters();
+        });
+    });
+
+    if (filterButtons.length) {
+        setActiveButton(filterButtons[0]);
+    }
+
+    searchInput.addEventListener('input', applyFilters);
+
+    sortSelect.addEventListener('change', () => {
+        const cards = Array.from(document.querySelectorAll('.order-card'));
+        const sorted = cards.sort((a, b) => {
+            const dateA = parseInt(a.dataset.date, 10);
+            const dateB = parseInt(b.dataset.date, 10);
+            return sortSelect.value === 'oldest' ? dateA - dateB : dateB - dateA;
+        });
+        sorted.forEach(card => listContainer.appendChild(card));
+    });
 });
 </script>
 

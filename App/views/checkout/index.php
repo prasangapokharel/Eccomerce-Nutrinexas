@@ -467,7 +467,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
             </div>
 
             <button type="button"
-                    class="hidden md:flex w-full justify-center mt-4 px-4 py-3 rounded-xl bg-slate-900 text-white font-semibold text-sm tracking-wide hover:bg-slate-800"
+                    class="hidden md:flex w-full justify-center mt-4 px-4 py-3 rounded-xl bg-primary text-white font-semibold text-sm tracking-wide hover:bg-primary-dark transition-colors"
                     onclick="document.getElementById('place-order-btn').click();">
                 Complete Purchase
             </button>

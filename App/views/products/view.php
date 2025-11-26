@@ -621,20 +621,22 @@ ob_start();
                                             </div>
                                         </button>
                                     <?php elseif ($isAvailable): ?>
-                                        <button type="button" class="w-full bg-primary text-white px-6 py-3 rounded-2xl font-semibold text-sm add-to-cart hover:bg-primary-dark transition-colors duration-200 shadow-lg hover:shadow-xl" 
-                                                data-product-id="<?= $product['id'] ?? '' ?>" 
-                                                data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
-                                                data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
-                                            <span class="btn-text">Add to Cart</span>
-                                            <span class="btn-loading hidden">Adding...</span>
-                                        </button>
-                                        <button type="button" class="w-full bg-accent text-white px-6 py-3 rounded-2xl font-semibold text-sm direct-checkout hover:bg-accent-dark transition-colors duration-200 border border-accent shadow-lg hover:shadow-xl" 
-                                                data-product-id="<?= $product['id'] ?? '' ?>" 
-                                                data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
-                                                data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
-                                            <span class="btn-text">Order Now</span>
-                                            <span class="btn-loading hidden">Processing...</span>
-                                        </button>
+                                        <div class="flex items-center gap-3">
+                                            <button type="button" class="flex-1 bg-primary text-white px-6 py-3 rounded-2xl font-semibold text-sm add-to-cart hover:bg-primary-dark transition-colors duration-200 shadow-lg hover:shadow-xl" 
+                                                    data-product-id="<?= $product['id'] ?? '' ?>" 
+                                                    data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
+                                                    data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
+                                                <span class="btn-text">Add to Cart</span>
+                                                <span class="btn-loading hidden">Adding...</span>
+                                            </button>
+                                            <button type="button" class="flex-1 bg-accent text-white px-6 py-3 rounded-2xl font-semibold text-sm direct-checkout hover:bg-accent-dark transition-colors duration-200 border border-accent shadow-lg hover:shadow-xl" 
+                                                    data-product-id="<?= $product['id'] ?? '' ?>" 
+                                                    data-product-name="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>" 
+                                                    data-product-price="<?= isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? '0' ?>">
+                                                <span class="btn-text">Order Now</span>
+                                                <span class="btn-loading hidden">Processing...</span>
+                                            </button>
+                                        </div>
                                     <?php else: ?>
                                         <button type="button" disabled class="w-full bg-gray-400 text-white px-6 py-3 rounded-2xl font-medium text-sm cursor-not-allowed shadow-lg">
                                             Out of Stock
