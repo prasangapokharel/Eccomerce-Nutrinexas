@@ -2,10 +2,50 @@
 /**
  * Latest Products Grid
  *
- * Uses $products and $pricingHelper to render recently added items.
+ * Fetches the newest uploaded products ordered by created_at DESC.
  */
 
-$latestProducts = array_slice($products ?? [], 0, 7);
+// Fetch latest products directly from database (newest first)
+$db = \App\Core\Database::getInstance();
+$productModel = new \App\Models\Product();
+$productImageModel = new \App\Models\ProductImage();
+$reviewModel = new \App\Models\Review();
+
+$latestProductsRaw = $db->query(
+    "SELECT p.*
+     FROM products p
+     WHERE p.status = 'active'
+     AND (p.approval_status = 'approved' OR p.approval_status IS NULL OR p.seller_id IS NULL OR p.seller_id = 0)
+     ORDER BY p.created_at DESC
+     LIMIT 7",
+    []
+)->all();
+
+// Process products: add images, review stats, sale prices
+$latestProducts = [];
+foreach ($latestProductsRaw as $product) {
+    // Get primary image
+    $primaryImage = $productImageModel->getPrimaryImage($product['id']);
+    if ($primaryImage && !empty($primaryImage['image_url'])) {
+        $product['image_url'] = filter_var($primaryImage['image_url'], FILTER_VALIDATE_URL) 
+            ? $primaryImage['image_url'] 
+            : \App\Core\View::asset('uploads/images/' . $primaryImage['image_url']);
+    } elseif (!empty($product['image'])) {
+        $product['image_url'] = $product['image'];
+    } else {
+        $product['image_url'] = \App\Core\View::asset('images/products/default.jpg');
+    }
+    
+    // Apply sale price calculation
+    $product = $productModel->applySalePrice($product);
+    
+    // Add review statistics
+    $reviewStats = $productModel->getReviewStats($product['id']);
+    $product['review_count'] = $reviewStats['total_reviews'];
+    $product['avg_rating'] = $reviewStats['average_rating'];
+    
+    $latestProducts[] = $product;
+}
 
 // Get internal product ad
 $internalProductAd = null;

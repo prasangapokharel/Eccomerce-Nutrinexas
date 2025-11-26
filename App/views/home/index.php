@@ -67,6 +67,10 @@ $homeCategoriesBanner = $bannerDisplayService->getBannerBySlot('slot_home_catego
     </section>
 
     <section class="py-6">
+        <?php include $sectionsPath . '/latest-products.php'; ?>
+    </section>
+
+    <section class="py-6">
         <?php include $sectionsPath . '/top-sale.php'; ?>
     </section>
 
@@ -77,10 +81,6 @@ $homeCategoriesBanner = $bannerDisplayService->getBannerBySlot('slot_home_catego
     <!-- Infinite Scroll Products Section -->
     <section class="py-2">
         <?php include $sectionsPath . '/Newproductsinfinnite.php'; ?>
-    </section>
-
-    <section class="py-6">
-        <?php include $sectionsPath . '/latest-products.php'; ?>
     </section>
 
     <?php include $sectionsPath . '/home-assets.php'; ?>
