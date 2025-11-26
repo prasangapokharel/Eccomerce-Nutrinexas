@@ -4,18 +4,21 @@ namespace App\Controllers\Seller;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Core\Cache;
 use Exception;
 
 class Orders extends BaseSellerController
 {
     private $orderModel;
     private $orderItemModel;
+    private $cache;
 
     public function __construct()
     {
         parent::__construct();
         $this->orderModel = new Order();
         $this->orderItemModel = new OrderItem();
+        $this->cache = new Cache();
     }
 
     /**
@@ -838,10 +841,11 @@ class Orders extends BaseSellerController
             }
 
             $status = $_POST['status'] ?? '';
-            $allowedStatuses = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
+            // Seller can only set: New Order (pending), Processing/Packing (processing), Ready for Pickup (ready_for_pickup)
+            $allowedStatuses = ['pending', 'processing', 'ready_for_pickup'];
             
             if (!in_array($status, $allowedStatuses)) {
-                $this->setFlash('error', 'Invalid status');
+                $this->setFlash('error', 'Invalid status. Sellers can only update to: New Order, Processing/Packing, or Ready for Pickup');
                 $this->redirect('seller/orders/detail/' . $id);
                 return;
             }
@@ -850,6 +854,87 @@ class Orders extends BaseSellerController
             $result = $this->orderModel->updateStatus($id, $status);
             
             if ($result) {
+                // Clear order caches
+                $this->cache->deletePattern('seller_orders_' . $this->sellerId . '_*');
+                $this->cache->delete('seller_order_total_' . $id . '_' . $this->sellerId);
+                
+                // Auto-assign courier when seller marks order as "ready_for_pickup"
+                if ($status === 'ready_for_pickup' && $oldStatus !== 'ready_for_pickup') {
+                    try {
+                        // Check if order already has a courier assigned
+                        if (empty($order['curior_id'])) {
+                            // Get seller city from order items
+                            $sellerCity = $this->db->query(
+                                "SELECT DISTINCT s.id as seller_id, s.name as seller_name, s.city 
+                                 FROM order_items oi
+                                 INNER JOIN products p ON oi.product_id = p.id
+                                 INNER JOIN sellers s ON p.seller_id = s.id
+                                 WHERE oi.order_id = ? AND s.city IS NOT NULL AND TRIM(s.city) != ''
+                                 LIMIT 1",
+                                [$id]
+                            )->single();
+                            
+                            $city = !empty($sellerCity['city']) ? trim($sellerCity['city']) : null;
+                            
+                            if ($city) {
+                                error_log("Seller Order Update: Order #{$id} - Seller city found: '{$city}' (Seller: {$sellerCity['seller_name']}, ID: {$sellerCity['seller_id']})");
+                            } else {
+                                error_log("Seller Order Update: Order #{$id} - No seller city found. Seller data: " . json_encode($sellerCity));
+                            }
+                            
+                            if ($city) {
+                                // Find courier with matching city (case-insensitive)
+                                $matchingCurior = $this->db->query(
+                                    "SELECT id, name, city FROM curiors 
+                                     WHERE status = 'active' 
+                                     AND LOWER(TRIM(city)) = LOWER(TRIM(?))
+                                     ORDER BY id ASC 
+                                     LIMIT 1",
+                                    [$city]
+                                )->single();
+                                
+                                if ($matchingCurior && !empty($matchingCurior['id'])) {
+                                    $this->orderModel->assignCuriorToOrder($id, $matchingCurior['id'], false);
+                                    error_log("Seller Order Update: Auto-assigned courier #{$matchingCurior['id']} ({$matchingCurior['name']}, city: {$matchingCurior['city']}) to order #{$id} when status changed to ready_for_pickup (seller city: {$city})");
+                                } else {
+                                    // Debug: Log available couriers for troubleshooting
+                                    $allCouriers = $this->db->query(
+                                        "SELECT id, name, city, status FROM curiors WHERE status = 'active'"
+                                    )->all();
+                                    error_log("Seller Order Update: No courier found with city '{$city}'. Available couriers: " . json_encode($allCouriers));
+                                    
+                                    // Fallback: find any available active courier
+                                    $availableCurior = $this->db->query(
+                                        "SELECT id, name, city FROM curiors WHERE status = 'active' ORDER BY id ASC LIMIT 1"
+                                    )->single();
+                                    
+                                    if ($availableCurior && !empty($availableCurior['id'])) {
+                                        $this->orderModel->assignCuriorToOrder($id, $availableCurior['id'], false);
+                                        error_log("Seller Order Update: Auto-assigned courier #{$availableCurior['id']} ({$availableCurior['name']}, city: {$availableCurior['city']}) to order #{$id} (no city match, fallback)");
+                                    } else {
+                                        error_log("Seller Order Update: No available courier found for order #{$id}");
+                                    }
+                                }
+                            } else {
+                                // No seller city, find any available active courier
+                                $availableCurior = $this->db->query(
+                                    "SELECT id FROM curiors WHERE status = 'active' ORDER BY id ASC LIMIT 1"
+                                )->single();
+                                
+                                if ($availableCurior && !empty($availableCurior['id'])) {
+                                    $this->orderModel->assignCuriorToOrder($id, $availableCurior['id'], false);
+                                    error_log("Seller Order Update: Auto-assigned courier #{$availableCurior['id']} (no seller city) to order #{$id}");
+                                } else {
+                                    error_log("Seller Order Update: No available courier found for order #{$id}");
+                                }
+                            }
+                        }
+                    } catch (\Exception $e) {
+                        error_log("Seller Order Update: Error auto-assigning courier to order #{$id}: " . $e->getMessage());
+                        // Don't fail the status update if auto-assignment fails
+                    }
+                }
+                
                 // Notify admin about seller's status update (optional)
                 // The seller notification service can also be used here if needed
                 $this->setFlash('success', 'Order status updated successfully');
@@ -871,6 +956,12 @@ class Orders extends BaseSellerController
     private function getOrders($status, $limit, $offset)
     {
         $paymentFilter = $_GET['payment_type'] ?? '';
+        $cacheKey = 'seller_orders_' . $this->sellerId . '_' . md5($status . $paymentFilter . $limit . $offset);
+        $cached = $this->cache->get($cacheKey);
+        
+        if ($cached !== false) {
+            return $cached;
+        }
         
         $sql = "SELECT DISTINCT o.*, u.first_name, u.last_name, u.email as customer_email,
                        pm.name as payment_method_name
@@ -901,11 +992,17 @@ class Orders extends BaseSellerController
         $db = \App\Core\Database::getInstance();
         $orders = $db->query($sql, $params)->all();
         
-        // Calculate seller's portion for each order
+        // Calculate seller's portion for each order (cache individual calculations)
         foreach ($orders as &$order) {
-            $sellerTotal = $this->calculateSellerOrderTotal($order['id']);
+            $totalCacheKey = 'seller_order_total_' . $order['id'] . '_' . $this->sellerId;
+            $sellerTotal = $this->cache->remember($totalCacheKey, function() use ($order) {
+                return $this->calculateSellerOrderTotal($order['id']);
+            }, 300);
             $order['seller_total'] = $sellerTotal;
         }
+        
+        // Cache for 2 minutes (orders change frequently)
+        $this->cache->set($cacheKey, $orders, 120);
         
         return $orders;
     }

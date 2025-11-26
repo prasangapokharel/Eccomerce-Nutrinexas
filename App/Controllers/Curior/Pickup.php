@@ -26,15 +26,31 @@ class Pickup extends BaseCuriorController
                        o.customer_name as order_customer_name,
                        CONCAT(u.first_name, ' ', u.last_name) as user_full_name,
                        u.email as customer_email,
-                       pm.name as payment_method
+                       pm.name as payment_method,
+                       MIN(s.id) as seller_id,
+                       MIN(s.name) as seller_name,
+                       MIN(s.company_name) as seller_company,
+                       MIN(s.address) as seller_address,
+                       MIN(s.city) as seller_city,
+                       MIN(s.phone) as seller_phone
                 FROM orders o
                 LEFT JOIN users u ON o.user_id = u.id
                 LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
+                LEFT JOIN order_items oi ON o.id = oi.order_id
+                LEFT JOIN products p ON oi.product_id = p.id
+                LEFT JOIN sellers s ON p.seller_id = s.id
                 WHERE o.curior_id = ? 
-                AND o.status IN ('processing', 'confirmed', 'shipped')
+                AND o.status IN ('processing', 'confirmed', 'shipped', 'ready_for_pickup')
+                GROUP BY o.id
                 ORDER BY o.created_at DESC";
         
         $orders = $this->db->query($sql, [$this->curiorId])->all();
+        
+        // Debug logging
+        error_log("Courier Pickup: Courier #{$this->curiorId} - Found " . count($orders) . " orders for pickup");
+        foreach ($orders as $order) {
+            error_log("Courier Pickup: Order #{$order['id']} (Invoice: {$order['invoice']}) - Status: {$order['status']}, Seller City: " . ($order['seller_city'] ?? 'N/A'));
+        }
         
         $this->view('curior/pickup/index', [
             'orders' => $orders,

@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= $title ?? 'Seller Dashboard' ?> - NutriNexus</title>
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/tailwind.css">
-    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/app.css">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/seller.css">
    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/admin.css">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/sidebar.css">

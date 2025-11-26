@@ -67,25 +67,55 @@ class SellerBalanceService
                 }
             }
 
-            // Check 5: Wait period - ensure 24 hours have passed since delivery
-            $deliveredAt = $order['delivered_at'] ?? null;
-            if (!$deliveredAt) {
-                // If delivered_at is not set, use updated_at when status changed to delivered
-                $deliveredAt = $order['updated_at'];
+            // Check 5: No active return/refund - do not release balance if return is active
+            // Check if order_returns table exists
+            $tableExists = $this->db->query("SHOW TABLES LIKE 'order_returns'")->single();
+            if ($tableExists) {
+                $returnStatus = $this->db->query(
+                    "SELECT status FROM order_returns WHERE order_id = ? AND status IN ('return_requested', 'return_picked_up', 'return_in_transit', 'processing') LIMIT 1",
+                    [$orderId]
+                )->single();
+                
+                if ($returnStatus) {
+                    error_log("SellerBalanceService: Order #{$orderId} has active return (status: {$returnStatus['status']}), skipping balance release");
+                    return ['success' => false, 'message' => 'Active return/refund - balance cannot be released'];
+                }
+            }
+            
+            // Check for refund status
+            if (!empty($order['refund_status']) && in_array($order['refund_status'], ['processing', 'requested', 'approved'])) {
+                error_log("SellerBalanceService: Order #{$orderId} has active refund (status: {$order['refund_status']}), skipping balance release");
+                return ['success' => false, 'message' => 'Active refund - balance cannot be released'];
             }
 
-            $deliveredTimestamp = strtotime($deliveredAt);
-            $waitPeriodEnd = $deliveredTimestamp + ($this->waitPeriodHours * 3600);
-            $currentTime = time();
+            // Check 6: Wait period - bypass for courier deliveries (immediate release)
+            // Check if order was delivered by courier (has curior_id)
+            $hasCourier = !empty($order['curior_id']);
+            
+            if ($hasCourier) {
+                // Courier delivery - bypass wait period for immediate release
+                error_log("SellerBalanceService: Order #{$orderId} - Courier delivery detected (courier_id: {$order['curior_id']}), bypassing wait period for immediate balance release");
+            } else {
+                // No courier - apply wait period
+                $deliveredAt = $order['delivered_at'] ?? null;
+                if (!$deliveredAt) {
+                    // If delivered_at is not set, use updated_at when status changed to delivered
+                    $deliveredAt = $order['updated_at'];
+                }
 
-            if ($currentTime < $waitPeriodEnd) {
-                $remainingHours = ceil(($waitPeriodEnd - $currentTime) / 3600);
-                error_log("SellerBalanceService: Order #{$orderId} - Wait period not complete. {$remainingHours} hours remaining");
-                return [
-                    'success' => false, 
-                    'message' => "Wait period not complete. {$remainingHours} hours remaining",
-                    'wait_period_remaining' => $remainingHours
-                ];
+                $deliveredTimestamp = strtotime($deliveredAt);
+                $waitPeriodEnd = $deliveredTimestamp + ($this->waitPeriodHours * 3600);
+                $currentTime = time();
+
+                if ($currentTime < $waitPeriodEnd) {
+                    $remainingHours = ceil(($waitPeriodEnd - $currentTime) / 3600);
+                    error_log("SellerBalanceService: Order #{$orderId} - Wait period not complete. {$remainingHours} hours remaining");
+                    return [
+                        'success' => false, 
+                        'message' => "Wait period not complete. {$remainingHours} hours remaining",
+                        'wait_period_remaining' => $remainingHours
+                    ];
+                }
             }
 
             // All checks passed - Release balance
@@ -149,31 +179,64 @@ class SellerBalanceService
                 
                 // Calculate seller earnings
                 $itemTotal = $item['price'] * $item['quantity'];
-                $commissionRate = $item['commission_rate'] ?? 10.00; // Default 10%
-                $commissionAmount = ($itemTotal * $commissionRate) / 100;
+                // Commission set to 0% for now (as per requirement)
+                $commissionRate = 0.00;
+                $commissionAmount = 0;
                 
-                // Tax calculation (if applicable)
-                $taxAmount = 0;
-                if (!empty($order['tax_amount']) && $order['tax_amount'] > 0) {
-                    // Distribute tax proportionally
-                    $taxRatio = $itemTotal / $order['total_amount'];
-                    $taxAmount = $order['tax_amount'] * $taxRatio;
+                // Calculate item ratio for proportional deductions
+                $itemRatio = 0;
+                if (!empty($order['total_amount']) && $order['total_amount'] > 0) {
+                    $itemRatio = $itemTotal / $order['total_amount'];
                 }
-
-                // Shipping - seller pays if configured
-                $shippingDeduction = 0;
-                // Note: Add logic here if seller pays shipping
+                
+                // Tax calculation (if applicable) - seller doesn't pay tax, it's already in price
+                $taxAmount = 0;
+                
+                // Delivery fee - ALWAYS deduct (seller should NOT receive delivery fee)
+                $deliveryFeeDeduction = 0;
+                if (!empty($order['delivery_fee']) && $order['delivery_fee'] > 0 && $itemRatio > 0) {
+                    $deliveryFeeDeduction = $order['delivery_fee'] * $itemRatio;
+                    error_log("SellerBalanceService: Product #{$productId} - Delivery fee deduction: Rs " . round($deliveryFeeDeduction, 2));
+                }
+                
+                // Cancellation fee (if any) - deduct proportionally
+                $cancellationFeeDeduction = 0;
+                if (!empty($order['cancellation_fee']) && $order['cancellation_fee'] > 0 && $itemRatio > 0) {
+                    $cancellationFeeDeduction = $order['cancellation_fee'] * $itemRatio;
+                    error_log("SellerBalanceService: Product #{$productId} - Cancellation fee deduction: Rs " . round($cancellationFeeDeduction, 2));
+                }
+                
+                // Return fee (if any) - deduct proportionally
+                $returnFeeDeduction = 0;
+                if (!empty($order['return_fee']) && $order['return_fee'] > 0 && $itemRatio > 0) {
+                    $returnFeeDeduction = $order['return_fee'] * $itemRatio;
+                    error_log("SellerBalanceService: Product #{$productId} - Return fee deduction: Rs " . round($returnFeeDeduction, 2));
+                }
+                
+                // Compound deduct (if any) - deduct proportionally
+                $compoundDeduct = 0;
+                if (!empty($order['compound_deduct']) && $order['compound_deduct'] > 0 && $itemRatio > 0) {
+                    $compoundDeduct = $order['compound_deduct'] * $itemRatio;
+                    error_log("SellerBalanceService: Product #{$productId} - Compound deduct: Rs " . round($compoundDeduct, 2));
+                }
 
                 // Calculate referral deduction proportionally for this item
                 $referralDeduction = 0;
-                if ($referralAmount > 0 && $order['total_amount'] > 0) {
-                    $itemRatio = $itemTotal / $order['total_amount'];
+                if ($referralAmount > 0 && $itemRatio > 0) {
                     $referralDeduction = $referralAmount * $itemRatio;
                     error_log("SellerBalanceService: Product #{$productId} - Item total: Rs {$itemTotal}, Referral deduction: Rs " . round($referralDeduction, 2));
                 }
 
-                // Net amount to seller: X - commission - tax - shipping - referral_amount
-                $sellerAmount = $itemTotal - $commissionAmount - $taxAmount - $shippingDeduction - $referralDeduction;
+                // Net amount to seller: product_total - cancellation_fee - return_fee - compound_deduct - delivery_fee - commission - referral
+                $sellerAmount = $itemTotal 
+                    - $cancellationFeeDeduction 
+                    - $returnFeeDeduction 
+                    - $compoundDeduct 
+                    - $deliveryFeeDeduction 
+                    - $commissionAmount 
+                    - $referralDeduction;
+                
+                error_log("SellerBalanceService: Product #{$productId} - Calculation: Rs {$itemTotal} - cancellation({$cancellationFeeDeduction}) - return({$returnFeeDeduction}) - compound({$compoundDeduct}) - delivery({$deliveryFeeDeduction}) - commission({$commissionAmount}) - referral({$referralDeduction}) = Rs " . round($sellerAmount, 2));
 
                 // Ensure non-negative
                 $sellerAmount = max(0, $sellerAmount);
@@ -202,6 +265,32 @@ class SellerBalanceService
                     [$newBalance, $newTotalEarnings, $sellerId]
                 )->execute();
 
+                // Create detailed description with breakdown
+                $descriptionParts = ["Order #{$order['invoice']} - {$item['product_name']} (Product #{$productId}, Qty: {$item['quantity']})"];
+                $descriptionParts[] = "Product Total: Rs " . number_format($itemTotal, 2);
+                
+                if ($deliveryFeeDeduction > 0) {
+                    $descriptionParts[] = "Delivery Fee: -Rs " . number_format($deliveryFeeDeduction, 2);
+                }
+                if ($cancellationFeeDeduction > 0) {
+                    $descriptionParts[] = "Cancellation Fee: -Rs " . number_format($cancellationFeeDeduction, 2);
+                }
+                if ($returnFeeDeduction > 0) {
+                    $descriptionParts[] = "Return Fee: -Rs " . number_format($returnFeeDeduction, 2);
+                }
+                if ($compoundDeduct > 0) {
+                    $descriptionParts[] = "Compound Deduct: -Rs " . number_format($compoundDeduct, 2);
+                }
+                if ($commissionAmount > 0) {
+                    $descriptionParts[] = "Commission ({$commissionRate}%): -Rs " . number_format($commissionAmount, 2);
+                }
+                if ($referralDeduction > 0) {
+                    $descriptionParts[] = "Referral: -Rs " . number_format($referralDeduction, 2);
+                }
+                $descriptionParts[] = "Net Payout: Rs " . number_format($sellerAmount, 2);
+                
+                $description = implode(' | ', $descriptionParts);
+                
                 // Create wallet transaction
                 $this->db->query(
                     "INSERT INTO seller_wallet_transactions 
@@ -210,7 +299,7 @@ class SellerBalanceService
                     [
                         $sellerId,
                         $sellerAmount,
-                        "Order #{$order['invoice']} - {$item['product_name']} (Product #{$productId}, Qty: {$item['quantity']})",
+                        $description,
                         $order['id'],
                         $newBalance
                     ]

@@ -28,7 +28,7 @@ class Dashboard extends BaseCuriorController
         });
         
         $pendingPickups = array_filter($allOrders, function($order) {
-            return in_array($order['status'], ['processing', 'confirmed', 'shipped']);
+            return in_array($order['status'], ['processing', 'confirmed', 'shipped', 'ready_for_pickup']);
         });
         
         $inProgress = array_filter($allOrders, function($order) {

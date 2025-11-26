@@ -3,16 +3,19 @@
 namespace App\Controllers\Seller;
 
 use App\Models\Product;
+use App\Core\Cache;
 use Exception;
 
 class Inventory extends BaseSellerController
 {
     private $productModel;
+    private $cache;
 
     public function __construct()
     {
         parent::__construct();
         $this->productModel = new Product();
+        $this->cache = new Cache();
     }
 
     /**
@@ -61,6 +64,8 @@ class Inventory extends BaseSellerController
             $result = $this->productModel->updateStock($id, $quantity);
             
             if ($result) {
+                // Clear inventory cache
+                $this->cache->deletePattern('seller_inventory_' . $this->sellerId . '_*');
                 $this->setFlash('success', 'Stock updated successfully');
             } else {
                 $this->setFlash('error', 'Failed to update stock');
@@ -78,6 +83,13 @@ class Inventory extends BaseSellerController
      */
     private function getInventoryProducts($lowStock = false)
     {
+        $cacheKey = 'seller_inventory_' . $this->sellerId . '_' . ($lowStock ? 'low' : 'all');
+        $cached = $this->cache->get($cacheKey);
+        
+        if ($cached !== false) {
+            return $cached;
+        }
+        
         $sql = "SELECT p.id, p.product_name, p.stock_quantity, p.price, p.sale_price, p.status, p.category,
                        pi.image_url as primary_image_url
                 FROM products p
@@ -93,7 +105,12 @@ class Inventory extends BaseSellerController
         $sql .= " ORDER BY p.stock_quantity ASC, p.product_name ASC";
         
         $db = \App\Core\Database::getInstance();
-        return $db->query($sql, $params)->all();
+        $products = $db->query($sql, $params)->all();
+        
+        // Cache for 2 minutes (inventory changes frequently)
+        $this->cache->set($cacheKey, $products, 120);
+        
+        return $products;
     }
 }
 

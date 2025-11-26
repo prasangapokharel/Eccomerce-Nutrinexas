@@ -14,12 +14,10 @@ $title = $title ?? 'Withdrawals Management';
 
     <!-- Flash Messages -->
     <?php if (\App\Core\Session::hasFlash('success')): ?>
-        <div class="bg-green-50 border border-green-200 rounded-md p-4">
+        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
             <div class="flex">
                 <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
+                    <i class="fas fa-check-circle text-green-400"></i>
                 </div>
                 <div class="ml-3">
                     <p class="text-sm font-medium text-green-800">
@@ -34,12 +32,10 @@ $title = $title ?? 'Withdrawals Management';
     <?php endif; ?>
 
     <?php if (\App\Core\Session::hasFlash('error')): ?>
-        <div class="bg-red-50 border border-red-200 rounded-md p-4">
+        <div class="bg-red-50 border border-red-200 rounded-lg p-4">
             <div class="flex">
                 <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                    </svg>
+                    <i class="fas fa-exclamation-circle text-red-400"></i>
                 </div>
                 <div class="ml-3">
                     <p class="text-sm font-medium text-red-800">
@@ -50,108 +46,117 @@ $title = $title ?? 'Withdrawals Management';
         </div>
     <?php endif; ?>
 
-    <!-- Withdrawals Table -->
-    <div class="bg-white shadow rounded-lg overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            User
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Amount
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Payment Method
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Status
-                        </th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                            Request Date
-                        </th>
-                        <th scope="col" class="relative px-6 py-3">
-                            <span class="sr-only">Actions</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php if (empty($withdrawals)): ?>
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 whitespace-nowrap text-center text-sm font-medium text-gray-900">
-                                No withdrawal requests found.
-                            </td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($withdrawals as $withdrawal): ?>
-                            <tr class="hover:bg-gray-50">
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-10 w-10">
-                                            <div class="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                                                <i class="fas fa-user text-primary"></i>
-                                            </div>
-                                        </div>
-                                        <div class="ml-4">
-                                            <div class="text-sm font-medium text-gray-900">
-                                                <?= htmlspecialchars(($withdrawal['first_name'] ?? '') . ' ' . ($withdrawal['last_name'] ?? '')) ?>
-                                            </div>
-                                            <div class="text-sm text-gray-500">
-                                                <?= htmlspecialchars($withdrawal['email'] ?? '') ?>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                    रु<?= number_format($withdrawal['amount'], 2) ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?= htmlspecialchars($withdrawal['payment_method'] ?? 'N/A') ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <?php
-                                    $status = $withdrawal['status'] ?? 'pending';
-                                    $statusColors = [
-                                        'pending' => 'bg-yellow-100 text-yellow-800',
-                                        'approved' => 'bg-green-100 text-green-800',
-                                        'rejected' => 'bg-red-100 text-red-800',
-                                        'completed' => 'bg-blue-100 text-blue-800'
-                                    ];
-                                    $colorClass = $statusColors[$status] ?? 'bg-gray-100 text-gray-800';
-                                    ?>
-                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $colorClass ?>">
-                                        <?= ucfirst($status) ?>
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?= date('M j, Y g:i A', strtotime($withdrawal['created_at'])) ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                                    <div class="flex items-center space-x-2">
-                                        <?php if ($status === 'pending'): ?>
-                                            <button onclick="updateWithdrawalStatus(<?= $withdrawal['id'] ?>, 'approved')" 
-                                                    class="text-green-600 hover:text-green-900" title="Approve">
-                                                <i class="fas fa-check"></i>
-                                            </button>
-                                            <button onclick="updateWithdrawalStatus(<?= $withdrawal['id'] ?>, 'rejected')" 
-                                                    class="text-red-600 hover:text-red-900" title="Reject">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                        <?php endif; ?>
-                                        <button onclick="viewWithdrawalDetails(<?= $withdrawal['id'] ?>)" 
-                                                class="text-primary hover:text-primary-dark" title="View Details">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
-                    <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+    <!-- Prepare data for Table component -->
+    <?php
+    $tableData = [];
+    foreach ($withdrawals as $withdrawal) {
+        $tableData[] = [
+            'id' => $withdrawal['id'],
+            'user' => $withdrawal,
+            'amount' => $withdrawal['amount'],
+            'payment_method' => $withdrawal['payment_method'] ?? 'N/A',
+            'status' => $withdrawal['status'] ?? 'pending',
+            'created_at' => $withdrawal['created_at']
+        ];
+    }
+
+    $tableConfig = [
+        'id' => 'withdrawalsTable',
+        'title' => 'Withdrawal Requests',
+        'description' => 'Manage user withdrawal requests and payments',
+        'search' => true,
+        'columns' => [
+            [
+                'key' => 'user',
+                'label' => 'User',
+                'type' => 'custom',
+                'render' => function($row) {
+                    $user = $row['user'];
+                    ob_start();
+                    ?>
+                    <div class="flex items-center">
+                        <div class="flex-shrink-0 h-10 w-10">
+                            <div class="h-10 w-10 rounded-full bg-primary-50 flex items-center justify-center">
+                                <i class="fas fa-user text-primary"></i>
+                            </div>
+                        </div>
+                        <div class="ml-4">
+                            <div class="text-sm font-medium text-gray-900">
+                                <?= htmlspecialchars(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? '')) ?>
+                            </div>
+                            <div class="text-xs text-gray-500">
+                                <?= htmlspecialchars($user['email'] ?? '') ?>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
+                    return ob_get_clean();
+                }
+            ],
+            [
+                'key' => 'amount',
+                'label' => 'Amount',
+                'type' => 'currency'
+            ],
+            [
+                'key' => 'payment_method',
+                'label' => 'Payment Method',
+                'type' => 'text'
+            ],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'type' => 'badge',
+                'badgeConfig' => [
+                    'pending' => 'warning',
+                    'approved' => 'success',
+                    'rejected' => 'danger',
+                    'completed' => 'info'
+                ]
+            ],
+            [
+                'key' => 'created_at',
+                'label' => 'Request Date',
+                'type' => 'date'
+            ],
+            [
+                'key' => 'actions',
+                'label' => 'Actions',
+                'type' => 'custom',
+                'render' => function($row) {
+                    $status = $row['status'];
+                    ob_start();
+                    ?>
+                    <div class="flex items-center space-x-2">
+                        <?php if ($status === 'pending'): ?>
+                            <button onclick="updateWithdrawalStatus(<?= $row['id'] ?>, 'approved')" 
+                                    class="text-green-600 hover:text-green-900 hover:bg-green-50 transition-colors p-1 rounded" 
+                                    title="Approve">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="updateWithdrawalStatus(<?= $row['id'] ?>, 'rejected')" 
+                                    class="text-red-600 hover:text-red-900 hover:bg-red-50 transition-colors p-1 rounded" 
+                                    title="Reject">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        <?php endif; ?>
+                        <button onclick="viewWithdrawalDetails(<?= $row['id'] ?>)" 
+                                class="text-primary hover:text-primary-dark hover:bg-primary-50 transition-colors p-1 rounded" 
+                                title="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <?php
+                    return ob_get_clean();
+                }
+            ]
+        ],
+        'data' => $tableData,
+        'baseUrl' => \App\Core\View::url('admin/withdrawals')
+    ];
+    ?>
+
+    <?php include __DIR__ . '/../../components/Table.php'; ?>
 </div>
 
 <script>
@@ -191,24 +196,18 @@ function updateWithdrawalStatus(withdrawalId, status) {
 }
 
 function viewWithdrawalDetails(withdrawalId) {
-    // Open modal or redirect to details page
     window.open(`<?= \App\Core\View::url('admin/withdrawals/view') ?>/${withdrawalId}`, '_blank');
 }
 
 function showAlert(type, message) {
     const alertDiv = document.createElement('div');
-    alertDiv.className = `fixed top-4 right-4 z-50 p-4 rounded-md shadow-lg ${
+    alertDiv.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg ${
         type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' : 'bg-red-100 border border-red-400 text-red-700'
     }`;
     alertDiv.innerHTML = `
         <div class="flex">
             <div class="flex-shrink-0">
-                <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                    ${type === 'success' ? 
-                        '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>' :
-                        '<path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>'
-                    }
-                </svg>
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
             </div>
             <div class="ml-3">
                 <p class="text-sm font-medium">${message}</p>
@@ -218,7 +217,6 @@ function showAlert(type, message) {
     
     document.body.appendChild(alertDiv);
     
-    // Remove alert after 3 seconds
     setTimeout(() => {
         alertDiv.remove();
     }, 3000);

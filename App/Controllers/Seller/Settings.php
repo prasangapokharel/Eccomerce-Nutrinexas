@@ -52,6 +52,9 @@ class Settings extends BaseSellerController
             if (isset($_POST['address'])) {
                 $data['address'] = trim($_POST['address'] ?? '');
             }
+            if (isset($_POST['city'])) {
+                $data['city'] = trim($_POST['city'] ?? '');
+            }
             if (isset($_POST['logo_url'])) {
                 $data['logo_url'] = trim($_POST['logo_url'] ?? '');
             }

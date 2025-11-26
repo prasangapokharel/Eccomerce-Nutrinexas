@@ -1,97 +1,135 @@
 <?php ob_start(); ?>
 
 <div class="space-y-6">
-    <!-- Header -->
-    <div class="flex justify-between items-center">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Seller Withdrawals</h1>
-            <p class="text-gray-600"><?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?></p>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Seller Withdrawals</h1>
+            <p class="mt-1 text-sm text-gray-500">
+                <?php if (isset($seller)): ?>
+                    <?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>
+                <?php else: ?>
+                    All seller withdrawal requests
+                <?php endif; ?>
+            </p>
         </div>
         <div class="flex gap-3">
-            <a href="<?= \App\Core\View::url('admin/seller/details/' . $seller['id']) ?>" 
-               class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300">
-                <i class="fas fa-arrow-left mr-2"></i>Back to Seller
-            </a>
+            <?php if (isset($seller)): ?>
+                <a href="<?= \App\Core\View::url('admin/seller/details/' . $seller['id']) ?>" 
+                   class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Seller
+                </a>
+            <?php endif; ?>
             <a href="<?= \App\Core\View::url('admin/seller/withdraws') ?>" 
-               class="bg-primary text-white px-4 py-2 rounded-lg hover:bg-primary-dark">
+               class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
                 <i class="fas fa-list mr-2"></i>All Withdrawals
             </a>
         </div>
     </div>
 
-    <!-- Withdrawals Table -->
-    <div class="bg-white rounded-lg shadow overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Bank Account</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Requested</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php if (empty($withdraws)): ?>
-                        <tr>
-                            <td colspan="6" class="px-6 py-4 text-center text-gray-500">No withdrawal requests found</td>
-                        </tr>
-                    <?php else: ?>
-                        <?php foreach ($withdraws as $withdraw): ?>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#<?= $withdraw['id'] ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">रु <?= number_format($withdraw['amount'], 2) ?></td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?= htmlspecialchars($withdraw['account_holder_name'] ?? 'N/A') ?><br>
-                                    <span class="text-xs"><?= htmlspecialchars($withdraw['bank_name'] ?? '') ?></span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <?php
-                                    $statusColors = [
-                                        'pending' => 'bg-yellow-100 text-yellow-800',
-                                        'approved' => 'bg-blue-100 text-blue-800',
-                                        'rejected' => 'bg-red-100 text-red-800',
-                                        'completed' => 'bg-green-100 text-green-800'
-                                    ];
-                                    $statusColor = $statusColors[$withdraw['status']] ?? 'bg-gray-100 text-gray-800';
-                                    ?>
-                                    <span class="px-2 py-1 text-xs font-medium rounded-full <?= $statusColor ?>">
-                                        <?= ucfirst($withdraw['status']) ?>
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                    <?= date('M j, Y g:i A', strtotime($withdraw['requested_at'])) ?>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <?php if ($withdraw['status'] === 'pending'): ?>
-                                        <div class="flex gap-2">
-                                            <button onclick="showApproveModal(<?= $withdraw['id'] ?>)" 
-                                                    class="text-green-600 hover:text-green-900">
-                                                <i class="fas fa-check"></i> Approve
-                                            </button>
-                                            <button onclick="showRejectModal(<?= $withdraw['id'] ?>)" 
-                                                    class="text-red-600 hover:text-red-900">
-                                                <i class="fas fa-times"></i> Reject
-                                            </button>
-                                        </div>
-                                    <?php elseif ($withdraw['status'] === 'approved'): ?>
-                                        <button onclick="showCompleteModal(<?= $withdraw['id'] ?>)" 
-                                                class="text-blue-600 hover:text-blue-900">
-                                            <i class="fas fa-check-circle"></i> Mark Complete
-                                        </button>
-                                    <?php else: ?>
-                                        <span class="text-gray-400">-</span>
-                                    <?php endif; ?>
-                                </td>
-                            </tr>
-                        <?php endforeach; ?>
+    <!-- Prepare data for Table component -->
+    <?php
+    $tableData = [];
+    foreach ($withdraws as $withdraw) {
+        $tableData[] = [
+            'id' => $withdraw['id'],
+            'withdraw' => $withdraw,
+            'amount' => $withdraw['amount'],
+            'account_holder_name' => $withdraw['account_holder_name'] ?? 'N/A',
+            'bank_name' => $withdraw['bank_name'] ?? '',
+            'status' => $withdraw['status'],
+            'requested_at' => $withdraw['requested_at']
+        ];
+    }
+
+    $tableConfig = [
+        'id' => 'sellerWithdrawsTable',
+        'title' => 'Withdrawal Requests',
+        'description' => 'Manage seller withdrawal requests',
+        'search' => true,
+        'columns' => [
+            [
+                'key' => 'id',
+                'label' => 'ID',
+                'type' => 'text'
+            ],
+            [
+                'key' => 'amount',
+                'label' => 'Amount',
+                'type' => 'currency'
+            ],
+            [
+                'key' => 'account_holder_name',
+                'label' => 'Bank Account',
+                'type' => 'custom',
+                'render' => function($row) {
+                    $withdraw = $row['withdraw'];
+                    ob_start();
+                    ?>
+                    <div class="text-sm text-gray-900"><?= htmlspecialchars($withdraw['account_holder_name'] ?? 'N/A') ?></div>
+                    <?php if (!empty($withdraw['bank_name'])): ?>
+                        <div class="text-xs text-gray-500"><?= htmlspecialchars($withdraw['bank_name']) ?></div>
                     <?php endif; ?>
-                </tbody>
-            </table>
-        </div>
-    </div>
+                    <?php
+                    return ob_get_clean();
+                }
+            ],
+            [
+                'key' => 'status',
+                'label' => 'Status',
+                'type' => 'badge',
+                'badgeConfig' => [
+                    'pending' => 'warning',
+                    'approved' => 'info',
+                    'rejected' => 'danger',
+                    'completed' => 'success'
+                ]
+            ],
+            [
+                'key' => 'requested_at',
+                'label' => 'Requested',
+                'type' => 'date'
+            ],
+            [
+                'key' => 'actions',
+                'label' => 'Actions',
+                'type' => 'custom',
+                'render' => function($row) {
+                    $withdraw = $row['withdraw'];
+                    $status = $withdraw['status'];
+                    ob_start();
+                    ?>
+                    <div class="flex items-center space-x-2">
+                        <?php if ($status === 'pending'): ?>
+                            <button onclick="showApproveModal(<?= $withdraw['id'] ?>)" 
+                                    class="text-green-600 hover:text-green-900 hover:bg-green-50 transition-colors p-1 rounded" 
+                                    title="Approve">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="showRejectModal(<?= $withdraw['id'] ?>)" 
+                                    class="text-red-600 hover:text-red-900 hover:bg-red-50 transition-colors p-1 rounded" 
+                                    title="Reject">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        <?php elseif ($status === 'approved'): ?>
+                            <button onclick="showCompleteModal(<?= $withdraw['id'] ?>)" 
+                                    class="text-blue-600 hover:text-blue-900 hover:bg-blue-50 transition-colors p-1 rounded" 
+                                    title="Mark Complete">
+                                <i class="fas fa-check-circle"></i>
+                            </button>
+                        <?php endif; ?>
+                    </div>
+                    <?php
+                    return ob_get_clean();
+                }
+            ]
+        ],
+        'data' => $tableData,
+        'baseUrl' => \App\Core\View::url('admin/seller/withdraws')
+    ];
+    ?>
+
+    <?php include __DIR__ . '/../../components/Table.php'; ?>
 </div>
 
 <!-- Approve Modal -->
@@ -149,40 +187,55 @@
 </div>
 
 <script>
+let currentWithdrawId = null;
+
 function showApproveModal(id) {
-    document.getElementById('approveForm').action = '<?= \App\Core\View::url('admin/seller/withdraws/approve/') ?>' + id;
-    document.getElementById('approveModal').classList.remove('hidden');
+    currentWithdrawId = id;
+    const form = document.getElementById('approveForm');
+    form.action = '<?= \App\Core\View::url('admin/seller/withdraws/approve') ?>/' + id;
     document.getElementById('approveModal').style.display = 'flex';
 }
 
 function hideApproveModal() {
-    document.getElementById('approveModal').classList.add('hidden');
     document.getElementById('approveModal').style.display = 'none';
+    document.getElementById('approveForm').reset();
 }
 
 function showRejectModal(id) {
-    document.getElementById('rejectForm').action = '<?= \App\Core\View::url('admin/seller/withdraws/reject/') ?>' + id;
-    document.getElementById('rejectModal').classList.remove('hidden');
+    currentWithdrawId = id;
+    const form = document.getElementById('rejectForm');
+    form.action = '<?= \App\Core\View::url('admin/seller/withdraws/reject') ?>/' + id;
     document.getElementById('rejectModal').style.display = 'flex';
 }
 
 function hideRejectModal() {
-    document.getElementById('rejectModal').classList.add('hidden');
     document.getElementById('rejectModal').style.display = 'none';
+    document.getElementById('rejectForm').reset();
 }
 
 function showCompleteModal(id) {
-    document.getElementById('completeForm').action = '<?= \App\Core\View::url('admin/seller/withdraws/complete/') ?>' + id;
-    document.getElementById('completeModal').classList.remove('hidden');
+    currentWithdrawId = id;
+    const form = document.getElementById('completeForm');
+    form.action = '<?= \App\Core\View::url('admin/seller/withdraws/complete') ?>/' + id;
     document.getElementById('completeModal').style.display = 'flex';
 }
 
 function hideCompleteModal() {
-    document.getElementById('completeModal').classList.add('hidden');
     document.getElementById('completeModal').style.display = 'none';
+    document.getElementById('completeForm').reset();
 }
+
+// Close modals on outside click
+document.getElementById('approveModal')?.addEventListener('click', function(e) {
+    if (e.target === this) hideApproveModal();
+});
+document.getElementById('rejectModal')?.addEventListener('click', function(e) {
+    if (e.target === this) hideRejectModal();
+});
+document.getElementById('completeModal')?.addEventListener('click', function(e) {
+    if (e.target === this) hideCompleteModal();
+});
 </script>
 
 <?php $content = ob_get_clean(); ?>
 <?php include dirname(dirname(__FILE__)) . '/layouts/admin.php'; ?>
-

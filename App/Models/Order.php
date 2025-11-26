@@ -62,7 +62,7 @@ class Order extends Model
                         LEFT JOIN users u ON o.user_id = u.id
                         LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
                         LEFT JOIN payment_gateways pg ON pm.gateway_id = pg.id
-                        WHERE o.curior_id = ? AND o.status IN ('dispatched', 'processing', 'shipped')
+                        WHERE o.curior_id = ? AND o.status IN ('dispatched', 'processing', 'shipped', 'picked_up', 'in_transit', 'ready_for_pickup')
                         ORDER BY o.created_at DESC";
         
         return $this->db->query($sql, [$curiorId])->all();
@@ -191,12 +191,27 @@ class Order extends Model
      */
     public function getOrderItems($orderId)
     {
-        $sql = "SELECT oi.*, p.product_name, p.image as product_image
+        $sql = "SELECT oi.*, p.product_name, p.image as product_image, 
+                       p.price as original_price, p.sale_price,
+                       COALESCE(NULLIF(p.sale_price, 0), p.price) as effective_price
                 FROM order_items oi
                 LEFT JOIN products p ON oi.product_id = p.id
                 WHERE oi.order_id = ?";
         
-        return $this->db->query($sql, [$orderId])->all();
+        $items = $this->db->query($sql, [$orderId])->all();
+        
+        // Update price and total to use sale_price if available
+        foreach ($items as &$item) {
+            $effectivePrice = !empty($item['sale_price']) && $item['sale_price'] > 0 
+                ? $item['sale_price'] 
+                : ($item['original_price'] ?? $item['price'] ?? 0);
+            
+            // Update price and recalculate total based on sale_price
+            $item['price'] = $effectivePrice;
+            $item['total'] = $effectivePrice * ($item['quantity'] ?? 1);
+        }
+        
+        return $items;
     }
 
     /**

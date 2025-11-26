@@ -36,8 +36,20 @@ ob_start();
         <h2 class="text-xl font-semibold text-gray-900 mb-4">Order Details</h2>
         <div class="space-y-3 text-gray-700">
             <?php
-            $subtotal = ($order['total_amount'] ?? 0) - ($order['tax_amount'] ?? 0) - ($order['delivery_fee'] ?? 0) + ($order['discount_amount'] ?? 0);
-            $subtotal = max(0, $subtotal);
+            // Calculate subtotal from order items using sale_price
+            $subtotal = 0;
+            if (!empty($order['items'])) {
+                foreach ($order['items'] as $item) {
+                    $itemPrice = !empty($item['sale_price']) && $item['sale_price'] > 0 
+                        ? $item['sale_price'] 
+                        : ($item['price'] ?? 0);
+                    $subtotal += $itemPrice * ($item['quantity'] ?? 1);
+                }
+            } else {
+                // Fallback calculation
+                $subtotal = ($order['total_amount'] ?? 0) - ($order['tax_amount'] ?? 0) - ($order['delivery_fee'] ?? 0) + ($order['discount_amount'] ?? 0);
+                $subtotal = max(0, $subtotal);
+            }
             ?>
             <div class="flex justify-between">
                 <span>Subtotal:</span>
@@ -94,6 +106,34 @@ ob_start();
             <p class="font-medium"><?= htmlspecialchars($order['address'] ?? 'N/A') ?></p>
         </div>
     </div>
+
+    <!-- Pickup Location (Seller Address) -->
+    <?php if (!empty($sellerInfo)): ?>
+    <div class="bg-white rounded-2xl shadow-lg p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-4">Pickup Location</h2>
+        <div class="space-y-3 text-gray-700">
+            <div>
+                <p class="text-sm text-gray-500">Seller</p>
+                <p class="font-medium"><?= htmlspecialchars($sellerInfo['company_name'] ?? $sellerInfo['name'] ?? 'N/A') ?></p>
+            </div>
+            <?php if (!empty($sellerInfo['address'])): ?>
+            <div>
+                <p class="text-sm text-gray-500">Address</p>
+                <p class="font-medium"><?= htmlspecialchars($sellerInfo['address']) ?></p>
+                <?php if (!empty($sellerInfo['city'])): ?>
+                    <p class="text-sm text-gray-600"><?= htmlspecialchars($sellerInfo['city']) ?></p>
+                <?php endif; ?>
+            </div>
+            <?php endif; ?>
+            <?php if (!empty($sellerInfo['phone'])): ?>
+            <div>
+                <p class="text-sm text-gray-500">Phone</p>
+                <p class="font-medium"><?= htmlspecialchars($sellerInfo['phone']) ?></p>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php endif; ?>
 </div>
 
 <!-- Order Items -->
@@ -127,8 +167,22 @@ ob_start();
                                 <?php endif; ?>
                             </td>
                             <td class="px-6 py-4 text-sm text-gray-900"><?= $item['quantity'] ?? 0 ?></td>
-                            <td class="px-6 py-4 text-sm text-gray-900">Rs <?= number_format($item['price'] ?? 0, 2) ?></td>
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900">Rs <?= number_format($item['total'] ?? 0, 2) ?></td>
+                            <td class="px-6 py-4 text-sm text-gray-900">
+                                Rs <?= number_format(
+                                    (!empty($item['sale_price']) && $item['sale_price'] > 0) 
+                                        ? $item['sale_price'] 
+                                        : ($item['price'] ?? 0), 
+                                    2
+                                ) ?>
+                            </td>
+                            <td class="px-6 py-4 text-sm font-medium text-gray-900">
+                                Rs <?= number_format(
+                                    (!empty($item['sale_price']) && $item['sale_price'] > 0) 
+                                        ? ($item['sale_price'] * ($item['quantity'] ?? 1)) 
+                                        : ($item['total'] ?? 0), 
+                                    2
+                                ) ?>
+                            </td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

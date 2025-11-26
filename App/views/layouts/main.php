@@ -95,6 +95,7 @@ if (defined('DEBUG') && DEBUG) {
     <?php if (isset($extraStyles)): ?>
         <?= $extraStyles ?>
     <?php endif; ?>
+ 
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
     <?php include ROOT_DIR . '/App/views/includes/navbar.php'; ?>

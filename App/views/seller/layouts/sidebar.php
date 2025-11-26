@@ -1,7 +1,7 @@
 <?php
 $currentPage = $page ?? 'dashboard';
 ?>
-<aside id="sidebar" class="sidebar bg-gradient-to-b from-primary to-primary-dark text-white shadow-2xl custom-scroll">
+<aside id="sidebar" class="sidebar bg-gradient-to-b from-primary to-primary-dark text-white shadow-2xl custom-scroll" style="border-radius: 0;">
     <div class="p-6 flex flex-col h-full">
         <!-- Logo Section -->
         <div class="flex items-center justify-between mb-8 pb-6 border-b border-white/20">

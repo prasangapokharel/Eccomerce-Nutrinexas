@@ -49,6 +49,34 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"><?= htmlspecialchars($seller['address'] ?? '') ?></textarea>
                 </div>
 
+                <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City <span class="text-red-500">*</span></label>
+                    <select id="city" name="city" required
+                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                        <option value="">Select City</option>
+                        <?php
+                        $cities = [
+                            'Kathmandu', 'Lalitpur', 'Bhaktapur', 'Pokhara', 'Bharatpur', 
+                            'Biratnagar', 'Birgunj', 'Dharan', 'Butwal', 'Hetauda',
+                            'Nepalgunj', 'Itahari', 'Tulsipur', 'Kalaiya', 'Jitpur',
+                            'Inaruwa', 'Janakpur', 'Bhimdatta', 'Dhangadhi', 'Birendranagar',
+                            'Ghorahi', 'Tikapur', 'Tansen', 'Baglung', 'Gulariya',
+                            'Rajbiraj', 'Lahan', 'Siddharthanagar', 'Bhadrapur', 'Damak',
+                            'Bardibas', 'Malangwa', 'Banepa', 'Panauti', 'Dhankuta',
+                            'Ilam', 'Phidim', 'Bhojpur', 'Diktel', 'Okhaldhunga',
+                            'Ramechhap', 'Manthali', 'Charikot', 'Jiri', 'Sindhuli',
+                            'Jaleshwar', 'Siraha', 'Mechinagar', 'Birtamod', 'Kakarbhitta'
+                        ];
+                        sort($cities);
+                        foreach ($cities as $city): ?>
+                            <option value="<?= htmlspecialchars($city) ?>" <?= (isset($seller['city']) && $seller['city'] === $city) ? 'selected' : '' ?>>
+                                <?= htmlspecialchars($city) ?>
+                            </option>
+                        <?php endforeach; ?>
+                    </select>
+                    <p class="text-xs text-gray-500 mt-1">Select your city for courier auto-assignment</p>
+                </div>
+
                 <div class="md:col-span-2">
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Store Description</label>
                     <textarea id="description" name="description" rows="4"

@@ -12,6 +12,8 @@ class Curior extends Model
         'phone',
         'email',
         'address',
+        'city',
+        'branch',
         'password',
         'status',
         'reset_token',
@@ -75,6 +77,8 @@ class Curior extends Model
             'phone' => $data['phone'],
             'email' => $data['email'] ?? null,
             'address' => $data['address'] ?? null,
+            'city' => $data['city'] ?? null,
+            'branch' => $data['branch'] ?? null,
             'password' => $data['password'],
             'status' => $data['status'] ?? 'active',
             'created_at' => $data['created_at'],
@@ -88,26 +92,36 @@ class Curior extends Model
     {
         $data['updated_at'] = date('Y-m-d H:i:s');
         
+        // Get current status if not provided
+        if (!isset($data['status'])) {
+            $current = $this->getById($id);
+            $data['status'] = $current['status'] ?? 'active';
+        }
+        
         if (isset($data['password']) && !empty($data['password'])) {
             $data['password'] = password_hash($data['password'], PASSWORD_DEFAULT);
-            $sql = "UPDATE {$this->table} SET name = ?, phone = ?, email = ?, address = ?, password = ?, status = ?, updated_at = ? WHERE id = ?";
+            $sql = "UPDATE {$this->table} SET name = ?, phone = ?, email = ?, address = ?, city = ?, branch = ?, password = ?, status = ?, updated_at = ? WHERE id = ?";
             return $this->db->query($sql, [
                 $data['name'],
                 $data['phone'],
                 $data['email'] ?? null,
                 $data['address'] ?? null,
+                $data['city'] ?? null,
+                $data['branch'] ?? null,
                 $data['password'],
                 $data['status'],
                 $data['updated_at'],
                 $id
             ]);
         } else {
-            $sql = "UPDATE {$this->table} SET name = ?, phone = ?, email = ?, address = ?, status = ?, updated_at = ? WHERE id = ?";
+            $sql = "UPDATE {$this->table} SET name = ?, phone = ?, email = ?, address = ?, city = ?, branch = ?, status = ?, updated_at = ? WHERE id = ?";
             return $this->db->query($sql, [
                 $data['name'],
                 $data['phone'],
                 $data['email'] ?? null,
                 $data['address'] ?? null,
+                $data['city'] ?? null,
+                $data['branch'] ?? null,
                 $data['status'],
                 $data['updated_at'],
                 $id

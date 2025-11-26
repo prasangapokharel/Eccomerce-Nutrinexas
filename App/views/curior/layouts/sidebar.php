@@ -36,6 +36,12 @@ $currentPage = $page ?? 'dashboard';
                 <span class="ml-3 sidebar-text font-medium">Pickup</span>
             </a>
             
+            <!-- Delivery Management -->
+            <a href="<?= \App\Core\View::url('curior/delivery') ?>" class="nav-item flex items-center p-3 <?= $currentPage === 'delivery' ? 'active' : '' ?>" title="Delivery Management">
+                <i class="fas fa-truck w-5 text-accent flex-shrink-0"></i>
+                <span class="ml-3 sidebar-text font-medium">Delivery</span>
+            </a>
+            
             <!-- Returns -->
             <a href="<?= \App\Core\View::url('curior/returns') ?>" class="nav-item flex items-center p-3 <?= $currentPage === 'returns' ? 'active' : '' ?>" title="Returns & RTO">
                 <i class="fas fa-undo w-5 text-accent flex-shrink-0"></i>

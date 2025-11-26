@@ -45,8 +45,20 @@ class Order extends BaseCuriorController
             return;
         }
 
+        // Get seller pickup location from order items
+        $sellerInfo = $this->db->query(
+            "SELECT DISTINCT s.id, s.name, s.company_name, s.address, s.city, s.phone, s.email
+             FROM order_items oi
+             INNER JOIN products p ON oi.product_id = p.id
+             INNER JOIN sellers s ON p.seller_id = s.id
+             WHERE oi.order_id = ?
+             LIMIT 1",
+            [$id]
+        )->single();
+
         $this->view('curior/orders/view', [
             'order' => $order,
+            'sellerInfo' => $sellerInfo,
             'page' => 'orders',
             'title' => 'Order Details'
         ]);
@@ -107,9 +119,9 @@ class Order extends BaseCuriorController
             return;
         }
 
-        $allowedStatuses = ['processing', 'confirmed', 'shipped'];
+        $allowedStatuses = ['processing', 'confirmed', 'shipped', 'ready_for_pickup'];
         if (!in_array($order['status'], $allowedStatuses)) {
-            $this->jsonResponse(['success' => false, 'message' => 'Order must be in processing, confirmed, or shipped status']);
+            $this->jsonResponse(['success' => false, 'message' => 'Order must be in processing, confirmed, shipped, or ready for pickup status']);
             return;
         }
 
@@ -670,11 +682,14 @@ class Order extends BaseCuriorController
      */
     private function processPostDelivery($orderId)
     {
+        error_log("Courier Order: Processing post-delivery tasks for order #{$orderId}");
+        
         try {
             $referralService = new \App\Services\ReferralEarningService();
             $referralService->processReferralEarning($orderId);
+            error_log("Courier Order: Referral earning processed for order #{$orderId}");
         } catch (\Exception $e) {
-            error_log('Curior Order: Error processing referral earning: ' . $e->getMessage());
+            error_log('Courier Order: Error processing referral earning: ' . $e->getMessage());
         }
         
         try {
@@ -682,10 +697,13 @@ class Order extends BaseCuriorController
             $balanceResult = $sellerBalanceService->processBalanceRelease($orderId);
             
             if ($balanceResult['success']) {
-                error_log("Seller balance released for order #{$orderId}: रु " . ($balanceResult['total_released'] ?? 0));
+                error_log("Courier Order: ✅ Seller balance released for order #{$orderId}: रु " . ($balanceResult['total_released'] ?? 0));
+            } else {
+                error_log("Courier Order: ❌ Seller balance release failed for order #{$orderId}: " . ($balanceResult['message'] ?? 'Unknown error'));
             }
         } catch (\Exception $e) {
-            error_log("Seller balance service error for order #{$orderId}: " . $e->getMessage());
+            error_log("Courier Order: ❌ Seller balance service error for order #{$orderId}: " . $e->getMessage());
+            error_log("Courier Order: Stack trace: " . $e->getTraceAsString());
         }
     }
 

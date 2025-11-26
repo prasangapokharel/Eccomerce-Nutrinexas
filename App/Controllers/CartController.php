@@ -747,6 +747,7 @@ respond_after_delete:
         {
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $items = isset($_POST['items']) ? $_POST['items'] : [];
+                $userId = Session::get('user_id');
 
                 if (empty($items) || !is_array($items)) {
                     if ($this->isAjaxRequest()) {

@@ -19,8 +19,11 @@ class Profile extends BaseCuriorController
      */
     public function index()
     {
+        // Ensure we have fresh data including city and branch
+        $curior = $this->curiorModel->getById($this->curiorId);
+        
         $this->view('curior/profile/index', [
-            'curior' => $this->curiorData,
+            'curior' => $curior ?: $this->curiorData,
             'page' => 'profile',
             'title' => 'Profile'
         ]);
@@ -41,7 +44,9 @@ class Profile extends BaseCuriorController
             'name' => trim($_POST['name'] ?? ''),
             'phone' => trim($_POST['phone'] ?? ''),
             'email' => trim($_POST['email'] ?? ''),
-            'address' => trim($_POST['address'] ?? '')
+            'address' => trim($_POST['address'] ?? ''),
+            'city' => trim($_POST['city'] ?? ''),
+            'branch' => trim($_POST['branch'] ?? '')
         ];
 
         $errors = [];

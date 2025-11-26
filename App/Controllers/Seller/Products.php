@@ -5,6 +5,7 @@ namespace App\Controllers\Seller;
 use App\Models\Product;
 use App\Models\ProductImage;
 use App\Models\Setting;
+use App\Core\Cache;
 use Exception;
 use App\Helpers\CategoryHelper;
 
@@ -13,6 +14,7 @@ class Products extends BaseSellerController
     private $productModel;
     private $productImageModel;
     private $settingModel;
+    private $cache;
 
     public function __construct()
     {
@@ -20,6 +22,7 @@ class Products extends BaseSellerController
         $this->productModel = new Product();
         $this->productImageModel = new ProductImage();
         $this->settingModel = new Setting();
+        $this->cache = new Cache();
     }
 
     /**
@@ -30,6 +33,14 @@ class Products extends BaseSellerController
         $page = (int)($_GET['page'] ?? 1);
         $limit = 20;
         $offset = ($page - 1) * $limit;
+        
+        $cacheKey = 'seller_products_' . $this->sellerId . '_' . $page;
+        $cached = $this->cache->get($cacheKey);
+        
+        if ($cached !== false) {
+            $this->view('seller/products/index', $cached);
+            return;
+        }
 
         $products = $this->productModel->getProductsBySellerId($this->sellerId, $limit, $offset);
         
@@ -38,16 +49,26 @@ class Products extends BaseSellerController
             $product['image_url'] = $this->getProductImageUrl($product);
         }
         
-        $total = $this->productModel->getProductCountBySeller($this->sellerId);
+        // Cache product count for 5 minutes
+        $countCacheKey = 'seller_product_count_' . $this->sellerId;
+        $total = $this->cache->remember($countCacheKey, function() {
+            return $this->productModel->getProductCountBySeller($this->sellerId);
+        }, 300);
+        
         $totalPages = ceil($total / $limit);
 
-        $this->view('seller/products/index', [
+        $viewData = [
             'title' => 'My Products',
             'products' => $products,
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'total' => $total
-        ]);
+        ];
+        
+        // Cache for 3 minutes
+        $this->cache->set($cacheKey, $viewData, 180);
+        
+        $this->view('seller/products/index', $viewData);
     }
 
     /**
@@ -228,6 +249,9 @@ class Products extends BaseSellerController
 
             if ($productId) {
                 $this->handleProductImages($productId);
+                // Clear product caches
+                $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');
+                $this->cache->delete('seller_product_count_' . $this->sellerId);
                 $this->setFlash('success', 'Product created successfully');
                 $this->redirect('seller/products');
             } else {
@@ -317,6 +341,9 @@ class Products extends BaseSellerController
 
             if ($result) {
                 $this->handleProductImages($id);
+                // Clear product caches
+                $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');
+                $this->cache->delete('seller_product_count_' . $this->sellerId);
                 $this->setFlash('success', 'Product updated successfully');
                 $this->redirect('seller/products');
             } else {
@@ -407,6 +434,9 @@ class Products extends BaseSellerController
             $result = $this->productModel->deleteProduct($id);
             
             if ($result) {
+                // Clear product caches
+                $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');
+                $this->cache->delete('seller_product_count_' . $this->sellerId);
                 $this->setFlash('success', 'Product deleted successfully');
             } else {
                 $this->setFlash('error', 'Failed to delete product');

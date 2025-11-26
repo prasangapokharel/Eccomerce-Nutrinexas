@@ -2,16 +2,19 @@
 
 namespace App\Controllers\Seller;
 
+use App\Core\Cache;
 use Exception;
 
 class Analytics extends BaseSellerController
 {
     private $db;
+    private $cache;
 
     public function __construct()
     {
         parent::__construct();
         $this->db = \App\Core\Database::getInstance();
+        $this->cache = new Cache();
     }
 
     /**
@@ -84,6 +87,13 @@ class Analytics extends BaseSellerController
      */
     private function getSalesData($dateRange)
     {
+        $cacheKey = 'seller_sales_data_' . $this->sellerId . '_' . md5($dateRange['start'] . $dateRange['end']);
+        $cached = $this->cache->get($cacheKey);
+        
+        if ($cached !== false) {
+            return $cached;
+        }
+        
         $sql = "SELECT DATE(o.created_at) as date, 
                        SUM(oi.total) as revenue,
                        COUNT(DISTINCT o.id) as orders
@@ -95,7 +105,12 @@ class Analytics extends BaseSellerController
                 GROUP BY DATE(o.created_at)
                 ORDER BY date ASC";
         
-        return $this->db->query($sql, [$this->sellerId, $dateRange['start'], $dateRange['end']])->all();
+        $data = $this->db->query($sql, [$this->sellerId, $dateRange['start'], $dateRange['end']])->all();
+        
+        // Cache for 10 minutes
+        $this->cache->set($cacheKey, $data, 600);
+        
+        return $data;
     }
 
     /**
@@ -103,6 +118,13 @@ class Analytics extends BaseSellerController
      */
     private function getOrderStats($dateRange)
     {
+        $cacheKey = 'seller_order_stats_' . $this->sellerId . '_' . md5($dateRange['start'] . $dateRange['end']);
+        $cached = $this->cache->get($cacheKey);
+        
+        if ($cached !== false) {
+            return $cached;
+        }
+        
         $sql = "SELECT 
                     COUNT(DISTINCT o.id) as total_orders,
                     SUM(oi.total) as total_revenue,
@@ -114,7 +136,12 @@ class Analytics extends BaseSellerController
                   AND o.created_at BETWEEN ? AND ?
                   AND o.status != 'cancelled'";
         
-        return $this->db->query($sql, [$this->sellerId, $dateRange['start'], $dateRange['end']])->single();
+        $stats = $this->db->query($sql, [$this->sellerId, $dateRange['start'], $dateRange['end']])->single();
+        
+        // Cache for 10 minutes
+        $this->cache->set($cacheKey, $stats, 600);
+        
+        return $stats;
     }
 
     /**
@@ -181,6 +208,13 @@ class Analytics extends BaseSellerController
      */
     private function getBestSellingProducts($dateRange)
     {
+        $cacheKey = 'seller_best_selling_' . $this->sellerId . '_' . md5($dateRange['start'] . $dateRange['end']);
+        $cached = $this->cache->get($cacheKey);
+        
+        if ($cached !== false) {
+            return $cached;
+        }
+        
         $sql = "SELECT p.id, p.product_name, 
                        SUM(oi.quantity) as total_sold,
                        SUM(oi.total) as total_revenue
@@ -194,7 +228,12 @@ class Analytics extends BaseSellerController
                 ORDER BY total_sold DESC
                 LIMIT 10";
         
-        return $this->db->query($sql, [$this->sellerId, $dateRange['start'], $dateRange['end']])->all();
+        $products = $this->db->query($sql, [$this->sellerId, $dateRange['start'], $dateRange['end']])->all();
+        
+        // Cache for 10 minutes
+        $this->cache->set($cacheKey, $products, 600);
+        
+        return $products;
     }
 
     /**

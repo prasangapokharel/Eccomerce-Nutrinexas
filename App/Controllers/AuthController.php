@@ -103,11 +103,19 @@ class AuthController extends Controller
         $user = $this->authenticateUser($identifier, $password);
         
         if ($user) {
+            // Check maintenance mode - only allow admin login if ON
+            $settingModel = new \App\Models\Setting();
+            $maintenanceMode = $settingModel->get('maintenance_mode', 'false');
+            $userRole = $user['role'] ?? 'customer';
+            
+            if (($maintenanceMode === 'true' || $maintenanceMode === true) && $userRole !== 'admin') {
+                $this->setFlash('error', 'Login is disabled during maintenance mode. Only administrators can access.');
+                $this->redirect('auth/login');
+                return;
+            }
+            
             // Reset login attempts
             $this->resetLoginAttempts($ip);
-            
-            // Set session based on role
-            $userRole = $user['role'] ?? 'customer';
             
             Session::set('user_id', $user['id']);
             Session::set('user_email', $user['email'] ?? '');
@@ -179,8 +187,6 @@ class AuthController extends Controller
             // Login notification and welcome emails are non-critical and should not block user login
             
             // Redirect based on user role
-            $userRole = $user['role'] ?? 'customer';
-            
             if ($userRole === 'admin') {
                 $this->redirect('admin');
             } elseif ($userRole === 'staff') {

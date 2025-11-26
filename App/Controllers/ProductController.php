@@ -412,10 +412,47 @@ class ProductController extends Controller
             $reviews = $this->reviewModel->getByProductId($product['id']);
             $averageRating = $this->reviewModel->getAverageRating($product['id']);
             $reviewCount = $this->reviewModel->getReviewCount($product['id']);
-            $relatedProducts = $this->getLocalRecommendations($product['id'], 4);
+            $relatedProducts = $this->getLocalRecommendations($product['id'], 3);
             foreach ($relatedProducts as &$relatedProduct) {
                 $primaryImage = $this->productImageModel->getPrimaryImage($relatedProduct['id']);
                 $relatedProduct['image_url'] = $this->getProductImageUrl($relatedProduct, $primaryImage);
+            }
+            
+            // Get internal product ad for suggestions
+            $internalProductAd = null;
+            $db = \App\Core\Database::getInstance();
+            $adProduct = $db->query(
+                "SELECT p.*, a.id as ad_id,
+                        (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as primary_image_url
+                 FROM ads a
+                 INNER JOIN ads_types at ON a.ads_type_id = at.id
+                 INNER JOIN products p ON a.product_id = p.id
+                 WHERE at.name = 'product_internal'
+                 AND a.status = 'active'
+                 AND (a.approval_status = 'approved' OR a.approval_status IS NULL)
+                 AND CURDATE() BETWEEN a.start_date AND a.end_date
+                 AND a.product_id IS NOT NULL
+                 AND a.product_id != ?
+                 AND p.status = 'active'
+                 AND p.approval_status = 'approved'
+                 ORDER BY RAND()
+                 LIMIT 1",
+                [$product['id']]
+            )->single();
+            
+            if ($adProduct) {
+                // Get image URL
+                if (!empty($adProduct['primary_image_url'])) {
+                    $adProduct['image_url'] = filter_var($adProduct['primary_image_url'], FILTER_VALIDATE_URL) 
+                        ? $adProduct['primary_image_url'] 
+                        : ASSETS_URL . '/uploads/images/' . $adProduct['primary_image_url'];
+                } else {
+                    $adProduct['image_url'] = ASSETS_URL . '/images/products/default.jpg';
+                }
+                $primaryImage = $this->productImageModel->getPrimaryImage($adProduct['id']);
+                $adProduct['image_url'] = $this->getProductImageUrl($adProduct, $primaryImage);
+                $adProduct['is_sponsored'] = true;
+                $internalProductAd = $adProduct;
             }
 
             if (Session::has('user_id')) {
@@ -460,6 +497,7 @@ class ProductController extends Controller
                 'averageRating' => $averageRating,
                 'reviewCount' => $reviewCount,
                 'relatedProducts' => $relatedProducts,
+                'internalProductAd' => $internalProductAd,
                 'inWishlist' => $inWishlist,
                 'hasReviewed' => $hasReviewed,
                 'isScheduled' => $isScheduled,

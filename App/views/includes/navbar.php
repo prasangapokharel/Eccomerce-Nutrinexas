@@ -1,5 +1,4 @@
 <?php include APPROOT . '/views/seo/meta.php'; ?>
-<link rel="stylesheet" href="<?= ASSETS_URL ?>/css/app.css">
 
 
 

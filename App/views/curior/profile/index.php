@@ -36,6 +36,46 @@ ob_start();
                 <textarea name="address" rows="3"
                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"><?= htmlspecialchars($curior['address'] ?? '') ?></textarea>
             </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">City <span class="text-red-500">*</span></label>
+                <select name="city" required
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                    <option value="">Select City</option>
+                    <?php
+                    $cities = [
+                        'Kathmandu', 'Lalitpur', 'Bhaktapur', 'Pokhara', 'Bharatpur', 
+                        'Biratnagar', 'Birgunj', 'Dharan', 'Butwal', 'Hetauda',
+                        'Nepalgunj', 'Itahari', 'Tulsipur', 'Kalaiya', 'Jitpur',
+                        'Inaruwa', 'Janakpur', 'Bhimdatta', 'Dhangadhi', 'Birendranagar',
+                        'Ghorahi', 'Tikapur', 'Tansen', 'Baglung', 'Gulariya',
+                        'Rajbiraj', 'Lahan', 'Siddharthanagar', 'Bhadrapur', 'Damak',
+                        'Bardibas', 'Malangwa', 'Banepa', 'Panauti', 'Dhankuta',
+                        'Ilam', 'Phidim', 'Bhojpur', 'Diktel', 'Okhaldhunga',
+                        'Ramechhap', 'Manthali', 'Charikot', 'Jiri', 'Sindhuli',
+                        'Jaleshwar', 'Siraha', 'Mechinagar', 'Birtamod', 'Kakarbhitta'
+                    ];
+                    sort($cities);
+                    $currentCity = trim($curior['city'] ?? '');
+                    foreach ($cities as $city): ?>
+                        <option value="<?= htmlspecialchars($city) ?>" <?= (strcasecmp($currentCity, $city) === 0) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($city) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <?php if (!empty($currentCity)): ?>
+                    <p class="text-xs text-green-600 mt-1">Current city: <?= htmlspecialchars($currentCity) ?></p>
+                <?php else: ?>
+                    <p class="text-xs text-gray-500 mt-1">Select your operating city for auto-assignment</p>
+                <?php endif; ?>
+            </div>
+            
+            <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Branch (Optional)</label>
+                <input type="text" name="branch" value="<?= htmlspecialchars($curior['branch'] ?? '') ?>"
+                       placeholder="e.g., Main Branch, North Branch"
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+            </div>
         </div>
         
         <div class="mt-6 flex justify-end">

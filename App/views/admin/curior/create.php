@@ -108,6 +108,65 @@
                         <?php endif; ?>
                     </div>
 
+                    <!-- City -->
+                    <div>
+                        <label for="city" class="block text-sm font-medium text-gray-700 mb-2">
+                            City <span class="text-red-500">*</span>
+                        </label>
+                        <select id="city" 
+                                name="city" 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                required>
+                            <option value="">Select City</option>
+                            <?php
+                            $cities = [
+                                'Kathmandu', 'Lalitpur', 'Bhaktapur', 'Pokhara', 'Bharatpur', 
+                                'Biratnagar', 'Birgunj', 'Dharan', 'Butwal', 'Hetauda',
+                                'Nepalgunj', 'Itahari', 'Tulsipur', 'Kalaiya', 'Jitpur',
+                                'Inaruwa', 'Janakpur', 'Bhimdatta', 'Dhangadhi', 'Birendranagar',
+                                'Ghorahi', 'Tikapur', 'Tansen', 'Baglung', 'Gulariya',
+                                'Rajbiraj', 'Lahan', 'Siddharthanagar', 'Bhadrapur', 'Damak',
+                                'Bardibas', 'Malangwa', 'Banepa', 'Panauti', 'Dhankuta',
+                                'Ilam', 'Phidim', 'Bhojpur', 'Diktel', 'Okhaldhunga',
+                                'Ramechhap', 'Manthali', 'Charikot', 'Jiri', 'Sindhuli',
+                                'Jaleshwar', 'Siraha', 'Mechinagar', 'Birtamod', 'Kakarbhitta'
+                            ];
+                            sort($cities);
+                            foreach ($cities as $city): ?>
+                                <option value="<?= htmlspecialchars($city) ?>" <?= (isset($data['city']) && $data['city'] === $city) ? 'selected' : '' ?>>
+                                    <?= htmlspecialchars($city) ?>
+                                </option>
+                            <?php endforeach; ?>
+                        </select>
+                        <p class="text-xs text-gray-500 mt-1">Select the city where this courier operates. Orders from sellers in the same city will be auto-assigned.</p>
+                        <?php if (isset($errors['city'])): ?>
+                            <p class="text-red-500 text-sm mt-2 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                <?= htmlspecialchars($errors['city']) ?>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+
+                    <!-- Branch -->
+                    <div>
+                        <label for="branch" class="block text-sm font-medium text-gray-700 mb-2">
+                            Branch <span class="text-gray-400 text-xs">(Optional)</span>
+                        </label>
+                        <input type="text" 
+                               id="branch" 
+                               name="branch" 
+                               value="<?= htmlspecialchars($data['branch'] ?? '') ?>"
+                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               placeholder="Enter branch name (e.g., Main Branch, North Branch)">
+                        <p class="text-xs text-gray-500 mt-1">Optional branch or location identifier</p>
+                        <?php if (isset($errors['branch'])): ?>
+                            <p class="text-red-500 text-sm mt-2 flex items-center">
+                                <i class="fas fa-exclamation-circle mr-1"></i>
+                                <?= htmlspecialchars($errors['branch']) ?>
+                            </p>
+                        <?php endif; ?>
+                    </div>
+
                     <!-- Password -->
                     <div>
                         <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
