@@ -60,8 +60,8 @@
                         <input type="text" 
                                id="searchInput" 
                                placeholder="Search products..." 
-                               class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                               style="-webkit-appearance: none; appearance: none; -webkit-border-radius: 0.5rem; border-radius: 0.5rem;">
+                               class="input native-input"
+                               style="padding-left: 2.5rem;">
                         <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400 text-sm"></i>
                         </div>
@@ -72,8 +72,7 @@
                     </div>
                     
                     <select id="statusFilter"
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                            style="-webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>'); background-repeat: no-repeat; background-position: right 0.7rem center; background-size: 0.65rem auto; padding-right: 2.5rem;">
+                            class="input native-input">
                         <?php $currentStatus = $_GET['status'] ?? ''; ?>
                         <option value="" <?= $currentStatus === '' ? 'selected' : '' ?>>All Statuses</option>
                         <option value="active" <?= $currentStatus === 'active' ? 'selected' : '' ?>>Active</option>
@@ -82,8 +81,7 @@
                     </select>
 
                     <select id="approvalFilter"
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                            style="-webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>'); background-repeat: no-repeat; background-position: right 0.7rem center; background-size: 0.65rem auto; padding-right: 2.5rem;">
+                            class="input native-input">
                         <option value="">All Approvals</option>
                         <option value="approved">Approved</option>
                         <option value="pending">Pending</option>

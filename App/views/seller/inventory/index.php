@@ -32,8 +32,8 @@
                     <input type="text" 
                            id="searchInput" 
                            placeholder="Search products..." 
-                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                           style="appearance: none; -webkit-appearance: none; border-radius: 0.5rem; -webkit-border-radius: 0.5rem;">
+                           class="input native-input"
+                           style="padding-left: 2.5rem;">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>
@@ -220,16 +220,16 @@
                            name="stock_quantity" 
                            min="0" 
                            required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
                 <div class="flex gap-3">
                     <button type="button" 
                             onclick="closeStockModal()" 
-                            class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                            class="btn btn-outline flex-1">
                         Cancel
                     </button>
                     <button type="submit" 
-                            class="flex-1 px-4 py-2 border border-transparent rounded-lg text-sm font-medium text-white bg-primary hover:bg-primary-dark">
+                            class="btn flex-1">
                         Update Stock
                     </button>
                 </div>

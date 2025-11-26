@@ -16,27 +16,27 @@
             <div class="grid grid-cols-1 grid-cols-2">
                 <div style="grid-column: span 2;">
                     <label for="product_name">Product Name *</label>
-                    <input type="text" id="product_name" name="product_name" value="<?= htmlspecialchars($product['product_name'] ?? '') ?>" required>
+                    <input type="text" id="product_name" name="product_name" value="<?= htmlspecialchars($product['product_name'] ?? '') ?>" class="input native-input" required>
                 </div>
 
                 <div>
                     <label for="price">Price (रु) *</label>
-                    <input type="number" id="price" name="price" value="<?= htmlspecialchars($product['price'] ?? 0) ?>" step="0.01" required>
+                    <input type="number" id="price" name="price" value="<?= htmlspecialchars($product['price'] ?? 0) ?>" step="0.01" class="input native-input" required>
                 </div>
 
                 <div>
                     <label for="sale_price">Sale Price (रु)</label>
-                    <input type="number" id="sale_price" name="sale_price" value="<?= htmlspecialchars($product['sale_price'] ?? '') ?>" step="0.01">
+                    <input type="number" id="sale_price" name="sale_price" value="<?= htmlspecialchars($product['sale_price'] ?? '') ?>" step="0.01" class="input native-input">
                 </div>
 
                 <div>
                     <label for="stock_quantity">Stock Quantity *</label>
-                    <input type="number" id="stock_quantity" name="stock_quantity" value="<?= htmlspecialchars($product['stock_quantity'] ?? 0) ?>" required min="0">
+                    <input type="number" id="stock_quantity" name="stock_quantity" value="<?= htmlspecialchars($product['stock_quantity'] ?? 0) ?>" class="input native-input" required min="0">
                 </div>
 
                 <div>
                     <label for="category">Category *</label>
-                    <input type="text" id="category" name="category" value="<?= htmlspecialchars($product['category'] ?? '') ?>" required>
+                    <input type="text" id="category" name="category" value="<?= htmlspecialchars($product['category'] ?? '') ?>" class="input native-input" required>
                 </div>
 
                 <div>
@@ -49,7 +49,7 @@
                                step="0.1"
                                min="0"
                                max="50"
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input"
                                placeholder="Leave empty to use default">
                         <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
                             <span class="text-gray-500 text-sm">%</span>
@@ -62,7 +62,7 @@
 
                 <div>
                     <label for="status">Status *</label>
-                    <select id="status" name="status" required>
+                    <select id="status" name="status" class="input native-input" required>
                         <option value="active" <?= ($product['status'] ?? '') === 'active' ? 'selected' : '' ?>>Active</option>
                         <option value="inactive" <?= ($product['status'] ?? '') === 'inactive' ? 'selected' : '' ?>>Inactive</option>
                     </select>
@@ -70,12 +70,12 @@
 
                 <div class="grid-col-span-2">
                     <label for="short_description">Short Description</label>
-                    <textarea id="short_description" name="short_description" rows="2"><?= htmlspecialchars($product['short_description'] ?? '') ?></textarea>
+                    <textarea id="short_description" name="short_description" rows="2" class="input native-input"><?= htmlspecialchars($product['short_description'] ?? '') ?></textarea>
                 </div>
 
                 <div class="grid-col-span-2">
                     <label for="description">Full Description</label>
-                    <textarea id="description" name="description" rows="5"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
+                    <textarea id="description" name="description" rows="5" class="input native-input"><?= htmlspecialchars($product['description'] ?? '') ?></textarea>
                 </div>
 
                 <?php if (!empty($images)): ?>
@@ -98,13 +98,13 @@
 
                 <div class="grid-col-span-2">
                     <label for="image_url">Update Primary Image URL (CDN)</label>
-                    <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg">
+                    <input type="url" id="image_url" name="image_url" class="input native-input" placeholder="https://example.com/image.jpg">
                     <p class="text-xs text-gray-600 mt-1">Enter new CDN URL to replace primary image</p>
                 </div>
 
                 <div class="grid-col-span-2">
                     <label for="additional_images">Add Additional Image URLs</label>
-                    <textarea id="additional_images" name="additional_images" rows="3" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"></textarea>
+                    <textarea id="additional_images" name="additional_images" rows="3" class="input native-input" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"></textarea>
                     <p class="text-xs text-gray-600 mt-1">Enter multiple image URLs separated by commas</p>
                 </div>
             </div>

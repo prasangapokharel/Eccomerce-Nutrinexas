@@ -21,38 +21,38 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                 <div>
                     <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
                     <input type="text" id="name" name="name" value="<?= htmlspecialchars($seller['name'] ?? '') ?>"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                     <input type="email" id="email" value="<?= htmlspecialchars($seller['email'] ?? '') ?>" disabled
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg bg-gray-100 text-gray-500 cursor-not-allowed">
+                           class="input native-input" style="background: #f3f4f6; color: #6b7280; cursor: not-allowed;">
                     <p class="text-xs text-gray-500 mt-1">Email cannot be changed</p>
                 </div>
 
                 <div>
                     <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                     <input type="tel" id="phone" name="phone" value="<?= htmlspecialchars($seller['phone'] ?? '') ?>"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="company_name" class="block text-sm font-medium text-gray-700 mb-2">Company Name</label>
                     <input type="text" id="company_name" name="company_name" value="<?= htmlspecialchars($seller['company_name'] ?? '') ?>"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div class="md:col-span-2">
                     <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Address</label>
                     <textarea id="address" name="address" rows="3"
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"><?= htmlspecialchars($seller['address'] ?? '') ?></textarea>
+                              class="input native-input"><?= htmlspecialchars($seller['address'] ?? '') ?></textarea>
                 </div>
 
                 <div>
                     <label for="city" class="block text-sm font-medium text-gray-700 mb-2">City <span class="text-red-500">*</span></label>
                     <select id="city" name="city" required
-                            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                            class="input native-input">
                         <option value="">Select City</option>
                         <?php
                         $cities = [
@@ -80,7 +80,7 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                 <div class="md:col-span-2">
                     <label for="description" class="block text-sm font-medium text-gray-700 mb-2">Store Description</label>
                     <textarea id="description" name="description" rows="4"
-                              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                              class="input native-input"
                               placeholder="Describe your store, products, and services..."><?= htmlspecialchars($seller['description'] ?? '') ?></textarea>
                     <p class="text-xs text-gray-500 mt-1">This description will be visible to customers</p>
                 </div>
@@ -89,7 +89,7 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                     <label for="logo_url" class="block text-sm font-medium text-gray-700 mb-2">Logo URL (CDN)</label>
                     <input type="url" id="logo_url" name="logo_url" value="<?= htmlspecialchars($seller['logo_url'] ?? '') ?>" 
                            placeholder="https://example.com/logo.png"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                     <p class="text-xs text-gray-500 mt-1">Enter the full CDN URL for your logo image</p>
                 </div>
 
@@ -97,7 +97,7 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                     <label for="cover_banner_url" class="block text-sm font-medium text-gray-700 mb-2">Cover Banner URL (CDN)</label>
                     <input type="url" id="cover_banner_url" name="cover_banner_url" value="<?= htmlspecialchars($seller['cover_banner_url'] ?? '') ?>" 
                            placeholder="https://example.com/banner.jpg"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                     <p class="text-xs text-gray-500 mt-1">Enter the full CDN URL for your store cover banner (recommended: 1200x300px)</p>
                 </div>
 
@@ -109,35 +109,35 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                     <label for="facebook" class="block text-sm font-medium text-gray-700 mb-2">Facebook</label>
                     <input type="url" id="facebook" name="facebook" value="<?= htmlspecialchars($socialMedia['facebook'] ?? '') ?>"
                            placeholder="https://facebook.com/yourpage"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="instagram" class="block text-sm font-medium text-gray-700 mb-2">Instagram</label>
                     <input type="url" id="instagram" name="instagram" value="<?= htmlspecialchars($socialMedia['instagram'] ?? '') ?>"
                            placeholder="https://instagram.com/yourpage"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="twitter" class="block text-sm font-medium text-gray-700 mb-2">Twitter</label>
                     <input type="url" id="twitter" name="twitter" value="<?= htmlspecialchars($socialMedia['twitter'] ?? '') ?>"
                            placeholder="https://twitter.com/yourpage"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="linkedin" class="block text-sm font-medium text-gray-700 mb-2">LinkedIn</label>
                     <input type="url" id="linkedin" name="linkedin" value="<?= htmlspecialchars($socialMedia['linkedin'] ?? '') ?>"
                            placeholder="https://linkedin.com/company/yourpage"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="youtube" class="block text-sm font-medium text-gray-700 mb-2">YouTube</label>
                     <input type="url" id="youtube" name="youtube" value="<?= htmlspecialchars($socialMedia['youtube'] ?? '') ?>"
                            placeholder="https://youtube.com/yourchannel"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div class="md:col-span-2 border-t pt-6">
@@ -159,14 +159,14 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                                        name="working_hours_<?= $key ?>_open" 
                                        value="<?= $hours['open'] ?? '09:00' ?>"
                                        id="hours_<?= $key ?>_open"
-                                       class="px-3 py-1 border border-gray-300 rounded-lg text-sm"
+                                       class="input native-input"
                                        <?= $hours['closed'] ? 'disabled' : '' ?>>
                                 <span class="text-gray-500">to</span>
                                 <input type="time" 
                                        name="working_hours_<?= $key ?>_close" 
                                        value="<?= $hours['close'] ?? '18:00' ?>"
                                        id="hours_<?= $key ?>_close"
-                                       class="px-3 py-1 border border-gray-300 rounded-lg text-sm"
+                                       class="input native-input"
                                        <?= $hours['closed'] ? 'disabled' : '' ?>>
                                 <input type="hidden" 
                                        name="working_hours_<?= $key ?>_closed" 
@@ -185,21 +185,21 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                     <label for="password" class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
                     <input type="password" id="password" name="password" 
                            placeholder="Leave empty to keep current password"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
                     <label for="password_confirm" class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
                     <input type="password" id="password_confirm" name="password_confirm"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
             </div>
 
             <div class="mt-6 flex justify-end gap-3">
-                <a href="<?= \App\Core\View::url('seller/dashboard') ?>" class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                <a href="<?= \App\Core\View::url('seller/dashboard') ?>" class="btn btn-outline">
                     Cancel
                 </a>
-                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">
+                <button type="submit" class="btn">
                     Save Changes
                 </button>
             </div>

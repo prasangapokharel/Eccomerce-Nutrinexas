@@ -38,7 +38,7 @@
                         <input type="text" 
                                id="product_name" 
                                name="product_name" 
-                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input"
                                placeholder="Enter product name"
                                required>
                     </div>
@@ -49,7 +49,7 @@
                         </label>
                         <select id="category" 
                                 name="category" 
-                                class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                class="input native-input"
                                 required>
                             <option value="">Select Main Category</option>
                             <?php foreach (CategoryHelper::getMainCategories() as $key => $value): ?>
@@ -68,7 +68,7 @@
                         <input type="text" 
                                id="subcategory" 
                                name="subcategory" 
-                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input"
                                placeholder="Enter custom subcategory (e.g., Whey Protein, Resistance Bands)">
                         <p class="text-xs text-gray-500 mt-1">Keep this field unique—enter your own descriptive subcategory.</p>
                     </div>
@@ -80,7 +80,7 @@
                             </label>
                             <select id="product_type_main" 
                                     name="product_type_main" 
-                                    class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                    class="input native-input"
                                     onchange="handleProductTypeChange()">
                                 <option value="">-- Select Product Type --</option>
                                 <option value="Supplements">Supplements</option>
@@ -98,7 +98,7 @@
                             <input type="text" 
                                    id="product_type" 
                                    name="product_type" 
-                                   class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input"
                                    placeholder="e.g., Whey, Bulking Cycle, Resistance Bands">
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                             <input type="text" 
                                    id="colors" 
                                    name="colors" 
-                                   class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input"
                                    placeholder="Red, Blue, Green or #FF0000, #0000FF, #00FF00">
                             <p class="text-xs text-gray-500 mt-1">Enter colors separated by commas</p>
                         </div>
@@ -151,7 +151,7 @@
                                        name="price" 
                                        step="0.01" 
                                        min="0"
-                                       class="input native-input w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                       class="input native-input"
                                        placeholder="0.00"
                                        required>
                             </div>
@@ -170,7 +170,7 @@
                                        name="sale_price" 
                                        step="0.01" 
                                        min="0"
-                                       class="input native-input w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                       class="input native-input"
                                        placeholder="0.00">
                             </div>
                         </div>
@@ -187,7 +187,7 @@
                                id="stock_quantity" 
                                name="stock_quantity" 
                                min="0"
-                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input"
                                placeholder="0"
                                required>
                         <p class="text-xs text-gray-500 mt-1">
@@ -209,7 +209,7 @@
                             <input type="text" 
                                    id="weight" 
                                    name="weight"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input"
                                    placeholder="e.g., 1kg, 500g, L, XL">
                         </div>
 
@@ -220,7 +220,7 @@
                             <input type="text" 
                                    id="serving" 
                                    name="serving"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input"
                                    placeholder="e.g., 29, 30 servings, 1 piece">
                         </div>
 
@@ -231,7 +231,7 @@
                             <input type="text" 
                                    id="flavor" 
                                    name="flavor"
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input"
                                    placeholder="e.g., Chocolate, Vanilla, Black, Red">
                         </div>
                     </div>
@@ -246,7 +246,7 @@
                         <textarea id="short_description" 
                                   name="short_description" 
                                   rows="3"
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-none"
+                                  class="input native-input"
                                   placeholder="Brief product description for listings"></textarea>
                         <p class="text-xs text-gray-500 mt-1">This will appear in product listings and search results</p>
                     </div>
@@ -258,7 +258,7 @@
                         <textarea id="description"
                                   name="description"
                                   rows="8"
-                                  class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-y"
+                                  class="input native-input"
                                   placeholder="Detailed information about the product, benefits, and usage. Markdown syntax is supported."></textarea>
                         <p class="text-xs text-gray-500 mt-2">Supports Markdown formatting. Use CDN image URLs for images.</p>
                     </div>
@@ -275,7 +275,7 @@
                         <input type="url" 
                                id="image_url" 
                                name="image_url" 
-                               class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                               class="input native-input"
                                placeholder="https://example.com/image.jpg"
                                required>
                         <p class="text-xs text-gray-500 mt-1">Enter the full CDN URL for the product image</p>
@@ -286,7 +286,7 @@
                         <textarea id="additional_images" 
                                   name="additional_images" 
                                   rows="4"
-                                  class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-none"
+                                  class="input native-input"
                                   placeholder="Enter image URLs, one per line (press Enter for each new link)"></textarea>
                         <p class="text-xs text-gray-500 mt-1">Enter one URL per line. We also accept comma-separated values.</p>
                     </div>
@@ -306,7 +306,7 @@
                                    step="0.1"
                                    min="0"
                                    max="100"
-                                   class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                   class="input native-input"
                                    placeholder="Leave empty to use default">
                             <div class="absolute inset-y-0 right-0 flex items-center pr-3">
                                 <span class="text-gray-500 text-sm">%</span>
@@ -326,7 +326,7 @@
                         <label for="status" class="block text-sm font-medium text-gray-700 mb-2">Status *</label>
                         <select id="status" 
                                 name="status" 
-                                class="input native-input w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                                class="input native-input"
                                 required>
                             <option value="active">Active</option>
                             <option value="inactive">Inactive</option>
@@ -338,11 +338,11 @@
             <!-- Form Footer -->
             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-end gap-3">
                 <a href="<?= \App\Core\View::url('seller/products') ?>" 
-                   class="inline-flex items-center justify-center px-6 py-3 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 btn btn-secondary">
+                   class="btn btn-outline">
                     Cancel
                 </a>
                 <button type="submit" 
-                        class="inline-flex items-center justify-center px-6 py-3 border border-transparent rounded-lg text-sm font-medium text-white bg-primary hover:bg-primary-dark btn btn-primary">
+                        class="btn">
                     <i class="fas fa-plus mr-2"></i>
                     Create Product
                 </button>
