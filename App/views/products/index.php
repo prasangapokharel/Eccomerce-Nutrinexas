@@ -39,11 +39,11 @@ function formatProductName($name) {
 }
 ?>
 
-<div class="bg-gray-50 min-h-screen">
+<div class="bg-neutral-50 min-h-screen">
     <div class="container category-clean mx-auto px-3 py-4 sm:px-4 sm:py-8">
         
         <?php if (isset($_SESSION['flash_message'])): ?>
-            <div class="bg-green-50 border-l-4 border-green-400 text-green-800 px-3 py-2 rounded-lg mb-4 shadow-sm">
+            <div class="bg-success/10 border-l-4 border-success text-success px-3 py-2 rounded-lg mb-4 shadow-sm">
                 <div class="flex items-center">
                     <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
@@ -66,7 +66,7 @@ function formatProductName($name) {
 
         <!-- Filter Tags -->
         <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
-            <button onclick="openFilterModal()" class="bg-primary text-white px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap flex items-center gap-1">
+            <button onclick="openFilterModal()" class="btn px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap flex items-center gap-1">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
                 </svg>
@@ -77,7 +77,7 @@ function formatProductName($name) {
                 $isActive = $activeSort === $filter['sort'];
                 $buttonClasses = $isActive 
                     ? 'text-xs px-3.5 py-1.5 rounded-full border whitespace-nowrap transition-colors bg-primary text-white border-primary' 
-                    : 'text-xs px-3.5 py-1.5 rounded-full border whitespace-nowrap transition-colors bg-gray-100 text-gray-700 border-transparent hover:bg-gray-200';
+                    : 'text-xs px-3.5 py-1.5 rounded-full border whitespace-nowrap transition-colors bg-neutral-100 text-neutral-700 border-transparent hover:bg-neutral-200';
                 ?>
                 <button type="button"
                         class="<?= $buttonClasses ?>"
@@ -87,18 +87,29 @@ function formatProductName($name) {
             <?php endforeach; ?>
         </div>
 
+        <!-- Products Layout with Sidebar -->
+        <div class="flex gap-6">
+            <!-- Filter Sidebar (Desktop) -->
+            <aside class="hidden lg:block">
+                <?php include __DIR__ . '/../components/productfilter.php'; ?>
+            </aside>
+
+            <!-- Products Grid -->
+            <div class="flex-1">
         <?php if (empty($products)): ?>
-            <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-8 text-center">
-                <div class="w-14 h-14 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                    <svg class="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4-8-4V7m16 0L12 3 4 7"></path>
-                    </svg>
+                <div class="bg-white rounded-lg shadow-sm border border-neutral-100 p-8 text-center">
+                    <div class="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4-8-4V7m16 0L12 3 4 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-neutral-700 mb-1">No Products Available</h3>
+                    <p class="text-sm text-neutral-500">Check back soon for new arrivals!</p>
                 </div>
-                <h3 class="text-base font-semibold text-gray-700 mb-1">No Products Available</h3>
-                <p class="text-sm text-gray-500">Check back soon for new arrivals!</p>
             </div>
+        </div>
         <?php else: ?>
-            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
                 <?php 
                 $productIndex = 0;
                 foreach ($products as $product): 
@@ -134,7 +145,9 @@ function formatProductName($name) {
                     endif; 
                     ?>
                 <?php endforeach; ?>
+                </div>
             </div>
+        </div>
         <?php endif; ?>
         
         <!-- Pagination -->
