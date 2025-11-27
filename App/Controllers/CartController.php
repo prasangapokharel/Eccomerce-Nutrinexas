@@ -619,8 +619,9 @@ class CartController extends Controller
                 if (!$cartItem) {
                     // As a safety net, try removing from guest cart if it exists
                     $guestCart = $_SESSION['guest_cart'] ?? [];
-                    if (isset($guestCart[$productId])) {
-                        unset($guestCart[$productId]);
+                    $productIdKey = (int)$productId;
+                    if (isset($guestCart[$productIdKey])) {
+                        unset($guestCart[$productIdKey]);
                         $_SESSION['guest_cart'] = $guestCart;
                         $_SESSION['cart_count'] = array_sum(array_column($guestCart, 'quantity'));
                         // Continue to response below
