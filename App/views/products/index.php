@@ -87,25 +87,8 @@ function formatProductName($name) {
             <?php endforeach; ?>
         </div>
 
-        <!-- Products Layout with Sidebar -->
-        <div class="flex gap-6">
-            <!-- Filter Sidebar (Desktop) -->
-            <aside>
-                <?php 
-                $filterData = $filterData ?? [
-                    'categories' => [],
-                    'brands' => [],
-                    'sizes' => [],
-                    'colors' => [],
-                    'minPrice' => 0,
-                    'maxPrice' => 10000
-                ];
-                include __DIR__ . '/../components/productfilter.php'; 
-                ?>
-            </aside>
-
-            <!-- Products Grid -->
-            <div class="flex-1">
+        <!-- Products Grid -->
+        <div>
         <?php if (empty($products)): ?>
                 <div class="bg-white rounded-lg shadow-sm border border-neutral-100 p-8 text-center">
                     <div class="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-3">
