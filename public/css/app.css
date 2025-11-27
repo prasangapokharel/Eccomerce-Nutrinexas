@@ -158,9 +158,26 @@ overflow: hidden;
   box-shadow: 0 0 0 3px rgba(31, 41, 55, 0.1);
 }
    .btn-primary {
-    /* Extends .btn base styles - no hardcoded background */
-    /* Use .btn class directly in code, or add .btn-primary for additional styling */
-}
+    /* Same as .btn - uses theme colors, no hardcoded background */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem;
+    padding: 0 1rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    border-radius: 12px;
+    background-color: #1F2937;
+    color: #FFFFFF;
+    border: 1px solid transparent;
+    cursor: pointer;
+    transition: background-color 0.15s ease-in-out, color 0.15s ease-in-out, border-color 0.15s ease-in-out;
+    text-decoration: none;
+    line-height: 1.1;
+   }
+   .btn-primary:hover {
+     background-color: #111827;
+   }
 .btn-sale {
     
             background: linear-gradient(to top,rgb(253, 254, 255),rgb(255, 255, 255),rgb(255, 255, 255));
