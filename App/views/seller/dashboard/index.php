@@ -11,9 +11,9 @@
     </div>
 
     <!-- Stats Cards -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+    <div class="flex flex-wrap gap-4 lg:gap-6">
         <!-- Total Orders -->
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex-1 min-w-[220px]">
             <div class="flex items-center">
                 <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
                     <i class="fas fa-shopping-cart text-xl"></i>
@@ -26,7 +26,7 @@
         </div>
 
         <!-- Pending Orders -->
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex-1 min-w-[220px]">
             <div class="flex items-center">
                 <div class="p-3 rounded-xl bg-yellow-50 text-yellow-600">
                     <i class="fas fa-clock text-xl"></i>
@@ -39,7 +39,7 @@
         </div>
 
         <!-- Completed Orders -->
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex-1 min-w-[220px]">
             <div class="flex items-center">
                 <div class="p-3 rounded-xl bg-green-50 text-green-600">
                     <i class="fas fa-check-circle text-xl"></i>
@@ -52,7 +52,7 @@
         </div>
 
         <!-- Total Earnings -->
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex-1 min-w-[220px]">
             <div class="flex items-center">
                 <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
                     <i class="fas fa-wallet text-xl"></i>
@@ -66,9 +66,9 @@
     </div>
 
     <!-- Additional Stats Row -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+    <div class="flex flex-wrap gap-4 lg:gap-6">
         <!-- Wallet Balance -->
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
@@ -81,7 +81,7 @@
         </div>
 
         <!-- Products Count -->
-        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+        <div class="bg-white rounded-xl shadow-sm p-6 border border-gray-100 flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm font-medium text-gray-500">Products Count</p>
@@ -94,7 +94,7 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl shadow-sm p-6 text-white">
+        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl shadow-sm p-6 text-white flex-1 min-w-[220px]">
             <div class="flex items-center justify-between">
                 <div>
                     <p class="text-sm text-white/80">Quick Actions</p>
@@ -108,9 +108,9 @@
     </div>
 
     <!-- Main Content Grid -->
-    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+    <div class="flex flex-col xl:flex-row gap-6">
         <!-- Recent Orders - Takes 2 columns -->
-        <div class="xl:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
+        <div class="xl:flex-[2] bg-white rounded-xl shadow-sm border border-gray-100">
             <div class="p-6 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-gray-900">Recent Orders</h2>
@@ -142,7 +142,7 @@
                             </tr>
                         <?php else: ?>
                             <?php foreach ($recentOrders as $order): ?>
-                                <tr class="hover:bg-gray-50">
+                                <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="text-sm font-medium text-gray-900">#<?= htmlspecialchars($order['invoice'] ?? $order['id']) ?></div>
                                     </td>
@@ -196,7 +196,7 @@
         </div>
         
         <!-- Top Products - Takes 1 column -->
-        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+        <div class="xl:flex-1 bg-white rounded-xl shadow-sm border border-gray-100">
             <div class="p-6 border-b border-gray-100">
                 <div class="flex items-center justify-between">
                     <h2 class="text-lg font-semibold text-gray-900">Top Products</h2>
