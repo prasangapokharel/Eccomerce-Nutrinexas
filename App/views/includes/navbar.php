@@ -121,20 +121,19 @@
             </div>
         </div>
     </div>
-</div>
-
-<?php
-if (!isset($categoriesWithSubs) || !is_array($categoriesWithSubs)) {
-    $categoriesWithSubs = \App\Helpers\NavbarHelper::getCategoriesWithSubcategories();
-    $categoriesWithSubs = array_filter($categoriesWithSubs, function ($category) {
-        $excluded = ['Test', 'test'];
-        return !in_array($category['name'], $excluded, true);
-    });
-}
-?>
-
-<!-- Desktop Mega Menu -->
-<div id="categoryMegaMenu" class="hidden absolute top-full left-0 right-0 bg-primary text-white shadow-2xl border-t border-white/15 rounded-b-3xl mx-4">
+    
+    <?php
+    if (!isset($categoriesWithSubs) || !is_array($categoriesWithSubs)) {
+        $categoriesWithSubs = \App\Helpers\NavbarHelper::getCategoriesWithSubcategories();
+        $categoriesWithSubs = array_filter($categoriesWithSubs, function ($category) {
+            $excluded = ['Test', 'test'];
+            return !in_array($category['name'], $excluded, true);
+        });
+    }
+    ?>
+    
+    <!-- Desktop Mega Menu -->
+    <div id="categoryMegaMenu" class="hidden absolute top-full left-0 right-0 bg-primary text-white shadow-2xl border-t border-white/15 rounded-b-3xl mx-4">
     <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <?php foreach ($categoriesWithSubs as $category): ?>
