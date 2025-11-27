@@ -16,7 +16,7 @@
 
         <!-- Flash Messages -->
         <?php if (isset($errors) && !empty($errors)): ?>
-            <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="mb-6 bg-red-50 border border-red-200 rounded-2xl p-4">
                 <div class="flex">
                     <div class="ml-3">
                         <p class="text-sm text-red-700">
@@ -31,7 +31,7 @@
 
         <?php if (\App\Core\Session::hasFlash()): ?>
             <?php $flash = \App\Core\Session::getFlash(); ?>
-            <div class="mb-6 <?= $flash['type'] === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' ?> border border-green-200 rounded-lg p-4">
+            <div class="mb-6 <?= $flash['type'] === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' ?> border border-green-200 rounded-2xl p-4">
                 <p class="text-sm"><?= htmlspecialchars($flash['message']) ?></p>
             </div>
         <?php endif; ?>
@@ -116,7 +116,7 @@
                                     </div>
                                 </div>
                             <?php else: ?>
-                                <div class="mt-2 p-3 bg-white/60 rounded-lg border border-primary/20">
+                                <div class="mt-2 p-3 bg-white/60 rounded-2xl border border-primary/20">
                                     <p class="text-xs text-gray-700 font-medium">
                                         <i class="fas fa-gift text-primary mr-1"></i>
                                         Join through this referral and start earning rewards!
@@ -155,7 +155,7 @@
                            id="full_name" 
                            name="full_name" 
                            required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your full name"
                            value="<?= htmlspecialchars($_POST['full_name'] ?? '') ?>">
                 </div>
@@ -169,7 +169,7 @@
                            id="phone" 
                            name="phone" 
                            required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your phone number"
                            value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
                 </div>
@@ -184,7 +184,7 @@
                            name="password" 
                            required
                            minlength="6"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your password (min 6 characters)">
                 </div>
 

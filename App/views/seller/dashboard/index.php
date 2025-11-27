@@ -215,7 +215,7 @@
                 <?php else: ?>
                     <div class="space-y-4">
                         <?php foreach ($topProducts as $product): ?>
-                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-2xl border border-gray-100">
                                 <div class="flex-1 min-w-0">
                                     <p class="text-sm font-medium text-gray-900 truncate">
                                         <?= htmlspecialchars($product['product_name'] ?? 'N/A') ?>

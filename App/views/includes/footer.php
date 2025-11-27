@@ -71,8 +71,8 @@
 
                 <form class="mt-6" action="<?= URLROOT ?>/newsletter/subscribe" method="post">
                     <div class="relative max-w-xs">
-                        <input type="email" name="email" placeholder="Enter your email" class="w-full px-4 py-2 text-gray-700 bg-white border rounded-none focus:border-accent" required />
-                        <button type="submit" class="absolute inset-y-0 right-0 px-3 text-sm font-medium text-white bg-accent rounded-r-md hover:bg-accent-dark">
+                        <input type="email" name="email" placeholder="Enter your email" class="w-full px-4 py-2 text-gray-700 bg-white border rounded-2xl focus:border-accent" required />
+                        <button type="submit" class="absolute inset-y-0 right-0 px-3 text-sm font-medium text-white bg-accent rounded-r-2xl hover:bg-accent-dark">
                             Subscribe
                         </button>
                     </div>

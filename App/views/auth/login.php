@@ -16,7 +16,7 @@
 
         <!-- Flash Messages -->
         <?php if (isset($errors) && !empty($errors)): ?>
-            <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4">
+            <div class="mb-6 bg-red-50 border border-red-200 rounded-2xl p-4">
                 <div class="flex">
                     <div class="ml-3">
                         <p class="text-sm text-red-700">
@@ -31,7 +31,7 @@
 
         <?php if (\App\Core\Session::hasFlash()): ?>
             <?php $flash = \App\Core\Session::getFlash(); ?>
-            <div class="mb-6 <?= $flash['type'] === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' ?> border border-green-200 rounded-lg p-4">
+            <div class="mb-6 <?= $flash['type'] === 'success' ? 'bg-green-50 text-green-700' : 'bg-red-50 text-red-700' ?> border border-green-200 rounded-2xl p-4">
                 <p class="text-sm"><?= htmlspecialchars($flash['message']) ?></p>
             </div>
         <?php endif; ?>
@@ -50,7 +50,7 @@
                            id="phone" 
                            name="phone" 
                            required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-2xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your phone number"
                            value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
                 </div>
