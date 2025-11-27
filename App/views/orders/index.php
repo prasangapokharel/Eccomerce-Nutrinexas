@@ -1,7 +1,7 @@
 <?php ob_start(); ?>
 
-<div class="bg-gray-50 min-h-screen">
-    <div class="bg-gray-50 px-4 py-8">
+<div class="bg-neutral-50 min-h-screen">
+    <div class="bg-neutral-50 px-4 py-8">
         <div class="max-w-screen-xl mx-auto">
             <?php if (isset($_SESSION['flash_message'])): ?>
                 <div class="mb-6 rounded-xl border border-success bg-success/10 px-4 py-3 text-sm text-success flex items-center gap-2">
@@ -14,15 +14,15 @@
             <?php endif; ?>
 
             <?php if (empty($orders)): ?>
-                <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-10 text-center max-w-lg mx-auto mt-8">
-                    <div class="w-20 h-20 mx-auto rounded-full bg-gray-100 flex items-center justify-center text-gray-400 mb-4">
+                <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 p-10 text-center max-w-lg mx-auto mt-8">
+                    <div class="w-20 h-20 mx-auto rounded-full bg-neutral-100 flex items-center justify-center text-neutral-400 mb-4">
                         <svg class="w-10 h-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-2.293 2.293A1 1 0 005.4 17H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
                         </svg>
                     </div>
                     <h2 class="text-xl font-semibold text-slate-900 mb-2">No orders yet</h2>
                     <p class="text-sm text-slate-600 mb-6">You haven't placed any orders yet. Start shopping to see your history here.</p>
-                    <a href="<?= \App\Core\View::url('products') ?>" class="inline-flex items-center gap-2 px-5 py-3 bg-primary text-white rounded-xl text-sm font-semibold hover:bg-primary-dark transition-colors">
+                    <a href="<?= \App\Core\View::url('products') ?>" class="btn inline-flex items-center gap-2">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
                         </svg>
@@ -39,7 +39,7 @@
                         <input
                             type="text"
                             id="order-search"
-                            class="px-4 py-2.5 bg-white border border-gray-300 text-slate-900 w-full text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40"
+                            class="input w-full text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40"
                             placeholder="Search orders..."
                         />
                     </div>
@@ -54,7 +54,7 @@
                         <button class="filter-btn btn btn-outline" data-filter="cancelled">Cancelled</button>
                     </div>
                     <div class="ml-auto w-full sm:w-auto">
-                        <select id="order-sort" class="appearance-none px-4 py-2.5 bg-white border border-gray-300 text-slate-900 w-full text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer">
+                        <select id="order-sort" class="input w-full text-sm rounded-md focus:outline-none focus:ring-2 focus:ring-primary/40 cursor-pointer">
                             <option value="newest">Sort by: Newest</option>
                             <option value="oldest">Sort by: Oldest</option>
                         </select>
@@ -73,11 +73,11 @@
                     ?>
                     <?php foreach ($orders as $order): 
                         $statusKey = strtolower($order['status']);
-                        $statusColor = $statusColors[$statusKey] ?? 'bg-gray-100 text-gray-800';
+                        $statusColor = $statusColors[$statusKey] ?? 'bg-neutral-100 text-neutral-800';
                         $invoice = $order['invoice'] ?? ('NTX' . str_pad($order['id'], 6, '0', STR_PAD_LEFT));
                         $itemsCount = $order['items_count'] ?? 0;
                     ?>
-                        <div class="bg-white rounded-xl border border-gray-300 overflow-hidden p-6 order-card"
+                        <div class="bg-white rounded-xl border border-neutral-300 overflow-hidden p-6 order-card"
                              data-status="<?= $statusKey ?>"
                              data-invoice="<?= strtolower($invoice) ?>"
                              data-total="<?= strtolower(number_format($order['total_amount'], 2)) ?>"
@@ -97,7 +97,7 @@
                             </div>
 
                             <?php if (!empty($order['items_preview'])): ?>
-                                <hr class="border-gray-300 my-6" />
+                                <hr class="border-neutral-300 my-6" />
                                 <div class="flex flex-wrap items-center gap-8">
                                     <?php foreach ($order['items_preview'] as $item): 
                                         $image = $item['image_url'] ?? \App\Core\View::asset('images/products/default.jpg');
@@ -166,8 +166,8 @@
     <div class="absolute bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl transform transition-transform duration-300 ease-out translate-y-full" id="cancelDrawerContent">
         <div class="p-6">
             <div class="flex items-center justify-between mb-4">
-                <h3 class="text-lg font-semibold text-gray-900">Cancel Order</h3>
-                <button onclick="closeCancelDrawer()" class="text-gray-400 hover:text-gray-600">
+                <h3 class="text-lg font-semibold text-foreground">Cancel Order</h3>
+                <button onclick="closeCancelDrawer()" class="text-neutral-400 hover:text-neutral-600">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -176,14 +176,14 @@
             <form id="cancelOrderForm" onsubmit="submitCancelOrder(event)">
                 <input type="hidden" id="cancelOrderId" name="order_id">
                 <div class="mb-4">
-                    <label for="cancelReason" class="block text-sm font-medium text-gray-700 mb-2">
+                    <label for="cancelReason" class="block text-sm font-medium text-foreground mb-2">
                         Reason for Cancellation <span class="text-error">*</span>
                     </label>
                     <textarea id="cancelReason" 
                               name="reason" 
                               rows="4" 
                               required
-                              class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-primary resize-none"
+                              class="input w-full rounded-xl resize-none"
                               placeholder="Please provide a reason for cancelling this order..."></textarea>
                 </div>
                 <div class="flex gap-3">
