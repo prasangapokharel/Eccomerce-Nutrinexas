@@ -90,7 +90,7 @@ function formatProductName($name) {
         <!-- Products Layout with Sidebar -->
         <div class="flex gap-6">
             <!-- Filter Sidebar (Desktop) -->
-            <aside class="hidden lg:block">
+            <aside>
                 <?php include __DIR__ . '/../components/productfilter.php'; ?>
             </aside>
 
