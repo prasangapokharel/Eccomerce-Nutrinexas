@@ -14,7 +14,7 @@ use App\Helpers\CurrencyHelper;
                     </svg>
                     <h2 class="h4-semibold text-primary mb-2">Your cart is empty</h2>
                     <p class="body1-regular text-gray-600 mb-6">Explore our products and start shopping today.</p>
-                    <a href="<?= \App\Core\View::url('products') ?>" class="btn">
+                    <a href="<?= \App\Core\View::url('products') ?>" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark inline-block text-center">
                         Start Shopping
                     </a>
                 </div>
@@ -147,7 +147,7 @@ use App\Helpers\CurrencyHelper;
                                                 <input type="text" id="cart-coupon-code" placeholder="Promo code"
                                                        class="flex-1 outline-0 bg-white text-slate-600 text-sm px-4 py-2.5 uppercase" autocomplete="off">
                                                 <button type="button" id="cart-apply-coupon-btn"
-                                                        class="btn btn-outline rounded-none rounded-r-full">
+                                                        class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-none rounded-r-full font-medium hover:bg-primary/10">
                                                     Apply
                                                 </button>
                                             </div>
@@ -155,10 +155,10 @@ use App\Helpers\CurrencyHelper;
                                         </div>
 
                                         <div class="space-y-3 hidden lg:block">
-                                            <a href="<?= \App\Core\View::url('checkout') ?>" class="btn w-full justify-center">
+                                            <a href="<?= \App\Core\View::url('checkout') ?>" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark w-full flex justify-center">
                                                 Proceed to Checkout
                                             </a>
-                                            <a href="<?= \App\Core\View::url('products') ?>" class="btn btn-outline w-full justify-center">
+                                            <a href="<?= \App\Core\View::url('products') ?>" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 w-full flex justify-center">
                                                 Continue Shopping
                                             </a>
                                         </div>
@@ -172,13 +172,13 @@ use App\Helpers\CurrencyHelper;
                 <!-- Sticky Checkout + Info -->
                 <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50 lg:hidden">
                     <div class="flex items-center gap-3">
-                        <button type="button" id="orderStepsBtn" class="btn btn-outline !px-4">
+                        <button type="button" id="orderStepsBtn" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 flex items-center gap-2">
                             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="m11.25 11.25.041-.02a.75.75 0 0 1 1.063.852l-.708 2.836a.75.75 0 0 0 1.063.853l.041-.021M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9-3.75h.008v.008H12V8.25Z" />
                             </svg>
                             <span class="text-sm font-medium">Tutorial</span>
                         </button>
-                        <a href="<?= \App\Core\View::url('checkout') ?>" class="btn flex-1 justify-center">
+                        <a href="<?= \App\Core\View::url('checkout') ?>" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark flex-1 flex justify-center">
                             Proceed To Checkout
                         </a>
                     </div>
@@ -261,10 +261,10 @@ use App\Helpers\CurrencyHelper;
                 
                 <!-- Modal Footer -->
                 <div class="bg-gray-50 px-6 py-4 flex space-x-3">
-                    <button onclick="closeCartModal()" class="btn btn-outline flex-1 justify-center">
+                    <button onclick="closeCartModal()" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 flex-1 flex justify-center">
                         Close
                     </button>
-                    <a href="<?= \App\Core\View::url('cart') ?>" class="btn flex-1 justify-center">
+                    <a href="<?= \App\Core\View::url('cart') ?>" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark flex-1 flex justify-center">
                         View Full Cart
                     </a>
                 </div>
@@ -293,8 +293,8 @@ use App\Helpers\CurrencyHelper;
     </ol>
   </div>
   <div class="bg-gray-50 px-6 py-4 flex space-x-3">
-    <button id="closeStepsDrawerFooter" class="btn btn-outline flex-1 justify-center">Close</button>
-    <a href="<?= \App\Core\View::url('checkout') ?>" class="btn flex-1 justify-center">Go to Checkout</a>
+    <button id="closeStepsDrawerFooter" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 flex-1 flex justify-center">Close</button>
+    <a href="<?= \App\Core\View::url('checkout') ?>" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark flex-1 flex justify-center">Go to Checkout</a>
   </div>
 </div>
 

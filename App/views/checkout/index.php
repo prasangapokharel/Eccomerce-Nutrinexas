@@ -432,7 +432,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                                    class="flex-1 px-3 py-2 border border-primary/30 rounded text-sm focus:ring-2 focus:ring-primary focus:border-primary uppercase"
                                    style="text-transform: uppercase;">
                             <button type="button" id="apply-coupon-btn"
-                                    class="btn btn-outline">
+                                    class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10">
                                 Apply
                             </button>
                         </div>
@@ -467,7 +467,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
             </div>
 
             <button type="button"
-                    class="hidden md:flex btn w-full justify-center mt-4"
+                    class="hidden md:flex bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark w-full justify-center mt-4"
                     onclick="document.getElementById('place-order-btn').click();">
                 Complete Purchase
             </button>
@@ -505,13 +505,13 @@ if (isset($_COOKIE['guest_postal_code'])) {
     <!-- Sticky Place Order Button -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50 lg:hidden">
         <div class="grid grid-cols-2 gap-3">
-            <button type="button" id="cod-quick-btn" class="btn btn-outline w-full justify-center">
+            <button type="button" id="cod-quick-btn" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 w-full flex justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                 </svg>
                 COD
             </button>
-            <button type="submit" form="checkout-form" id="place-order-btn" class="btn w-full justify-center">
+            <button type="submit" form="checkout-form" id="place-order-btn" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark w-full flex justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z" />
                 </svg>
@@ -1133,8 +1133,8 @@ function showLocationAlert(type, message) {
                         </div>
                     </div>
                     <div class="p-4 grid grid-cols-2 gap-3">
-                        <button type="button" class="btn btn-outline" id="rv-edit">Edit</button>
-                        <button type="button" class="btn" id="rv-confirm">Confirm</button>
+                        <button type="button" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10" id="rv-edit">Edit</button>
+                        <button type="button" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark" id="rv-confirm">Confirm</button>
                     </div>
                 </div>`;
             document.body.appendChild(modal);
