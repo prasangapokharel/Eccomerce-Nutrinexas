@@ -596,7 +596,14 @@ ob_start();
                             <label class="text-sm font-medium text-gray-700">Quantity:</label>
                                 <div class="flex items-center border border-gray-300 rounded-2xl bg-white shadow-sm">
                                     <button type="button" id="decrease-qty" class="px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors duration-200 rounded-l-lg">−</button>
-                                <input type="number" id="quantity" value="1" min="1" max="<?= min(3, $product['stock_quantity'] ?? 1) ?>" class="w-16 px-2 py-2 text-center border-0 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
+                                <input type="number" id="quantity" value="1" min="1" max="<?= min(3, $product['stock_quantity'] ?? 1) ?>" class="w-16 px-2 py-2 text-center border-0 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20" style="-moz-appearance: textfield;">
+                                <style>
+                                    #quantity::-webkit-outer-spin-button,
+                                    #quantity::-webkit-inner-spin-button {
+                                        -webkit-appearance: none;
+                                        margin: 0;
+                                    }
+                                </style>
                                     <button type="button" id="increase-qty" class="px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors duration-200 rounded-r-lg">+</button>
                                 </div>
                                 <span class="text-xs text-gray-500">Max: <?= min(3, $product['stock_quantity'] ?? 1) ?> per order</span>
@@ -778,6 +785,47 @@ ob_start();
             </div>
         </div>
 
+        <!-- Suggested Products Section -->
+        <?php if (!empty($lowPriceProducts) && count($lowPriceProducts) > 0): ?>
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
+            <div class="p-4">
+                <h3 class="text-sm font-semibold text-gray-900 mb-3">You May Also Like</h3>
+                <div class="grid grid-cols-2 gap-3">
+                    <?php foreach (array_slice($lowPriceProducts, 0, 2) as $suggested): ?>
+                        <?php
+                        $suggestedPrice = isset($suggested['sale_price']) && $suggested['sale_price'] > 0 ? $suggested['sale_price'] : $suggested['price'] ?? 0;
+                        $suggestedImageUrl = $suggested['image_url'] ?? ASSETS_URL . '/images/products/default.jpg';
+                        $suggestedName = htmlspecialchars($suggested['product_name'] ?? 'Product');
+                        $suggestedSlug = $suggested['slug'] ?? $suggested['id'] ?? '';
+                        ?>
+                        <div class="bg-white rounded-2xl border border-gray-200 p-3 hover:shadow-md transition-shadow relative group">
+                            <div class="flex items-start gap-2">
+                                <div class="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                                    <img src="<?= htmlspecialchars($suggestedImageUrl) ?>" 
+                                         alt="<?= $suggestedName ?>" 
+                                         class="w-full h-full object-cover"
+                                         onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'; this.onerror=null;">
+                                </div>
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-xs font-medium text-gray-900 truncate mb-1"><?= $suggestedName ?></h4>
+                                    <p class="text-sm font-semibold text-primary">रु<?= number_format($suggestedPrice, 2) ?></p>
+                                </div>
+                                <button type="button" 
+                                        onclick="addSuggestedToCart(<?= $suggested['id'] ?>)"
+                                        class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-dark transition-colors"
+                                        title="Add to cart">
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+
         <!-- Reviews -->
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
             <div class="p-4">
@@ -891,6 +939,46 @@ ob_start();
         </div>
     </div>
 
+<!-- Mobile Suggested Products Section -->
+<?php if (!empty($lowPriceProducts) && count($lowPriceProducts) > 0): ?>
+<div class="lg:hidden mt-4 mb-24 px-4">
+    <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-4">
+        <h3 class="text-sm font-semibold text-gray-900 mb-3">You May Also Like</h3>
+        <div class="grid grid-cols-2 gap-3">
+            <?php foreach (array_slice($lowPriceProducts, 0, 2) as $suggested): ?>
+                <?php
+                $suggestedPrice = isset($suggested['sale_price']) && $suggested['sale_price'] > 0 ? $suggested['sale_price'] : $suggested['price'] ?? 0;
+                $suggestedImageUrl = $suggested['image_url'] ?? ASSETS_URL . '/images/products/default.jpg';
+                $suggestedName = htmlspecialchars($suggested['product_name'] ?? 'Product');
+                $suggestedSlug = $suggested['slug'] ?? $suggested['id'] ?? '';
+                ?>
+                <div class="bg-white rounded-2xl border border-gray-200 p-3 hover:shadow-md transition-shadow relative group">
+                    <div class="flex items-start gap-2">
+                        <div class="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                            <img src="<?= htmlspecialchars($suggestedImageUrl) ?>" 
+                                 alt="<?= $suggestedName ?>" 
+                                 class="w-full h-full object-cover"
+                                 onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'; this.onerror=null;">
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-xs font-medium text-gray-900 truncate mb-1"><?= $suggestedName ?></h4>
+                            <p class="text-sm font-semibold text-primary">रु<?= number_format($suggestedPrice, 2) ?></p>
+                        </div>
+                        <button type="button" 
+                                onclick="addSuggestedToCart(<?= $suggested['id'] ?>)"
+                                class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-dark transition-colors"
+                                title="Add to cart">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+</div>
+<?php endif; ?>
 
 <!-- Review Drawer Form -->
 <?php if ($isLoggedIn && !$userReview && $productId): ?>
@@ -1494,14 +1582,30 @@ document.addEventListener('DOMContentLoaded', function() {
                         notyf.success(data.message || 'Product added to cart!');
                     }
                     
-                    // Redirect to cart after 1.5 seconds
+                    // Update cart count
+                    const cartCountElements = document.querySelectorAll('.cart-count');
+                    cartCountElements.forEach(element => {
+                        element.textContent = data.cart_count || 0;
+                    });
+                    
+                    // Show green tick icon instead of redirecting
                     setTimeout(() => {
-                        if (data.redirect_url) {
-                            window.location.href = data.redirect_url;
-                        } else {
-                            window.location.href = '<?= \App\Core\View::url('cart') ?>';
+                        if (btnText) {
+                            btnText.innerHTML = '<svg class="w-5 h-5 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>Added!';
                         }
-                    }, 1500);
+                        this.classList.remove('bg-success');
+                        this.classList.add('bg-success');
+                        
+                        // Reset after 3 seconds
+                        setTimeout(() => {
+                            this.disabled = false;
+                            if (btnText) {
+                                btnText.textContent = 'Add to Cart';
+                            }
+                            this.classList.remove('bg-success');
+                            this.classList.add('bg-primary');
+                        }, 3000);
+                    }, 500);
                 } else {
                     // Show error state
                     if (btnText) {
@@ -1749,15 +1853,17 @@ document.addEventListener('DOMContentLoaded', function() {
                     alert('Product added to cart!');
                 }
                 
-                // Update button to show checkmark
+                // Update button to show green checkmark icon
                 if (button) {
                     button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                    button.classList.remove('bg-primary', 'bg-primary-dark');
                     button.classList.add('bg-success');
                     setTimeout(() => {
                         button.innerHTML = originalHTML;
                         button.classList.remove('bg-success');
+                        button.classList.add('bg-primary');
                         button.disabled = false;
-                    }, 2000);
+                    }, 3000);
                 }
             } else {
                 if (button) {
