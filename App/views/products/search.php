@@ -307,6 +307,104 @@ if (sortDropdown) {
         sortDropdown.value = sortParam;
     }
 }
+
+// Wishlist functions
+if (typeof addToWishlist === 'undefined') {
+    function addToWishlist(productId) {
+        const button = document.querySelector('[data-product-id="' + productId + '"]');
+        if (button) {
+            button.classList.add('wishlist-active');
+            const icon = button.querySelector('i');
+            if (icon) {
+                icon.classList.remove('far', 'text-gray-600');
+                icon.classList.add('fas', 'text-red-500');
+            }
+            button.setAttribute('onclick', 'event.stopPropagation(); removeFromWishlist(' + productId + ')');
+        }
+
+        fetch('<?= ASSETS_URL ?>/wishlist/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'product_id=' + encodeURIComponent(productId)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                if (button) {
+                    button.classList.remove('wishlist-active');
+                    const icon = button.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('fas', 'text-red-500');
+                        icon.classList.add('far', 'text-gray-600');
+                    }
+                    button.setAttribute('onclick', 'event.stopPropagation(); addToWishlist(' + productId + ')');
+                }
+                if (data.error === 'Please login to add items to your wishlist') {
+                    window.location.href = '<?= \App\Core\View::url('auth/login') ?>';
+                }
+            }
+        })
+        .catch(() => {
+            if (button) {
+                button.classList.remove('wishlist-active');
+                const icon = button.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('fas', 'text-red-500');
+                    icon.classList.add('far', 'text-gray-600');
+                }
+                button.setAttribute('onclick', 'event.stopPropagation(); addToWishlist(' + productId + ')');
+            }
+        });
+    }
+}
+
+if (typeof removeFromWishlist === 'undefined') {
+    function removeFromWishlist(productId) {
+        const button = document.querySelector('[data-product-id="' + productId + '"]');
+        if (button) {
+            button.classList.remove('wishlist-active');
+            const icon = button.querySelector('i');
+            if (icon) {
+                icon.classList.remove('fas', 'text-red-500');
+                icon.classList.add('far', 'text-gray-600');
+            }
+            button.setAttribute('onclick', 'event.stopPropagation(); addToWishlist(' + productId + ')');
+        }
+
+        fetch('<?= ASSETS_URL ?>/wishlist/remove/' + productId, {
+            method: 'GET',
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (!data.success) {
+                if (button) {
+                    button.classList.add('wishlist-active');
+                    const icon = button.querySelector('i');
+                    if (icon) {
+                        icon.classList.remove('far', 'text-gray-600');
+                        icon.classList.add('fas', 'text-red-500');
+                    }
+                    button.setAttribute('onclick', 'event.stopPropagation(); removeFromWishlist(' + productId + ')');
+                }
+            }
+        })
+        .catch(() => {
+            if (button) {
+                button.classList.add('wishlist-active');
+                const icon = button.querySelector('i');
+                if (icon) {
+                    icon.classList.remove('far', 'text-gray-600');
+                    icon.classList.add('fas', 'text-red-500');
+                }
+                button.setAttribute('onclick', 'event.stopPropagation(); removeFromWishlist(' + productId + ')');
+            }
+        });
+    }
+}
 </script>
 <style>
 /* Improve rendering performance on large lists */

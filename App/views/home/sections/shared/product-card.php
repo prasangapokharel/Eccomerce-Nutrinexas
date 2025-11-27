@@ -121,8 +121,19 @@ $adId = $isSponsored || $hasAdId ? ($product['ad_id'] ?? null) : null;
             </div>
         <?php endif; ?>
 
+        <?php 
+        // Wishlist heart icon - always show in top-right (same as More Products section)
+        $productId = $product['id'] ?? 0;
+        $wishlistActive = !empty($product['in_wishlist']);
+        ?>
+        <button onclick="event.stopPropagation(); <?= $wishlistActive ? "removeFromWishlist({$productId})" : "addToWishlist({$productId})" ?>" 
+                class="absolute top-2 right-2 btn-wishlist <?= $wishlistActive ? 'wishlist-active' : '' ?> z-10 bg-white/80 hover:bg-white rounded-full p-1.5 transition-colors"
+                data-product-id="<?= $productId ?>">
+            <i class="<?= $wishlistActive ? 'fas' : 'far' ?> fa-heart text-sm <?= $wishlistActive ? 'text-red-500' : 'text-gray-600' ?>"></i>
+        </button>
+
         <?php if (!empty($topRightBadge['label'])): ?>
-            <div class="absolute top-2 right-2 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow inline-flex items-center gap-1">
+            <div class="absolute top-2 right-12 bg-primary text-white px-2 py-1 rounded-full text-xs font-bold shadow inline-flex items-center gap-1 z-10">
                 <?php if (!empty($topRightBadge['icon'])): ?>
                     <?= $topRightBadge['icon'] ?>
                 <?php endif; ?>
