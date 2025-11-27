@@ -23,7 +23,7 @@
             </form>
             
             <!-- Search Suggestions Dropdown -->
-            <div id="mobileSearchSuggestions" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-lg shadow-xl border border-gray-200 z-50 hidden max-h-[60vh] overflow-hidden">
+            <div id="mobileSearchSuggestions" class="absolute top-full left-0 right-0 mt-1 bg-white rounded-2xl shadow-xl border border-gray-200 z-50 hidden max-h-[60vh] overflow-hidden">
                 <div id="mobileSuggestionsList" class="max-h-[60vh] overflow-y-auto">
                     <!-- Suggestions will be populated here -->
                 </div>

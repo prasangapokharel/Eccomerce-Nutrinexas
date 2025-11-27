@@ -257,7 +257,7 @@ ob_start();
 
     <!-- Product Container -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 
                 <!-- Product Image -->
@@ -284,7 +284,7 @@ ob_start();
                     <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
                         <?php foreach (array_slice($additionalImages, 0, 4) as $index => $image): ?>
                             <?php $thumbnailUrl = filter_var($image['image_url'], FILTER_VALIDATE_URL) ? $image['image_url'] : ASSETS_URL . '/uploads/images/' . $image['image_url']; ?>
-                            <div class="aspect-square rounded-xl overflow-hidden border-2 transition-all duration-200 <?= $image['is_primary'] ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300' ?> cursor-pointer product-thumbnail" 
+                            <div class="aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-200 <?= $image['is_primary'] ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300' ?> cursor-pointer product-thumbnail" 
                                  data-image-url="<?= htmlspecialchars($thumbnailUrl) ?>">
                                 <img src="<?= htmlspecialchars($thumbnailUrl) ?>" 
                                      alt="<?= $productName ?> - Image <?= $index + 1 ?>" 
@@ -305,7 +305,7 @@ ob_start();
                     <?php if (!empty($seller)): ?>
                         <div class="mb-3">
                             <a href="<?= \App\Core\View::url('seller/' . urlencode($seller['company_name'] ?? $seller['name'])) ?>" 
-                               class="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-lg transition-colors group">
+                               class="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors group">
                                 <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-primary transition-colors flex-shrink-0">
                                     <?php if (!empty($seller['logo_url'])): ?>
                                         <img src="<?= htmlspecialchars($seller['logo_url']) ?>" 
@@ -469,7 +469,7 @@ ob_start();
                                     $colorId = 'color-' . $index;
                                     ?>
                                     <button type="button" 
-                                            class="color-option flex items-center gap-1 px-3 py-2 rounded-lg border-2 border-gray-300 bg-white hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer <?= $index === 0 ? 'border-primary bg-primary/10' : '' ?>"
+                                            class="color-option flex items-center gap-1 px-3 py-2 rounded-2xl border-2 border-gray-300 bg-white hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer <?= $index === 0 ? 'border-primary bg-primary/10' : '' ?>"
                                             data-color="<?= htmlspecialchars($colorName) ?>"
                                             data-color-id="<?= $colorId ?>"
                                             onclick="selectColor('<?= htmlspecialchars($colorName) ?>', '<?= $colorId ?>')">
@@ -510,7 +510,7 @@ ob_start();
                                     $sizeId = 'size-' . $index;
                                     ?>
                                     <button type="button" 
-                                            class="size-option px-4 py-2 rounded-lg border-2 border-gray-300 bg-white hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer font-medium text-sm <?= $index === 0 ? 'border-primary bg-primary/10 text-primary' : 'text-gray-700' ?>"
+                                            class="size-option px-4 py-2 rounded-2xl border-2 border-gray-300 bg-white hover:border-primary hover:bg-primary/5 transition-all duration-200 cursor-pointer font-medium text-sm <?= $index === 0 ? 'border-primary bg-primary/10 text-primary' : 'text-gray-700' ?>"
                                             data-size="<?= htmlspecialchars($sizeName) ?>"
                                             data-size-id="<?= $sizeId ?>"
                                             onclick="selectSize('<?= htmlspecialchars($sizeName) ?>', '<?= $sizeId ?>')">
@@ -594,7 +594,7 @@ ob_start();
                     <div class="mb-4">
                             <div class="flex items-center space-x-3">
                             <label class="text-sm font-medium text-gray-700">Quantity:</label>
-                                <div class="flex items-center border border-gray-300 rounded-lg bg-white shadow-sm">
+                                <div class="flex items-center border border-gray-300 rounded-2xl bg-white shadow-sm">
                                     <button type="button" id="decrease-qty" class="px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors duration-200 rounded-l-lg">−</button>
                                 <input type="number" id="quantity" value="1" min="1" max="<?= min(3, $product['stock_quantity'] ?? 1) ?>" class="w-16 px-2 py-2 text-center border-0 text-sm focus:outline-none focus:ring-2 focus:ring-primary/20">
                                     <button type="button" id="increase-qty" class="px-3 py-2 text-gray-600 hover:text-primary hover:bg-gray-50 transition-colors duration-200 rounded-r-lg">+</button>
@@ -664,7 +664,7 @@ ob_start();
                                             <!-- QR Code (Left) -->
                                             <div class="flex-shrink-0">
                                                 <div class="flex flex-col items-center">
-                                                    <div class="bg-white p-3 rounded-lg border-2 border-gray-200 shadow-sm mb-2">
+                                                    <div class="bg-white p-3 rounded-2xl border-2 border-gray-200 shadow-sm mb-2">
                                                         <img id="product-qr-code" 
                                                              src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=<?= urlencode($absoluteProductUrl) ?>&color=000000&bgcolor=ffffff&margin=1" 
                                                              alt="Product QR Code" 
@@ -682,7 +682,7 @@ ob_start();
                                             <!-- Trust Badges (Right) -->
                                             <div class="flex-1 space-y-2">
                                                 <!-- Cash on Delivery Badge -->
-                                                <div class="flex items-center gap-2 px-3 py-2 border border-green-200 rounded-lg">
+                                                <div class="flex items-center gap-2 px-3 py-2 border border-green-200 rounded-2xl">
                                                     <svg class="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                     </svg>
@@ -727,7 +727,7 @@ ob_start();
                                                     }
                                                 }
                                                 ?>
-                                                <div class="flex items-center gap-2 px-3 py-2 border border-blue-200 rounded-lg">
+                                                <div class="flex items-center gap-2 px-3 py-2 border border-blue-200 rounded-2xl">
                                                     <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                                                         <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                                     </svg>
@@ -744,7 +744,7 @@ ob_start();
                 
 
         <!-- Product Description -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-4">
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
             <div class="p-4">
                 <h2 class="text-base font-semibold text-gray-900 mb-3">Description</h2>
                 <div class="prose prose-sm max-w-none text-gray-700 markdown-content">
@@ -798,7 +798,7 @@ ob_start();
                                         $src = $matches[2];
                                         
                                         // Add responsive classes and loading attributes
-                                        $newAttributes = ' class="max-w-full h-auto rounded-lg shadow-sm" loading="lazy"';
+                                        $newAttributes = ' class="max-w-full h-auto rounded-2xl shadow-sm" loading="lazy"';
                                         
                                         // If it's a CDN URL, add additional styling
                                         if (preg_match('/^https?:\/\/(cdn\.|images\.|img\.)/i', $src)) {
@@ -834,12 +834,12 @@ ob_start();
         </div>
 
         <!-- Reviews -->
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-4">
+        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
             <div class="p-4">
                 <div class="flex items-center justify-between mb-4">
                     <h2 class="text-base font-semibold text-gray-900">Reviews</h2>
                     <?php if ($isLoggedIn && !$userReview): ?>
-                        <button id="open-add-review-drawer" class="inline-flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-accent-dark transition-colors shadow-md hover:shadow-lg">
+                        <button id="open-add-review-drawer" class="inline-flex items-center gap-2 bg-accent text-white px-4 py-2 rounded-2xl text-sm font-medium hover:bg-accent-dark transition-colors shadow-md hover:shadow-lg">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
                             </svg>
@@ -882,7 +882,7 @@ ob_start();
                                 $rUser = htmlspecialchars($rev['user_name'] ?? $rev['user'] ?? 'Anonymous');
                                 $rDate = !empty($rev['created_at']) ? date('M j, Y', strtotime($rev['created_at'])) : '';
                                 ?>
-                                <div class="bg-gray-50 rounded-lg p-4">
+                                <div class="bg-gray-50 rounded-2xl p-4">
                                     <div class="flex items-center justify-between">
                                         <div class="flex items-center gap-2 text-yellow-500">
                                             <?php for ($i = 1; $i <= 5; $i++): ?>
@@ -1070,13 +1070,13 @@ ob_start();
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-20 lg:mb-6">
   <?php if ($productId): ?>
     <?php if ($isLoggedIn && $userReview): ?>
-      <div class="bg-white rounded-lg shadow-sm p-5">
+      <div class="bg-white rounded-2xl shadow-sm p-5">
         <div class="flex items-center justify-between mb-3">
           <h3 class="text-lg font-semibold text-gray-900">My Review</h3>
           <div class="flex items-center gap-3">
             <span class="text-xs text-gray-500">Reviewed on <?= date('M j, Y', strtotime($userReview['created_at'] ?? 'now')) ?></span>
             <button type="button" 
-                    class="delete-review-btn text-red-500 hover:text-red-700 transition-colors p-2 hover:bg-red-50 rounded-lg" 
+                    class="delete-review-btn text-red-500 hover:text-red-700 transition-colors p-2 hover:bg-red-50 rounded-2xl" 
                     data-review-id="<?= $userReview['id'] ?? '' ?>"
                     title="Delete Review">
               <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

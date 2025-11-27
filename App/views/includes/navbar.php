@@ -44,7 +44,7 @@
                             Search
                         </button>
                     </form>
-                    <div id="desktopSearchSuggestions" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-xl border border-gray-200 z-[9999] hidden">
+                    <div id="desktopSearchSuggestions" class="absolute top-full left-0 right-0 mt-2 bg-white rounded-2xl shadow-xl border border-gray-200 z-[9999] hidden">
                         <div id="desktopSuggestionsList" class="max-h-60 overflow-y-auto"></div>
                     </div>
                 </div>
@@ -82,7 +82,7 @@
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
                             </svg>
                         </button>
-                        <div class="absolute top-full right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 hidden z-[9999]" data-profile-menu>
+                        <div class="absolute top-full right-0 mt-2 w-48 bg-white rounded-2xl shadow-xl border border-gray-200 hidden z-[9999]" data-profile-menu>
                             <ul class="py-2 text-sm">
                                 <li><a href="<?= URLROOT ?>/user/account" class="flex items-center gap-2 px-4 py-2 text-gray-800 hover:bg-gray-100">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -155,7 +155,7 @@ if (!isset($categoriesWithSubs) || !is_array($categoriesWithSubs)) {
                         <div class="flex-shrink-0 ml-3">
                             <img src="<?= htmlspecialchars($categoryImageUrl) ?>" 
                                  alt="<?= htmlspecialchars($category['name']) ?>" 
-                                 class="w-12 h-12 rounded-lg object-cover border-2 border-primary/20 shadow-sm"
+                                 class="w-12 h-12 rounded-2xl object-cover border-2 border-primary/20 shadow-sm"
                                  onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'">
                         </div>
                     </div>
@@ -163,7 +163,7 @@ if (!isset($categoriesWithSubs) || !is_array($categoriesWithSubs)) {
                         <div class="mt-3 space-y-2 text-sm text-gray-600">
                             <?php foreach (array_slice($category['subcategories'], 0, 4) as $subcategory): ?>
                                 <a href="<?= URLROOT ?>/products/category/<?= $category['slug'] ?>/<?= $subcategory['slug'] ?>"
-                                    class="flex items-center justify-between px-3 py-2 rounded-lg hover:bg-primary/5 transition-colors">
+                                    class="flex items-center justify-between px-3 py-2 rounded-2xl hover:bg-primary/5 transition-colors">
                                     <span class="text-gray-800 font-medium"><?= htmlspecialchars($subcategory['name']) ?></span>
                                     <?php if ($subcategory['product_count'] > 0): ?>
                                         <span class="text-xs text-gray-400 font-normal"><?= $subcategory['product_count'] ?></span>
