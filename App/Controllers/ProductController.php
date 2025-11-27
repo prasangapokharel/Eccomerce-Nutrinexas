@@ -225,27 +225,39 @@ class ProductController extends Controller
             
             // Render product grid HTML
             ob_start();
-            include __DIR__ . '/../components/pricing-helper.php';
-            foreach ($products as $product):
-                $badge = null;
-                if (!empty($product['is_new'])) {
-                    $badge = ['label' => 'New'];
-                } elseif (!empty($product['is_best_seller'])) {
-                    $badge = ['label' => 'Best'];
-                }
-                
-                $cardOptions = [
-                    'theme' => 'light',
-                    'showCta' => false,
-                    'cardClass' => 'w-full h-full',
-                ];
-                
-                if ($badge) {
-                    $cardOptions['topRightBadge'] = $badge;
-                }
-                
-                include dirname(__DIR__) . '/views/home/sections/shared/product-card.php';
-            endforeach;
+            if (empty($products)) {
+                echo '<div class="col-span-full bg-white rounded-lg shadow-sm border border-neutral-100 p-8 text-center">
+                    <div class="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <svg class="w-6 h-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4-8-4V7m16 0L12 3 4 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-semibold text-neutral-700 mb-1">No Products Found</h3>
+                    <p class="text-sm text-neutral-500">Try adjusting your filters</p>
+                </div>';
+            } else {
+                include __DIR__ . '/../components/pricing-helper.php';
+                foreach ($products as $product):
+                    $badge = null;
+                    if (!empty($product['is_new'])) {
+                        $badge = ['label' => 'New'];
+                    } elseif (!empty($product['is_best_seller'])) {
+                        $badge = ['label' => 'Best'];
+                    }
+                    
+                    $cardOptions = [
+                        'theme' => 'light',
+                        'showCta' => false,
+                        'cardClass' => 'w-full h-full',
+                    ];
+                    
+                    if ($badge) {
+                        $cardOptions['topRightBadge'] = $badge;
+                    }
+                    
+                    include dirname(__DIR__) . '/views/home/sections/shared/product-card.php';
+                endforeach;
+            }
             $html = ob_get_clean();
             
             $this->jsonResponse([
@@ -371,8 +383,10 @@ class ProductController extends Controller
             if (!empty($sizes)) {
                 $sizeConditions = [];
                 foreach ($sizes as $size) {
-                    $sizeConditions[] = "JSON_CONTAINS(p.size_available, ?)";
-                    $params[] = json_encode($size);
+                    $sizeConditions[] = "(p.size_available LIKE ? OR JSON_CONTAINS(p.size_available, ?))";
+                    $sizeJson = json_encode($size);
+                    $params[] = '%' . $size . '%';
+                    $params[] = $sizeJson;
                 }
                 if (!empty($sizeConditions)) {
                     $where[] = "(" . implode(' OR ', $sizeConditions) . ")";
@@ -383,8 +397,10 @@ class ProductController extends Controller
             if (!empty($colors)) {
                 $colorConditions = [];
                 foreach ($colors as $color) {
-                    $colorConditions[] = "JSON_CONTAINS(p.colors, ?)";
-                    $params[] = json_encode($color);
+                    $colorConditions[] = "(p.colors LIKE ? OR JSON_CONTAINS(p.colors, ?))";
+                    $colorJson = json_encode($color);
+                    $params[] = '%' . $color . '%';
+                    $params[] = $colorJson;
                 }
                 if (!empty($colorConditions)) {
                     $where[] = "(" . implode(' OR ', $colorConditions) . ")";

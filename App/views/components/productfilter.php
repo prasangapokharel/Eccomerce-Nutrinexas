@@ -98,10 +98,10 @@ $filterData = $filterData ?? [
       </div>
       <div class="collape-content overflow-hidden transition-all duration-300">
         <div class="mt-4">
-          <div class="flex items-center px-3 py-2 rounded-sm border border-neutral-300 bg-neutral-50 focus-within:bg-white overflow-hidden">
+          <div class="relative flex items-center">
             <input type="text" id="categorySearch" placeholder="Search category"
-              class="input w-full text-sm border-0 bg-transparent focus:ring-0" />
-            <svg class="w-4 h-4 text-neutral-600 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              class="input w-full text-sm pr-10" />
+            <svg class="absolute right-3 w-4 h-4 text-neutral-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -127,10 +127,10 @@ $filterData = $filterData ?? [
       </div>
       <div class="collape-content h-0 overflow-hidden transition-all duration-300">
         <div class="mt-4">
-          <div class="flex items-center px-3 py-2 rounded-sm border border-neutral-300 bg-neutral-50 focus-within:bg-white overflow-hidden">
+          <div class="relative flex items-center">
             <input type="text" id="brandSearch" placeholder="Search brand"
-              class="input w-full text-sm border-0 bg-transparent focus:ring-0" />
-            <svg class="w-4 h-4 text-neutral-600 flex-shrink-0 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              class="input w-full text-sm pr-10" />
+            <svg class="absolute right-3 w-4 h-4 text-neutral-600 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </div>
@@ -177,15 +177,31 @@ $filterData = $filterData ?? [
 
       <div class="collape-content h-0 overflow-hidden transition-all duration-300">
         <div class="mt-4">
-          <div class="flex flex-wrap gap-3" id="colorButtons">
+            <div class="flex flex-wrap gap-3" id="colorButtons">
             <?php foreach ($filterData['colors'] as $color): ?>
               <?php
+              $color = trim($color);
               $isHex = preg_match('/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $color);
-              $colorClass = $isHex ? '' : 'bg-' . strtolower($color) . '-500';
+              // Map common color names to Tailwind classes
+              $colorMap = [
+                'blue' => 'bg-info',
+                'red' => 'bg-error',
+                'green' => 'bg-success',
+                'yellow' => 'bg-warning',
+                'purple' => 'bg-primary',
+                'orange' => 'bg-warning',
+                'pink' => 'bg-accent',
+                'black' => 'bg-neutral-900',
+                'white' => 'bg-white border border-neutral-300',
+                'gray' => 'bg-neutral-700',
+                'grey' => 'bg-neutral-700'
+              ];
+              $colorClass = $isHex ? '' : ($colorMap[strtolower($color)] ?? 'bg-neutral-500');
               ?>
             <button type="button" data-color="<?= htmlspecialchars($color) ?>"
-              class="color-btn cursor-pointer rounded-full w-8 h-8 hover:scale-[1.05] transition-all <?= $isHex ? '' : $colorClass ?>"
-              <?= $isHex ? 'style="background-color: ' . htmlspecialchars($color) . '"' : '' ?>>
+              class="color-btn cursor-pointer rounded-full w-8 h-8 hover:scale-[1.05] transition-all border-2 border-transparent hover:border-primary <?= $isHex ? '' : $colorClass ?>"
+              <?= $isHex ? 'style="background-color: ' . htmlspecialchars($color) . '"' : '' ?>
+              title="<?= htmlspecialchars($color) ?>">
             </button>
             <?php endforeach; ?>
           </div>
@@ -226,7 +242,8 @@ $filterData = $filterData ?? [
   const filterVisible = getCookie('filterVisible') !== 'false';
   if (!filterVisible) {
     filterContent.style.display = 'none';
-    toggleFilterBtn.querySelector('svg path').setAttribute('d', 'M4 6h16M4 12h16M4 18h16');
+    const icon = toggleFilterBtn.querySelector('svg');
+    icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
   }
   
   toggleFilterBtn.addEventListener('click', function() {
@@ -235,11 +252,11 @@ $filterData = $filterData ?? [
     setCookie('filterVisible', !isVisible);
     
     // Update icon
-    const icon = toggleFilterBtn.querySelector('svg path');
+    const icon = toggleFilterBtn.querySelector('svg');
     if (isVisible) {
-      icon.setAttribute('d', 'M4 6h16M4 12h16M4 18h16'); // Hamburger
+      icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />';
     } else {
-      icon.setAttribute('d', 'M6 18L18 6M6 6l12 12'); // X
+      icon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />';
     }
   });
   
@@ -311,24 +328,39 @@ $filterData = $filterData ?? [
     });
   });
   
-  // Filter checkboxes and buttons
+    // Filter checkboxes and buttons
   let filterTimeout;
-  document.querySelectorAll('.filter-checkbox, .size-btn, .color-btn').forEach(element => {
+  document.querySelectorAll('.filter-checkbox').forEach(element => {
     element.addEventListener('change', applyFilters);
+  });
+  
+  document.querySelectorAll('.size-btn').forEach(element => {
     element.addEventListener('click', function(e) {
-      if (e.target.classList.contains('size-btn') || e.target.classList.contains('color-btn')) {
-        e.target.classList.toggle('border-primary');
-        e.target.classList.toggle('bg-primary/10');
-        applyFilters();
-      }
+      e.preventDefault();
+      this.classList.toggle('border-primary');
+      this.classList.toggle('bg-primary/10');
+      applyFilters();
+    });
+  });
+  
+  document.querySelectorAll('.color-btn').forEach(element => {
+    element.addEventListener('click', function(e) {
+      e.preventDefault();
+      this.classList.toggle('border-primary');
+      this.classList.toggle('ring-2');
+      this.classList.toggle('ring-primary');
+      applyFilters();
     });
   });
   
   // Clear all filters
   document.getElementById('clearAllFilters')?.addEventListener('click', function() {
     document.querySelectorAll('.filter-checkbox').forEach(cb => cb.checked = false);
-    document.querySelectorAll('.size-btn, .color-btn').forEach(btn => {
+    document.querySelectorAll('.size-btn').forEach(btn => {
       btn.classList.remove('border-primary', 'bg-primary/10');
+    });
+    document.querySelectorAll('.color-btn').forEach(btn => {
+      btn.classList.remove('border-primary', 'ring-2', 'ring-primary');
     });
     minRange.value = minRange.min;
     maxRange.value = maxRange.max;
