@@ -27,7 +27,7 @@
             </div>
 
             <div class="max-lg:min-w-[140px]">
-                <h4 class="text-accent font-semibold text-base relative max-sm:cursor-pointer">Products</h4>
+                <h4 class="text-white font-semibold text-base relative max-sm:cursor-pointer">Products</h4>
 
                 <ul class="mt-6 space-y-4">
                     <li>
@@ -49,7 +49,7 @@
             </div>
 
             <div class="max-lg:min-w-[140px]">
-                <h4 class="text-accent font-semibold text-base relative max-sm:cursor-pointer">Support</h4>
+                <h4 class="text-white font-semibold text-base relative max-sm:cursor-pointer">Support</h4>
                 <ul class="space-y-4 mt-6">
                     <li>
                         <a href='<?= URLROOT ?>/pages/faq' class='hover:text-accent text-gray-300 text-sm'>FAQ</a>
@@ -67,7 +67,7 @@
             </div>
 
             <div class="max-lg:min-w-[140px]">
-                <h4 class="text-accent font-semibold text-base relative max-sm:cursor-pointer">Newsletter</h4>
+                <h4 class="text-white font-semibold text-base relative max-sm:cursor-pointer">Newsletter</h4>
 
                 <form class="mt-6" action="<?= URLROOT ?>/newsletter/subscribe" method="post">
                     <div class="relative max-w-xs">

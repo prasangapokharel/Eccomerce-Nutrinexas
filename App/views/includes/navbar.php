@@ -114,7 +114,7 @@
                         </div>
                     </div>
                 <?php else: ?>
-                    <a href="<?= URLROOT ?>/auth/login" class="px-5 py-2 rounded-full bg-accent text-white text-sm font-semibold shadow hover:bg-accent-dark transition-colors">
+                    <a href="<?= URLROOT ?>/auth/login" class="px-5 py-2 rounded-full bg-accent text-white text-sm font-semibold hover:bg-accent-dark">
                         Sign In
                     </a>
                 <?php endif; ?>
@@ -134,7 +134,7 @@ if (!isset($categoriesWithSubs) || !is_array($categoriesWithSubs)) {
 ?>
 
 <!-- Desktop Mega Menu -->
-<div id="categoryMegaMenu" class="hidden bg-primary text-white shadow-2xl border border-white/15 rounded-3xl mx-4 mt-4">
+<div id="categoryMegaMenu" class="hidden absolute top-full left-0 right-0 bg-primary text-white shadow-2xl border-t border-white/15 rounded-b-3xl mx-4">
     <div class="max-w-7xl mx-auto px-6 py-8 space-y-6">
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
             <?php foreach ($categoriesWithSubs as $category): ?>
