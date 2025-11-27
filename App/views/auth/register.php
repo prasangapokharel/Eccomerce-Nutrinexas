@@ -155,22 +155,9 @@
                            id="full_name" 
                            name="full_name" 
                            required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your full name"
                            value="<?= htmlspecialchars($_POST['full_name'] ?? '') ?>">
-                </div>
-
-                <!-- Email Field -->
-                <div>
-                    <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email <span class="text-gray-400">(Optional)</span>
-                    </label>
-                    <input type="email" 
-                           id="email" 
-                           name="email" 
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                           placeholder="Enter your email"
-                           value="<?= htmlspecialchars($_POST['email'] ?? '') ?>">
                 </div>
 
                 <!-- Phone Field -->
@@ -182,7 +169,7 @@
                            id="phone" 
                            name="phone" 
                            required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your phone number"
                            value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
                 </div>
@@ -197,22 +184,8 @@
                            name="password" 
                            required
                            minlength="6"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
                            placeholder="Enter your password (min 6 characters)">
-                </div>
-
-                <!-- Confirm Password Field -->
-                <div>
-                    <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-2">
-                        Confirm Password <span class="text-red-500">*</span>
-                    </label>
-                    <input type="password" 
-                           id="confirm_password" 
-                           name="confirm_password" 
-                           required
-                           minlength="6"
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                           placeholder="Confirm your password">
                 </div>
 
                 <!-- Referral Code Field (Hidden if already set) -->

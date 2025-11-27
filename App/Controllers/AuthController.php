@@ -68,14 +68,16 @@ class AuthController extends Controller
             return;
         }
         
-        $identifier = trim($_POST['identifier'] ?? '');
+        $phone = \App\Helpers\SecurityHelper::sanitizePhone($_POST['phone'] ?? '');
         $password = $_POST['password'] ?? '';
         $rememberMe = isset($_POST['remember_me']);
         
         $errors = [];
         
-        if (empty($identifier)) {
-            $errors[] = 'Email, phone, or username is required';
+        if (empty($phone)) {
+            $errors[] = 'Phone number is required';
+        } elseif (!\App\Helpers\SecurityHelper::validatePhone($phone)) {
+            $errors[] = 'Invalid phone number format';
         }
         
         if (empty($password)) {
@@ -99,8 +101,8 @@ class AuthController extends Controller
             return;
         }
         
-        // Authenticate user
-        $user = $this->authenticateUser($identifier, $password);
+        // Authenticate user by phone
+        $user = $this->authenticateUserByPhone($phone, $password);
         
         if ($user) {
             // Check maintenance mode - only allow admin login if ON
@@ -276,10 +278,8 @@ class AuthController extends Controller
         }
         
         $fullName = \App\Helpers\SecurityHelper::sanitizeString($_POST['full_name'] ?? '');
-        $email = trim($_POST['email'] ?? '');
         $phone = \App\Helpers\SecurityHelper::sanitizePhone($_POST['phone'] ?? '');
         $password = $_POST['password'] ?? '';
-        $confirmPassword = $_POST['confirm_password'] ?? '';
         $referralCode = \App\Helpers\SecurityHelper::sanitizeString($_POST['referral_code'] ?? '');
         
         $errors = [];
@@ -295,18 +295,10 @@ class AuthController extends Controller
             $errors[] = 'Invalid phone number format';
         }
         
-        if (!empty($email) && !\App\Helpers\SecurityHelper::validateEmail($email)) {
-            $errors[] = 'Invalid email format';
-        }
-        
         if (empty($password)) {
             $errors[] = 'Password is required';
         } elseif (strlen($password) < 6) {
             $errors[] = 'Password must be at least 6 characters long';
-        }
-        
-        if ($password !== $confirmPassword) {
-            $errors[] = 'Passwords do not match';
         }
         
         // Check if phone already exists
@@ -314,14 +306,6 @@ class AuthController extends Controller
             $existingUser = $this->userModel->findByPhone($phone);
             if ($existingUser) {
                 $errors[] = 'An account with this phone number already exists';
-            }
-        }
-        
-        // Check if email already exists (if provided)
-        if (!empty($email)) {
-            $existingUser = $this->userModel->findByEmail($email);
-            if ($existingUser) {
-                $errors[] = 'An account with this email already exists';
             }
         }
         
@@ -356,10 +340,6 @@ class AuthController extends Controller
                 'password' => $password,
                 'referred_by' => !empty($referralCode) && isset($inviter) ? $inviter['id'] : null
             ];
-            
-            if (!empty($email)) {
-                $userData['email'] = $email;
-            }
             
             $userId = $this->userModel->register($userData);
             

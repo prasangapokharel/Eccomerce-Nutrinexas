@@ -41,18 +41,18 @@
             <!-- Normal Login Form -->
             <form method="POST" action="<?= \App\Core\View::url('auth/processLogin') ?>" class="space-y-6">
                 <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
-                <!-- Email/Phone/Username Field -->
+                <!-- Phone Field -->
                 <div>
-                    <label for="identifier" class="block text-sm font-medium text-gray-700 mb-2">
-                        Email, Phone, or Username
+                    <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                        Phone Number <span class="text-red-500">*</span>
                     </label>
-                    <input type="text" 
-                           id="identifier" 
-                           name="identifier" 
+                    <input type="tel" 
+                           id="phone" 
+                           name="phone" 
                            required
-                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none transition-all"
-                           placeholder="Enter your email, phone, or username"
-                           value="<?= htmlspecialchars($_POST['identifier'] ?? '') ?>">
+                           class="w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent outline-none"
+                           placeholder="Enter your phone number"
+                           value="<?= htmlspecialchars($_POST['phone'] ?? '') ?>">
                 </div>
 
                 <!-- Password Field -->
