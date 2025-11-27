@@ -89,7 +89,7 @@ overflow: hidden;
      font-size: 0.875rem; /* shadcn default font size */
      font-weight: 600;
      border-radius: 12px;
-     background-color: var(--primary-color, #7C3AED);
+     background-color: #1F2937;
      color: #FFFFFF;
      border: 1px solid transparent;
      cursor: pointer;
@@ -98,7 +98,7 @@ overflow: hidden;
      line-height: 1.1;
    }
    .btn:hover {
-     background-color: var(--primary-light-color, #8B5CF6);
+     background-color: #111827;
    }
    .btn:disabled {
      opacity: 0.55;
@@ -110,8 +110,8 @@ overflow: hidden;
      border-color: rgba(15, 23, 42, 0.08);
    }
    .btn-outline:hover {
-     border-color: var(--primary-color, #7C3AED);
-     color: var(--primary-color, #7C3AED);
+     border-color: #1F2937;
+     color: #1F2937;
    }
    .btn-accent {
      background-color: var(--accent-color, #C5A572);
@@ -154,11 +154,11 @@ overflow: hidden;
 }
 
 .input:focus {
-  border-color: var(--primary-color, #7C3AED);
-  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+  border-color: #1F2937;
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, 0.1);
 }
    .btn-primary {
-    background: linear-gradient(to top, var(--primary-color, #7C3AED), var(--primary-light-color, #8B5CF6), var(--primary-color, #7C3AED));
+    background-color: #1F2937;
     color: white;
             border-radius: 12px;
             padding: 8px 9px;
@@ -262,7 +262,7 @@ overflow: hidden;
   font-size: 0.875rem; /* shadcn default font size */
   font-weight: 600;
   border-radius: 12px;
-  background-color: var(--primary-color, #7C3AED);
+  background-color: #1F2937;
   color: #FFFFFF;
   border: none;
   cursor: pointer;
@@ -270,7 +270,7 @@ overflow: hidden;
   text-decoration: none;
 }
 .btn-normal:hover {
-  background-color: var(--primary-light-color, #8B5CF6);
+  background-color: #111827;
 }
 .btn-normal:disabled {
   opacity: 0.5;
