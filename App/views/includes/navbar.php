@@ -2,7 +2,7 @@
 
 
 
-<div class="hidden lg:block sticky top-0 z-50 w-full bg-primary border-b border-white/10 py-3 px-4 sm:px-6 min-h-[75px]" style="overflow: visible;">
+<div class="hidden lg:block sticky top-0 z-50 w-full bg-primary border-b border-white/10 py-3 px-4 sm:px-6 min-h-[75px] relative" style="overflow: visible;">
     <div class="max-w-7xl mx-auto" style="overflow: visible;">
         <div class="flex flex-wrap items-center justify-between gap-4 min-w-0 w-full" style="overflow: visible;">
             <!-- Logo, Navigation Quick Links & Search -->
