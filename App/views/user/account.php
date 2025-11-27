@@ -77,7 +77,8 @@ function renderAccountIcon($name)
 ?>
 
 <div class="min-h-screen bg-neutral-50 py-6 px-4">
-    <div class="w-full max-w-3xl mx-auto bg-white rounded-3xl border border-primary/10 shadow-sm px-5 py-6 space-y-6">
+    <div class="w-full max-w-4xl mx-auto">
+        <div class="bg-white rounded-3xl border border-primary/10 shadow-sm px-5 py-6 space-y-6">
         <header class="flex items-center justify-between text-primary">
             <button type="button" class="w-10 h-10 rounded-2xl border border-primary/20 flex items-center justify-center" onclick="history.back()">
                 <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -129,49 +130,50 @@ function renderAccountIcon($name)
             </div>
         </section>
 
-        <section class="space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <?php foreach ($primaryLinks as $link): ?>
                 <a href="<?= $link['href'] ?>" class="flex items-center gap-3 rounded-2xl border border-primary/10 bg-white px-4 py-3 transition hover:border-primary/30 hover:bg-primary/5">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <?= renderAccountIcon($link['icon']) ?>
                         </svg>
                     </div>
-                    <div class="flex-1">
+                    <div class="flex-1 min-w-0">
                         <p class="text-sm font-semibold text-primary"><?= $link['label'] ?></p>
                         <span class="text-xs text-primary/60"><?= $link['hint'] ?></span>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-primary flex-shrink-0">
                         <path d="M9 5l7 7-7 7"/>
                     </svg>
                 </a>
             <?php endforeach; ?>
-        </section>
+        </div>
 
-        <section class="space-y-3">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
             <?php foreach ($supportLinks as $link): ?>
                 <a href="<?= $link['href'] ?>" class="flex items-center gap-3 rounded-2xl border border-primary/10 bg-white px-4 py-3 transition hover:border-primary/30 hover:bg-primary/5">
-                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                    <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary flex-shrink-0">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <?= renderAccountIcon($link['icon']) ?>
                         </svg>
                     </div>
-                    <div class="flex-1">
+                    <div class="flex-1 min-w-0">
                         <p class="text-sm font-semibold text-primary"><?= $link['label'] ?></p>
                         <?php if (!empty($link['hint'])): ?>
                             <span class="text-xs text-primary/60"><?= $link['hint'] ?></span>
                         <?php endif; ?>
                     </div>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="text-primary flex-shrink-0">
                         <path d="M9 5l7 7-7 7"/>
                     </svg>
                 </a>
             <?php endforeach; ?>
-        </section>
+        </div>
 
         <a href="<?= \App\Core\View::url('auth/logout') ?>" class="w-full bg-destructive/10 text-destructive font-semibold px-6 py-3 rounded-2xl text-sm text-center border border-destructive/20 block">
             Log Out
         </a>
+        </div>
     </div>
 </div>
 

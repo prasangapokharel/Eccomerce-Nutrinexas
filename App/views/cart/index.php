@@ -14,7 +14,7 @@ use App\Helpers\CurrencyHelper;
                     </svg>
                     <h2 class="h4-semibold text-primary mb-2">Your cart is empty</h2>
                     <p class="body1-regular text-gray-600 mb-6">Explore our products and start shopping today.</p>
-                    <a href="<?= \App\Core\View::url('products') ?>" class="  bg-primary hover:bg-primary-dark text-white px-6 py-2 rounded-lg text-sm font-medium inline-block transition-colors">
+                    <a href="<?= \App\Core\View::url('products') ?>" class="btn">
                         Start Shopping
                     </a>
                 </div>
