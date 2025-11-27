@@ -79,7 +79,8 @@ textarea {
     font-size: 16px;
     width: 100%;
     padding: 0.5rem 1rem;
-    border: 1px solid var(--gray-300);
+    border-color:1px solid ;
+    outline: 1px solid var(--gray-300);
     background-color: white;
     color: var(--gray-900);
 }

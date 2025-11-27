@@ -2,159 +2,234 @@
 <?php $page = 'dashboard'; ?>
 
 <div class="space-y-6">
+    <!-- Page Header -->
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+        <div>
+            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Seller Dashboard</h1>
+            <p class="mt-1 text-sm text-gray-500">Welcome back! Here's what's happening with your store today.</p>
+        </div>
+    </div>
+
     <!-- Stats Cards -->
-    <div class="flex flex-wrap gap-4">
-        <div class="card flex-1 min-w-[220px]">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-600">Total Orders</p>
-                    <p class="stats-value"><?= number_format($stats['total_orders'] ?? 0) ?></p>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
+        <!-- Total Orders -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fas fa-shopping-cart text-xl"></i>
                 </div>
-                <div class="stats-icon stats-icon-blue">
-                    <i class="fas fa-shopping-cart"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="card flex-1 min-w-[220px]">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-600">Pending Orders</p>
-                    <p class="stats-value"><?= number_format($stats['pending_orders'] ?? 0) ?></p>
-                </div>
-                <div class="stats-icon stats-icon-yellow">
-                    <i class="fas fa-clock"></i>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Total Orders</p>
+                    <h3 class="text-2xl font-bold text-gray-900"><?= number_format($stats['total_orders'] ?? 0) ?></h3>
                 </div>
             </div>
         </div>
 
-        <div class="card flex-1 min-w-[220px]">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-600">Completed Orders</p>
-                    <p class="stats-value"><?= number_format($stats['completed_orders'] ?? 0) ?></p>
+        <!-- Pending Orders -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-yellow-50 text-yellow-600">
+                    <i class="fas fa-clock text-xl"></i>
                 </div>
-                <div class="stats-icon stats-icon-green">
-                    <i class="fas fa-check-circle"></i>
-                </div>
-            </div>
-        </div>
-
-        <div class="card flex-1 min-w-[220px]">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-600">Total Earnings</p>
-                    <p class="stats-value">रु <?= number_format($stats['total_earnings'] ?? $stats['total_revenue'] ?? 0, 2) ?></p>
-                </div>
-                <div class="stats-icon stats-icon-purple">
-                    <i class="fas fa-wallet"></i>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Pending Orders</p>
+                    <h3 class="text-2xl font-bold text-gray-900"><?= number_format($stats['pending_orders'] ?? 0) ?></h3>
                 </div>
             </div>
         </div>
 
-        <div class="card flex-1 min-w-[220px]">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-600">Wallet Balance</p>
-                    <p class="stats-value">रु <?= number_format($stats['wallet_balance'] ?? 0, 2) ?></p>
+        <!-- Completed Orders -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-green-50 text-green-600">
+                    <i class="fas fa-check-circle text-xl"></i>
                 </div>
-                <div class="stats-icon stats-icon-blue">
-                    <i class="fas fa-coins"></i>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Completed Orders</p>
+                    <h3 class="text-2xl font-bold text-gray-900"><?= number_format($stats['completed_orders'] ?? 0) ?></h3>
                 </div>
             </div>
         </div>
 
-        <div class="card flex-1 min-w-[220px]">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="text-sm text-gray-600">Products Count</p>
-                    <p class="stats-value"><?= number_format($stats['products_count'] ?? $stats['total_products'] ?? 0) ?></p>
+        <!-- Total Earnings -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center">
+                <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                    <i class="fas fa-wallet text-xl"></i>
                 </div>
-                <div class="stats-icon stats-icon-purple">
-                    <i class="fas fa-boxes"></i>
+                <div class="ml-4 flex-1">
+                    <p class="text-sm font-medium text-gray-500">Total Earnings</p>
+                    <h3 class="text-2xl font-bold text-gray-900">रु <?= number_format($stats['total_earnings'] ?? $stats['total_revenue'] ?? 0, 0) ?></h3>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Top Products -->
-    <div class="flex flex-col lg:flex-row gap-6">
-        <div class="card flex-1">
-            <h3 class="card-title">Top Products</h3>
-            <div class="space-y-4">
+    <!-- Additional Stats Row -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 lg:gap-6">
+        <!-- Wallet Balance -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Wallet Balance</p>
+                    <h3 class="text-xl font-bold text-gray-900">रु <?= number_format($stats['wallet_balance'] ?? 0, 0) ?></h3>
+                </div>
+                <div class="p-3 rounded-xl bg-blue-50 text-blue-600">
+                    <i class="fas fa-coins text-lg"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Products Count -->
+        <div class="bg-white rounded-xl shadow-sm p-6 card-hover border border-gray-100">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm font-medium text-gray-500">Products Count</p>
+                    <h3 class="text-xl font-bold text-gray-900"><?= number_format($stats['products_count'] ?? $stats['total_products'] ?? 0) ?></h3>
+                </div>
+                <div class="p-3 rounded-xl bg-purple-50 text-purple-600">
+                    <i class="fas fa-boxes text-lg"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl shadow-sm p-6 text-white">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-white/80">Quick Actions</p>
+                    <h3 class="text-lg font-bold">Manage Store</h3>
+                </div>
+                <div class="p-3 rounded-xl bg-white/20">
+                    <i class="fas fa-bolt text-lg"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content Grid -->
+    <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+        <!-- Recent Orders - Takes 2 columns -->
+        <div class="xl:col-span-2 bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Recent Orders</h2>
+                    <a href="<?= \App\Core\View::url('seller/orders') ?>" class="text-sm text-primary hover:text-primary-dark font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="overflow-x-hidden">
+                <table class="min-w-full divide-y divide-gray-100">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-100">
+                        <?php if (empty($recentOrders)): ?>
+                            <tr>
+                                <td colspan="6" class="px-6 py-8 text-center text-gray-500">
+                                    <i class="fas fa-shopping-cart text-3xl text-gray-300 mb-2"></i>
+                                    <p>No orders found</p>
+                                </td>
+                            </tr>
+                        <?php else: ?>
+                            <?php foreach ($recentOrders as $order): ?>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">#<?= htmlspecialchars($order['invoice'] ?? $order['id']) ?></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-900"><?= htmlspecialchars($order['customer_name'] ?? ($order['first_name'] . ' ' . $order['last_name']) ?? 'Unknown Customer') ?></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm text-gray-500"><?= date('M j, Y', strtotime($order['created_at'])) ?></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <div class="text-sm font-medium text-gray-900">रु <?= number_format($order['total_amount'] ?? $order['seller_total'] ?? 0, 2) ?></div>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap">
+                                        <span class="inline-flex px-2 py-1 text-xs font-semibold rounded-full 
+                                            <?php
+                                            switch ($order['status']) {
+                                                case 'delivered':
+                                                    echo 'bg-green-100 text-green-800';
+                                                    break;
+                                                case 'pending':
+                                                    echo 'bg-yellow-100 text-yellow-800';
+                                                    break;
+                                                case 'cancelled':
+                                                    echo 'bg-red-100 text-red-800';
+                                                    break;
+                                                case 'processing':
+                                                case 'confirmed':
+                                                    echo 'bg-blue-100 text-blue-800';
+                                                    break;
+                                                case 'shipped':
+                                                    echo 'bg-purple-100 text-purple-800';
+                                                    break;
+                                                default:
+                                                    echo 'bg-gray-100 text-gray-800';
+                                            }
+                                            ?>">
+                                            <?= ucfirst($order['status']) ?>
+                                        </span>
+                                    </td>
+                                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <a href="<?= \App\Core\View::url('seller/orders/detail/' . $order['id']) ?>" class="text-primary hover:text-primary-dark">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <!-- Top Products - Takes 1 column -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+            <div class="p-6 border-b border-gray-100">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-lg font-semibold text-gray-900">Top Products</h2>
+                    <a href="<?= \App\Core\View::url('seller/products') ?>" class="text-sm text-primary hover:text-primary-dark font-medium">
+                        View All <i class="fas fa-arrow-right ml-1"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="p-6">
                 <?php if (empty($topProducts)): ?>
-                    <p class="text-gray-600" style="text-align: center; padding: 2rem 0;">No sales data available</p>
+                    <div class="text-center py-8">
+                        <i class="fas fa-box text-3xl text-gray-300 mb-2"></i>
+                        <p class="text-gray-500">No sales data available</p>
+                    </div>
                 <?php else: ?>
-                    <?php foreach ($topProducts as $product): ?>
-                        <div class="flex items-center justify-between p-3" style="background-color: var(--gray-50); border-radius: 0.5rem;">
-                            <div>
-                                <p class="font-medium text-gray-900"><?= htmlspecialchars($product['product_name'] ?? 'N/A') ?></p>
-                                <p class="text-sm text-gray-600"><?= number_format($product['total_sold'] ?? 0) ?> sold</p>
+                    <div class="space-y-4">
+                        <?php foreach ($topProducts as $product): ?>
+                            <div class="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg border border-gray-100">
+                                <div class="flex-1 min-w-0">
+                                    <p class="text-sm font-medium text-gray-900 truncate">
+                                        <?= htmlspecialchars($product['product_name'] ?? 'N/A') ?>
+                                    </p>
+                                    <p class="text-xs text-gray-600">
+                                        <?= number_format($product['total_sold'] ?? 0) ?> sold
+                                    </p>
+                                </div>
+                                <div class="flex-shrink-0 text-right">
+                                    <p class="text-sm font-semibold text-gray-900">रु <?= number_format($product['total_revenue'] ?? 0, 0) ?></p>
+                                </div>
                             </div>
-                            <div style="text-align: right;">
-                                <p class="font-semibold text-gray-900">रु <?= number_format($product['total_revenue'] ?? 0, 2) ?></p>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-
-    <!-- Recent Orders & Products -->
-    <div class="flex flex-col lg:flex-row gap-6">
-        <!-- Recent Orders -->
-        <div class="card flex-1">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="card-title" style="margin: 0;">Recent Orders</h3>
-                <a href="<?= \App\Core\View::url('seller/orders') ?>" class="link-primary text-sm">View All</a>
-            </div>
-            <div class="space-y-3">
-                <?php if (empty($recentOrders)): ?>
-                    <p class="text-gray-600" style="text-align: center; padding: 2rem 0;">No orders yet</p>
-                <?php else: ?>
-                    <?php foreach ($recentOrders as $order): ?>
-                        <div class="flex items-center justify-between p-3" style="border: 1px solid var(--gray-200); border-radius: 0.5rem;">
-                            <div>
-                                <p class="font-medium text-gray-900">Order #<?= $order['id'] ?></p>
-                                <p class="text-sm text-gray-600"><?= date('M j, Y', strtotime($order['created_at'])) ?></p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-gray-900">रु <?= number_format($order['total_amount'] ?? 0, 2) ?></p>
-                                <span class="badge <?= $order['status'] === 'delivered' ? 'badge-success' : ($order['status'] === 'pending' ? 'badge-warning' : 'badge-info') ?>">
-                                    <?= ucfirst($order['status']) ?>
-                                </span>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
-            </div>
-        </div>
-
-        <!-- Recent Products -->
-        <div class="card flex-1">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="card-title" style="margin: 0;">Recent Products</h3>
-                <a href="<?= \App\Core\View::url('seller/products') ?>" class="link-primary text-sm">View All</a>
-            </div>
-            <div class="space-y-3">
-                <?php if (empty($recentProducts)): ?>
-                    <p class="text-gray-600" style="text-align: center; padding: 2rem 0;">No products yet</p>
-                <?php else: ?>
-                    <?php foreach ($recentProducts as $product): ?>
-                        <div class="flex items-center justify-between p-3" style="border: 1px solid var(--gray-200); border-radius: 0.5rem;">
-                            <div>
-                                <p class="font-medium text-gray-900"><?= htmlspecialchars($product['product_name'] ?? 'N/A') ?></p>
-                                <p class="text-sm text-gray-600">Stock: <?= $product['stock_quantity'] ?? 0 ?></p>
-                            </div>
-                            <div class="text-right">
-                                <p class="font-semibold text-gray-900">रु <?= number_format($product['price'] ?? 0, 2) ?></p>
-                                <span class="badge <?= $product['status'] === 'active' ? 'badge-success' : 'badge-gray' ?>">
-                                    <?= ucfirst($product['status']) ?>
-                                </span>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
+                        <?php endforeach; ?>
+                    </div>
                 <?php endif; ?>
             </div>
         </div>
