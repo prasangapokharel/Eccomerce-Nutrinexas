@@ -382,6 +382,7 @@ class CartController extends Controller
                 $action = isset($_POST['action']) ? $_POST['action'] : '';
 
                 if (!$productId || !in_array($action, ['increase', 'decrease'])) {
+                    error_log("Cart update: Invalid parameters - productId: {$productId}, action: {$action}");
                     if ($this->isAjaxRequest()) {
                         $this->jsonResponse(['success' => false, 'message' => 'Invalid update parameters']);
                         return;
@@ -454,12 +455,28 @@ class CartController extends Controller
                 // Update the cart item quantity
                 if ($isGuest) {
                     $guestCart = $cartMiddleware->getCartData();
+                    
+                    // Ensure product_id is integer for array key access
+                    $productIdKey = (int)$productId;
+                    
+                    // Verify the product exists in guest cart before updating
+                    if (!isset($guestCart[$productIdKey])) {
+                        error_log("Cart update error: Product ID {$productIdKey} not found in guest cart. Available keys: " . implode(', ', array_keys($guestCart)));
+                        if ($this->isAjaxRequest()) {
+                            $this->jsonResponse(['success' => false, 'message' => 'Item not found in cart. Please refresh the page.']);
+                            return;
+                        }
+                        $this->setFlash('error', 'Item not found in cart. Please refresh the page.');
+                        $this->redirect('cart');
+                        return;
+                    }
+                    
                     if ($action === 'increase') {
-                        $guestCart[$productId]['quantity'] += 1;
+                        $guestCart[$productIdKey]['quantity'] += 1;
                     } elseif ($action === 'decrease') {
-                        $guestCart[$productId]['quantity'] -= 1;
-                        if ($guestCart[$productId]['quantity'] <= 0) {
-                            unset($guestCart[$productId]);
+                        $guestCart[$productIdKey]['quantity'] -= 1;
+                        if ($guestCart[$productIdKey]['quantity'] <= 0) {
+                            unset($guestCart[$productIdKey]);
                         }
                     }
                     $_SESSION['guest_cart'] = $guestCart;
@@ -487,9 +504,10 @@ class CartController extends Controller
                     
                     if ($isGuest) {
                         $guestCart = $cartMiddleware->getCartData();
-                        if (isset($guestCart[$productId])) {
-                            $itemQuantity = $guestCart[$productId]['quantity'];
-                            $product = $this->productModel->find($productId);
+                        $productIdKey = (int)$productId;
+                        if (isset($guestCart[$productIdKey])) {
+                            $itemQuantity = $guestCart[$productIdKey]['quantity'];
+                            $product = $this->productModel->find($productIdKey);
                             if ($product) {
                                 $currentPrice = ($product['sale_price'] > 0 && $product['sale_price'] < $product['price']) 
                                     ? $product['sale_price'] 
