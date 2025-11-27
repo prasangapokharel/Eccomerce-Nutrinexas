@@ -88,19 +88,16 @@ function formatProductName($name) {
         </div>
 
         <!-- Products Grid -->
-        <div>
         <?php if (empty($products)): ?>
-                <div class="bg-white rounded-lg shadow-sm border border-neutral-100 p-8 text-center">
-                    <div class="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                        <svg class="w-6 h-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4-8-4V7m16 0L12 3 4 7"></path>
-                        </svg>
-                    </div>
-                    <h3 class="text-base font-semibold text-neutral-700 mb-1">No Products Available</h3>
-                    <p class="text-sm text-neutral-500">Check back soon for new arrivals!</p>
+            <div class="bg-white rounded-lg shadow-sm border border-neutral-100 p-8 text-center">
+                <div class="w-14 h-14 bg-neutral-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                    <svg class="w-6 h-6 text-neutral-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4-8-4V7m16 0L12 3 4 7"></path>
+                    </svg>
                 </div>
+                <h3 class="text-base font-semibold text-neutral-700 mb-1">No Products Available</h3>
+                <p class="text-sm text-neutral-500">Check back soon for new arrivals!</p>
             </div>
-        </div>
         <?php else: ?>
                 <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-3">
                 <?php 
@@ -138,9 +135,7 @@ function formatProductName($name) {
                     endif; 
                     ?>
                 <?php endforeach; ?>
-                </div>
             </div>
-        </div>
         <?php endif; ?>
         
         <!-- Pagination -->

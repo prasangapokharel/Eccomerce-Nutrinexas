@@ -171,15 +171,11 @@ class ProductController extends Controller
             }
             unset($product);
 
-            // Get filter data for sidebar
-            $filterData = $this->getFilterData();
-            
             $this->view('products/index', [
                 'products' => $products,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
                 'totalProducts' => $totalProducts,
-                'filterData' => $filterData,
                 'title' => 'All Products',
             ]);
         }
