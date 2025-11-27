@@ -182,6 +182,7 @@
             <?php endforeach; ?>
         </div>
     </div>
+    </div>
 </div>
 
 <!-- Mobile Search Component -->
