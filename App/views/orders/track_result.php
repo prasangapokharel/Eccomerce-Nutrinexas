@@ -13,21 +13,37 @@
         
         <h1 class="text-2xl font-semibold text-foreground mb-8">Order Tracking</h1>
         
+        <?php if (empty($order)): ?>
+            <div class="bg-error/10 border border-error/30 rounded-2xl p-6 text-center">
+                <svg class="w-12 h-12 text-error mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <h2 class="text-xl font-semibold text-error mb-2">Order Not Found</h2>
+                <p class="text-neutral-600 mb-4">The order you're looking for doesn't exist or the invoice number is incorrect.</p>
+                <a href="<?= \App\Core\View::url('orders/track') ?>" class="inline-flex items-center gap-2 bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    Back to Tracking
+                </a>
+            </div>
+        <?php else: ?>
         <div class="bg-white rounded-2xl shadow-sm border border-neutral-200 overflow-hidden mb-8">
             <div class="p-6 border-b border-neutral-200">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                     <div>
                         <h2 class="text-xl font-semibold text-foreground">
-                            Order #<?= htmlspecialchars($order['invoice']) ?>
+                            Order #<?= htmlspecialchars($order['invoice'] ?? 'N/A') ?>
                         </h2>
                         <p class="mt-1 text-sm text-neutral-500">
-                            Placed on <?= date('F j, Y', strtotime($order['created_at'])) ?>
+                            Placed on <?= !empty($order['created_at']) ? date('F j, Y', strtotime($order['created_at'])) : 'N/A' ?>
                         </p>
                     </div>
                     <div class="mt-4 sm:mt-0">
                         <span class="px-3 py-1 rounded-full text-sm font-medium
                             <?php
-                            switch (strtolower($order['status'])) {
+                            $status = strtolower($order['status'] ?? 'pending');
+                            switch ($status) {
                                 case 'paid':
                                 case 'delivered':
                                 case 'shipped':
@@ -47,7 +63,7 @@
                                     echo 'bg-neutral-100 text-neutral-800 border border-neutral-300';
                             }
                             ?>">
-                            <?= ucfirst(htmlspecialchars($order['status'])) ?>
+                            <?= ucfirst(htmlspecialchars($order['status'] ?? 'Pending')) ?>
                         </span>
                     </div>
                 </div>
@@ -69,13 +85,13 @@
                             </div>
                             <div class="ml-4">
                                 <h4 class="text-base font-semibold text-foreground">Order Placed</h4>
-                                <p class="text-sm text-neutral-500"><?= date('F j, Y, g:i a', strtotime($order['created_at'])) ?></p>
+                                <p class="text-sm text-neutral-500"><?= !empty($order['created_at']) ? date('F j, Y, g:i a', strtotime($order['created_at'])) : 'N/A' ?></p>
                                 <p class="text-sm text-neutral-600 mt-1">Your order has been received and is being processed.</p>
                             </div>
                         </div>
                         
                         <!-- Payment Status -->
-                        <?php if (in_array(strtolower($order['status']), ['paid', 'processing', 'shipped', 'delivered'])): ?>
+                        <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['paid', 'processing', 'shipped', 'delivered'])): ?>
                             <div class="relative flex items-start mb-6">
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -91,7 +107,7 @@
                         <?php endif; ?>
                         
                         <!-- Processing Status -->
-                        <?php if (in_array(strtolower($order['status']), ['processing', 'shipped', 'delivered'])): ?>
+                        <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['processing', 'shipped', 'delivered'])): ?>
                             <div class="relative flex items-start mb-6">
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-info/10 text-info z-10 border-2 border-info/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +124,7 @@
                         <?php endif; ?>
                         
                         <!-- Shipping Status -->
-                        <?php if (in_array(strtolower($order['status']), ['shipped', 'delivered'])): ?>
+                        <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['shipped', 'delivered'])): ?>
                             <div class="relative flex items-start mb-6">
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-info/10 text-info z-10 border-2 border-info/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -124,7 +140,7 @@
                         <?php endif; ?>
                         
                         <!-- Delivered Status -->
-                        <?php if (strtolower($order['status']) === 'delivered'): ?>
+                        <?php if (strtolower($order['status'] ?? '') === 'delivered'): ?>
                             <div class="relative flex items-start mb-6">
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -140,7 +156,7 @@
                         <?php endif; ?>
                         
                         <!-- Cancelled Status -->
-                        <?php if (strtolower($order['status']) === 'cancelled'): ?>
+                        <?php if (strtolower($order['status'] ?? '') === 'cancelled'): ?>
                             <div class="relative flex items-start">
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-error/10 text-error z-10 border-2 border-error/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -156,7 +172,7 @@
                         <?php endif; ?>
                         
                         <!-- Pending Payment -->
-                        <?php if (in_array(strtolower($order['status']), ['pending', 'unpaid'])): ?>
+                        <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['pending', 'unpaid'])): ?>
                             <div class="relative flex items-start">
                                 <div class="flex items-center justify-center w-10 h-10 rounded-full bg-warning/10 text-warning z-10 border-2 border-warning/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -176,9 +192,9 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-lg font-semibold text-foreground mb-2">Shipping Address</h3>
-                        <div class="text-sm text-neutral-600 bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
-                            <p class="font-semibold text-foreground"><?= htmlspecialchars($order['customer_name']) ?></p>
-                            <p class="mt-1"><?= nl2br(htmlspecialchars($order['address'])) ?></p>
+                            <div class="text-sm text-neutral-600 bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
+                            <p class="font-semibold text-foreground"><?= htmlspecialchars($order['customer_name'] ?? 'N/A') ?></p>
+                            <p class="mt-1"><?= nl2br(htmlspecialchars($order['address'] ?? 'N/A')) ?></p>
                             <?php if (!empty($order['contact_no'])): ?>
                                 <p class="mt-1">Phone: <?= htmlspecialchars($order['contact_no']) ?></p>
                             <?php endif; ?>
@@ -190,16 +206,16 @@
                         <div class="text-sm text-neutral-600 bg-neutral-50 p-4 rounded-2xl border border-neutral-200">
                             <div class="flex justify-between mb-2">
                                 <span>Subtotal:</span>
-                                <span class="font-medium text-foreground">रु<?= number_format($order['total_amount'] - $order['delivery_fee'], 2) ?></span>
+                                <span class="font-medium text-foreground">रु<?= number_format(($order['total_amount'] ?? 0) - ($order['delivery_fee'] ?? 0), 2) ?></span>
                             </div>
                             <div class="flex justify-between mb-2">
                                 <span>Shipping:</span>
-                                <span class="font-medium text-foreground">रु<?= number_format($order['delivery_fee'], 2) ?></span>
+                                <span class="font-medium text-foreground">रु<?= number_format($order['delivery_fee'] ?? 0, 2) ?></span>
                             </div>
                             <div class="border-t border-neutral-200 pt-2 mt-2">
                                 <div class="flex justify-between font-semibold text-foreground">
                                     <span>Total:</span>
-                                    <span>रु<?= number_format($order['total_amount'], 2) ?></span>
+                                    <span>रु<?= number_format($order['total_amount'] ?? 0, 2) ?></span>
                                 </div>
                             </div>
                             <?php if (!empty($order['payment_method'])): ?>
@@ -311,6 +327,7 @@
                 </a>
             </div>
         </div>
+        <?php endif; ?>
     </div>
 </div>
 

@@ -304,6 +304,7 @@ class Order extends Model
     public function getOrderByInvoice($invoice)
     {
         $sql = "SELECT o.*,
+                        COALESCE(o.invoice, CONCAT('NTX', LPAD(o.id, 6, '0'))) as invoice,
                         o.customer_name as order_customer_name,
                         CONCAT(u.first_name, ' ', u.last_name) as user_full_name,
                         u.email as customer_email,
@@ -318,8 +319,8 @@ class Order extends Model
                         LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
                         LEFT JOIN khalti_payments kp ON o.id = kp.order_id
                         LEFT JOIN esewa_payments ep ON o.id = ep.order_id
-                        WHERE o.invoice = ?";
-        return $this->db->query($sql)->bind([$invoice])->single();
+                        WHERE o.invoice = ? OR CONCAT('NTX', LPAD(o.id, 6, '0')) = ?";
+        return $this->db->query($sql)->bind([$invoice, $invoice])->single();
     }
 
     /**

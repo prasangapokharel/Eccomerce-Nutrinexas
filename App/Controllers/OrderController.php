@@ -191,35 +191,48 @@ class OrderController extends Controller
      */
     public function trackResult()
     {
-        $invoice = $this->get('invoice') ?: $this->post('invoice');
-        
-        if (empty($invoice)) {
-            $this->setFlash('error', 'Invoice number is required');
+        try {
+            $invoice = $this->get('invoice') ?: $this->post('invoice');
+            
+            if (empty($invoice)) {
+                $this->setFlash('error', 'Invoice number is required');
+                $this->redirect('orders/track');
+                return;
+            }
+            
+            // Trim and sanitize invoice
+            $invoice = trim($invoice);
+            
+            $order = $this->orderModel->getOrderByInvoice($invoice);
+            
+            if (!$order) {
+                $this->setFlash('error', 'Order not found. Please check your invoice number and try again.');
+                $this->redirect('orders/track');
+                return;
+            }
+            
+            $orderItems = $this->orderModel->getOrderItems($order['id']);
+            
+            if (empty($orderItems)) {
+                $orderItems = [];
+            }
+            
+            // Resolve product images for order items
+            foreach ($orderItems as &$item) {
+                $item['image_url'] = $this->resolveOrderItemImage($item);
+            }
+            unset($item);
+            
+            $this->view('orders/track-result', [
+                'order' => $order,
+                'orderItems' => $orderItems,
+                'title' => 'Track Order Result'
+            ]);
+        } catch (\Exception $e) {
+            error_log('Track result error: ' . $e->getMessage());
+            $this->setFlash('error', 'An error occurred while tracking your order. Please try again.');
             $this->redirect('orders/track');
-            return;
         }
-        
-        $order = $this->orderModel->getOrderByInvoice($invoice);
-        
-        if (!$order) {
-            $this->setFlash('error', 'Order not found');
-            $this->redirect('orders/track');
-            return;
-        }
-        
-        $orderItems = $this->orderModel->getOrderItems($order['id']);
-        
-        // Resolve product images for order items
-        foreach ($orderItems as &$item) {
-            $item['image_url'] = $this->resolveOrderItemImage($item);
-        }
-        unset($item);
-        
-        $this->view('orders/track-result', [
-            'order' => $order,
-            'orderItems' => $orderItems,
-            'title' => 'Track Order Result'
-        ]);
     }
 
     /**
