@@ -11,6 +11,7 @@ use App\Models\Withdrawal;
 use App\Models\Transaction;
 use App\Models\Notification;
 use App\Models\Setting;
+use App\Models\Review;
 use App\Core\Session;
 
 class UserController extends Controller
@@ -24,6 +25,7 @@ class UserController extends Controller
     private $transactionModel;
     private $notificationModel;
     private $settingModel;
+    private $reviewModel;
 
     public function __construct()
     {
@@ -45,6 +47,7 @@ class UserController extends Controller
         $this->transactionModel = new Transaction();
         $this->notificationModel = new Notification();
         $this->settingModel = new Setting();
+        $this->reviewModel = new Review();
         
         // Check if user is logged in
         $this->requireLogin();
@@ -488,6 +491,43 @@ class UserController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'title' => 'Transaction History'
+        ]);
+    }
+
+    /**
+     * Display user reviews page
+     */
+    public function reviews()
+    {
+        $userId = Session::get('user_id');
+        
+        $reviews = $this->db->query(
+            "SELECT r.*, 
+                    p.product_name, p.slug,
+                    pi.image_url as product_image
+             FROM reviews r
+             INNER JOIN products p ON r.product_id = p.id
+             LEFT JOIN product_images pi ON p.id = pi.product_id AND pi.is_primary = 1
+             WHERE r.user_id = ?
+             ORDER BY r.created_at DESC",
+            [$userId]
+        )->all();
+        
+        // Resolve product images
+        foreach ($reviews as &$review) {
+            if (!empty($review['product_image'])) {
+                $review['product_image'] = filter_var($review['product_image'], FILTER_VALIDATE_URL) 
+                    ? $review['product_image'] 
+                    : \App\Core\View::asset('uploads/images/' . $review['product_image']);
+            } else {
+                $review['product_image'] = \App\Core\View::asset('images/products/default.jpg');
+            }
+        }
+        unset($review);
+        
+        $this->view('user/reviews', [
+            'reviews' => $reviews,
+            'title' => 'My Reviews'
         ]);
     }
     

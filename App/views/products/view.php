@@ -1099,41 +1099,6 @@ ob_start();
     </div>
 <?php endif; ?>
 
-<!-- My Review Section -->
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 mb-20 lg:mb-6">
-  <?php if ($productId): ?>
-    <?php if ($isLoggedIn && $userReview): ?>
-      <div class="bg-white rounded-2xl shadow-sm p-5">
-        <div class="flex items-center justify-between mb-3">
-          <h3 class="text-lg font-semibold text-gray-900">My Review</h3>
-          <div class="flex items-center gap-3">
-            <span class="text-xs text-gray-500">Reviewed on <?= date('M j, Y', strtotime($userReview['created_at'] ?? 'now')) ?></span>
-            <button type="button" 
-                    class="delete-review-btn text-red-500 hover:text-red-700 transition-colors p-2 hover:bg-red-50 rounded-2xl" 
-                    data-review-id="<?= $userReview['id'] ?? '' ?>"
-                    title="Delete Review">
-              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
-              </svg>
-            </button>
-          </div>
-        </div>
-        <div class="flex items-center gap-2 text-yellow-500 mb-3">
-          <?php for ($i=1;$i<=5;$i++): ?>
-            <svg class="w-5 h-5 <?= $i <= (int)($userReview['rating'] ?? 0) ? 'fill-current' : 'fill-none' ?> stroke-current" viewBox="0 0 20 20">
-              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/>
-            </svg>
-          <?php endfor; ?>
-        </div>
-        <p class="text-gray-700"><?= htmlspecialchars($userReview['review_text'] ?? '') ?></p>
-      </div>
-    <?php elseif (!$isLoggedIn): ?>
-      <div class="bg-white rounded-lg shadow-sm p-5 text-center">
-        <p class="text-sm text-gray-600">Please <a href="<?= \App\Core\View::url('auth/login') ?>" class="text-primary font-semibold underline">log in</a> to add a review.</p>
-      </div>
-    <?php endif; ?>
-  <?php endif; ?>
-</div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -1846,14 +1811,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     element.textContent = data.cart_count || 0;
                 });
                 
-                // Show success message
-                if (window.AppAlert) {
-                    window.AppAlert.show('Product added to cart!', 'success');
-                } else {
-                    alert('Product added to cart!');
-                }
-                
-                // Update button to show green checkmark icon
+                // Update button to show green checkmark icon directly (no alert)
                 if (button) {
                     button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
                     button.classList.remove('bg-primary', 'bg-primary-dark');
@@ -1872,12 +1830,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
                 if (data.error && data.error.includes('login')) {
                     window.location.href = '<?= \App\Core\View::url('auth/login') ?>';
-                } else {
-                    if (window.AppAlert) {
-                        window.AppAlert.show(data.message || 'Failed to add product to cart', 'error');
-                    } else {
-                        alert(data.message || 'Failed to add product to cart');
-                    }
                 }
             }
         })
@@ -1886,11 +1838,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 button.innerHTML = originalHTML;
                 button.disabled = false;
             }
-            if (window.AppAlert) {
-                window.AppAlert.show('Error adding product to cart. Please try again.', 'error');
-            } else {
-                alert('Error adding product to cart. Please try again.');
-            }
+            // Silent error handling - button will reset
         });
     }
     </script>

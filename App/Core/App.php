@@ -275,6 +275,7 @@ class App
         
         // User routes
         $this->router->get('user/account', 'UserController@account');
+        $this->router->get('user/reviews', 'UserController@reviews');
         $this->router->get('user/invite', 'UserController@invite');
         $this->router->get('user/balance', 'UserController@balance');
         

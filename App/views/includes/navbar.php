@@ -150,13 +150,13 @@
                 <div class="category-card border border-white/20 rounded-2xl p-4 bg-white text-gray-900 hover:shadow-lg transition-all duration-300">
                     <div class="flex items-start justify-between text-primary mb-3">
                         <h3 class="text-base font-medium"><?= htmlspecialchars($category['name']) ?></h3>
-                        <!-- Small Category Image Thumbnail -->
-                        <div class="flex-shrink-0 ml-3">
+                        <!-- Small Category Image Thumbnail - Clickable -->
+                        <a href="<?= URLROOT ?>/products/category/<?= $category['slug'] ?>" class="flex-shrink-0 ml-3">
                             <img src="<?= htmlspecialchars($categoryImageUrl) ?>" 
                                  alt="<?= htmlspecialchars($category['name']) ?>" 
-                                 class="w-12 h-12 rounded-2xl object-cover border-2 border-primary/20 shadow-sm"
+                                 class="w-12 h-12 rounded-2xl object-cover border-2 border-primary/20 shadow-sm hover:border-primary/40 transition-colors cursor-pointer"
                                  onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'">
-                        </div>
+                        </a>
                     </div>
                     <?php if (!empty($category['subcategories'])): ?>
                         <div class="mt-3 space-y-2 text-sm text-gray-600">
@@ -171,13 +171,6 @@
                             <?php endforeach; ?>
                         </div>
                     <?php endif; ?>
-                    <a href="<?= URLROOT ?>/products/category/<?= $category['slug'] ?>"
-                        class="mt-4 inline-flex items-center text-sm font-medium text-accent hover:text-accent-dark">
-                        View all <?= htmlspecialchars($category['name']) ?>
-                        <svg class="w-4 h-4 ml-1" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M12.293 5.293a1 1 0 011.414 0L17 8.586a1 1 0 010 1.414l-3.293 3.293a1 1 0 01-1.414-1.414L13.586 10H4a1 1 0 110-2h9.586l-1.293-1.293a1 1 0 010-1.414z" clip-rule="evenodd" />
-                        </svg>
-                    </a>
                 </div>
             <?php endforeach; ?>
         </div>
