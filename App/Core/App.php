@@ -84,6 +84,7 @@ class App
         
         // Product routes
         $this->router->get('products', 'ProductController@index');
+        $this->router->get('products/filter', 'ProductController@filter');
         $this->router->get('products/view/{slug}', 'ProductController@viewProduct');
         $this->router->get('products/category/{category}/{subtype}', 'ProductController@category');
         $this->router->get('products/category/{category}', 'ProductController@category');
