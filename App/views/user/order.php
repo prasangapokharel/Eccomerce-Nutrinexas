@@ -23,13 +23,13 @@
                             <?php
                             switch ($order['status']) {
                                 case 'paid':
-                                    echo 'bg-green-100 text-green-800';
+                                    echo 'bg-success/10 text-success';
                                     break;
                                 case 'unpaid':
-                                    echo 'bg-yellow-100 text-yellow-800';
+                                    echo 'bg-warning/10 text-warning';
                                     break;
                                 case 'cancelled':
-                                    echo 'bg-red-100 text-red-800';
+                                    echo 'bg-error/10 text-error';
                                     break;
                             }
                             ?>">

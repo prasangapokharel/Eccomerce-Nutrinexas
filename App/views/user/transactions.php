@@ -41,7 +41,7 @@
                                         <div class="text-xs text-gray-500"><?= ucfirst(str_replace('_', ' ', $transaction['type'])) ?></div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <div class="text-sm <?= $transaction['amount'] >= 0 ? 'text-green-600' : 'text-red-600' ?> font-medium">
+                                        <div class="text-sm <?= $transaction['amount'] >= 0 ? 'text-success' : 'text-error' ?> font-medium">
                                             <?= $transaction['amount'] >= 0 ? '+' : '' ?><?= number_format($transaction['amount'], 2) ?>
                                         </div>
                                     </td>

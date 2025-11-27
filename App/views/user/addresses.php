@@ -28,7 +28,7 @@
                             <h2 class="text-lg font-semibold text-gray-900">
                                 <?= htmlspecialchars($address['recipient_name']) ?>
                                 <?php if ($address['is_default']): ?>
-                                    <span class="ml-2 px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Default</span>
+                                    <span class="ml-2 px-2 py-1 bg-success/10 text-success text-xs rounded-full">Default</span>
                                 <?php endif; ?>
                             </h2>
                             <div class="flex space-x-2">
@@ -37,7 +37,7 @@
                                 </a>
                                 <a href="<?= \App\Core\View::url('user/deleteAddress/' . $address['id']) ?>" 
                                    onclick="return confirm('Are you sure you want to delete this address?')" 
-                                   class="text-red-600 hover:text-red-800">
+                                   class="text-error hover:text-error-dark">
                                     <i class="fas fa-trash-alt"></i>
                                 </a>
                             </div>

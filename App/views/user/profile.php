@@ -4,7 +4,7 @@
         <h1 class="text-2xl font-bold text-gray-900 mb-6">My Profile</h1>
         
         <?php if (isset($errors) && !empty($errors)): ?>
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6" role="alert">
+            <div class="bg-error/10 border border-error text-error px-4 py-3 rounded relative mb-6" role="alert">
                 <ul class="list-disc pl-5">
                     <?php foreach ($errors as $error): ?>
                         <li><?= $error ?></li>
@@ -49,7 +49,7 @@
                                    name="profile_image" 
                                    id="profile_image" 
                                    accept="image/*" 
-                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                   class="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-info/10 file:text-info hover:file:bg-info/20">
                             <p class="mt-1 text-xs text-gray-500">JPG, PNG or WebP. Max 5MB. Will be automatically resized to 300x300.</p>
                         </div>
                     </div>
@@ -225,7 +225,7 @@ function showApiKeyModal(keyData) {
                     <input type="text" value="${keyData.api_key}" readonly 
                            class="flex-1 px-3 py-2 border border-gray-300 rounded-l-none bg-gray-50 text-sm font-mono">
                     <button onclick="copyToClipboard('${keyData.api_key}')" 
-                            class="px-3 py-2 bg-blue-600 text-white rounded-r-none hover:bg-blue-700">
+                            class="px-3 py-2 bg-info text-white rounded-r-none hover:bg-info-dark">
                         Copy
                     </button>
                 </div>
@@ -237,7 +237,7 @@ function showApiKeyModal(keyData) {
                 ${keyData.expires_at ? `<p><strong>Expires:</strong> ${new Date(keyData.expires_at).toLocaleDateString()}</p>` : ''}
             </div>
             <button onclick="this.closest('.fixed').remove()" 
-                    class="w-full px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-700">
+                    class="w-full px-4 py-2 bg-primary text-white rounded hover:bg-primary-dark">
                 Close
             </button>
         </div>
@@ -253,11 +253,11 @@ function copyToClipboard(text) {
         const button = event.target;
         const originalText = button.textContent;
         button.textContent = 'Copied!';
-        button.classList.add('bg-green-600');
+        button.classList.add('bg-success');
         
         setTimeout(() => {
             button.textContent = originalText;
-            button.classList.remove('bg-green-600');
+            button.classList.remove('bg-success');
         }, 2000);
     });
 }
@@ -307,11 +307,11 @@ function displayApiKeys(keys) {
                 </div>
                 <div class="flex space-x-2">
                     <button onclick="editApiKey(${key.id})" 
-                            class="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700">
+                            class="px-3 py-1 text-sm bg-info text-white rounded hover:bg-info-dark">
                         Edit
                     </button>
                     <button onclick="revokeApiKey(${key.id})" 
-                            class="px-3 py-1 text-sm bg-red-600 text-white rounded hover:bg-red-700">
+                            class="px-3 py-1 text-sm bg-error text-white rounded hover:bg-error-dark">
                         Revoke
                     </button>
                 </div>

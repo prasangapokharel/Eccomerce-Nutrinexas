@@ -12,8 +12,8 @@
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-info/10 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
                             </svg>
                         </div>
@@ -26,8 +26,8 @@
                 
                 <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-success/10 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
@@ -42,8 +42,8 @@
                 
                 <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
                     <div class="flex items-center">
-                        <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center mr-4">
-                            <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <div class="w-12 h-12 bg-warning/10 rounded-full flex items-center justify-center mr-4">
+                            <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                             </svg>
                         </div>
@@ -94,23 +94,24 @@
                             $isUnread = !isset($notification['is_read']) || !$notification['is_read'];
                             
                             $iconConfig = [
-                                'order_status' => ['icon' => 'shopping-bag', 'color' => 'blue'],
-                                'withdrawal_request' => ['icon' => 'credit-card', 'color' => 'green'],
-                                'referral_earning' => ['icon' => 'users', 'color' => 'purple'],
-                                'system' => ['icon' => 'info-circle', 'color' => 'orange'],
-                                'default' => ['icon' => 'bell', 'color' => 'gray']
+                                'order_status' => ['icon' => 'shopping-bag', 'bgClass' => 'bg-info/10', 'textClass' => 'text-info'],
+                                'withdrawal_request' => ['icon' => 'credit-card', 'bgClass' => 'bg-success/10', 'textClass' => 'text-success'],
+                                'referral_earning' => ['icon' => 'users', 'bgClass' => 'bg-primary/10', 'textClass' => 'text-primary'],
+                                'system' => ['icon' => 'info-circle', 'bgClass' => 'bg-warning/10', 'textClass' => 'text-warning'],
+                                'default' => ['icon' => 'bell', 'bgClass' => 'bg-neutral-100', 'textClass' => 'text-neutral-600']
                             ];
                             
                             $config = $iconConfig[$notification['type']] ?? $iconConfig['default'];
                             $iconClass = $config['icon'];
-                            $colorClass = $config['color'];
+                            $bgClass = $config['bgClass'];
+                            $textClass = $config['textClass'];
                             ?>
-                            <div class="p-6 hover:bg-gray-50 transition-colors cursor-pointer notification-item <?= $isUnread ? 'bg-blue-50/30 border-l-4 border-l-primary' : '' ?>" 
+                            <div class="p-6 hover:bg-gray-50 transition-colors cursor-pointer notification-item <?= $isUnread ? 'bg-info/10 border-l-4 border-l-primary' : '' ?>" 
                                  data-notification-id="<?= $notification['id'] ?? '' ?>"
                                  onclick="markAsRead(<?= $notification['id'] ?? 0 ?>)">
                                 <div class="flex">
                                     <div class="flex-shrink-0 mr-4">
-                                        <div class="w-12 h-12 rounded-full bg-<?= $colorClass ?>-100 flex items-center justify-center text-<?= $colorClass ?>-600">
+                                        <div class="w-12 h-12 rounded-full <?= $bgClass ?> <?= $textClass ?> flex items-center justify-center">
                                             <?php if ($iconClass === 'shopping-bag'): ?>
                                                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path>
@@ -218,7 +219,7 @@ function markAsRead(notificationId) {
         if (data.success) {
             const notificationElement = document.querySelector(`[data-notification-id="${notificationId}"]`);
             if (notificationElement) {
-                notificationElement.classList.remove('bg-blue-50/30', 'border-l-4', 'border-l-primary');
+                notificationElement.classList.remove('bg-info/10', 'border-l-4', 'border-l-primary');
                 const unreadDot = notificationElement.querySelector('.w-3.h-3.bg-primary');
                 if (unreadDot) {
                     unreadDot.remove();
@@ -253,7 +254,7 @@ function markAllAsRead() {
         if (data.success) {
             // Remove unread styling from all notifications
             document.querySelectorAll('.notification-item').forEach(item => {
-                item.classList.remove('bg-blue-50/30', 'border-l-4', 'border-l-primary');
+                item.classList.remove('bg-info/10', 'border-l-4', 'border-l-primary');
                 const unreadDot = item.querySelector('.w-3.h-3.bg-primary');
                 if (unreadDot) {
                     unreadDot.remove();

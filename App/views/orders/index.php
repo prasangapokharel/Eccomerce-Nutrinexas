@@ -4,7 +4,7 @@
     <div class="bg-gray-50 px-4 py-8">
         <div class="max-w-screen-xl mx-auto">
             <?php if (isset($_SESSION['flash_message'])): ?>
-                <div class="mb-6 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm text-green-700 flex items-center gap-2">
+                <div class="mb-6 rounded-xl border border-success bg-success/10 px-4 py-3 text-sm text-success flex items-center gap-2">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                     </svg>
@@ -68,7 +68,7 @@
                         'processing' => 'bg-primary/10 text-primary border border-primary/30',
                         'shipped' => 'bg-primary/10 text-primary border border-primary/30',
                         'delivered' => 'bg-accent/10 text-accent border border-accent/30',
-                        'cancelled' => 'bg-red-50 text-red-600 border border-red-200'
+                        'cancelled' => 'bg-error/10 text-error border border-error'
                     ];
                     ?>
                     <?php foreach ($orders as $order): 
@@ -144,7 +144,7 @@
                                 <?php 
                                 $cancellableStatuses = ['pending', 'confirmed', 'processing', 'unpaid'];
                                 if (in_array($order['status'], $cancellableStatuses)): ?>
-                                    <button onclick="openCancelDrawer(<?= $order['id'] ?>)" class="btn btn-outline text-red-600 border-red-200 flex items-center gap-2">
+                                    <button onclick="openCancelDrawer(<?= $order['id'] ?>)" class="btn btn-outline text-error border-error flex items-center gap-2">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                         </svg>
@@ -177,7 +177,7 @@
                 <input type="hidden" id="cancelOrderId" name="order_id">
                 <div class="mb-4">
                     <label for="cancelReason" class="block text-sm font-medium text-gray-700 mb-2">
-                        Reason for Cancellation <span class="text-red-500">*</span>
+                        Reason for Cancellation <span class="text-error">*</span>
                     </label>
                     <textarea id="cancelReason" 
                               name="reason" 
@@ -193,7 +193,7 @@
                         Close
                     </button>
                     <button type="submit" 
-                            class="btn btn-outline flex-1 justify-center text-red-600 border-red-300">
+                            class="btn btn-outline flex-1 justify-center text-error border-error">
                         Submit Cancellation
                     </button>
                 </div>

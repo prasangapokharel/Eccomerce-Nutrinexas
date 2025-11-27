@@ -31,8 +31,8 @@ $description = 'View your earnings, balance, and withdrawal history';
                         <p class="body2-medium text-gray-600">Available Balance</p>
                         <p class="h3-bold text-primary">रु<?= number_format($availableBalance ?? 0, 2) ?></p>
                     </div>
-                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-success/10 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                         </svg>
                     </div>
@@ -43,10 +43,10 @@ $description = 'View your earnings, balance, and withdrawal history';
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="body2-medium text-gray-600">Total Earned</p>
-                        <p class="h3-bold text-blue-600">रु<?= number_format($totalEarnings ?? 0, 2) ?></p>
+                        <p class="h3-bold text-info">रु<?= number_format($totalEarnings ?? 0, 2) ?></p>
                     </div>
-                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-info/10 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                         </svg>
                     </div>
@@ -57,10 +57,10 @@ $description = 'View your earnings, balance, and withdrawal history';
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600">Pending</p>
-                        <p class="text-2xl font-bold text-yellow-600">रु<?= number_format($pendingEarnings ?? 0, 2) ?></p>
+                        <p class="text-2xl font-bold text-warning">रु<?= number_format($pendingEarnings ?? 0, 2) ?></p>
                     </div>
-                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center">
-                        <svg class="w-6 h-6 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-12 h-12 bg-warning/10 rounded-lg flex items-center justify-center">
+                        <svg class="w-6 h-6 text-warning" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
                     </div>
@@ -115,12 +115,12 @@ $description = 'View your earnings, balance, and withdrawal history';
             </div>
             
             <?php if (($availableBalance ?? 0) < ($minWithdrawal ?? 100)): ?>
-                <div class="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <div class="mt-4 p-4 bg-warning/10 border border-warning rounded-lg">
                     <div class="flex items-center">
-                        <svg class="w-5 h-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-5 h-5 text-warning mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 19.5c-.77.833.192 2.5 1.732 2.5z"/>
                         </svg>
-                        <p class="text-sm text-yellow-700">
+                        <p class="text-sm text-warning">
                             Minimum withdrawal amount is रु<?= number_format($minWithdrawal ?? 100) ?>. 
                             You need रु<?= number_format(($minWithdrawal ?? 100) - ($availableBalance ?? 0), 2) ?> more to withdraw.
                         </p>
@@ -153,8 +153,8 @@ $description = 'View your earnings, balance, and withdrawal history';
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
-                                            <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3 <?= $activity['type'] === 'earning' ? 'bg-green-100' : 'bg-blue-100' ?>">
-                                                <svg class="w-4 h-4 <?= $activity['type'] === 'earning' ? 'text-green-500' : 'text-blue-500' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <div class="w-8 h-8 rounded-full flex items-center justify-center mr-3 <?= $activity['type'] === 'earning' ? 'bg-success/10' : 'bg-info/10' ?>">
+                                                <svg class="w-4 h-4 <?= $activity['type'] === 'earning' ? 'text-success' : 'text-info' ?>" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <?php if ($activity['type'] === 'earning'): ?>
                                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"/>
                                                     <?php else: ?>
@@ -169,12 +169,12 @@ $description = 'View your earnings, balance, and withdrawal history';
                                         <div class="text-sm text-gray-900"><?= htmlspecialchars($activity['description']) ?></div>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="text-sm font-semibold <?= $activity['amount'] >= 0 ? 'text-green-600' : 'text-red-600' ?>">
+                                        <span class="text-sm font-semibold <?= $activity['amount'] >= 0 ? 'text-success' : 'text-error' ?>">
                                             <?= $activity['amount'] >= 0 ? '+' : '' ?>रु<?= number_format(abs($activity['amount']), 2) ?>
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
-                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-success/10 text-success">
                                             Completed
                                         </span>
                                     </td>
@@ -216,7 +216,7 @@ $description = 'View your earnings, balance, and withdrawal history';
                         </div>
                         <div class="flex justify-between items-center">
                             <span class="text-gray-600">Auto Approve</span>
-                            <span class="text-sm font-medium <?= ($autoApprove ?? 'true') === 'true' ? 'text-green-600' : 'text-red-600' ?>">
+                            <span class="text-sm font-medium <?= ($autoApprove ?? 'true') === 'true' ? 'text-success' : 'text-error' ?>">
                                 <?= ($autoApprove ?? 'true') === 'true' ? 'Enabled' : 'Disabled' ?>
                             </span>
                         </div>

@@ -79,8 +79,8 @@
                                 <input type="radio" name="payment_method" value="bank_transfer" class="sr-only" id="bank_transfer">
                                 <div class="border-2 border-neutral-200 rounded-lg p-4 hover:border-primary transition-colors payment-option">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-8 h-8 bg-info/10 rounded-full flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
                                             </svg>
                                         </div>
@@ -96,8 +96,8 @@
                                 <input type="radio" name="payment_method" value="esewa" class="sr-only" id="esewa">
                                 <div class="border-2 border-neutral-200 rounded-lg p-4 hover:border-primary transition-colors payment-option">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-green-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-8 h-8 bg-success/10 rounded-full flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-success" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                             </svg>
                                         </div>
@@ -113,8 +113,8 @@
                                 <input type="radio" name="payment_method" value="khalti" class="sr-only" id="khalti">
                                 <div class="border-2 border-neutral-200 rounded-lg p-4 hover:border-primary transition-colors payment-option">
                                     <div class="flex items-center space-x-3">
-                                        <div class="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
-                                            <svg class="w-4 h-4 text-purple-600" fill="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
+                                            <svg class="w-4 h-4 text-primary" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
                                             </svg>
                                         </div>
@@ -272,9 +272,9 @@
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                                 <?= 
-                                                $withdrawal['status'] === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
-                                                ($withdrawal['status'] === 'processing' ? 'bg-blue-100 text-blue-800' : 
-                                                ($withdrawal['status'] === 'completed' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800')) 
+                                                $withdrawal['status'] === 'pending' ? 'bg-warning/10 text-warning' : 
+                                                ($withdrawal['status'] === 'processing' ? 'bg-info/10 text-info' : 
+                                                ($withdrawal['status'] === 'completed' ? 'bg-success/10 text-success' : 'bg-error/10 text-error')) 
                                                 ?>">
                                                 <?= ucfirst($withdrawal['status']) ?>
                                             </span>
