@@ -13,19 +13,6 @@ ob_start();
                 <h1 class="text-3xl md:text-4xl font-bold leading-tight mb-3">Health & Nutrition Insights for Every Goal</h1>
                 <p class="text-white/90 max-w-2xl">Curated articles, supplement breakdowns, meal plans, and wellbeing tactics—designed with the same polish as our storefront product cards.</p>
             </div>
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl px-6 py-5 border border-white/20 shadow-lg w-full md:w-96">
-                <form action="<?= \App\Core\View::url('blog/search') ?>" method="GET" class="space-y-3">
-                    <div class="flex items-center gap-2 bg-white rounded-xl px-4 py-2 shadow-sm">
-                        <i class="fas fa-search text-primary"></i>
-                        <input type="text" name="q" placeholder="Find macros, guides, ingredients..." 
-                               value="<?= htmlspecialchars($_GET['q'] ?? '') ?>"
-                               class="flex-1 input border-0 px-0 py-0 focus:ring-0 focus:border-transparent shadow-none text-sm" />
-                    </div>
-                    <button type="submit" class="btn btn-accent w-full justify-center py-3">
-                        Search Articles
-                    </button>
-                </form>
-            </div>
         </div>
     </div>
 
@@ -40,11 +27,11 @@ ob_start();
         $sizeClasses = $variant === 'feature' ? 'aspect-[5/3] md:aspect-[4/3]' : 'aspect-[4/3]';
     ?>
         <a href="<?= \App\Core\View::url('blog/view/' . $post['slug']) ?>" class="group block">
-            <div class="relative bg-white border border-neutral-100 rounded-2xl shadow-sm overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl">
+            <div class="relative bg-white border border-neutral-100 rounded-2xl shadow-sm overflow-hidden hover:shadow-lg">
                 <div class="relative <?= $sizeClasses ?> bg-neutral-100 overflow-hidden">
                     <?php if ($image): ?>
                     <img src="<?= htmlspecialchars($image) ?>" alt="<?= htmlspecialchars($post['title']) ?>"
-                         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" loading="lazy">
+                         class="w-full h-full object-cover" loading="lazy">
                     <?php endif; ?>
                     <?php if ($category): ?>
                     <span class="absolute top-4 left-4 inline-flex items-center rounded-full bg-white/90 text-primary text-xs font-semibold px-3 py-1 shadow">
@@ -57,7 +44,7 @@ ob_start();
                         <span><?= $date ?></span>
                         <span class="inline-flex items-center gap-1"><i class="far fa-clock"></i> <?= $readingTime ?> min read</span>
                     </div>
-                    <h3 class="text-lg font-semibold text-primary line-clamp-2 group-hover:text-secondary transition-colors">
+                    <h3 class="text-lg font-semibold text-primary line-clamp-2 group-hover:text-primary-dark">
                         <?= htmlspecialchars($post['title']) ?>
                     </h3>
                     <p class="text-sm text-neutral-600 line-clamp-3"><?= htmlspecialchars($excerpt) ?></p>
@@ -175,7 +162,7 @@ ob_start();
         <div class="p-4">
             <div class="space-y-3">
                 <?php foreach ($data['popularPosts'] as $popular): ?>
-                <div class="flex space-x-3 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors"
+                <div class="flex space-x-3 cursor-pointer hover:bg-neutral-50 p-2 rounded-lg"
                      onclick="window.location.href='<?= \App\Core\View::url('blog/view/' . $popular['slug']) ?>'">
                     <?php if ($popular['featured_image']): ?>
                     <img src="<?= htmlspecialchars($popular['featured_image']) ?>" 

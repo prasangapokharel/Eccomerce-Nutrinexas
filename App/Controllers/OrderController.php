@@ -209,6 +209,12 @@ class OrderController extends Controller
         
         $orderItems = $this->orderModel->getOrderItems($order['id']);
         
+        // Resolve product images for order items
+        foreach ($orderItems as &$item) {
+            $item['image_url'] = $this->resolveOrderItemImage($item);
+        }
+        unset($item);
+        
         $this->view('orders/track-result', [
             'order' => $order,
             'orderItems' => $orderItems,

@@ -40,10 +40,10 @@ use App\Helpers\CurrencyHelper;
 
                                     <div id="cart-items-container" class="sm:space-y-6 space-y-8">
                                         <?php foreach ($cartItems as $item): ?>
-                                            <div class="cart-item grid sm:grid-cols-3 items-center gap-4 max-sm:gap-3 bg-white rounded-xl border border-transparent hover:border-primary/30 transition-all p-4 max-sm:p-3" data-product-id="<?= $item['product']['id'] ?>">
+                                            <div class="cart-item grid sm:grid-cols-3 items-center gap-4 max-sm:gap-3 bg-white rounded-xl border border-transparent hover:border-primary/30 p-4 max-sm:p-3" data-product-id="<?= $item['product']['id'] ?>">
                                                 <div class="sm:col-span-2 flex sm:items-center max-sm:flex-col gap-4 max-sm:gap-3 w-full">
                                                     <div class="flex items-start gap-3 w-full">
-                                                        <input type="checkbox" class="item-checkbox w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0 mt-1" checked>
+                                                        <input type="checkbox" class="item-checkbox w-5 h-5 text-primary bg-white border-2 border-neutral-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0 mt-1" checked>
                                                         <div class="w-16 h-16 sm:w-24 sm:h-24 shrink-0 bg-white p-2 rounded-md border">
                                                             <?php $imageUrl = htmlspecialchars($item['product']['image_url'] ?? \App\Core\View::asset('images/products/default.jpg')); ?>
                                                             <img src="<?= $imageUrl ?>" alt="<?= htmlspecialchars($item['product']['product_name']) ?>" class="w-full h-full object-contain" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'; this.onerror=null;">
@@ -63,13 +63,13 @@ use App\Helpers\CurrencyHelper;
                                                                     </button>
                                                                 </div>
                                                                 <div class="flex items-center px-2.5 py-1.5 border border-gray-300 text-slate-900 text-xs rounded-md bg-white">
-                                                                    <button type="button" class="p-1 rounded-md hover:bg-gray-100 transition-colors" onclick="updateCartItem(<?= $item['product']['id'] ?>, 'decrease')" aria-label="Decrease quantity">
+                                                                    <button type="button" class="p-1 rounded-md hover:bg-neutral-100" onclick="updateCartItem(<?= $item['product']['id'] ?>, 'decrease')" aria-label="Decrease quantity">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 fill-current" viewBox="0 0 124 124">
                                                                             <path d="M112 50H12C5.4 50 0 55.4 0 62s5.4 12 12 12h100c6.6 0 12-5.4 12-12s-5.4-12-12-12z"></path>
                                                                         </svg>
                                                                     </button>
                                                                     <span class="mx-3 quantity-display-main text-base font-semibold" data-product-id="<?= $item['product']['id'] ?>"><?= $item['quantity'] ?></span>
-                                                                    <button type="button" class="p-1 rounded-md hover:bg-gray-100 transition-colors" onclick="updateCartItem(<?= $item['product']['id'] ?>, 'increase')" aria-label="Increase quantity">
+                                                                    <button type="button" class="p-1 rounded-md hover:bg-neutral-100" onclick="updateCartItem(<?= $item['product']['id'] ?>, 'increase')" aria-label="Increase quantity">
                                                                         <svg xmlns="http://www.w3.org/2000/svg" class="w-3 h-3 fill-current" viewBox="0 0 42 42">
                                                                             <path d="M37.059 16H26V4.941C26 2.224 23.718 0 21 0s-5 2.224-5 4.941V16H4.941C2.224 16 0 18.282 0 21s2.224 5 4.941 5H16v11.059C16 39.776 18.282 42 21 42s5-2.224 5-4.941V26h11.059C39.776 26 42 23.718 42 21s-2.224-5-4.941-5z"></path>
                                                                         </svg>
@@ -190,7 +190,7 @@ use App\Helpers\CurrencyHelper;
     <!-- Cart Modal -->
     <div id="cartModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
         <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div class="inline-block align-bottom bg-white rounded-t-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+            <div class="inline-block align-bottom bg-white rounded-t-2xl text-left overflow-hidden shadow-xl sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                 <!-- Modal Header -->
                 <div class="bg-white px-6 py-4 border-b border-gray-200 flex items-center justify-between">
                     <h3 class="text-lg font-semibold text-gray-900">All Cart Items</h3>
@@ -247,7 +247,7 @@ use App\Helpers\CurrencyHelper;
                                     </div>
                                     <button type="button" 
                                             onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)" 
-                                            class="p-1 text-error hover:text-error-dark hover:bg-error/10 rounded transition-colors" 
+                                            class="p-1 text-error hover:text-error-dark hover:bg-error/10 rounded" 
                                             aria-label="Remove item">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -275,7 +275,7 @@ use App\Helpers\CurrencyHelper;
 
 <!-- Order Steps Drawer -->
 <div id="orderStepsOverlay" class="fixed inset-0 bg-black bg-opacity-40 z-50 hidden"></div>
-<div id="orderStepsDrawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-xl z-50 transform translate-y-full transition-transform duration-300">
+<div id="orderStepsDrawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-2xl shadow-xl z-50 translate-y-full">
   <div class="bg-white px-6 py-4 border-b border-gray-200 flex items-center justify-between">
     <h3 class="text-lg font-semibold text-gray-900">Order in 6 clean steps</h3>
     <button id="closeStepsDrawer" class="text-gray-400 hover:text-gray-600" aria-label="Close">
@@ -326,7 +326,6 @@ document.addEventListener('DOMContentLoaded', function(){
 
 <style>
 /* Drawer fallback if Tailwind classes are unavailable */
-#orderStepsDrawer { transition: transform 0.3s ease; }
 #orderStepsDrawer.translate-y-full { transform: translateY(100%); }
 </style>
 
@@ -348,15 +347,15 @@ document.addEventListener('DOMContentLoaded', function(){
     input[type="checkbox"] {
         appearance: none;
         background-color: white;
-        border: 2px solid #d1d5db;
+        border: 2px solid #D1D5DB;
         border-radius: 6px;
         cursor: pointer;
         position: relative;
     }
     
     input[type="checkbox"]:checked {
-        background-color: var(--primary-color, #7C3AED);
-        border-color: var(--primary-color, #7C3AED);
+        background-color: #1F2937;
+        border-color: #1F2937;
     }
     
     input[type="checkbox"]:checked::after {
@@ -364,7 +363,8 @@ document.addEventListener('DOMContentLoaded', function(){
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        margin-top: -6px;
+        margin-left: -6px;
         width: 12px;
         height: 12px;
         background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke-width='1.5' stroke='white'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' d='m4.5 12.75 6 6 9-13.5' /%3E%3C/svg%3E");
@@ -383,7 +383,8 @@ document.addEventListener('DOMContentLoaded', function(){
         position: absolute;
         top: 50%;
         left: 50%;
-        transform: translate(-50%, -50%);
+        margin-top: -6px;
+        margin-left: -6px;
         color: white;
         font-size: 14px;
         font-weight: bold;
@@ -391,8 +392,8 @@ document.addEventListener('DOMContentLoaded', function(){
     
     /* Cart item selection state */
     .cart-item.selected {
-        background-color: rgba(124, 58, 237, 0.05);
-        border-color: var(--primary-color, #7C3AED);
+        background-color: rgba(31, 41, 55, 0.05);
+        border-color: #1F2937;
     }
     
     /* Mobile optimizations */
