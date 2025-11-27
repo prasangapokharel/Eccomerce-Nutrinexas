@@ -584,8 +584,9 @@ class CartController extends Controller
             if ($isGuest) {
                 // Remove from guest cart
                 $guestCart = $cartMiddleware->getCartData();
-                if (isset($guestCart[$productId])) {
-                    unset($guestCart[$productId]);
+                $productIdKey = (int)$productId;
+                if (isset($guestCart[$productIdKey])) {
+                    unset($guestCart[$productIdKey]);
                     $_SESSION['guest_cart'] = $guestCart;
                     $_SESSION['cart_count'] = array_sum(array_column($guestCart, 'quantity'));
                 }
