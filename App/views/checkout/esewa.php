@@ -49,8 +49,8 @@ $esewaLogo = PaymentGatewayHelper::getGatewayLogo('eSewa');
         <!-- Payment success animation -->
         <div id="paymentSuccessAnimation" class="fixed inset-0 bg-black bg-opacity-50 flex flex-col items-center justify-center z-50 hidden">
             <div class="bg-white p-8 rounded-lg flex flex-col items-center">
-                <div class="bg-green-100 rounded-full p-3 mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <div class="bg-success/10 rounded-full p-3 mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
@@ -60,10 +60,10 @@ $esewaLogo = PaymentGatewayHelper::getGatewayLogo('eSewa');
         </div>
 
         <!-- Payment error display -->
-        <div id="paymentError" class="bg-red-50 border border-red-200 text-red-800 rounded-lg p-4 mb-6 hidden">
+        <div id="paymentError" class="bg-error/10 border border-error text-error rounded-lg p-4 mb-6 hidden">
             <div class="flex">
                 <div class="flex-shrink-0">
-                    <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                    <svg class="h-5 w-5 text-error" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
                     </svg>
                 </div>

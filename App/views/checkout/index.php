@@ -239,10 +239,10 @@ if (isset($_COOKIE['guest_postal_code'])) {
                                              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                                     <?php endif; ?>
                                     
-                                    <div class="w-full h-full rounded-lg flex items-center justify-center <?= $gateway['type'] === 'cod' ? 'bg-green-100' : ($gateway['type'] === 'manual' ? 'bg-blue-100' : 'bg-purple-100') ?>" 
+                                    <div class="w-full h-full rounded-lg flex items-center justify-center <?= $gateway['type'] === 'cod' ? 'bg-success/10' : ($gateway['type'] === 'manual' ? 'bg-info/10' : 'bg-primary/10') ?>" 
                                          style="<?= $iconUrl ? 'display: none;' : '' ?>">
                                         <?php if ($gateway['type'] === 'cod'): ?>
-                                            <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-5 h-5 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
                                             </svg>
                                         <?php elseif ($gateway['type'] === 'manual'): ?>
@@ -250,7 +250,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                             </svg>
                                         <?php else: ?>
-                                            <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
                                             </svg>
                                         <?php endif; ?>
@@ -286,14 +286,14 @@ if (isset($_COOKIE['guest_postal_code'])) {
                                     ?>
                                     <p class="text-xs text-gray-600"><?= htmlspecialchars($description) ?></p>
                                     <?php if ($gateway['type'] === 'cod'): ?>
-                                        <!-- <p class="text-xs text-green-600 font-medium">✓ No extra charges</p> -->
+                                        <!-- <p class="text-xs text-success font-medium">✓ No extra charges</p> -->
                                     <?php elseif ($gateway['type'] === 'digital'): ?>
-                                        <!-- <p class="text-xs text-blue-600 font-medium">✓ 100% secure</p> -->
+                                        <!-- <p class="text-xs text-info font-medium">✓ 100% secure</p> -->
                                     <?php endif; ?>
                                 </div>
                                 
                                 <!-- <div class="text-right">
-                                    <div class="text-green-600 text-sm font-medium">
+                                    <div class="text-success text-sm font-medium">
                                         <?= $trustBadge ?>
                                     </div>
                                     <?php if ($gateway['type'] === 'digital'): ?>
@@ -419,7 +419,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                             <p class="text-sm font-medium text-primary"><?= htmlspecialchars($appliedCoupon['code']) ?></p>
                             <p class="text-xs text-primary/70">You saved <?= CurrencyHelper::format($couponDiscount) ?></p>
                         </div>
-                        <button type="button" id="remove-coupon-btn" class="text-red-600" aria-label="Remove coupon">
+                        <button type="button" id="remove-coupon-btn" class="text-error" aria-label="Remove coupon">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -451,7 +451,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                     <span class="font-semibold text-slate-900">रु<span id="tax"><?= number_format($tax, 2) ?></span></span>
                 </div>
                 <?php if (isset($couponDiscount) && $couponDiscount > 0): ?>
-                    <div class="flex justify-between text-green-600">
+                    <div class="flex justify-between text-success">
                         <span>Coupon Discount</span>
                         <span>-<?= CurrencyHelper::format($couponDiscount) ?></span>
                     </div>
@@ -482,19 +482,19 @@ if (isset($_COOKIE['guest_postal_code'])) {
     <!-- <div class="fixed bottom-20 left-0 right-0 bg-white border-t border-gray-100 p-4 z-40">
         <div class="flex items-center justify-center space-x-6 text-xs text-gray-600">
             <div class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-success" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
                 </svg>
                 <span>100% Secure</span>
             </div>
             <div class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-info" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                 </svg>
                 <span>SSL Protected</span>
             </div>
             <div class="flex items-center space-x-1">
-                <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                 </svg>
                 <span>Privacy Protected</span>
@@ -744,7 +744,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function showCouponMessage(message, type) {
         couponMessage.textContent = message;
-        couponMessage.className = `mt-2 text-sm ${type === 'error' ? 'text-red-600' : 'text-green-600'}`;
+        couponMessage.className = `mt-2 text-sm ${type === 'error' ? 'text-error' : 'text-success'}`;
         couponMessage.classList.remove('hidden');
         setTimeout(() => {
             couponMessage.classList.add('hidden');
@@ -769,7 +769,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="text-xs text-accent/70">Discount: रु${parseFloat(discount).toFixed(2)}</p>
                     </div>
                 </div>
-                <button type="button" id="remove-coupon-btn" class="text-red-600">
+                <button type="button" id="remove-coupon-btn" class="text-error">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -813,8 +813,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (taxLine) {
                     const couponHtml = `
                         <div class="flex justify-between coupon-discount-line">
-                            <span class="text-green-600">Coupon Discount</span>
-                            <span class="font-medium text-green-600">-रु${parseFloat(discount).toFixed(2)}</span>
+                            <span class="text-success">Coupon Discount</span>
+                            <span class="font-medium text-success">-रु${parseFloat(discount).toFixed(2)}</span>
                         </div>
                     `;
                     taxLine.insertAdjacentHTML('afterend', couponHtml);
@@ -936,7 +936,7 @@ document.addEventListener('DOMContentLoaded', function() {
             currentDeliveryFee = typeof fee !== 'undefined' ? parseFloat(fee) : 0;
             if (currentDeliveryFee === 0) {
                 deliveryFeeElement.textContent = 'Free';
-                deliveryFeeElement.className = 'font-medium text-green-600';
+                deliveryFeeElement.className = 'font-medium text-success';
             } else {
                 deliveryFeeElement.textContent = `रु${currentDeliveryFee.toFixed(2)}`;
                 deliveryFeeElement.className = 'font-medium text-gray-900';
@@ -1039,10 +1039,10 @@ function detectLocation() {
 function showLocationAlert(type, message) {
     const alertDiv = document.createElement('div');
     alertDiv.className = `fixed top-4 right-4 z-50 p-4 rounded-md shadow-lg ${
-        type === 'success' ? 'bg-green-100 border border-green-400 text-green-700' :
-        type === 'info' ? 'bg-blue-100 border border-blue-400 text-blue-700' :
-        type === 'warning' ? 'bg-primary/10 border border-primary/30 text-primary' :
-        'bg-red-100 border border-red-400 text-red-700'
+        type === 'success' ? 'bg-success/10 border border-success text-success' :
+        type === 'info' ? 'bg-info/10 border border-info text-info' :
+        type === 'warning' ? 'bg-warning/10 border border-warning text-warning' :
+        'bg-error/10 border border-error text-error'
     }`;
     alertDiv.innerHTML = `
         <div class="flex">
@@ -1073,7 +1073,7 @@ function showLocationAlert(type, message) {
     // Basic validation and review modal
     const errorToast = (msg) => {
         const el = document.createElement('div');
-        el.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 bg-red-600 text-white px-4 py-2 rounded-lg shadow z-50';
+        el.className = 'fixed bottom-20 left-1/2 -translate-x-1/2 bg-error text-white px-4 py-2 rounded-lg shadow z-50';
         el.textContent = msg;
         document.body.appendChild(el);
         setTimeout(()=>el.remove(), 2500);

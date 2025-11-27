@@ -75,14 +75,14 @@ use App\Helpers\CurrencyHelper;
                                          <!-- Selected Color and Size -->
                                          <div class="mt-2 flex flex-wrap gap-2">
                                              <?php if (!empty($item['selected_color'])): ?>
-                                                 <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-blue-100 text-blue-800 border border-blue-200">
+                                                 <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-info/10 text-info border border-info">
                                                      <span class="w-2 h-2 rounded-full border border-gray-300 mr-1" style="background-color: <?= preg_match('/^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/', $item['selected_color']) ? htmlspecialchars($item['selected_color']) : 'transparent' ?>"></span>
                                                      Color: <?= htmlspecialchars($item['selected_color']) ?>
                                                  </span>
                                              <?php endif; ?>
                                              
                                              <?php if (!empty($item['selected_size'])): ?>
-                                                 <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-green-100 text-green-800 border border-green-200">
+                                                 <span class="inline-flex items-center px-2 py-1 rounded text-xs font-medium bg-success/10 text-success border border-success">
                                                      Size: <?= htmlspecialchars($item['selected_size']) ?>
                                                  </span>
                                              <?php endif; ?>
@@ -126,8 +126,8 @@ use App\Helpers\CurrencyHelper;
                         </div>
                         <?php if ($discountAmount > 0): ?>
                             <div class="flex justify-between">
-                                <span class="text-green-600">Item Discount</span>
-                                <span class="font-medium text-green-600">-<?= CurrencyHelper::format($discountAmount) ?></span>
+                                <span class="text-success">Item Discount</span>
+                                <span class="font-medium text-success">-<?= CurrencyHelper::format($discountAmount) ?></span>
                             </div>
                         <?php endif; ?>
                         <?php if ($taxAmount > 0): ?>

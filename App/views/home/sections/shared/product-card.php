@@ -30,7 +30,7 @@ $themes = [
         'ratingText' => 'text-xs text-gray-300',
         'priceWrap' => 'text-base font-bold text-accent',
         'priceStrike' => 'text-xs text-gray-200 line-through',
-        'savings' => 'text-xs text-green-300 font-semibold',
+        'savings' => 'text-xs text-success font-semibold',
         'cta' => 'default',
     ],
     'primary' => [
@@ -40,7 +40,7 @@ $themes = [
         'ratingText' => 'text-xs text-white/70',
         'priceWrap' => 'text-lg font-bold text-white',
         'priceStrike' => 'text-xs text-white/70 line-through',
-        'savings' => 'text-xs text-green-200 font-semibold',
+        'savings' => 'text-xs text-success font-semibold',
         'cta' => 'primary',
     ],
     'light' => [
@@ -50,7 +50,7 @@ $themes = [
         'ratingText' => 'text-xs text-gray-600',
         'priceWrap' => 'text-lg font-bold text-primary',
         'priceStrike' => 'text-xs text-gray-500 line-through',
-        'savings' => 'text-xs text-green-600 font-semibold',
+        'savings' => 'text-xs text-success font-semibold',
         'cta' => 'default',
     ],
 ];

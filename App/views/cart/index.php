@@ -52,7 +52,7 @@ use App\Helpers\CurrencyHelper;
                                                             <h4 class="text-[15px] font-semibold text-slate-900 truncate">
                                                                 <?= htmlspecialchars($item['product']['product_name']) ?>
                                                             </h4>
-                                                            <button type="button" class="text-xs font-medium text-red-500" onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)">Remove</button>
+                                                            <button type="button" class="text-xs font-medium text-error" onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)">Remove</button>
                                                             <div class="flex flex-wrap items-center gap-3 mt-2">
                                                                 <div>
                                                                     <button type="button" class="flex items-center px-2.5 py-1.5 border border-gray-300 text-slate-900 text-xs font-medium bg-white rounded-md">
@@ -123,7 +123,7 @@ use App\Helpers\CurrencyHelper;
                                     <div>
                                         <ul class="text-slate-500 font-medium space-y-4 text-sm">
                                             <li class="flex flex-wrap gap-4">Subtotal <span class="ml-auto text-slate-900 font-semibold">रु<span id="subtotal" data-original="<?= $originalTotals['subtotal'] ?>" data-current="<?= $total ?>"><?= number_format($total, 2) ?></span></span></li>
-                                            <li id="cart-discount-row" class="flex flex-wrap gap-4 text-sm <?= $hasCoupon ? '' : 'hidden' ?>">Discount <span class="ml-auto font-semibold text-green-600">-रु<span id="cart-discount-amount"><?= number_format($couponDiscount, 2) ?></span></span></li>
+                                            <li id="cart-discount-row" class="flex flex-wrap gap-4 text-sm <?= $hasCoupon ? '' : 'hidden' ?>">Discount <span class="ml-auto font-semibold text-success">-रु<span id="cart-discount-amount"><?= number_format($couponDiscount, 2) ?></span></span></li>
                                             <li class="flex flex-wrap gap-4">Tax (<?= number_format($taxRate * 100, 0) ?>%) <span class="ml-auto text-slate-900 font-semibold">रु<span id="tax" data-original="<?= $originalTotals['tax'] ?>" data-current="<?= $tax ?>"><?= number_format($tax, 2) ?></span></span></li>
                                             <li class="flex flex-wrap gap-4 text-[15px] font-semibold text-slate-900">Total <span class="ml-auto">रु<span id="final-total" data-original="<?= $originalTotals['final'] ?>" data-current="<?= $finalTotal ?>"><?= number_format($finalTotal, 2) ?></span></span></li>
                                         </ul>
@@ -134,7 +134,7 @@ use App\Helpers\CurrencyHelper;
                                                 <p class="text-sm font-semibold text-primary" id="cart-applied-code"><?= $hasCoupon ? htmlspecialchars($appliedCoupon['code']) : '' ?></p>
                                                 <p class="text-xs text-primary/70" id="cart-applied-discount"><?= $hasCoupon ? 'Saved रु' . number_format($couponDiscount, 2) : '' ?></p>
                                             </div>
-                                            <button type="button" id="cart-remove-coupon-btn" class="text-red-600 hover:text-red-700" aria-label="Remove coupon">
+                                            <button type="button" id="cart-remove-coupon-btn" class="text-error hover:text-error-dark" aria-label="Remove coupon">
                                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                                 </svg>
@@ -247,7 +247,7 @@ use App\Helpers\CurrencyHelper;
                                     </div>
                                     <button type="button" 
                                             onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)" 
-                                            class="p-1 text-red-500 hover:text-red-700 hover:bg-red-50 rounded transition-colors" 
+                                            class="p-1 text-error hover:text-error-dark hover:bg-error/10 rounded transition-colors" 
                                             aria-label="Remove item">
                                         <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -422,7 +422,7 @@ function showMessage(message, type = 'error') {
     }
     
     const messageDiv = document.createElement('div');
-    messageDiv.className = `fixed bottom-20 left-4 z-50 px-4 py-2 rounded-lg text-white font-medium ${type === 'success' ? 'bg-green-500' : 'bg-red-500'}`;
+    messageDiv.className = `fixed bottom-20 left-4 z-50 px-4 py-2 rounded-lg text-white font-medium ${type === 'success' ? 'bg-success' : 'bg-error'}`;
     messageDiv.textContent = message;
     document.body.appendChild(messageDiv);
     
@@ -474,7 +474,7 @@ function setBaseTotals(subtotalValue, taxValue, finalValue) {
 function showCartCouponMessage(message, type = 'success') {
     if (!couponMessageEl) return;
     couponMessageEl.textContent = message;
-    couponMessageEl.className = `text-sm ${type === 'error' ? 'text-red-600' : 'text-green-600'}`;
+    couponMessageEl.className = `text-sm ${type === 'error' ? 'text-error' : 'text-success'}`;
     couponMessageEl.classList.remove('hidden');
     setTimeout(() => couponMessageEl.classList.add('hidden'), 4000);
 }
