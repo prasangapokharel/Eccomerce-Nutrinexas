@@ -97,7 +97,7 @@ body {
   }
 
   .btn-primary {
-    @apply bg-primary text-white shadow-sky hover:bg-primary-dark focus-visible:ring-primary;
+    @apply bg-primary text-white shadow-md hover:bg-primary-dark focus-visible:ring-primary;
   }
 
   .btn-secondary {
