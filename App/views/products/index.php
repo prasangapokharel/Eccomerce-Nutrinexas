@@ -91,7 +91,17 @@ function formatProductName($name) {
         <div class="flex gap-6">
             <!-- Filter Sidebar (Desktop) -->
             <aside>
-                <?php include __DIR__ . '/../components/productfilter.php'; ?>
+                <?php 
+                $filterData = $filterData ?? [
+                    'categories' => [],
+                    'brands' => [],
+                    'sizes' => [],
+                    'colors' => [],
+                    'minPrice' => 0,
+                    'maxPrice' => 10000
+                ];
+                include __DIR__ . '/../components/productfilter.php'; 
+                ?>
             </aside>
 
             <!-- Products Grid -->

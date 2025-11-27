@@ -171,13 +171,264 @@ class ProductController extends Controller
             }
             unset($product);
 
+            // Get filter data for sidebar
+            $filterData = $this->getFilterData();
+            
             $this->view('products/index', [
                 'products' => $products,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
                 'totalProducts' => $totalProducts,
+                'filterData' => $filterData,
                 'title' => 'All Products',
             ]);
+        }
+
+        /**
+         * AJAX Filter endpoint
+         */
+        public function filter()
+        {
+            if (!isset($_SERVER['HTTP_X_REQUESTED_WITH']) || $_SERVER['HTTP_X_REQUESTED_WITH'] !== 'XMLHttpRequest') {
+                $this->redirect('products');
+                return;
+            }
+            
+            $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+            $limit = 12;
+            $offset = ($page - 1) * $limit;
+            
+            // Get filters
+            $sort = $_GET['sort'] ?? '';
+            $minPrice = isset($_GET['min_price']) ? (float)$_GET['min_price'] : null;
+            $maxPrice = isset($_GET['max_price']) ? (float)$_GET['max_price'] : null;
+            $categories = isset($_GET['categories']) ? (array)$_GET['categories'] : [];
+            $brands = isset($_GET['brands']) ? (array)$_GET['brands'] : [];
+            $sizes = isset($_GET['sizes']) ? (array)$_GET['sizes'] : [];
+            $colors = isset($_GET['colors']) ? (array)$_GET['colors'] : [];
+            
+            // Apply filters
+            $products = $this->getFilteredProductsAdvanced($limit, $offset, $sort, $minPrice, $maxPrice, $categories, $brands, $sizes, $colors);
+            
+            foreach ($products as &$product) {
+                $primaryImage = $this->productImageModel->getPrimaryImage($product['id']);
+                $product['image_url'] = $this->getProductImageUrl($product, $primaryImage);
+                
+                // Add wishlist status
+                if (Session::has('user_id')) {
+                    $product['in_wishlist'] = $this->wishlistModel->isInWishlist(Session::get('user_id'), $product['id']);
+                } else {
+                    $product['in_wishlist'] = false;
+                }
+            }
+            unset($product);
+            
+            // Render product grid HTML
+            ob_start();
+            include __DIR__ . '/../components/pricing-helper.php';
+            foreach ($products as $product):
+                $badge = null;
+                if (!empty($product['is_new'])) {
+                    $badge = ['label' => 'New'];
+                } elseif (!empty($product['is_best_seller'])) {
+                    $badge = ['label' => 'Best'];
+                }
+                
+                $cardOptions = [
+                    'theme' => 'light',
+                    'showCta' => false,
+                    'cardClass' => 'w-full h-full',
+                ];
+                
+                if ($badge) {
+                    $cardOptions['topRightBadge'] = $badge;
+                }
+                
+                include dirname(__DIR__) . '/views/home/sections/shared/product-card.php';
+            endforeach;
+            $html = ob_get_clean();
+            
+            $this->jsonResponse([
+                'success' => true,
+                'html' => $html,
+                'count' => count($products)
+            ]);
+        }
+
+        /**
+         * Get filter data (categories, brands, sizes, colors, price range)
+         */
+        private function getFilterData()
+        {
+            $db = \App\Core\Database::getInstance();
+            
+            // Get categories
+            $categories = $db->query(
+                "SELECT DISTINCT category FROM products WHERE status = 'active' AND category IS NOT NULL AND category != '' ORDER BY category ASC"
+            )->all();
+            $categoryList = array_column($categories, 'category');
+            
+            // Get brands (assuming brand is stored in a field, adjust if needed)
+            $brands = $db->query(
+                "SELECT DISTINCT seller_id FROM products WHERE status = 'active' AND seller_id IS NOT NULL AND seller_id > 0"
+            )->all();
+            $brandList = array_map(function($b) use ($db) {
+                $seller = $db->query("SELECT business_name FROM sellers WHERE id = ?", [$b['seller_id']])->single();
+                return $seller['business_name'] ?? 'Brand ' . $b['seller_id'];
+            }, $brands);
+            $brandList = array_filter($brandList);
+            
+            // Get sizes from size_available JSON field
+            $sizes = $db->query(
+                "SELECT DISTINCT size_available FROM products WHERE status = 'active' AND size_available IS NOT NULL"
+            )->all();
+            $sizeList = [];
+            foreach ($sizes as $size) {
+                if (!empty($size['size_available'])) {
+                    $sizeArray = json_decode($size['size_available'], true);
+                    if (is_array($sizeArray)) {
+                        $sizeList = array_merge($sizeList, $sizeArray);
+                    }
+                }
+            }
+            $sizeList = array_unique(array_filter($sizeList));
+            sort($sizeList);
+            
+            // Get colors from colors JSON field
+            $colors = $db->query(
+                "SELECT DISTINCT colors FROM products WHERE status = 'active' AND colors IS NOT NULL"
+            )->all();
+            $colorList = [];
+            foreach ($colors as $color) {
+                if (!empty($color['colors'])) {
+                    $colorArray = json_decode($color['colors'], true);
+                    if (is_array($colorArray)) {
+                        $colorList = array_merge($colorList, $colorArray);
+                    }
+                }
+            }
+            $colorList = array_unique(array_filter($colorList));
+            
+            // Get price range
+            $priceRange = $db->query(
+                "SELECT MIN(COALESCE(sale_price, price)) as min_price, MAX(COALESCE(sale_price, price)) as max_price 
+                 FROM products WHERE status = 'active'"
+            )->single();
+            
+            return [
+                'categories' => $categoryList,
+                'brands' => array_values($brandList),
+                'sizes' => array_values($sizeList),
+                'colors' => array_values($colorList),
+                'minPrice' => (int)($priceRange['min_price'] ?? 0),
+                'maxPrice' => (int)($priceRange['max_price'] ?? 10000)
+            ];
+        }
+
+        /**
+         * Advanced filtered products with categories, brands, sizes, colors
+         */
+        private function getFilteredProductsAdvanced($limit, $offset, $sort = '', $minPrice = null, $maxPrice = null, $categories = [], $brands = [], $sizes = [], $colors = [])
+        {
+            $db = \App\Core\Database::getInstance();
+            $where = ["p.status = 'active'", "(p.approval_status = 'approved' OR p.approval_status IS NULL OR p.seller_id IS NULL OR p.seller_id = 0)"];
+            $params = [];
+
+            // Price filters
+            if ($minPrice !== null && $minPrice > 0) {
+                $where[] = "COALESCE(p.sale_price, p.price) >= ?";
+                $params[] = $minPrice;
+            }
+            if ($maxPrice !== null && $maxPrice > 0) {
+                $where[] = "COALESCE(p.sale_price, p.price) <= ?";
+                $params[] = $maxPrice;
+            }
+
+            // Category filter
+            if (!empty($categories)) {
+                $placeholders = implode(',', array_fill(0, count($categories), '?'));
+                $where[] = "p.category IN ($placeholders)";
+                $params = array_merge($params, $categories);
+            }
+
+            // Brand filter (by seller_id)
+            if (!empty($brands)) {
+                $sellerIds = [];
+                foreach ($brands as $brandName) {
+                    $seller = $db->query("SELECT id FROM sellers WHERE business_name = ?", [$brandName])->single();
+                    if ($seller) {
+                        $sellerIds[] = $seller['id'];
+                    }
+                }
+                if (!empty($sellerIds)) {
+                    $placeholders = implode(',', array_fill(0, count($sellerIds), '?'));
+                    $where[] = "p.seller_id IN ($placeholders)";
+                    $params = array_merge($params, $sellerIds);
+                }
+            }
+
+            // Size filter
+            if (!empty($sizes)) {
+                $sizeConditions = [];
+                foreach ($sizes as $size) {
+                    $sizeConditions[] = "JSON_CONTAINS(p.size_available, ?)";
+                    $params[] = json_encode($size);
+                }
+                if (!empty($sizeConditions)) {
+                    $where[] = "(" . implode(' OR ', $sizeConditions) . ")";
+                }
+            }
+
+            // Color filter
+            if (!empty($colors)) {
+                $colorConditions = [];
+                foreach ($colors as $color) {
+                    $colorConditions[] = "JSON_CONTAINS(p.colors, ?)";
+                    $params[] = json_encode($color);
+                }
+                if (!empty($colorConditions)) {
+                    $where[] = "(" . implode(' OR ', $colorConditions) . ")";
+                }
+            }
+
+            $whereClause = implode(' AND ', $where);
+
+            // Sorting
+            $orderBy = "p.created_at DESC";
+            switch ($sort) {
+                case 'price-low':
+                case 'price_low':
+                    $orderBy = "COALESCE(p.sale_price, p.price) ASC";
+                    break;
+                case 'price-high':
+                case 'price_high':
+                    $orderBy = "COALESCE(p.sale_price, p.price) DESC";
+                    break;
+                case 'name':
+                    $orderBy = "p.product_name ASC";
+                    break;
+                case 'popular':
+                    $orderBy = "p.is_featured DESC, p.total_sales DESC, p.sales_count DESC, p.created_at DESC";
+                    break;
+                case 'newest':
+                default:
+                    $orderBy = "p.created_at DESC";
+                    break;
+            }
+
+            $sql = "SELECT p.* FROM products p WHERE $whereClause ORDER BY $orderBy LIMIT ? OFFSET ?";
+            $params[] = $limit;
+            $params[] = $offset;
+
+            $products = $db->query($sql, $params)->all();
+
+            // Add images
+            foreach ($products as &$product) {
+                $primaryImage = $this->productImageModel->getPrimaryImage($product['id']);
+                $product['image_url'] = $this->getProductImageUrl($product, $primaryImage);
+            }
+
+            return $products;
         }
 
         /**
