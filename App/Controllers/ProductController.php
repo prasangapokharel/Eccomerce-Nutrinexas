@@ -681,6 +681,35 @@ class ProductController extends Controller
                 $relatedProduct['image_url'] = $this->getProductImageUrl($relatedProduct, $primaryImage);
             }
             
+            // Get low-price suggested products (exclude current product)
+            $lowPriceProducts = [];
+            $db = \App\Core\Database::getInstance();
+            $suggestedProducts = $db->query(
+                "SELECT p.*, 
+                        (SELECT pi.image_url FROM product_images pi WHERE pi.product_id = p.id AND pi.is_primary = 1 LIMIT 1) as primary_image_url
+                 FROM products p
+                 WHERE p.id != ?
+                 AND p.status = 'active'
+                 AND (p.approval_status = 'approved' OR p.approval_status IS NULL OR p.seller_id IS NULL OR p.seller_id = 0)
+                 AND (COALESCE(p.sale_price, p.price) > 0)
+                 ORDER BY COALESCE(p.sale_price, p.price) ASC
+                 LIMIT 2",
+                [$product['id']]
+            )->all();
+            
+            foreach ($suggestedProducts as &$suggested) {
+                if (!empty($suggested['primary_image_url'])) {
+                    $suggested['image_url'] = filter_var($suggested['primary_image_url'], FILTER_VALIDATE_URL) 
+                        ? $suggested['primary_image_url'] 
+                        : ASSETS_URL . '/uploads/images/' . $suggested['primary_image_url'];
+                } else {
+                    $suggested['image_url'] = ASSETS_URL . '/images/products/default.jpg';
+                }
+                $primaryImage = $this->productImageModel->getPrimaryImage($suggested['id']);
+                $suggested['image_url'] = $this->getProductImageUrl($suggested, $primaryImage);
+            }
+            $lowPriceProducts = $suggestedProducts;
+            
             // Get internal product ad for suggestions
             $internalProductAd = null;
             $db = \App\Core\Database::getInstance();
@@ -761,6 +790,7 @@ class ProductController extends Controller
                 'reviewCount' => $reviewCount,
                 'relatedProducts' => $relatedProducts,
                 'internalProductAd' => $internalProductAd,
+                'lowPriceProducts' => $lowPriceProducts,
                 'inWishlist' => $inWishlist,
                 'hasReviewed' => $hasReviewed,
                 'isScheduled' => $isScheduled,

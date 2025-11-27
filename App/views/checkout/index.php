@@ -104,7 +104,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
             <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
             <!-- Shipping Information -->
             <div class="px-4 py-4 border-b border-gray-200">
-                <h2 class="h4-semibold text-gray-900 mb-4">Shipping Information</h2>
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Information</h2>
                 
                 <div class="space-y-4">
                     <div>

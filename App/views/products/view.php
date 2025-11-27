@@ -643,99 +643,44 @@ ob_start();
                                         </button>
                                     <?php endif; ?>
                                     
-                                    <!-- QR Code & Share Section -->
-                                    <div class="rounded-2xl p-4">
-                                        <div class="flex items-center justify-between mb-3">
-                                            <h3 class="text-sm font-semibold text-gray-900">Share Product</h3>
-                                            <!-- Share Icon -->
-                                            <button type="button" 
-                                                    id="share-product-link" 
-                                                    class="p-2 text-gray-600 hover:text-primary cursor-pointer"
-                                                    title="Copy link">
-                                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                                                </svg>
-                                            </button>
-                                            <input type="hidden" id="product-url-copy" value="<?= htmlspecialchars($absoluteProductUrl) ?>">
-                                        </div>
-                                        
-                                        <!-- Flex Layout: QR Left, Badges Right -->
-                                        <div class="flex items-start gap-4">
-                                            <!-- QR Code (Left) -->
-                                            <div class="flex-shrink-0">
-                                                <div class="flex flex-col items-center">
-                                                    <div class="bg-white p-3 rounded-2xl border-2 border-gray-200 shadow-sm mb-2">
-                                                        <img id="product-qr-code" 
-                                                             src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=<?= urlencode($absoluteProductUrl) ?>&color=000000&bgcolor=ffffff&margin=1" 
-                                                             alt="Product QR Code" 
-                                                             class="w-32 h-32 object-contain">
-                                                    </div>
-                                                    <div class="flex items-center gap-1.5 text-xs text-gray-600">
-                                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
-                                                        </svg>
-                                                        <span>Scan with mobile</span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            
-                                            <!-- Trust Badges (Right) -->
-                                            <div class="flex-1 space-y-2">
-                                                <!-- Cash on Delivery Badge -->
-                                                <div class="flex items-center gap-2 px-3 py-2 border border-green-200 rounded-2xl">
-                                                    <svg class="w-4 h-4 text-green-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    <span class="text-xs font-medium text-green-700">Cash on Delivery Available</span>
-                                                </div>
-                                                
-                                                <!-- Seller Trust Badge -->
-                                                <?php 
-                                                $sellerTrustPercent = 95; // Default
-                                                if (!empty($seller) && !empty($seller['id'])) {
-                                                    $db = \App\Core\Database::getInstance();
-                                                    // Calculate seller trust based on reviews and ratings
-                                                    $sellerStats = $db->query(
-                                                        "SELECT 
-                                                            AVG(r.rating) as avg_rating,
-                                                            COUNT(DISTINCT r.id) as review_count,
-                                                            COUNT(DISTINCT o.id) as order_count
-                                                         FROM sellers s
-                                                         LEFT JOIN products p ON s.id = p.seller_id
-                                                         LEFT JOIN reviews r ON p.id = r.product_id
-                                                         LEFT JOIN order_items oi ON p.id = oi.product_id
-                                                         LEFT JOIN orders o ON oi.order_id = o.id AND o.status = 'delivered'
-                                                         WHERE s.id = ?
-                                                         GROUP BY s.id",
-                                                        [$seller['id']]
-                                                    )->single();
-                                                    
-                                                    if ($sellerStats) {
-                                                        $avgRating = (float)($sellerStats['avg_rating'] ?? 0);
-                                                        $reviewCount = (int)($sellerStats['review_count'] ?? 0);
-                                                        $orderCount = (int)($sellerStats['order_count'] ?? 0);
-                                                        
-                                                        // Calculate trust percentage: base 80% + rating bonus + review bonus
-                                                        $sellerTrustPercent = 80;
-                                                        if ($avgRating > 0) {
-                                                            $sellerTrustPercent += min(15, ($avgRating - 3) * 5); // Up to 15% from rating
-                                                        }
-                                                        if ($reviewCount > 0) {
-                                                            $sellerTrustPercent += min(5, min(5, $reviewCount / 10)); // Up to 5% from reviews
-                                                        }
-                                                        $sellerTrustPercent = min(100, max(80, round($sellerTrustPercent)));
-                                                    }
-                                                }
+                                    <!-- Suggested Products Section -->
+                                    <?php if (!empty($lowPriceProducts) && count($lowPriceProducts) > 0): ?>
+                                    <div class="rounded-2xl p-4 bg-white border border-gray-200">
+                                        <h3 class="text-sm font-semibold text-gray-900 mb-3">You May Also Like</h3>
+                                        <div class="grid grid-cols-2 gap-3">
+                                            <?php foreach (array_slice($lowPriceProducts, 0, 2) as $suggested): ?>
+                                                <?php
+                                                $suggestedPrice = isset($suggested['sale_price']) && $suggested['sale_price'] > 0 ? $suggested['sale_price'] : $suggested['price'] ?? 0;
+                                                $suggestedImageUrl = $suggested['image_url'] ?? ASSETS_URL . '/images/products/default.jpg';
+                                                $suggestedName = htmlspecialchars($suggested['product_name'] ?? 'Product');
+                                                $suggestedSlug = $suggested['slug'] ?? $suggested['id'] ?? '';
                                                 ?>
-                                                <div class="flex items-center gap-2 px-3 py-2 border border-blue-200 rounded-2xl">
-                                                    <svg class="w-4 h-4 text-blue-600 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                                                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                                    </svg>
-                                                    <span class="text-xs font-medium text-blue-700">Seller Trusted <?= $sellerTrustPercent ?>%</span>
+                                                <div class="bg-white rounded-2xl border border-gray-200 p-3 hover:shadow-md transition-shadow relative group">
+                                                    <div class="flex items-start gap-2">
+                                                        <div class="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
+                                                            <img src="<?= htmlspecialchars($suggestedImageUrl) ?>" 
+                                                                 alt="<?= $suggestedName ?>" 
+                                                                 class="w-full h-full object-cover"
+                                                                 onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'; this.onerror=null;">
+                                                        </div>
+                                                        <div class="flex-1 min-w-0">
+                                                            <h4 class="text-xs font-medium text-gray-900 truncate mb-1"><?= $suggestedName ?></h4>
+                                                            <p class="text-sm font-semibold text-primary">रु<?= number_format($suggestedPrice, 2) ?></p>
+                                                        </div>
+                                                        <button type="button" 
+                                                                onclick="addSuggestedToCart(<?= $suggested['id'] ?>)"
+                                                                class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-dark transition-colors"
+                                                                title="Add to cart">
+                                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                                            </svg>
+                                                        </button>
+                                                    </div>
                                                 </div>
-                                            </div>
+                                            <?php endforeach; ?>
                                         </div>
                                     </div>
+                                    <?php endif; ?>
                                 </div>
                             </div>
                                 </div>
@@ -1769,6 +1714,78 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             window.location.href = url;
         }
+    }
+    
+    // Add suggested product to cart
+    function addSuggestedToCart(productId) {
+        const button = event.target.closest('button');
+        if (button) {
+            button.disabled = true;
+            const originalHTML = button.innerHTML;
+            button.innerHTML = '<svg class="w-4 h-4 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+        }
+        
+        fetch('<?= ASSETS_URL ?>/cart/add', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-Requested-With': 'XMLHttpRequest'
+            },
+            body: 'product_id=' + encodeURIComponent(productId) + '&quantity=1'
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Update cart count
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = data.cart_count || 0;
+                });
+                
+                // Show success message
+                if (window.AppAlert) {
+                    window.AppAlert.show('Product added to cart!', 'success');
+                } else {
+                    alert('Product added to cart!');
+                }
+                
+                // Update button to show checkmark
+                if (button) {
+                    button.innerHTML = '<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>';
+                    button.classList.add('bg-success');
+                    setTimeout(() => {
+                        button.innerHTML = originalHTML;
+                        button.classList.remove('bg-success');
+                        button.disabled = false;
+                    }, 2000);
+                }
+            } else {
+                if (button) {
+                    button.innerHTML = originalHTML;
+                    button.disabled = false;
+                }
+                if (data.error && data.error.includes('login')) {
+                    window.location.href = '<?= \App\Core\View::url('auth/login') ?>';
+                } else {
+                    if (window.AppAlert) {
+                        window.AppAlert.show(data.message || 'Failed to add product to cart', 'error');
+                    } else {
+                        alert(data.message || 'Failed to add product to cart');
+                    }
+                }
+            }
+        })
+        .catch(error => {
+            if (button) {
+                button.innerHTML = originalHTML;
+                button.disabled = false;
+            }
+            if (window.AppAlert) {
+                window.AppAlert.show('Error adding product to cart. Please try again.', 'error');
+            } else {
+                alert('Error adding product to cart. Please try again.');
+            }
+        });
     }
     </script>
 
