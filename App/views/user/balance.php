@@ -88,7 +88,7 @@ $description = 'View your earnings, balance, and withdrawal history';
             <div class="space-y-4">
                 <!-- Primary Withdraw Button -->
                 <a href="<?= \App\Core\View::url('user/withdraw') ?>" 
-                   class="w-full bg-primary text-white px-6 py-4 rounded-lg font-semibold text-lg flex items-center justify-center <?= ($availableBalance ?? 0) < ($minWithdrawal ?? 100) ? 'opacity-50 cursor-not-allowed' : 'hover:bg-primary-dark' ?>"
+                   class="btn w-full justify-center text-lg <?= ($availableBalance ?? 0) < ($minWithdrawal ?? 100) ? 'opacity-50 cursor-not-allowed' : '' ?>"
                    <?= ($availableBalance ?? 0) < ($minWithdrawal ?? 100) ? 'onclick="return false;"' : '' ?>>
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -98,14 +98,14 @@ $description = 'View your earnings, balance, and withdrawal history';
                 
                 <!-- Secondary Actions -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <a href="<?= \App\Core\View::url('user/invite') ?>" class="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                    <a href="<?= \App\Core\View::url('user/invite') ?>" class="btn btn-outline w-full justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"/>
                         </svg>
                         Invite Friends
                     </a>
                     
-                    <a href="<?= \App\Core\View::url('user/transactions') ?>" class="flex items-center justify-center px-4 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200">
+                    <a href="<?= \App\Core\View::url('user/transactions') ?>" class="btn btn-outline w-full justify-center">
                         <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/>
                         </svg>

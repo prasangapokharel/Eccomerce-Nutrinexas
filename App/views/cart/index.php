@@ -52,7 +52,7 @@ use App\Helpers\CurrencyHelper;
                                                             <h4 class="text-[15px] font-semibold text-slate-900 truncate">
                                                                 <?= htmlspecialchars($item['product']['product_name']) ?>
                                                             </h4>
-                                                            <button type="button" class="text-xs font-medium text-error" onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)">Remove</button>
+                                                            <button type="button" class="text-xs font-medium text-error hover:text-error-dark" onclick="removeCartItem(<?= $item['id'] ?>, <?= $item['product']['id'] ?>)">Remove</button>
                                                             <div class="flex flex-wrap items-center gap-3 mt-2">
                                                                 <div>
                                                                     <button type="button" class="flex items-center px-2.5 py-1.5 border border-gray-300 text-slate-900 text-xs font-medium bg-white rounded-md">
@@ -261,10 +261,10 @@ use App\Helpers\CurrencyHelper;
                 
                 <!-- Modal Footer -->
                 <div class="bg-gray-50 px-6 py-4 flex space-x-3">
-                    <button onclick="closeCartModal()" class="flex-1 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50">
+                    <button onclick="closeCartModal()" class="btn btn-outline flex-1 justify-center">
                         Close
                     </button>
-                    <a href="<?= \App\Core\View::url('cart') ?>" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-medium text-center hover:bg-primary-dark">
+                    <a href="<?= \App\Core\View::url('cart') ?>" class="btn flex-1 justify-center">
                         View Full Cart
                     </a>
                 </div>
@@ -293,8 +293,8 @@ use App\Helpers\CurrencyHelper;
     </ol>
   </div>
   <div class="bg-gray-50 px-6 py-4 flex space-x-3">
-    <button id="closeStepsDrawerFooter" class="flex-1 bg-white border border-gray-300 text-gray-700 py-2 px-4 rounded-lg font-medium hover:bg-gray-50">Close</button>
-    <a href="<?= \App\Core\View::url('checkout') ?>" class="flex-1 bg-primary text-white py-2 px-4 rounded-lg font-medium text-center hover:bg-primary-dark">Go to Checkout</a>
+    <button id="closeStepsDrawerFooter" class="btn btn-outline flex-1 justify-center">Close</button>
+    <a href="<?= \App\Core\View::url('checkout') ?>" class="btn flex-1 justify-center">Go to Checkout</a>
   </div>
 </div>
 

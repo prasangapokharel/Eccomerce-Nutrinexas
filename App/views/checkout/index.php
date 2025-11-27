@@ -419,7 +419,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                             <p class="text-sm font-medium text-primary"><?= htmlspecialchars($appliedCoupon['code']) ?></p>
                             <p class="text-xs text-primary/70">You saved <?= CurrencyHelper::format($couponDiscount) ?></p>
                         </div>
-                        <button type="button" id="remove-coupon-btn" class="text-error" aria-label="Remove coupon">
+                        <button type="button" id="remove-coupon-btn" class="text-error hover:text-error-dark" aria-label="Remove coupon">
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                             </svg>
@@ -769,7 +769,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <p class="text-xs text-accent/70">Discount: रु${parseFloat(discount).toFixed(2)}</p>
                     </div>
                 </div>
-                <button type="button" id="remove-coupon-btn" class="text-error">
+                <button type="button" id="remove-coupon-btn" class="text-error hover:text-error-dark">
                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
@@ -1133,8 +1133,8 @@ function showLocationAlert(type, message) {
                         </div>
                     </div>
                     <div class="p-4 grid grid-cols-2 gap-3">
-                        <button type="button" class="px-3 py-2 rounded-2xl border" id="rv-edit">Edit</button>
-                        <button type="button" class="px-3 py-2 rounded-2xl  bg-primary hover:bg-primary-dark text-white" id="rv-confirm">Confirm</button>
+                        <button type="button" class="btn btn-outline" id="rv-edit">Edit</button>
+                        <button type="button" class="btn" id="rv-confirm">Confirm</button>
                     </div>
                 </div>`;
             document.body.appendChild(modal);
