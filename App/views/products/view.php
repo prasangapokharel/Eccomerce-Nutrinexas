@@ -2052,53 +2052,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const copyText = document.getElementById('copy-link-text');
         const copyBtn = document.getElementById('copy-link-btn');
         
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-            navigator.clipboard.writeText(url)
-                .then(() => {
-                    if (copyIcon) copyIcon.classList.add('hidden');
-                    if (copyCheck) copyCheck.classList.remove('hidden');
-                    if (copyText) copyText.textContent = 'Copied!';
-                    if (copyBtn) copyBtn.classList.add('bg-green-50', 'border', 'border-green-500');
-                    
-                    setTimeout(() => {
-                        if (copyIcon) copyIcon.classList.remove('hidden');
-                        if (copyCheck) copyCheck.classList.add('hidden');
-                        if (copyText) copyText.textContent = 'Copy Link';
-                        if (copyBtn) copyBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
-                    }, 2000);
-                })
-                .catch(() => {
-                    const textArea = document.createElement('textarea');
-                    textArea.value = url;
-                    textArea.style.position = 'fixed';
-                    textArea.style.left = '-999999px';
-                    document.body.appendChild(textArea);
-                    textArea.select();
-                    document.execCommand('copy');
-                    document.body.removeChild(textArea);
-                    
-                    if (copyIcon) copyIcon.classList.add('hidden');
-                    if (copyCheck) copyCheck.classList.remove('hidden');
-                    if (copyText) copyText.textContent = 'Copied!';
-                    if (copyBtn) copyBtn.classList.add('bg-green-50', 'border', 'border-green-500');
-                    
-                    setTimeout(() => {
-                        if (copyIcon) copyIcon.classList.remove('hidden');
-                        if (copyCheck) copyCheck.classList.add('hidden');
-                        if (copyText) copyText.textContent = 'Copy Link';
-                        if (copyBtn) copyBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
-                    }, 2000);
-                });
-        } else {
-            const textArea = document.createElement('textarea');
-            textArea.value = url;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            document.body.appendChild(textArea);
-            textArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(textArea);
-            
+        function showCopied() {
             if (copyIcon) copyIcon.classList.add('hidden');
             if (copyCheck) copyCheck.classList.remove('hidden');
             if (copyText) copyText.textContent = 'Copied!';
@@ -2110,6 +2064,24 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (copyText) copyText.textContent = 'Copy Link';
                 if (copyBtn) copyBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
             }, 2000);
+        }
+        
+        function fallbackCopy() {
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
+            showCopied();
+        }
+        
+        if (navigator.clipboard?.writeText) {
+            navigator.clipboard.writeText(url).then(showCopied).catch(fallbackCopy);
+        } else {
+            fallbackCopy();
         }
     }
     
