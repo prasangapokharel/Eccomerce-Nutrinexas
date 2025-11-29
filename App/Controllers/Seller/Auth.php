@@ -61,6 +61,13 @@ class Auth extends Controller
                 return;
             }
             
+            // Check if seller is suspended
+            if ($seller['status'] === 'suspended') {
+                $this->setFlash('error', 'Your seller account has been suspended. Please contact support.');
+                $this->redirect('seller/login');
+                return;
+            }
+            
             // Check if seller status is active
             if ($seller['status'] !== 'active') {
                 $this->setFlash('error', 'Your account is ' . $seller['status'] . '. Please contact support.');

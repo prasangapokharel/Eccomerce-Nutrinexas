@@ -1094,8 +1094,8 @@ class AdminController extends Controller
                     $fileType = mime_content_type($files['tmp_name'][$i]);
 
                     if (in_array($fileType, $allowedTypes)) {
-                        // Validate file size (max 5MB)
-                        if ($files['size'][$i] <= 5 * 1024 * 1024) {
+                        // Validate file size (max 300KB)
+                        if ($files['size'][$i] <= 300 * 1024) {
                             if (move_uploaded_file($files['tmp_name'][$i], $uploadPath)) {
                                 $uploadedFiles[] = $fileName;
                                 $imageUrls[] = $fileName;
@@ -1232,28 +1232,57 @@ class AdminController extends Controller
     {
         if (!$id) {
             $this->redirect('admin/orders');
+            return;
         }
 
         $order = $this->orderModel->getOrderById($id);
 
         if (!$order) {
+            $this->setFlash('error', 'Order not found');
             $this->redirect('admin/orders');
+            return;
         }
 
+        // Handle orders being created (during payment processing)
+        // Ensure order has basic data even if payment is still processing
+        if (empty($order['status'])) {
+            $order['status'] = 'pending';
+        }
+        
+        if (empty($order['payment_status'])) {
+            $order['payment_status'] = 'pending';
+        }
+
+        // Get order items - handle case where order might be incomplete
         $orderItems = $this->orderItemModel->getByOrderId($id);
         
+        // If no items found, order might still be creating - show message but don't break
+        if (empty($orderItems)) {
+            $orderItems = [];
+            // Don't redirect - allow admin to see order exists but items not yet added
+        }
+        
         // Get curiors for assignment
-        $curiors = $this->curiorModel->getAllCuriors();
+        $curiors = [];
+        try {
+            $curiors = $this->curiorModel->getAllCuriors();
+        } catch (\Exception $e) {
+            error_log('Admin viewOrder: Error loading curiors: ' . $e->getMessage());
+        }
         
         // Get assigned curior info if exists
         $assignedCurior = null;
         if (!empty($order['curior_id'])) {
-            $assignedCurior = $this->curiorModel->getById($order['curior_id']);
+            try {
+                $assignedCurior = $this->curiorModel->getById($order['curior_id']);
+            } catch (\Exception $e) {
+                error_log('Admin viewOrder: Error loading assigned curior: ' . $e->getMessage());
+            }
         }
 
         $this->view('admin/orders/view', [
             'order' => $order,
-            'orderItems' => $orderItems,
+            'orderItems' => $orderItems ?? [],
             'curiors' => $curiors,
             'assignedCurior' => $assignedCurior,
             'title' => 'Order Details'

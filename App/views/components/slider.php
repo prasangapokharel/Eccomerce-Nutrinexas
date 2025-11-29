@@ -295,8 +295,11 @@ document.addEventListener('DOMContentLoaded', function () {
 .app-hero__media-link img {
     width: 100%;
     height: 100%;
+    min-height: 140px;
     object-fit: cover;
+    object-position: center;
     background: #ffffff;
+    display: block;
 }
 
 .app-hero__dots {

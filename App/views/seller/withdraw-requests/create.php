@@ -56,20 +56,27 @@
 
                 <div id="bankAccountSection">
                     <label for="bank_account_id" class="block text-sm font-medium text-gray-700 mb-2">
-                        Bank Account
+                        Bank Account <span class="text-red-500">*</span>
                     </label>
                     <select id="bank_account_id" 
                             name="bank_account_id" 
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm">
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm"
+                            required>
                         <option value="">Select Bank Account</option>
                         <?php foreach ($bankAccounts as $account): ?>
                             <option value="<?= $account['id'] ?>" <?= $account['is_default'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($account['bank_name']) ?> - <?= htmlspecialchars($account['account_number']) ?> 
-                                <?= $account['is_default'] ? '(Default)' : '' ?>
+                                <?= htmlspecialchars($account['bank_name']) ?> - 
+                                <?= htmlspecialchars($account['account_holder_name'] ?? '') ?> - 
+                                ****<?= substr($account['account_number'], -4) ?>
+                                <?= $account['is_default'] ? ' (Default)' : '' ?>
                             </option>
                         <?php endforeach; ?>
                     </select>
-                    <a href="<?= \App\Core\View::url('seller/bank-account') ?>" class="text-sm text-primary hover:underline mt-1 block">Add New Bank Account</a>
+                    <div class="mt-2 flex items-center gap-2">
+                        <a href="<?= \App\Core\View::url('seller/bank-account') ?>" class="text-sm text-primary hover:underline">
+                            <i class="fas fa-plus-circle mr-1"></i>Add New Bank Account
+                        </a>
+                    </div>
                 </div>
 
                 <div>
@@ -107,16 +114,31 @@ function toggleBankAccount() {
 document.getElementById('withdrawForm').addEventListener('submit', function(e) {
     const amount = parseFloat(document.getElementById('amount').value);
     const balance = <?= $wallet['balance'] ?? 0 ?>;
+    const pending = <?= $wallet['pending_withdrawals'] ?? 0 ?>;
+    const available = balance - pending;
+    const bankAccountId = document.getElementById('bank_account_id').value;
     
-    if (amount > balance) {
+    if (!bankAccountId) {
         e.preventDefault();
-        alert('Insufficient balance');
+        alert('Please select a bank account');
+        return false;
+    }
+    
+    if (amount > available) {
+        e.preventDefault();
+        alert('Insufficient balance. Available: रु ' + available.toFixed(2));
         return false;
     }
     
     if (amount < 100) {
         e.preventDefault();
         alert('Minimum withdrawal amount is रु 100');
+        return false;
+    }
+    
+    if (amount <= 0) {
+        e.preventDefault();
+        alert('Please enter a valid amount');
         return false;
     }
 });

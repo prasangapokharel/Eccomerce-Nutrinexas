@@ -432,69 +432,8 @@
                 </div>
             </header>
             
-            <!-- Unified Toast Notifications -->
-            <?php
-            use App\Helpers\NotificationHelper;
-            echo NotificationHelper::render();
-            ?>
-            
-            <!-- Legacy Flash Message Support -->
-            <?php if (isset($_SESSION['flash_message'])): ?>
-                <div id="toast" class="toast bg-emerald-600 text-white font-semibold tracking-wide flex items-center w-max max-w-sm p-4 rounded-lg shadow-lg" role="alert">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 shrink-0 fill-white inline mr-3" viewBox="0 0 512 512">
-                        <ellipse cx="256" cy="256" fill="#fff" rx="256" ry="255.832" />
-                        <path class="fill-emerald-600" d="m235.472 392.08-121.04-94.296 34.416-44.168 74.328 57.904 122.672-177.016 46.032 31.888z" />
-                    </svg>
-                    <span class="block text-sm mr-3"><?= htmlspecialchars($_SESSION['flash_message']) ?></span>
-                    <button onclick="closeToast()" class="ml-auto">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 cursor-pointer shrink-0 fill-white" viewBox="0 0 320.591 320.591">
-                            <path d="M30.391 318.583a30.37 30.37 0 0 1-21.56-7.288c-11.774-11.844-11.774-30.973 0-42.817L266.643 10.665c12.246-11.459 31.462-10.822 42.921 1.424 10.362 11.074 10.966 28.095 1.414 39.875L51.647 311.295a30.366 30.366 0 0 1-21.256 7.288z" />
-                            <path d="M287.9 318.583a30.37 30.37 0 0 1-21.257-8.806L8.83 51.963C-2.078 39.225-.595 20.055 12.143 9.146c11.369-9.736 28.136-9.736 39.504 0l259.331 257.813c12.243 11.462 12.876 30.679 1.414 42.922-.456.487-.927.958-1.414 1.414a30.368 30.368 0 0 1-23.078 7.288z" />
-                        </svg>
-                    </button>
-                </div>
-                <?php unset($_SESSION['flash_message']); ?>
-            <?php endif; ?>
-            
-            <?php if (\App\Core\Session::hasFlash('success')): ?>
-                <div class="fixed top-4 right-4 z-50 max-w-sm w-full">
-                    <div class="bg-green-50 border-green-200 border rounded-lg p-4 shadow-lg flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium text-green-800"><?= htmlspecialchars(\App\Core\Session::getFlash('success')) ?></p>
-                        </div>
-                        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-green-400 hover:text-green-500">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            <?php endif; ?>
-            
-            <?php if (\App\Core\Session::hasFlash('error')): ?>
-                <div class="fixed top-4 right-4 z-50 max-w-sm w-full">
-                    <div class="bg-red-50 border-red-200 border rounded-lg p-4 shadow-lg flex items-start">
-                        <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
-                            </svg>
-                        </div>
-                        <div class="ml-3 flex-1">
-                            <p class="text-sm font-medium text-red-800"><?= htmlspecialchars(\App\Core\Session::getFlash('error')) ?></p>
-                        </div>
-                        <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-red-400 hover:text-red-500">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
-                            </svg>
-                        </button>
-                    </div>
-                </div>
-            <?php endif; ?>
+            <!-- Global Notification Component -->
+            <?php include ROOT_DIR . '/App/views/components/alert.php'; ?>
             
             <!-- Page Content -->
             <main class="flex-1 overflow-y-auto p-4 lg:p-6">

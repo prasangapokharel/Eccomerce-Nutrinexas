@@ -49,10 +49,23 @@ class WithdrawRequests extends BaseSellerController
         }
         
         $wallet = $this->walletModel->getWalletBySellerId($this->sellerId);
+        if (!$wallet) {
+            $this->setFlash('error', 'Wallet not found. Please contact support.');
+            $this->redirect('seller/dashboard');
+            return;
+        }
+        
         $bankAccounts = $this->db->query(
-            "SELECT * FROM seller_bank_accounts WHERE seller_id = ? ORDER BY is_default DESC",
+            "SELECT * FROM seller_bank_accounts WHERE seller_id = ? ORDER BY is_default DESC, created_at DESC",
             [$this->sellerId]
         )->all();
+        
+        // Check if seller has at least one bank account
+        if (empty($bankAccounts)) {
+            $this->setFlash('error', 'Please add a bank account before requesting withdrawal');
+            $this->redirect('seller/bank-account');
+            return;
+        }
         
         $this->view('seller/withdraw-requests/create', [
             'title' => 'Request Withdrawal',
@@ -64,7 +77,9 @@ class WithdrawRequests extends BaseSellerController
     public function detail($id)
     {
         $request = $this->db->query(
-            "SELECT wr.*, ba.* 
+            "SELECT wr.*, 
+                    ba.account_holder_name, ba.bank_name, ba.account_number, 
+                    ba.branch_name, ba.account_type, ba.ifsc_code
              FROM seller_withdraw_requests wr
              LEFT JOIN seller_bank_accounts ba ON wr.bank_account_id = ba.id
              WHERE wr.id = ? AND wr.seller_id = ?",
@@ -75,6 +90,21 @@ class WithdrawRequests extends BaseSellerController
             $this->setFlash('error', 'Withdrawal request not found');
             $this->redirect('seller/withdraw-requests');
             return;
+        }
+        
+        // If request is rejected/failed, show message
+        if (in_array($request['status'], ['rejected', 'failed', 'cancelled'])) {
+            $wallet = $this->walletModel->getWalletBySellerId($this->sellerId);
+            if ($wallet && $request['status'] === 'rejected') {
+                // Refund pending amount if rejected
+                $this->db->query(
+                    "UPDATE seller_wallet 
+                     SET pending_withdrawals = GREATEST(0, pending_withdrawals - ?),
+                         updated_at = NOW()
+                     WHERE seller_id = ?",
+                    [$request['amount'], $this->sellerId]
+                )->execute();
+            }
         }
         
         $this->view('seller/withdraw-requests/detail', [
@@ -91,6 +121,19 @@ class WithdrawRequests extends BaseSellerController
             $bankAccountId = !empty($_POST['bank_account_id']) ? (int)$_POST['bank_account_id'] : null;
             $accountDetails = trim($_POST['account_details'] ?? '');
             
+            // Validate amount
+            if ($amount <= 0) {
+                $this->setFlash('error', 'Invalid withdrawal amount');
+                $this->redirect('seller/withdraw-requests/create');
+                return;
+            }
+            
+            if ($amount < 100) {
+                $this->setFlash('error', 'Minimum withdrawal amount is रु 100');
+                $this->redirect('seller/withdraw-requests/create');
+                return;
+            }
+            
             // Validate bank account is selected
             if (!$bankAccountId) {
                 $this->setFlash('error', 'Please select a bank account');
@@ -98,45 +141,79 @@ class WithdrawRequests extends BaseSellerController
                 return;
             }
             
-            if ($amount <= 0) {
-                $this->setFlash('error', 'Invalid withdrawal amount');
+            // Verify bank account exists and belongs to seller
+            $bankAccount = $this->db->query(
+                "SELECT id, bank_name, account_number, account_holder_name 
+                 FROM seller_bank_accounts 
+                 WHERE id = ? AND seller_id = ?",
+                [$bankAccountId, $this->sellerId]
+            )->single();
+            
+            if (!$bankAccount) {
+                $this->setFlash('error', 'Selected bank account not found or access denied. Please select a valid bank account.');
                 $this->redirect('seller/withdraw-requests/create');
                 return;
             }
             
+            // Get wallet
             $wallet = $this->walletModel->getWalletBySellerId($this->sellerId);
+            if (!$wallet) {
+                $this->setFlash('error', 'Wallet not found. Please contact support.');
+                $this->redirect('seller/dashboard');
+                return;
+            }
             
-            if ($amount > $wallet['balance']) {
-                $this->setFlash('error', 'Insufficient balance');
+            // Check available balance (balance - pending withdrawals)
+            $availableBalance = $wallet['balance'] - ($wallet['pending_withdrawals'] ?? 0);
+            
+            if ($amount > $availableBalance) {
+                $this->setFlash('error', 'Insufficient balance. Available: रु ' . number_format($availableBalance, 2));
                 $this->redirect('seller/withdraw-requests/create');
                 return;
             }
             
-            $result = $this->db->query(
-                "INSERT INTO seller_withdraw_requests 
-                 (seller_id, amount, payment_method, bank_account_id, account_details, status) 
-                 VALUES (?, ?, ?, ?, ?, 'pending')",
-                [$this->sellerId, $amount, $paymentMethod, $bankAccountId, $accountDetails]
-            )->execute();
+            // Create withdrawal request
+            $this->db->beginTransaction();
             
-            if ($result) {
+            try {
+                $result = $this->db->query(
+                    "INSERT INTO seller_withdraw_requests 
+                     (seller_id, amount, payment_method, bank_account_id, account_details, status, requested_at) 
+                     VALUES (?, ?, ?, ?, ?, 'pending', NOW())",
+                    [$this->sellerId, $amount, $paymentMethod, $bankAccountId, $accountDetails]
+                )->execute();
+                
+                if (!$result) {
+                    throw new Exception('Failed to create withdrawal request');
+                }
+                
                 $requestId = $this->db->lastInsertId();
                 
-                $newPending = $wallet['pending_withdrawals'] + $amount;
-                $this->db->query(
-                    "UPDATE seller_wallet SET pending_withdrawals = ? WHERE seller_id = ?",
+                // Update pending withdrawals in wallet
+                $newPending = ($wallet['pending_withdrawals'] ?? 0) + $amount;
+                $updateResult = $this->db->query(
+                    "UPDATE seller_wallet SET pending_withdrawals = ?, updated_at = NOW() WHERE seller_id = ?",
                     [$newPending, $this->sellerId]
                 )->execute();
                 
+                if (!$updateResult) {
+                    throw new Exception('Failed to update wallet pending withdrawals');
+                }
+                
+                $this->db->commit();
+                
                 $this->setFlash('success', 'Withdrawal request submitted successfully');
                 $this->redirect('seller/withdraw-requests/detail/' . $requestId);
-            } else {
-                $this->setFlash('error', 'Failed to create withdrawal request');
-                $this->redirect('seller/withdraw-requests/create');
+                
+            } catch (Exception $e) {
+                $this->db->rollBack();
+                throw $e;
             }
+            
         } catch (Exception $e) {
             error_log('Create withdrawal error: ' . $e->getMessage());
-            $this->setFlash('error', 'Error creating withdrawal request');
+            error_log('Stack trace: ' . $e->getTraceAsString());
+            $this->setFlash('error', 'Error creating withdrawal request: ' . $e->getMessage());
             $this->redirect('seller/withdraw-requests/create');
         }
     }

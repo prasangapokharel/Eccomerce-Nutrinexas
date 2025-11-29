@@ -96,12 +96,35 @@ class CouponController extends Controller
             }
             
             // Get cart data for validation
-            $cartData = $this->cartModel->getCartWithProducts($this->productModel);
-            error_log('Cart data structure: ' . json_encode(array_keys($cartData)));
-            error_log('Cart items count: ' . count($cartData['items'] ?? []));
+            $cartItems = $this->cartModel->getCartWithProducts($userId);
+            
+            if (empty($cartItems)) {
+                error_log('Cart is empty');
+                echo json_encode(['success' => false, 'message' => 'Cart is empty']);
+                return;
+            }
+            
+            // Enhance cart items with full product data
+            $cartData = ['items' => [], 'total' => 0];
+            foreach ($cartItems as $item) {
+                $product = $this->productModel->find($item['product_id']);
+                if ($product) {
+                    $currentPrice = ($product['sale_price'] > 0 && $product['sale_price'] < $product['price']) 
+                        ? $product['sale_price'] 
+                        : $product['price'];
+                    $subtotal = $currentPrice * $item['quantity'];
+                    $cartData['total'] += $subtotal;
+                    
+                    $cartData['items'][] = [
+                        'product' => $product,
+                        'quantity' => $item['quantity'],
+                        'subtotal' => $subtotal
+                    ];
+                }
+            }
             
             if (empty($cartData['items'])) {
-                error_log('Cart is empty');
+                error_log('Cart is empty after processing');
                 echo json_encode(['success' => false, 'message' => 'Cart is empty']);
                 return;
             }
@@ -136,12 +159,13 @@ class CouponController extends Controller
                     }
                     
                     $productSellerId = $product['seller_id'] ?? null;
+                    $couponSellerId = (int)$coupon['seller_id'];
                     
-                    // Validate coupon for this product using CouponCheck
-                    if (!$this->couponCheck->isValid($coupon, $product)) {
+                    // Validate: If coupon has seller_id, all products must belong to that seller
+                    if ($couponSellerId > 0 && (int)$productSellerId !== $couponSellerId) {
                         $allProductsMatch = false;
-                        $mismatchProducts[] = $product['name'] ?? 'Product';
-                        error_log("Coupon seller mismatch: Coupon seller_id={$coupon['seller_id']}, Product seller_id={$productSellerId}");
+                        $mismatchProducts[] = $product['product_name'] ?? $product['name'] ?? 'Product';
+                        error_log("Coupon seller mismatch: Coupon seller_id={$couponSellerId}, Product seller_id={$productSellerId}, Product ID={$product['id']}");
                     }
                 }
                 
@@ -165,7 +189,7 @@ class CouponController extends Controller
             
             if ($validation['valid']) {
                 $discount = $this->couponModel->calculateDiscount($validation['coupon'], $orderAmount);
-                $finalAmount = ($cartData['final_total'] - $discount);
+                $finalAmount = max(0, $orderAmount - $discount);
                 
                 error_log('Discount calculated: ' . $discount);
                 error_log('Final amount: ' . $finalAmount);
@@ -233,10 +257,35 @@ class CouponController extends Controller
             }
             
             // Get cart data
-            $cartData = $this->cartModel->getCartWithProducts($this->productModel);
+            $cartItems = $this->cartModel->getCartWithProducts($userId);
+            
+            if (empty($cartItems)) {
+                error_log('Cart is empty for apply');
+                echo json_encode(['success' => false, 'message' => 'Cart is empty']);
+                return;
+            }
+            
+            // Enhance cart items with full product data
+            $cartData = ['items' => [], 'total' => 0];
+            foreach ($cartItems as $item) {
+                $product = $this->productModel->find($item['product_id']);
+                if ($product) {
+                    $currentPrice = ($product['sale_price'] > 0 && $product['sale_price'] < $product['price']) 
+                        ? $product['sale_price'] 
+                        : $product['price'];
+                    $subtotal = $currentPrice * $item['quantity'];
+                    $cartData['total'] += $subtotal;
+                    
+                    $cartData['items'][] = [
+                        'product' => $product,
+                        'quantity' => $item['quantity'],
+                        'subtotal' => $subtotal
+                    ];
+                }
+            }
             
             if (empty($cartData['items'])) {
-                error_log('Cart is empty for apply');
+                error_log('Cart is empty after processing for apply');
                 echo json_encode(['success' => false, 'message' => 'Cart is empty']);
                 return;
             }
@@ -264,9 +313,14 @@ class CouponController extends Controller
                         continue;
                     }
                     
-                    if (!$this->couponCheck->isValid($coupon, $product)) {
+                    $couponSellerId = (int)$coupon['seller_id'];
+                    $productSellerId = (int)($product['seller_id'] ?? 0);
+                    
+                    // Validate: If coupon has seller_id, all products must belong to that seller
+                    if ($couponSellerId > 0 && $productSellerId !== $couponSellerId) {
                         $allProductsMatch = false;
-                        $mismatchProducts[] = $product['name'] ?? 'Product';
+                        $mismatchProducts[] = $product['product_name'] ?? $product['name'] ?? 'Product';
+                        error_log("Apply: Coupon seller mismatch: Coupon seller_id={$couponSellerId}, Product seller_id={$productSellerId}");
                     }
                 }
                 
@@ -289,6 +343,7 @@ class CouponController extends Controller
             if ($validation['valid']) {
                 $_SESSION['applied_coupon'] = $validation['coupon'];
                 $discount = $this->couponModel->calculateDiscount($validation['coupon'], $orderAmount);
+                $finalAmount = max(0, $orderAmount - $discount);
                 
                 error_log('Coupon applied successfully with discount: ' . $discount);
                 
@@ -296,7 +351,7 @@ class CouponController extends Controller
                     'success' => true,
                     'message' => 'Coupon applied successfully!',
                     'discount' => $discount,
-                    'final_amount' => ($cartData['final_total'] - $discount)
+                    'final_amount' => $finalAmount
                 ]);
             } else {
                 error_log('Coupon apply validation failed: ' . $validation['message']);

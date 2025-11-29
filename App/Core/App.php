@@ -209,6 +209,10 @@ class App
         $this->router->get('seller/cancellations', 'Seller\Cancellations@index');
         $this->router->get('seller/cancellations/detail/{id}', 'Seller\Cancellations@detail');
         $this->router->post('seller/cancellations/update/{id}', 'Seller\Cancellations@updateStatus');
+        $this->router->get('seller/staff', 'Seller\Staff@index');
+        $this->router->get('seller/staff/create', 'Seller\Staff@create');
+        $this->router->post('seller/staff/create', 'Seller\Staff@create');
+        $this->router->post('seller/staff/delete/{id}', 'Seller\Staff@delete');
         $this->router->get('seller/profile', 'Seller\Profile@index');
         $this->router->post('seller/profile', 'Seller\Profile@index');
         $this->router->get('seller/ads', 'Seller\Ads@index');
@@ -482,6 +486,15 @@ class App
         // Curior History routes
         $this->router->get('curior/history', 'Curior\History@index');
         
+        // Delivery Boy routes
+        $this->router->get('deliveryboy/login', 'DeliveryBoy\Auth@login');
+        $this->router->post('deliveryboy/login', 'DeliveryBoy\Auth@login');
+        $this->router->get('deliveryboy/logout', 'DeliveryBoy\Auth@logout');
+        $this->router->get('deliveryboy/dashboard', 'DeliveryBoy\Dashboard@index');
+        $this->router->get('deliveryboy/pickup', 'DeliveryBoy\Dashboard@pickup');
+        $this->router->get('deliveryboy/order/{id}', 'DeliveryBoy\Dashboard@viewOrder');
+        $this->router->post('deliveryboy/deliver/{id}', 'DeliveryBoy\Dashboard@deliver');
+        
         // SMS routes - FIXED AND COMPLETE
         $this->router->get('admin/sms', 'Sms\SMSController@index');
         $this->router->get('admin/sms/marketing', 'Sms\SMSController@marketing');
@@ -655,6 +668,7 @@ class App
         $this->router->get('admin/settings/download-backup', 'Admin\AdminSettingController@downloadBackup');
         $this->router->get('admin/settings/export-db-xls', 'Admin\AdminSettingController@exportDbXls');
         $this->router->post('admin/settings/clear-cache', 'Admin\AdminSettingController@clearCache');
+        $this->router->get('admin/migration/seller-staff', 'Admin\MigrationController@createSellerStaff');
         $this->router->get('admin/analytics', 'Admin\AdminController@analytics');
         $this->router->get('admin/reports/best-selling', 'Admin\AdminProductController@bestSelling');
         $this->router->get('admin/reports/low-stock', 'Admin\AdminController@lowStockAlerts');

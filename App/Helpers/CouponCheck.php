@@ -19,19 +19,32 @@ class CouponCheck
         }
 
         // If coupon has seller_id, it must match product seller_id
-        if (!empty($coupon['seller_id']) && $coupon['seller_id'] != $product['seller_id']) {
+        if (!empty($coupon['seller_id'])) {
+            $couponSellerId = (int)$coupon['seller_id'];
+            $productSellerId = (int)($product['seller_id'] ?? 0);
+            
+            // Only seller coupons can be applied to seller products
+            if ($couponSellerId > 0 && $productSellerId !== $couponSellerId) {
+                return false;
+            }
+        }
+
+        // Check coupon status (1 = active)
+        if (isset($coupon['status']) && $coupon['status'] != 1 && $coupon['is_active'] != 1) {
             return false;
         }
 
-        // Check coupon status
-        if ($coupon['status'] != 1) {
-            return false;
-        }
-
-        // Check date validity
-        $today = date('Y-m-d');
-        if ($today < $coupon['start_date'] || $today > $coupon['end_date']) {
-            return false;
+        // Check date validity if dates are provided
+        if (!empty($coupon['expires_at'])) {
+            $today = date('Y-m-d H:i:s');
+            if ($today > $coupon['expires_at']) {
+                return false;
+            }
+        } elseif (!empty($coupon['start_date']) && !empty($coupon['end_date'])) {
+            $today = date('Y-m-d');
+            if ($today < $coupon['start_date'] || $today > $coupon['end_date']) {
+                return false;
+            }
         }
 
         return true;

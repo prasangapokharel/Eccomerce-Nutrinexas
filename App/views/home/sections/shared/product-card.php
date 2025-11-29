@@ -22,6 +22,10 @@ if (empty($product) || !is_array($product)) {
 
 $cardOptions = $cardOptions ?? [];
 $themeKey = $cardOptions['theme'] ?? 'light';
+
+// Check if product is launching/scheduled
+$isLaunching = !empty($product['is_scheduled']) && $product['is_scheduled'] == 1;
+
 $themes = [
     'flash' => [
         'card' => 'block bg-sale border border-gray-100 rounded-2xl overflow-hidden relative product-card productclip text-white',
@@ -107,7 +111,7 @@ $adId = $isSponsored || $hasAdId ? ($product['ad_id'] ?? null) : null;
         <?php endif; ?>
 
         <div class="absolute top-1.5 left-1.5 z-10 flex flex-col gap-1">
-            <?php if ($discountPercent > 0): ?>
+            <?php if (!$isLaunching && $discountPercent > 0): ?>
                 <span class="bg-primary text-white px-1.5 py-0.5 rounded-full text-xs font-semibold shadow-sm">
                     -<?= $discountPercent ?>%
                 </span>
@@ -174,7 +178,13 @@ $adId = $isSponsored || $hasAdId ? ($product['ad_id'] ?? null) : null;
         </div>
 
         <div class="mb-2">
-            <?php if ($hasSale && $discountPercent > 0): ?>
+            <?php if ($isLaunching): ?>
+                <!-- Mystery Price for Launching Products -->
+                <div class="mystery-price-container">
+                    <span class="<?= $theme['priceWrap'] ?>">रु???</span>
+                    <p class="text-xs text-gray-400 mt-1">Price revealed at launch!</p>
+                </div>
+            <?php elseif ($hasSale && $discountPercent > 0): ?>
                 <div class="flex items-baseline gap-2 mb-1">
                     <span class="<?= $theme['priceWrap'] ?>">रु<?= number_format($currentPrice, 0) ?></span>
                     <span class="<?= $theme['priceStrike'] ?>">रु<?= number_format($originalPrice, 0) ?></span>
@@ -202,4 +212,5 @@ $adId = $isSponsored || $hasAdId ? ($product['ad_id'] ?? null) : null;
         <?php endif; ?>
     </div>
 </div>
+
 

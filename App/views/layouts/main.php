@@ -110,21 +110,8 @@ if (defined('DEBUG') && DEBUG) {
     <?php include ROOT_DIR . '/App/views/includes/navbar.php'; ?>
  
     <main class="flex-grow">
-        <?php if (\App\Core\Session::hasFlash()): ?>
-            <?php $flash = \App\Core\Session::getFlash(); ?>
-            <div class="w-full max-w-6xl mx-auto px-4 sm:px-6 py-3 sm:py-4">
-                <div class="<?= $flash['type'] === 'success' ? 'bg-green-100 border-green-500 text-green-700' : 'bg-red-100 border-red-500 text-red-700' ?> px-3 sm:px-4 py-2 sm:py-3 rounded relative border-l-4 flex items-center" role="alert">
-                    <span class="<?= $flash['type'] === 'success' ? 'text-green-500' : 'text-red-500' ?> flex-shrink-0 mr-2">
-                        <i class="fas <?= $flash['type'] === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle' ?>"></i>
-                    </span>
-                    <span class="block text-sm sm:text-base"><?= $flash['message'] ?></span>
-                    <button type="button" class="absolute top-0 right-0 mt-3 mr-3 text-gray-400 hover:text-gray-500" onclick="this.parentElement.remove()">
-                        <span class="sr-only">Close</span>
-                        <i class="fas fa-times text-xs"></i>
-                    </button>
-                </div>
-            </div>
-        <?php endif; ?>
+        <!-- Global Notification Component -->
+        <?php include ROOT_DIR . '/App/views/components/alert.php'; ?>
         
         <div class="w-full max-w-6xl mx-auto  sm:px-6  sm:py-6">
             <?= $content ?>

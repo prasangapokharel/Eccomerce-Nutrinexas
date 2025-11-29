@@ -61,6 +61,9 @@ class PayoutController extends Controller
             $sellerAmount = $payoutData['amount'];
             $deductions = $payoutData['deductions'];
             
+            // Include subtotal in deductions for notification (already calculated in calculateSellerAmount)
+            $deductions['subtotal'] = $payoutData['subtotal'] ?? 0;
+            
             if ($sellerAmount > 0) {
                 $result = $this->updateSellerBalance($sellerId, $sellerAmount, $orderId, $deductions);
                 if ($result) {
@@ -164,15 +167,18 @@ class PayoutController extends Controller
         // Log calculation for debugging
         error_log("PayoutController: Calculation for seller #{$sellerId}, order #{$order['id']}:");
         error_log("  - Seller Subtotal: Rs {$sellerSubtotal}");
-        error_log("  - Delivery Fee: Rs {$delivery}");
-        error_log("  - Tax: Rs {$tax}");
-        error_log("  - Coupon: Rs {$coupon}");
-        error_log("  - Affiliate: Rs {$affiliate}");
-        error_log("  - Final Amount: Rs {$amount}");
+        error_log("  - Delivery Fee (deducted): Rs {$delivery}");
+        error_log("  - Tax (NOT deducted, for reference only): Rs {$tax}");
+        error_log("  - Coupon (deducted if seller's coupon): Rs {$coupon}");
+        error_log("  - Affiliate (deducted): Rs {$affiliate}");
+        error_log("  - Final Payout: Rs {$amount}");
+        error_log("  - Formula: Subtotal ({$sellerSubtotal}) - Delivery ({$delivery}) - Coupon ({$coupon}) - Affiliate ({$affiliate}) = {$amount}");
         
         // Return amount and deductions for notification
+        // Note: Tax is shown in notification but NOT deducted from payout
         return [
             'amount' => $amount,
+            'subtotal' => $sellerSubtotal, // Include subtotal for notification
             'deductions' => [
                 'tax' => $tax,
                 'tax_rate' => $taxRate,
@@ -236,6 +242,7 @@ class PayoutController extends Controller
             }
 
             // Send notification to seller
+            // Include subtotal in deductions for notification display (already included in calculateSellerAmount return)
             $notificationController = new NotificationSellerController();
             $notificationController->notifyPayoutReceived($sellerId, $orderId, $amount, $deductions);
 

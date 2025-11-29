@@ -169,9 +169,9 @@ class ReviewController extends Controller
                     return;
                 }
                 
-                // Validate file size (max 5MB)
-                if ($file['size'] > 5 * 1024 * 1024) {
-                    echo json_encode(['success' => false, 'message' => 'Image size too large. Maximum size is 5MB']);
+                // Validate file size (max 300KB)
+                if ($file['size'] > 300 * 1024) {
+                    echo json_encode(['success' => false, 'message' => 'Image size too large. Maximum size is 300KB']);
                     return;
                 }
                 

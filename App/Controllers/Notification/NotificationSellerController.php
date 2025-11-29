@@ -45,31 +45,51 @@ class NotificationSellerController extends Controller
             )->single();
             $orderInvoice = $order['invoice'] ?? '#' . $orderId;
 
-            // Format amount
-            $formattedAmount = 'रु ' . number_format($amount, 2);
+            // Get subtotal (before deductions) - this is what seller receives before deductions
+            $subtotal = $deductions['subtotal'] ?? 0;
+            if ($subtotal <= 0) {
+                // Fallback: calculate from amount + deductions
+                $subtotal = $amount + ($deductions['delivery_fee'] ?? 0) + ($deductions['coupon'] ?? 0) + ($deductions['affiliate'] ?? 0);
+            }
+            
+            $formattedSubtotal = 'रु' . number_format($subtotal, 2);
+            $formattedAmount = 'रु' . number_format($amount, 2);
 
             // Get tax rate for display
             $taxRate = $deductions['tax_rate'] ?? (new \App\Models\Setting())->get('tax_rate', 12);
             
-            // Build message with deductions breakdown
-            $message = "{$sellerName} received your order payout {$formattedAmount} after all deduction.\n\n";
+            // Build message: Subtotal → Deductions → Net Payout
+            $message = "{$sellerName} received your order payout {$formattedSubtotal}.\n\n";
             $message .= "Order: {$orderInvoice}\n\n";
-            $message .= "Deductions Breakdown:\n";
             
-            if (!empty($deductions['tax']) && $deductions['tax'] > 0) {
-                $message .= "- Tax ({$taxRate}%): रु " . number_format($deductions['tax'], 2) . "\n";
+            // Calculate what was actually deducted
+            $hasDeductions = false;
+            $deductionList = [];
+            
+            if (!empty($deductions['delivery_fee']) && $deductions['delivery_fee'] > 0) {
+                $hasDeductions = true;
+                $deductionList[] = "- Delivery fee: रु " . number_format($deductions['delivery_fee'], 2);
             }
             
             if (!empty($deductions['coupon']) && $deductions['coupon'] > 0) {
-                $message .= "- Coupon: रु " . number_format($deductions['coupon'], 2) . "\n";
+                $hasDeductions = true;
+                $deductionList[] = "- Coupon discount: रु " . number_format($deductions['coupon'], 2);
             }
             
             if (!empty($deductions['affiliate']) && $deductions['affiliate'] > 0) {
-                $message .= "- Affiliate earned: रु " . number_format($deductions['affiliate'], 2) . "\n";
+                $hasDeductions = true;
+                $deductionList[] = "- Affiliate commission: रु " . number_format($deductions['affiliate'], 2);
             }
             
-            if (!empty($deductions['delivery_fee']) && $deductions['delivery_fee'] > 0) {
-                $message .= "- Delivery fee: रु " . number_format($deductions['delivery_fee'], 2) . "\n";
+            if ($hasDeductions) {
+                $message .= "Deductions:\n";
+                $message .= implode("\n", $deductionList);
+                $message .= "\n";
+            }
+            
+            // Show tax for reference only (NOT deducted)
+            if (!empty($deductions['tax']) && $deductions['tax'] > 0) {
+                $message .= "Note: Tax ({$taxRate}%) रु " . number_format($deductions['tax'], 2) . " is not deducted (government fee).\n";
             }
 
             $message .= "\nNet Payout: {$formattedAmount}";

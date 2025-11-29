@@ -61,8 +61,14 @@
                     <?php
                     // Calculate subtotal from actual order items (using sale prices if available)
                     $subtotal = 0;
-                    foreach ($orderItems as $item) {
-                        $subtotal += ($item['total'] ?? 0);
+                    if (!empty($orderItems)) {
+                        foreach ($orderItems as $item) {
+                            $subtotal += ($item['total'] ?? 0);
+                        }
+                    } else {
+                        // Fallback to order total if items not loaded yet
+                        $subtotal = ($order['total_amount'] ?? 0) - ($order['tax_amount'] ?? 0) - ($order['delivery_fee'] ?? 0) + ($order['discount_amount'] ?? 0);
+                        $subtotal = max(0, $subtotal);
                     }
                     
                     // Calculate correct total from breakdown

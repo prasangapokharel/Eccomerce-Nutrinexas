@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center">
         <div>
-            <h1 class="text-2xl font-bold text-gray-900">Seller Details</h1>
+            <h1 class="text-2xl font-bold text-gray-900"><?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?></h1>
             <p class="text-gray-600"><?= htmlspecialchars($seller['name']) ?></p>
         </div>
         <div class="flex gap-3">
@@ -23,43 +23,51 @@
         </div>
     </div>
 
-    <!-- Approval Section -->
-    <?php if (!$seller['is_approved']): ?>
-        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-6">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h3 class="text-lg font-semibold text-yellow-900 mb-2">Pending Approval</h3>
-                    <p class="text-yellow-700">This seller is waiting for approval. Review their documents and approve or reject.</p>
-                    <?php if (!empty($seller['rejection_reason'])): ?>
-                        <p class="text-sm text-yellow-800 mt-2"><strong>Previous Rejection Reason:</strong> <?= htmlspecialchars($seller['rejection_reason']) ?></p>
-                    <?php endif; ?>
-                </div>
-                <div class="flex gap-3">
+    <!-- Approval & Status Section -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center gap-4">
+                <h2 class="text-lg font-semibold text-gray-900"><?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?></h2>
+            </div>
+            <div class="flex items-center gap-3">
+                <?php if (!$seller['is_approved']): ?>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                        <i class="fas fa-clock mr-2"></i>Pending Approval
+                    </span>
                     <form action="<?= \App\Core\View::url('admin/seller/approve/' . $seller['id']) ?>" method="POST" class="inline">
                         <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
-                        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700">
-                            <i class="fas fa-check mr-2"></i>Approve
+                        <button type="submit" class="bg-green-600 text-white px-4 py-1.5 rounded-lg hover:bg-green-700 text-sm">
+                            <i class="fas fa-check mr-1"></i>Approve
                         </button>
                     </form>
-                    <button onclick="showRejectModal()" class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700">
-                        <i class="fas fa-times mr-2"></i>Reject
+                    <button onclick="showRejectModal()" class="bg-red-600 text-white px-4 py-1.5 rounded-lg hover:bg-red-700 text-sm">
+                        <i class="fas fa-times mr-1"></i>Reject
                     </button>
-                </div>
+                <?php else: ?>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        <i class="fas fa-check-circle mr-2"></i>Approved
+                    </span>
+                <?php endif; ?>
+                <?php
+                $status = $seller['status'] ?? 'active';
+                $statusColors = [
+                    'active' => 'bg-green-100 text-green-800',
+                    'suspended' => 'bg-red-100 text-red-800',
+                    'inactive' => 'bg-gray-100 text-gray-800'
+                ];
+                $statusColor = $statusColors[$status] ?? 'bg-gray-100 text-gray-800';
+                ?>
+                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <?= $statusColor ?>">
+                    <?= ucfirst($status) ?>
+                </span>
             </div>
         </div>
-    <?php else: ?>
-        <div class="bg-green-50 border border-green-200 rounded-lg p-4">
-            <div class="flex items-center">
-                <i class="fas fa-check-circle text-green-600 text-xl mr-3"></i>
-                <div>
-                    <p class="text-green-900 font-semibold">Approved</p>
-                    <p class="text-sm text-green-700">
-                        Approved on <?= $seller['approved_at'] ? date('M j, Y g:i A', strtotime($seller['approved_at'])) : 'N/A' ?>
-                    </p>
-                </div>
+        <?php if (!$seller['is_approved'] && !empty($seller['rejection_reason'])): ?>
+            <div class="mt-3 pt-3 border-t border-gray-200">
+                <p class="text-sm text-gray-600"><strong>Previous Rejection Reason:</strong> <?= htmlspecialchars($seller['rejection_reason']) ?></p>
             </div>
-        </div>
-    <?php endif; ?>
+        <?php endif; ?>
+    </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Left Column -->
@@ -224,6 +232,315 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Orders Section -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Orders</h2>
+            <p class="text-sm text-gray-600 mt-1">Order management and statistics for this seller</p>
+        </div>
+        
+        <!-- Order Statistics -->
+        <div class="px-6 py-4 bg-gray-50 border-b border-gray-200">
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <div class="text-center">
+                    <p class="text-xs text-gray-500 mb-1">Not Delivered</p>
+                    <p class="text-2xl font-bold text-orange-600"><?= number_format($orderStats['not_delivered'] ?? 0) ?></p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-500 mb-1">Delivered</p>
+                    <p class="text-2xl font-bold text-green-600"><?= number_format($orderStats['delivered'] ?? 0) ?></p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-500 mb-1">Total Orders</p>
+                    <p class="text-2xl font-bold text-primary"><?= number_format($orderStats['total_orders'] ?? 0) ?></p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-500 mb-1">This Week Sales</p>
+                    <p class="text-2xl font-bold text-blue-600">रु <?= number_format($orderStats['week_sales'] ?? 0, 2) ?></p>
+                </div>
+                <div class="text-center">
+                    <p class="text-xs text-gray-500 mb-1">This Month Sales</p>
+                    <p class="text-2xl font-bold text-purple-600">रु <?= number_format($orderStats['month_sales'] ?? 0, 2) ?></p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Orders Table -->
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Items</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php if (!empty($orders)): ?>
+                        <?php foreach ($orders as $order): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">#<?= $order['id'] ?></div>
+                                    <div class="text-xs text-gray-500"><?= htmlspecialchars($order['invoice'] ?? '') ?></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm text-gray-900">
+                                        <?= htmlspecialchars(trim(($order['first_name'] ?? '') . ' ' . ($order['last_name'] ?? '')) ?: $order['customer_name'] ?? 'Guest') ?>
+                                    </div>
+                                    <div class="text-xs text-gray-500"><?= htmlspecialchars($order['customer_email'] ?? '') ?></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <?= number_format($order['item_count'] ?? 0) ?> items
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <div class="text-sm font-medium text-gray-900">रु <?= number_format($order['seller_order_total'] ?? 0, 2) ?></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php
+                                    $paymentStatus = $order['payment_status'] ?? 'pending';
+                                    $paymentColors = [
+                                        'paid' => 'bg-green-100 text-green-800',
+                                        'pending' => 'bg-yellow-100 text-yellow-800',
+                                        'failed' => 'bg-red-100 text-red-800'
+                                    ];
+                                    $paymentColor = $paymentColors[$paymentStatus] ?? 'bg-gray-100 text-gray-800';
+                                    ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $paymentColor ?>">
+                                        <?= ucfirst($paymentStatus) ?>
+                                    </span>
+                                    <div class="text-xs text-gray-500 mt-1"><?= htmlspecialchars($order['payment_method_name'] ?? 'N/A') ?></div>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php
+                                    $status = $order['status'] ?? 'pending';
+                                    $statusColors = [
+                                        'delivered' => 'bg-green-100 text-green-800',
+                                        'in_transit' => 'bg-blue-100 text-blue-800',
+                                        'picked_up' => 'bg-purple-100 text-purple-800',
+                                        'confirmed' => 'bg-yellow-100 text-yellow-800',
+                                        'pending' => 'bg-gray-100 text-gray-800',
+                                        'cancelled' => 'bg-red-100 text-red-800'
+                                    ];
+                                    $statusColor = $statusColors[$status] ?? 'bg-gray-100 text-gray-800';
+                                    ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusColor ?>">
+                                        <?= ucfirst(str_replace('_', ' ', $status)) ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= date('M j, Y', strtotime($order['created_at'])) ?><br>
+                                    <span class="text-xs"><?= date('g:i A', strtotime($order['created_at'])) ?></span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="<?= \App\Core\View::url('admin/orders/view/' . $order['id']) ?>" 
+                                       class="text-primary hover:text-primary-dark">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="8" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-2 block"></i>
+                                No orders found for this seller
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Coupons Section -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Coupons</h2>
+            <p class="text-sm text-gray-600 mt-1">Seller-created coupons</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Code</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Discount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Usage</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Expires</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Created</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php if (!empty($coupons)): ?>
+                        <?php foreach ($coupons as $coupon): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <span class="text-sm font-medium text-gray-900"><?= htmlspecialchars($coupon['code']) ?></span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <?= $coupon['discount_type'] === 'percentage' ? $coupon['discount_value'] . '%' : 'रु' . number_format($coupon['discount_value'], 2) ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                    <?= number_format($coupon['usage_count'] ?? 0) ?> uses
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php
+                                    $isActive = $coupon['is_active'] == 1;
+                                    $isExpired = !empty($coupon['expires_at']) && strtotime($coupon['expires_at']) < time();
+                                    $statusColor = $isActive && !$isExpired ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800';
+                                    ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusColor ?>">
+                                        <?= $isActive && !$isExpired ? 'Active' : ($isExpired ? 'Expired' : 'Inactive') ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= $coupon['expires_at'] ? date('M j, Y', strtotime($coupon['expires_at'])) : 'No expiry' ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= date('M j, Y', strtotime($coupon['created_at'])) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <i class="fas fa-ticket-alt text-4xl text-gray-300 mb-2 block"></i>
+                                No coupons found
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Withdraw Requests Section -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Withdraw Requests</h2>
+            <p class="text-sm text-gray-600 mt-1">All withdrawal requests from this seller</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">ID</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Amount</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Payment Method</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bank Account</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Requested</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php if (!empty($withdrawRequests)): ?>
+                        <?php foreach ($withdrawRequests as $request): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">#<?= $request['id'] ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">रु <?= number_format($request['amount'], 2) ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($request['payment_method'] ?? 'N/A') ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= htmlspecialchars($request['bank_name'] ?? 'N/A') ?>
+                                    <?php if (!empty($request['account_number'])): ?>
+                                        <div class="text-xs text-gray-400">****<?= substr($request['account_number'], -4) ?></div>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php
+                                    $status = $request['status'] ?? 'pending';
+                                    $statusColors = [
+                                        'pending' => 'bg-yellow-100 text-yellow-800',
+                                        'approved' => 'bg-blue-100 text-blue-800',
+                                        'completed' => 'bg-green-100 text-green-800',
+                                        'rejected' => 'bg-red-100 text-red-800'
+                                    ];
+                                    $statusColor = $statusColors[$status] ?? 'bg-gray-100 text-gray-800';
+                                    ?>
+                                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <?= $statusColor ?>">
+                                        <?= ucfirst($status) ?>
+                                    </span>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= date('M j, Y', strtotime($request['requested_at'])) ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                    <a href="<?= \App\Core\View::url('admin/seller/withdraws/' . $seller['id'] . '?request=' . $request['id']) ?>" 
+                                       class="text-primary hover:text-primary-dark">
+                                        <i class="fas fa-eye"></i> View
+                                    </a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="7" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <i class="fas fa-money-bill-wave text-4xl text-gray-300 mb-2 block"></i>
+                                No withdrawal requests found
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Bank Accounts Section -->
+    <div class="bg-white rounded-lg shadow overflow-hidden mb-6">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Bank Accounts</h2>
+            <p class="text-sm text-gray-600 mt-1">Registered bank accounts for withdrawals</p>
+        </div>
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-50">
+                    <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Account Holder</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Bank Name</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Account Number</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Default</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Added</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white divide-y divide-gray-200">
+                    <?php if (!empty($bankAccounts)): ?>
+                        <?php foreach ($bankAccounts as $account): ?>
+                            <tr class="hover:bg-gray-50">
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?= htmlspecialchars($account['account_holder_name'] ?? 'N/A') ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900"><?= htmlspecialchars($account['bank_name'] ?? 'N/A') ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">****<?= substr($account['account_number'] ?? '', -4) ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500"><?= htmlspecialchars($account['account_type'] ?? 'N/A') ?></td>
+                                <td class="px-6 py-4 whitespace-nowrap">
+                                    <?php if ($account['is_default'] ?? 0): ?>
+                                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-white">Default</span>
+                                    <?php else: ?>
+                                        <span class="text-xs text-gray-400">-</span>
+                                    <?php endif; ?>
+                                </td>
+                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    <?= date('M j, Y', strtotime($account['created_at'])) ?>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr>
+                            <td colspan="6" class="px-6 py-8 text-center text-sm text-gray-500">
+                                <i class="fas fa-university text-4xl text-gray-300 mb-2 block"></i>
+                                No bank accounts registered
+                            </td>
+                        </tr>
+                    <?php endif; ?>
+                </tbody>
+            </table>
         </div>
     </div>
 

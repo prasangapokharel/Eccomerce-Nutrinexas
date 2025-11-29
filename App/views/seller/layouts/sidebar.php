@@ -96,6 +96,12 @@ $currentPage = $page ?? 'dashboard';
                 <span class="ml-3 sidebar-text font-medium">Support</span>
             </a>
             
+            <!-- Staff -->
+            <a href="<?= \App\Core\View::url('seller/staff') ?>" class="nav-item flex items-center p-3 <?= $currentPage === 'staff' ? 'active' : '' ?>" title="Staff">
+                <i class="fas fa-user-tie w-5 text-accent flex-shrink-0"></i>
+                <span class="ml-3 sidebar-text font-medium">Staff</span>
+            </a>
+            
             <!-- Cancellations -->
             <a href="<?= \App\Core\View::url('seller/cancellations') ?>" class="nav-item flex items-center p-3 <?= $currentPage === 'cancellations' ? 'active' : '' ?>" title="Cancellations">
                 <i class="fas fa-times-circle w-5 text-accent flex-shrink-0"></i>

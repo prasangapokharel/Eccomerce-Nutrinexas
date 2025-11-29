@@ -218,26 +218,54 @@ include __DIR__ . '/../seo/product-seo.php';
                 
                 <!-- Product Image/Video -->
                 <div class="p-4 lg:p-6">
-                    <!-- Main Product Media -->
-                    <div class="aspect-square overflow-hidden rounded-2xl bg-gray-50 shadow-sm mb-4">
-                        <?php 
-                        $isVideo = \App\Helpers\MediaHelper::isVideo($mainImageUrl);
-                        if ($isVideo): 
-                        ?>
-                            <video id="main-product-media" 
-                                   src="<?= htmlspecialchars($mainImageUrl) ?>" 
-                                   class="w-full h-full object-contain"
-                                   controls
-                                   preload="metadata"
-                                   poster="<?= \App\Core\View::asset('images/products/default.jpg') ?>">
-                                Your browser does not support the video tag.
-                            </video>
-                        <?php else: ?>
-                            <img id="main-product-media" 
-                                 src="<?= htmlspecialchars($mainImageUrl) ?>" 
-                                 alt="<?= $productName ?>" 
-                                 class="w-full h-full object-contain transition-all duration-300 hover:scale-105"
-                                 onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                    <!-- Main Product Media Slider -->
+                    <div id="product-media-slider" class="aspect-square overflow-hidden rounded-2xl bg-gray-50 shadow-sm mb-4 relative touch-pan-y">
+                        <div id="product-media-track" class="flex h-full transition-transform duration-300 ease-out" style="transform: translateX(0%);">
+                            <?php 
+                            // Include all media in slider
+                            $allMediaForSlider = [];
+                            if (!empty($additionalMedia)) {
+                                $allMediaForSlider = $additionalMedia;
+                            } else {
+                                $allMediaForSlider[] = [
+                                    'image_url' => $mainImageUrl,
+                                    'is_primary' => 1
+                                ];
+                            }
+                            
+                            foreach ($allMediaForSlider as $index => $media): 
+                                $mediaUrl = $media['image_url'] ?? '';
+                                $isMediaVideo = \App\Helpers\MediaHelper::isVideo($mediaUrl);
+                            ?>
+                                <div class="product-media-slide flex-shrink-0 w-full h-full">
+                                    <?php if ($isMediaVideo): ?>
+                                        <video src="<?= htmlspecialchars($mediaUrl) ?>" 
+                                               class="w-full h-full object-contain"
+                                               controls
+                                               preload="metadata"
+                                               poster="<?= \App\Core\View::asset('images/products/default.jpg') ?>">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    <?php else: ?>
+                                        <img src="<?= htmlspecialchars($mediaUrl) ?>" 
+                                             alt="<?= $productName ?> - Image <?= $index + 1 ?>" 
+                                             id="<?= $index === 0 ? 'main-product-media' : '' ?>"
+                                             class="w-full h-full object-contain transition-all duration-300"
+                                             onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                                    <?php endif; ?>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                        <!-- Slider Dots -->
+                        <?php if (count($allMediaForSlider) > 1): ?>
+                            <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                                <?php foreach ($allMediaForSlider as $index => $media): ?>
+                                    <button type="button" 
+                                            class="product-slider-dot w-2 h-2 rounded-full transition-all duration-300 <?= $index === 0 ? 'bg-white w-6' : 'bg-white/50' ?>"
+                                            data-slide-index="<?= $index ?>"
+                                            aria-label="Go to slide <?= $index + 1 ?>"></button>
+                                <?php endforeach; ?>
+                            </div>
                         <?php endif; ?>
                     </div>
 
@@ -352,7 +380,7 @@ include __DIR__ . '/../seo/product-seo.php';
                                     class="flex items-center gap-1 hover:text-primary transition-colors"
                                     data-product-id="<?= $product['id'] ?>"
                                     data-liked="<?= ($isLiked ?? false) ? '1' : '0' ?>">
-                                <i class="<?= ($isLiked ?? false) ? 'fas' : 'far' ?> fa-heart text-sm <?= ($isLiked ?? false) ? 'text-red-500' : 'text-gray-600' ?>"></i>
+                                <i class="<?= ($isLiked ?? false) ? 'fas' : 'far' ?> fa-heart text-sm <?= ($isLiked ?? false) ? 'text-red-500 fill-red-500' : 'text-gray-600' ?>"></i>
                                 <span id="like-count"><?= number_format($likeCount ?? 0) ?></span>
                             </button>
                         </div>
@@ -1520,68 +1548,130 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Image/Video thumbnail functionality
+    // Product Media Slider Swipe Functionality
+    const productSlider = document.getElementById('product-media-slider');
+    const productTrack = document.getElementById('product-media-track');
+    const productSlides = document.querySelectorAll('.product-media-slide');
+    let productCurrentIndex = 0;
+    let productStartX = 0;
+    let productCurrentX = 0;
+    let productIsDragging = false;
+    
+    if (productSlider && productTrack && productSlides.length > 1) {
+        function updateProductSlider() {
+            const translateX = -productCurrentIndex * 100;
+            productTrack.style.transform = `translateX(${translateX}%)`;
+            
+            // Update dots
+            const dots = document.querySelectorAll('.product-slider-dot');
+            dots.forEach((dot, index) => {
+                if (index === productCurrentIndex) {
+                    dot.classList.remove('bg-white/50', 'w-2');
+                    dot.classList.add('bg-white', 'w-6');
+                } else {
+                    dot.classList.remove('bg-white', 'w-6');
+                    dot.classList.add('bg-white/50', 'w-2');
+                }
+            });
+        }
+        
+        // Dot click handlers
+        document.querySelectorAll('.product-slider-dot').forEach((dot, index) => {
+            dot.addEventListener('click', () => {
+                productCurrentIndex = index;
+                updateProductSlider();
+            });
+        });
+        
+        productSlider.addEventListener('touchstart', (e) => {
+            productStartX = e.touches[0].clientX;
+            productIsDragging = true;
+        });
+        
+        productSlider.addEventListener('touchmove', (e) => {
+            if (!productIsDragging) return;
+            productCurrentX = e.touches[0].clientX;
+            const diff = productStartX - productCurrentX;
+            const translateX = -productCurrentIndex * 100 - (diff / productSlider.offsetWidth) * 100;
+            productTrack.style.transform = `translateX(${translateX}%)`;
+        });
+        
+        productSlider.addEventListener('touchend', () => {
+            if (!productIsDragging) return;
+            productIsDragging = false;
+            const diff = productStartX - productCurrentX;
+            const threshold = productSlider.offsetWidth * 0.3;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && productCurrentIndex < productSlides.length - 1) {
+                    productCurrentIndex++;
+                } else if (diff < 0 && productCurrentIndex > 0) {
+                    productCurrentIndex--;
+                }
+            }
+            updateProductSlider();
+        });
+        
+        // Mouse drag support
+        productSlider.addEventListener('mousedown', (e) => {
+            productStartX = e.clientX;
+            productIsDragging = true;
+            productSlider.style.cursor = 'grabbing';
+        });
+        
+        productSlider.addEventListener('mousemove', (e) => {
+            if (!productIsDragging) return;
+            e.preventDefault();
+            productCurrentX = e.clientX;
+            const diff = productStartX - productCurrentX;
+            const translateX = -productCurrentIndex * 100 - (diff / productSlider.offsetWidth) * 100;
+            productTrack.style.transform = `translateX(${translateX}%)`;
+        });
+        
+        productSlider.addEventListener('mouseup', () => {
+            if (!productIsDragging) return;
+            productIsDragging = false;
+            productSlider.style.cursor = 'grab';
+            const diff = productStartX - productCurrentX;
+            const threshold = productSlider.offsetWidth * 0.3;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && productCurrentIndex < productSlides.length - 1) {
+                    productCurrentIndex++;
+                } else if (diff < 0 && productCurrentIndex > 0) {
+                    productCurrentIndex--;
+                }
+            }
+            updateProductSlider();
+        });
+        
+        productSlider.addEventListener('mouseleave', () => {
+            if (productIsDragging) {
+                productIsDragging = false;
+                productSlider.style.cursor = 'grab';
+                updateProductSlider();
+            }
+        });
+    }
+    
+    // Image/Video thumbnail functionality - update slider instead of replacing media
     const thumbnails = document.querySelectorAll('.product-thumbnail');
     
-    if (thumbnails.length > 0) {
-        thumbnails.forEach(thumbnail => {
+    if (thumbnails.length > 0 && productSlides.length > 0) {
+        thumbnails.forEach((thumbnail, index) => {
             thumbnail.addEventListener('click', function() {
-                const mediaUrl = this.getAttribute('data-image-url');
-                const mediaType = this.getAttribute('data-media-type') || 'image';
-                
-                if (mediaUrl) {
-                    // Update main media (image or video)
-                    const mainMedia = document.getElementById('main-product-media');
-                    if (mainMedia) {
-                        if (mediaType === 'video') {
-                            // If main media is image, replace with video
-                            if (mainMedia.tagName === 'IMG') {
-                                const video = document.createElement('video');
-                                video.id = 'main-product-media';
-                                video.src = mediaUrl;
-                                video.className = 'w-full h-full object-contain';
-                                video.controls = true;
-                                video.autoplay = true;
-                                video.muted = true;
-                                video.loop = true;
-                                video.playsInline = true;
-                                video.preload = 'metadata';
-                                video.poster = '<?= \App\Core\View::asset('images/products/default.jpg') ?>';
-                                video.onerror = function() {
-                                    this.src = '<?= ASSETS_URL ?>/images/products/default.jpg';
-                                };
-                                mainMedia.parentNode.replaceChild(video, mainMedia);
-                            } else {
-                                // Main media is already video, just update src
-                                mainMedia.src = mediaUrl;
-                            }
-                        } else {
-                            // If main media is video, replace with image
-                            if (mainMedia.tagName === 'VIDEO') {
-                                const img = document.createElement('img');
-                                img.id = 'main-product-media';
-                                img.src = mediaUrl;
-                                img.alt = '<?= htmlspecialchars($productName) ?>';
-                                img.className = 'w-full h-full object-contain transition-all duration-300 hover:scale-105';
-                                img.onerror = function() {
-                                    this.src = '<?= ASSETS_URL ?>/images/products/default.jpg';
-                                };
-                                mainMedia.parentNode.replaceChild(img, mainMedia);
-                            } else {
-                                // Main media is already image, just update src
-                                mainMedia.src = mediaUrl;
-                            }
-                        }
-                    }
-                    
-                    // Update active thumbnail
-                    thumbnails.forEach(t => {
-                        t.classList.remove('border-primary', 'shadow-md');
-                        t.classList.add('border-gray-200');
-                    });
-                    this.classList.remove('border-gray-200');
-                    this.classList.add('border-primary', 'shadow-md');
+                if (productCurrentIndex !== index) {
+                    productCurrentIndex = index;
+                    updateProductSlider();
                 }
+                
+                // Update active thumbnail
+                thumbnails.forEach(t => {
+                    t.classList.remove('border-primary', 'shadow-md');
+                    t.classList.add('border-gray-200');
+                });
+                this.classList.remove('border-gray-200');
+                this.classList.add('border-primary', 'shadow-md');
             });
         });
     }
@@ -1893,34 +1983,15 @@ document.addEventListener('DOMContentLoaded', function() {
     function openShareDrawer() {
         const drawer = document.getElementById('share-drawer');
         const overlay = document.getElementById('share-drawer-overlay');
-        const mediaContainer = document.getElementById('share-drawer-media-container');
-        if (mediaContainer && productImageShare) {
-            const mediaUrl = productImageShare.value;
-            const isVideo = /\.(mp4|webm|ogg|mov|avi)$/i.test(mediaUrl);
-            
-            // Clear container
-            mediaContainer.innerHTML = '';
-            
-            if (isVideo) {
-                const video = document.createElement('video');
-                video.id = 'share-drawer-media';
-                video.src = mediaUrl;
-                video.className = 'w-full h-full object-contain';
-                video.controls = true;
-                mediaContainer.appendChild(video);
-            } else {
-                const img = document.createElement('img');
-                img.id = 'share-drawer-media';
-                img.src = mediaUrl;
-                img.alt = productNameShare.value || 'Product';
-                img.className = 'w-full h-full object-contain';
-                mediaContainer.appendChild(img);
-            }
-        }
         if (drawer && overlay) {
             drawer.classList.remove('translate-y-full');
             overlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+            // Reset share drawer slider to first image
+            if (shareCurrentIndex !== 0) {
+                shareCurrentIndex = 0;
+                updateShareSlider();
+            }
         }
     }
     
@@ -2110,6 +2181,114 @@ document.addEventListener('DOMContentLoaded', function() {
         shareDrawerClose.addEventListener('click', closeShareDrawer);
     }
     
+    // Share Drawer Slider Swipe Functionality
+    const shareSlider = document.getElementById('share-drawer-slider');
+    const shareTrack = document.getElementById('share-drawer-track');
+    const shareSlides = document.querySelectorAll('.share-media-slide');
+    let shareCurrentIndex = 0;
+    let shareStartX = 0;
+    let shareCurrentX = 0;
+    let shareIsDragging = false;
+    
+    function updateShareSlider() {
+        if (shareTrack && shareSlides.length > 0) {
+            const translateX = -shareCurrentIndex * 100;
+            shareTrack.style.transform = `translateX(${translateX}%)`;
+            
+            // Update dots
+            const dots = document.querySelectorAll('.share-slider-dot');
+            dots.forEach((dot, index) => {
+                if (index === shareCurrentIndex) {
+                    dot.classList.remove('bg-white/50', 'w-2');
+                    dot.classList.add('bg-white', 'w-6');
+                } else {
+                    dot.classList.remove('bg-white', 'w-6');
+                    dot.classList.add('bg-white/50', 'w-2');
+                }
+            });
+        }
+    }
+    
+    // Share drawer dot click handlers
+    document.querySelectorAll('.share-slider-dot').forEach((dot, index) => {
+        dot.addEventListener('click', () => {
+            shareCurrentIndex = index;
+            updateShareSlider();
+        });
+    });
+    
+    if (shareSlider && shareTrack && shareSlides.length > 1) {
+        shareSlider.addEventListener('touchstart', (e) => {
+            shareStartX = e.touches[0].clientX;
+            shareIsDragging = true;
+        });
+        
+        shareSlider.addEventListener('touchmove', (e) => {
+            if (!shareIsDragging) return;
+            shareCurrentX = e.touches[0].clientX;
+            const diff = shareStartX - shareCurrentX;
+            const translateX = -shareCurrentIndex * 100 - (diff / shareSlider.offsetWidth) * 100;
+            shareTrack.style.transform = `translateX(${translateX}%)`;
+        });
+        
+        shareSlider.addEventListener('touchend', () => {
+            if (!shareIsDragging) return;
+            shareIsDragging = false;
+            const diff = shareStartX - shareCurrentX;
+            const threshold = shareSlider.offsetWidth * 0.3;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && shareCurrentIndex < shareSlides.length - 1) {
+                    shareCurrentIndex++;
+                } else if (diff < 0 && shareCurrentIndex > 0) {
+                    shareCurrentIndex--;
+                }
+            }
+            updateShareSlider();
+        });
+        
+        // Mouse drag support
+        shareSlider.addEventListener('mousedown', (e) => {
+            shareStartX = e.clientX;
+            shareIsDragging = true;
+            shareSlider.style.cursor = 'grabbing';
+        });
+        
+        shareSlider.addEventListener('mousemove', (e) => {
+            if (!shareIsDragging) return;
+            e.preventDefault();
+            shareCurrentX = e.clientX;
+            const diff = shareStartX - shareCurrentX;
+            const translateX = -shareCurrentIndex * 100 - (diff / shareSlider.offsetWidth) * 100;
+            shareTrack.style.transform = `translateX(${translateX}%)`;
+        });
+        
+        shareSlider.addEventListener('mouseup', () => {
+            if (!shareIsDragging) return;
+            shareIsDragging = false;
+            shareSlider.style.cursor = 'grab';
+            const diff = shareStartX - shareCurrentX;
+            const threshold = shareSlider.offsetWidth * 0.3;
+            
+            if (Math.abs(diff) > threshold) {
+                if (diff > 0 && shareCurrentIndex < shareSlides.length - 1) {
+                    shareCurrentIndex++;
+                } else if (diff < 0 && shareCurrentIndex > 0) {
+                    shareCurrentIndex--;
+                }
+            }
+            updateShareSlider();
+        });
+        
+        shareSlider.addEventListener('mouseleave', () => {
+            if (shareIsDragging) {
+                shareIsDragging = false;
+                shareSlider.style.cursor = 'grab';
+                updateShareSlider();
+            }
+        });
+    }
+    
     const shareFacebookBtn = document.getElementById('share-facebook');
     if (shareFacebookBtn) {
         shareFacebookBtn.addEventListener('click', shareToFacebook);
@@ -2270,12 +2449,12 @@ document.addEventListener('DOMContentLoaded', function() {
                             this.dataset.liked = '1';
                             if (likeIcon) {
                                 likeIcon.classList.remove('far', 'text-gray-600');
-                                likeIcon.classList.add('fas', 'text-red-500');
+                                likeIcon.classList.add('fas', 'text-red-500', 'fill-red-500');
                             }
                         } else {
                             this.dataset.liked = '0';
                             if (likeIcon) {
-                                likeIcon.classList.remove('fas', 'text-red-500');
+                                likeIcon.classList.remove('fas', 'text-red-500', 'fill-red-500');
                                 likeIcon.classList.add('far', 'text-gray-600');
                             }
                         }
@@ -2345,16 +2524,46 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
         </div>
         
-        <!-- Product Media -->
+        <!-- Product Media Slider -->
         <div class="mb-6">
-            <div class="aspect-square overflow-hidden rounded-2xl bg-gray-50">
-                <div id="share-drawer-media-container">
-                    <?php if (\App\Helpers\MediaHelper::isVideo($mainImageUrl)): ?>
-                        <video id="share-drawer-media" src="<?= htmlspecialchars($mainImageUrl) ?>" class="w-full h-full object-contain" controls></video>
-                    <?php else: ?>
-                        <img id="share-drawer-media" src="<?= htmlspecialchars($mainImageUrl) ?>" alt="<?= htmlspecialchars($productName) ?>" class="w-full h-full object-contain">
-                    <?php endif; ?>
+            <div id="share-drawer-slider" class="aspect-square overflow-hidden rounded-2xl bg-gray-50 relative touch-pan-y">
+                <div id="share-drawer-track" class="flex h-full transition-transform duration-300 ease-out" style="transform: translateX(0%);">
+                    <?php 
+                    // Use all media for share drawer slider
+                    $shareMediaList = !empty($additionalMedia) ? $additionalMedia : [['image_url' => $mainImageUrl, 'is_primary' => 1]];
+                    foreach ($shareMediaList as $index => $media): 
+                        $shareMediaUrl = $media['image_url'] ?? '';
+                        $isShareVideo = \App\Helpers\MediaHelper::isVideo($shareMediaUrl);
+                    ?>
+                        <div class="share-media-slide flex-shrink-0 w-full h-full">
+                            <?php if ($isShareVideo): ?>
+                                <video src="<?= htmlspecialchars($shareMediaUrl) ?>" 
+                                       class="w-full h-full object-contain" 
+                                       autoplay
+                                       muted
+                                       loop
+                                       playsinline
+                                       preload="metadata"></video>
+                            <?php else: ?>
+                                <img src="<?= htmlspecialchars($shareMediaUrl) ?>" 
+                                     alt="<?= htmlspecialchars($productName) ?> - Image <?= $index + 1 ?>" 
+                                     id="<?= $index === 0 ? 'share-drawer-media' : '' ?>"
+                                     class="w-full h-full object-contain">
+                            <?php endif; ?>
+                        </div>
+                    <?php endforeach; ?>
                 </div>
+                <!-- Share Drawer Slider Dots -->
+                <?php if (count($shareMediaList) > 1): ?>
+                    <div class="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                        <?php foreach ($shareMediaList as $index => $media): ?>
+                            <button type="button" 
+                                    class="share-slider-dot w-2 h-2 rounded-full transition-all duration-300 <?= $index === 0 ? 'bg-white w-6' : 'bg-white/50' ?>"
+                                    data-slide-index="<?= $index ?>"
+                                    aria-label="Go to slide <?= $index + 1 ?>"></button>
+                        <?php endforeach; ?>
+                    </div>
+                <?php endif; ?>
             </div>
         </div>
         
@@ -2414,6 +2623,39 @@ document.addEventListener('DOMContentLoaded', function() {
 /* Ensure review actions sit above floating sticky elements */
 .review-action { position: relative; z-index: 1101; }
 .review-sticky-safe { padding-bottom: 90px; }
+
+/* Product Slider Styles */
+#product-media-slider, #share-drawer-slider {
+    cursor: grab;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+#product-media-slider:active, #share-drawer-slider:active {
+    cursor: grabbing;
+}
+
+#product-media-track, #share-drawer-track {
+    will-change: transform;
+}
+
+.product-media-slide, .share-media-slide {
+    touch-action: pan-y;
+}
+
+/* Slider Dots */
+.product-slider-dot, .share-slider-dot {
+    cursor: pointer;
+    border: none;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.product-slider-dot:hover, .share-slider-dot:hover {
+    opacity: 0.8;
+}
 
 @media (min-width: 1024px) {
   .review-sticky-safe { padding-bottom: 0; }

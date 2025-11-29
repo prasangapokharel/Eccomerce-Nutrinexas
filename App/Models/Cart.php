@@ -31,7 +31,7 @@ class Cart extends Model
     {
         $cacheKey = $this->cachePrefix . 'user_' . $userId;
         return $this->cache->remember($cacheKey, function () use ($userId) {
-            $sql = "SELECT c.*, p.product_name, p.price, p.sale_price, p.stock_quantity, p.image,
+            $sql = "SELECT c.*, p.product_name, p.price, p.sale_price, p.stock_quantity, p.image, p.seller_id,
                            c.selected_color as color, c.selected_size as size
                     FROM {$this->table} c
                     LEFT JOIN products p ON c.product_id = p.id
@@ -323,6 +323,7 @@ class Cart extends Model
                         p.stock_quantity,
                         p.image,
                         p.slug,
+                        p.seller_id,
                         CASE 
                             WHEN p.sale_price > 0 AND p.sale_price < p.price THEN p.sale_price
                             ELSE p.price

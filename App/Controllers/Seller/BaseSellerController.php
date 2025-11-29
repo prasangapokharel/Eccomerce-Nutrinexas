@@ -36,7 +36,23 @@ class BaseSellerController extends Controller
         $sellerModel = new \App\Models\Seller();
         $this->sellerData = $sellerModel->find($sellerId);
         
-        if (!$this->sellerData || $this->sellerData['status'] !== 'active') {
+        if (!$this->sellerData) {
+            Session::remove('seller_id');
+            $this->setFlash('error', 'Seller account not found');
+            $this->redirect('seller/login');
+            exit;
+        }
+        
+        // Check if seller is suspended
+        if ($this->sellerData['status'] === 'suspended') {
+            Session::remove('seller_id');
+            $this->setFlash('error', 'Your seller account has been suspended. Please contact support.');
+            $this->redirect('seller/login');
+            exit;
+        }
+        
+        // Check if seller is active
+        if ($this->sellerData['status'] !== 'active') {
             Session::remove('seller_id');
             $this->setFlash('error', 'Your seller account is not active');
             $this->redirect('seller/login');

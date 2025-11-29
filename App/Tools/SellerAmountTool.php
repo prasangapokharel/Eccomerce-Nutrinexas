@@ -7,10 +7,16 @@ class SellerAmountTool
     /**
      * Calculate seller payout amount after all deductions
      * 
+     * Industry Standard Formula (Daraz, Flipkart, Amazon, Shopify):
+     * Seller Payout = Subtotal - Delivery Fee - Coupon - Affiliate
+     * 
+     * IMPORTANT: Tax is NEVER deducted from seller payout.
+     * Tax belongs to government and is added on top of product price.
+     * 
      * @param float $price Product price (seller subtotal)
      * @param float $delivery Delivery fee to deduct
-     * @param float $tax Tax amount to deduct
-     * @param float $coupon Coupon discount amount (seller bears this cost)
+     * @param float $tax Tax amount (NOT deducted, kept for reference only)
+     * @param float $coupon Coupon discount amount (seller bears this cost if seller's coupon)
      * @param float $affPercent Affiliate percentage
      * @param bool $hasReferral Whether order has referral
      * @return float Seller amount after deductions
@@ -23,10 +29,9 @@ class SellerAmountTool
             $affiliate = ($price * $affPercent) / 100;
         }
 
-        // Seller gets: product price - delivery fee - tax - affiliate - coupon
-        // If seller created the coupon, they bear the discount cost
-        // Formula: price - delivery - tax - affiliate - coupon
-        $sellerAmount = $price - $delivery - $tax - $affiliate - $coupon;
+        // Correct Formula: Subtotal - Delivery Fee - Coupon - Affiliate
+        // Tax is NOT deducted (it's government money, not seller money)
+        $sellerAmount = $price - $delivery - $coupon - $affiliate;
 
         return max(0, round($sellerAmount, 2));
     }

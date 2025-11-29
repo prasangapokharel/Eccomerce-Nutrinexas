@@ -781,28 +781,61 @@ class EsewaController extends PaymentBaseController
                 return;
             }
             
+            // Check if payment is already completed (handles case where success callback succeeded but webhook failed)
+            $order = $this->orderModel->find($payment['order_id']);
+            if ($order && $order['payment_status'] === 'paid' && $payment['status'] === 'completed') {
+                // Payment already processed - return success to prevent duplicate processing
+                $this->logSecurityEvent($traceId, 'esewa_webhook_already_processed', 'info', [
+                    'order_id' => $payment['order_id'],
+                    'transaction_uuid' => $transactionUuid
+                ]);
+                http_response_code(200);
+                echo 'OK';
+                return;
+            }
+            
             // Verify payment
             $verificationResponse = $this->verifyEsewaPayment($input);
             
             if ($verificationResponse) {
-                // Update payment and order status
-                $this->esewaModel->updatePayment($payment['id'], [
-                    'status' => 'completed',
-                    'reference_id' => $input['transaction_code'] ?? $input['refId'] ?? null
-                ]);
-                
-                $this->orderModel->update($payment['order_id'], [
-                    'payment_status' => 'paid',
-                    'status' => 'confirmed'
-                ]);
-                
-                $this->logSecurityEvent($traceId, 'esewa_webhook_success', 'success', [
-                    'order_id' => $payment['order_id'],
-                    'transaction_uuid' => $transactionUuid
-                ]);
-                
-                http_response_code(200);
-                echo 'OK';
+                // Use transaction to ensure atomicity
+                $db = \App\Core\Database::getInstance();
+                try {
+                    $db->beginTransaction();
+                    
+                    // Update payment and order status
+                    $this->esewaModel->updatePayment($payment['id'], [
+                        'status' => 'completed',
+                        'reference_id' => $input['transaction_code'] ?? $input['refId'] ?? null
+                    ]);
+                    
+                    // Only update if not already paid (prevents race conditions)
+                    if ($order && $order['payment_status'] !== 'paid') {
+                        $this->orderModel->update($payment['order_id'], [
+                            'payment_status' => 'paid',
+                            'status' => 'confirmed'
+                        ]);
+                        
+                        // Handle digital products
+                        $digitalController = new \App\Controllers\Product\DigitalProductController();
+                        $digitalController->processDigitalProductsAfterPayment($payment['order_id']);
+                    }
+                    
+                    $db->commit();
+                    
+                    $this->logSecurityEvent($traceId, 'esewa_webhook_success', 'success', [
+                        'order_id' => $payment['order_id'],
+                        'transaction_uuid' => $transactionUuid
+                    ]);
+                    
+                    http_response_code(200);
+                    echo 'OK';
+                } catch (\Exception $e) {
+                    $db->rollBack();
+                    error_log('Esewa webhook transaction error: ' . $e->getMessage());
+                    http_response_code(500);
+                    echo 'ERROR';
+                }
             } else {
                 $this->logSecurityEvent($traceId, 'esewa_webhook_failed', 'error', [
                     'transaction_uuid' => $transactionUuid

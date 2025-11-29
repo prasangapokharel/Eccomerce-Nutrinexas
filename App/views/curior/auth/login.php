@@ -20,24 +20,8 @@
                 <p class="mt-2 text-sm text-gray-600">Sign in to your courier account</p>
             </div>
 
-            <!-- Flash Messages -->
-            <?php 
-            $flash = \App\Core\Session::getFlash();
-            if ($flash && is_array($flash) && isset($flash['type']) && isset($flash['message'])): 
-                $type = $flash['type'];
-                $message = $flash['message'];
-                $colors = [
-                    'success' => 'bg-success-50 border-success/30 text-success-dark',
-                    'error' => 'bg-error-50 border-error/30 text-error-dark',
-                    'warning' => 'bg-warning-50 border-warning/30 text-warning-dark',
-                    'info' => 'bg-primary-50 border-primary/30 text-primary-700'
-                ];
-                $color = $colors[$type] ?? $colors['info'];
-            ?>
-                <div class="mb-6 p-4 rounded-lg border-2 <?= $color ?>">
-                    <p class="text-sm font-medium"><?= htmlspecialchars($message) ?></p>
-                </div>
-            <?php endif; ?>
+            <!-- Global Notification Component -->
+            <?php include ROOT_DIR . '/App/views/components/alert.php'; ?>
 
             <!-- Login Form -->
             <form class="space-y-6" action="<?= \App\Core\View::url('curior/login') ?>" method="POST">

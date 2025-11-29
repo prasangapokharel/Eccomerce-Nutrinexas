@@ -164,12 +164,81 @@ class AdminSellerController extends Controller
             [$id]
         )->all();
         
+        // Get orders for this seller
+        $orders = $db->query(
+            "SELECT DISTINCT o.*, 
+                    u.first_name, u.last_name, u.email as customer_email,
+                    pm.name as payment_method_name,
+                    COUNT(DISTINCT oi.id) as item_count,
+                    SUM(oi.total) as seller_order_total
+             FROM orders o
+             INNER JOIN order_items oi ON o.id = oi.order_id
+             LEFT JOIN users u ON o.user_id = u.id
+             LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
+             WHERE oi.seller_id = ?
+             GROUP BY o.id
+             ORDER BY o.created_at DESC
+             LIMIT 50",
+            [$id]
+        )->all();
+        
+        // Get order statistics
+        $orderStats = $db->query(
+            "SELECT 
+                COUNT(DISTINCT CASE WHEN o.status != 'delivered' AND o.status != 'cancelled' THEN o.id END) as not_delivered,
+                COUNT(DISTINCT CASE WHEN o.status = 'delivered' THEN o.id END) as delivered,
+                COUNT(DISTINCT o.id) as total_orders,
+                SUM(CASE WHEN o.status = 'delivered' AND o.payment_status = 'paid' AND DATE(o.updated_at) >= DATE_SUB(CURDATE(), INTERVAL 7 DAY) THEN oi.total ELSE 0 END) as week_sales,
+                SUM(CASE WHEN o.status = 'delivered' AND o.payment_status = 'paid' AND DATE(o.updated_at) >= DATE_SUB(CURDATE(), INTERVAL 30 DAY) THEN oi.total ELSE 0 END) as month_sales
+             FROM orders o
+             INNER JOIN order_items oi ON o.id = oi.order_id
+             WHERE oi.seller_id = ?",
+            [$id]
+        )->single();
+        
+        // Get seller coupons
+        $coupons = $db->query(
+            "SELECT c.*, 
+                    COUNT(cu.id) as usage_count
+             FROM coupons c
+             LEFT JOIN coupon_usage cu ON c.id = cu.coupon_id
+             WHERE c.seller_id = ?
+             GROUP BY c.id
+             ORDER BY c.created_at DESC
+             LIMIT 20",
+            [$id]
+        )->all();
+        
+        // Get withdraw requests
+        $withdrawRequests = $db->query(
+            "SELECT wr.*, ba.account_holder_name, ba.bank_name, ba.account_number
+             FROM seller_withdraw_requests wr
+             LEFT JOIN seller_bank_accounts ba ON wr.bank_account_id = ba.id
+             WHERE wr.seller_id = ?
+             ORDER BY wr.requested_at DESC
+             LIMIT 20",
+            [$id]
+        )->all();
+        
+        // Get bank accounts
+        $bankAccounts = $db->query(
+            "SELECT * FROM seller_bank_accounts 
+             WHERE seller_id = ?
+             ORDER BY is_default DESC, created_at DESC",
+            [$id]
+        )->all();
+        
         $this->view('admin/seller/details', [
             'seller' => $seller,
             'stats' => $stats,
             'withdrawStats' => $withdrawStats ?? [],
             'walletBalance' => $wallet['balance'] ?? 0,
             'products' => $products ?? [],
+            'orders' => $orders ?? [],
+            'orderStats' => $orderStats ?? [],
+            'coupons' => $coupons ?? [],
+            'withdrawRequests' => $withdrawRequests ?? [],
+            'bankAccounts' => $bankAccounts ?? [],
             'title' => 'Seller Details - ' . $seller['name']
         ]);
     }

@@ -14,12 +14,8 @@
                     </div>
                 </div>
 
-                <?php if (isset($_SESSION['flash_message'])): ?>
-                    <div class="p-3 rounded-xl text-sm <?= strpos($_SESSION['flash_message'], 'error') !== false ? 'bg-red-50 text-red-600' : 'bg-green-50 text-green-600' ?>">
-                        <?= htmlspecialchars($_SESSION['flash_message']) ?>
-                    </div>
-                    <?php unset($_SESSION['flash_message']); ?>
-                <?php endif; ?>
+                <!-- Global Notification Component -->
+                <?php include ROOT_DIR . '/App/views/components/alert.php'; ?>
 
                 <div>
                     <label class="text-sm font-medium text-gray-900 mb-2 block" for="email">Email Address</label>
