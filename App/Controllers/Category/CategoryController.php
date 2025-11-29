@@ -22,14 +22,36 @@ class CategoryController extends Controller
     public function publicIndex()
     {
         try {
+            // Initialize performance cache
+            if (!class_exists('App\Helpers\PerformanceCache')) {
+                require_once ROOT_DIR . '/App/Helpers/PerformanceCache.php';
+            }
+            \App\Helpers\PerformanceCache::init();
+            
+            // Check cache
+            $cacheKey = 'categories_index';
+            $cachedData = \App\Helpers\PerformanceCache::getStaticContent($cacheKey);
+            if ($cachedData) {
+                $this->view('categories/index', $cachedData);
+                return;
+            }
+            
             $categories = $this->categoryModel->getActiveCategories();
             
-            $this->view('categories/index', [
+            $viewData = [
                 'categories' => $categories,
                 'title' => 'Product Categories - NutriNexas'
-            ]);
+            ];
+            
+            // Cache for 1 hour
+            \App\Helpers\PerformanceCache::cacheStaticContent($cacheKey, $viewData, 3600);
+            
+            $this->view('categories/index', $viewData);
         } catch (Exception $e) {
-            error_log('CategoryController publicIndex error: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('CategoryController publicIndex error: ' . $e->getMessage());
+            }
             $this->setFlash('error', 'Unable to load categories. Please try again later.');
             $this->redirect('');
         }

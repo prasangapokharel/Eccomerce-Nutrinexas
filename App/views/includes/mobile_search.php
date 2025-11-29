@@ -2,7 +2,7 @@
 <div class="lg:hidden bg-primary px-3 py-2.5 sticky top-0 z-50">
     <div class="flex items-center gap-2.5">
         <a href="<?= URLROOT ?>" class="flex-shrink-0" aria-label="Home">
-            <img src="<?= \App\Core\View::asset('images/logo/logo.png') ?>" alt="Nutri Nexas" class="w-9 h-9 rounded-full" loading="lazy" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'" />
+            <img src="<?= \App\Core\View::asset('images/logo/logo.png') ?>" alt="Nutri Nexas" class="w-12 h-12 rounded-full" loading="eager" fetchpriority="high" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'" />
         </a>
         <div class="flex-1 relative min-w-0">
             <form action="<?= \App\Core\View::url('products/search') ?>" method="get" id="mobileSearchForm" class="w-full">

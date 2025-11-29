@@ -24,17 +24,33 @@ class SellerPublicController extends Controller
      */
     public function index()
     {
+        // Initialize performance cache
+        if (!class_exists('App\Helpers\PerformanceCache')) {
+            require_once ROOT_DIR . '/App/Helpers/PerformanceCache.php';
+        }
+        \App\Helpers\PerformanceCache::init();
+        
         $search = $_GET['search'] ?? '';
         $page = (int)($_GET['page'] ?? 1);
         $limit = 12;
         $offset = ($page - 1) * $limit;
+        
+        // Check cache (only for page 1, no search)
+        $cacheKey = 'sellers_public_' . $page . '_' . md5($search);
+        if ($page === 1 && empty($search)) {
+            $cachedData = \App\Helpers\PerformanceCache::getStaticContent($cacheKey);
+            if ($cachedData) {
+                $this->view('seller/public/index', $cachedData);
+                return;
+            }
+        }
         
         // Get sellers
         $sellers = $this->getSellers($search, $limit, $offset);
         $total = $this->getSellerCount($search);
         $totalPages = ceil($total / $limit);
         
-        $this->view('seller/public/index', [
+        $viewData = [
             'title' => 'Our Sellers - NutriNexus',
             'description' => 'Discover trusted sellers and premium products on NutriNexus',
             'sellers' => $sellers,
@@ -42,7 +58,14 @@ class SellerPublicController extends Controller
             'currentPage' => $page,
             'totalPages' => $totalPages,
             'total' => $total
-        ]);
+        ];
+        
+        // Cache for 30 minutes (only for page 1, no search)
+        if ($page === 1 && empty($search)) {
+            \App\Helpers\PerformanceCache::cacheStaticContent($cacheKey, $viewData, 1800);
+        }
+        
+        $this->view('seller/public/index', $viewData);
     }
 
     /**

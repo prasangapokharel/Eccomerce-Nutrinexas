@@ -465,15 +465,37 @@ class CouponController extends Controller
     public function index()
     {
         try {
+            // Initialize performance cache
+            if (!class_exists('App\Helpers\PerformanceCache')) {
+                require_once ROOT_DIR . '/App/Helpers/PerformanceCache.php';
+            }
+            \App\Helpers\PerformanceCache::init();
+            
+            // Check cache
+            $cacheKey = 'coupons_public';
+            $cachedData = \App\Helpers\PerformanceCache::getStaticContent($cacheKey);
+            if ($cachedData) {
+                $this->view('home/coupon', $cachedData);
+                return;
+            }
+            
             // Get all public coupons
             $coupons = $this->couponModel->getPublicCoupons();
             
-            $this->view('home/coupon', [
+            $viewData = [
                 'coupons' => $coupons,
                 'title' => 'Available Coupons'
-            ]);
+            ];
+            
+            // Cache for 30 minutes
+            \App\Helpers\PerformanceCache::cacheStaticContent($cacheKey, $viewData, 1800);
+            
+            $this->view('home/coupon', $viewData);
         } catch (Exception $e) {
-            error_log('Error loading public coupons: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading public coupons: ' . $e->getMessage());
+            }
             $this->view('home/coupon', [
                 'coupons' => [],
                 'title' => 'Available Coupons'

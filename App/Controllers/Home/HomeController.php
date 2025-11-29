@@ -78,53 +78,41 @@ class HomeController extends Controller
             }
             \App\Helpers\PerformanceCache::init();
             
-            error_log('HomeController: Starting to load data...');
-            
             // Get cached data or load fresh
             $cacheKey = 'homepage_data_' . (Session::has('user_id') ? Session::get('user_id') : 'guest');
             $cachedData = \App\Helpers\PerformanceCache::getStaticContent($cacheKey);
             
             if ($cachedData) {
-                error_log('HomeController: Using cached data');
                 $this->view('home/index', $cachedData);
                 return;
             }
             
-            error_log('HomeController: Loading fresh data...');
-            
             // Get active sliders with caching
             $sliders = $this->getCachedSliders();
-            error_log('HomeController: Sliders loaded: ' . count($sliders));
             
             // Get active categories with caching
             $categories = $this->getCachedCategories();
-            error_log('HomeController: Categories loaded: ' . count($categories));
             
             // Get latest products with caching
             $products = $this->getCachedProducts();
-            error_log('HomeController: Products loaded: ' . count($products));
             
             // Add wishlist status to products
             $products = $this->addWishlistStatus($products);
             
             // Get popular products with caching
             $popular_products = $this->getCachedPopularProducts();
-            error_log('HomeController: Popular products loaded: ' . count($popular_products));
             
             // Add wishlist status to popular products
             $popular_products = $this->addWishlistStatus($popular_products);
             
             // Get random reviews with caching
             $reviews = $this->getCachedReviews();
-            error_log('HomeController: Reviews loaded: ' . count($reviews));
             
             // Get featured blog posts with caching
             $blog_posts = $this->getCachedBlogPosts();
-            error_log('HomeController: Blog posts loaded: ' . count($blog_posts));
             
             // Get active and approved sellers with logos
             $sellers = $this->getCachedSellers();
-            error_log('HomeController: Sellers loaded: ' . count($sellers));
 
             $data = [
                 'sliders' => $sliders,
@@ -140,13 +128,14 @@ class HomeController extends Controller
             // Cache the data for 1 hour
             \App\Helpers\PerformanceCache::cacheStaticContent($cacheKey, $data, 3600);
             
-            error_log('HomeController: All data loaded successfully, rendering view...');
             $this->view('home/index', $data);
-            
-            error_log('HomeController: View rendered successfully');
         } catch (Exception $e) {
-            error_log('HomeController index error: ' . $e->getMessage());
-            error_log('HomeController index error trace: ' . $e->getTraceAsString());
+            // Log errors only in development
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('HomeController index error: ' . $e->getMessage());
+                error_log('HomeController index error trace: ' . $e->getTraceAsString());
+            }
             
             // Fallback with minimal data
             $this->view('home/index', [
@@ -412,7 +401,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('SELECT * FROM sliders WHERE is_active = 1 ORDER BY sort_order ASC', [], $sliders, 1800);
             return $sliders;
         } catch (Exception $e) {
-            error_log('Error loading sliders: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading sliders: ' . $e->getMessage());
+            }
             return [];
         }
     }
@@ -434,7 +426,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('SELECT * FROM categories WHERE is_active = 1 ORDER BY sort_order ASC', [], $categories, 1800);
             return $categories;
         } catch (Exception $e) {
-            error_log('Error loading categories: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading categories: ' . $e->getMessage());
+            }
             return [];
         }
     }
@@ -496,7 +491,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('ranked_products_12', [], $products, 900);
             return $products;
         } catch (Exception $e) {
-            error_log('Error loading products: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading products: ' . $e->getMessage());
+            }
             return [];
         }
     }
@@ -557,7 +555,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('SELECT * FROM products WHERE is_active = 1 AND (is_featured = 1 OR is_bestseller = 1) ORDER BY views DESC LIMIT 12', [], $products, 900);
             return $products;
         } catch (Exception $e) {
-            error_log('Error loading popular products: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading popular products: ' . $e->getMessage());
+            }
             return [];
         }
     }
@@ -579,7 +580,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('SELECT * FROM reviews WHERE is_approved = 1 ORDER BY RAND() LIMIT 6', [], $reviews, 1800);
             return $reviews;
         } catch (Exception $e) {
-            error_log('Error loading reviews: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading reviews: ' . $e->getMessage());
+            }
             return [];
         }
     }
@@ -601,7 +605,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('SELECT * FROM blog_posts WHERE is_published = 1 AND is_featured = 1 ORDER BY created_at DESC LIMIT 6', [], $blog_posts, 1800);
             return $blog_posts;
         } catch (Exception $e) {
-            error_log('Error loading blog posts: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading blog posts: ' . $e->getMessage());
+            }
             return [];
         }
     }
@@ -634,7 +641,10 @@ class HomeController extends Controller
             \App\Helpers\PerformanceCache::cacheDatabaseQuery('SELECT id, name, company_name, logo_url, status, is_approved FROM sellers WHERE status = ? AND is_approved = ? AND logo_url IS NOT NULL AND logo_url != ? ORDER BY created_at DESC LIMIT 12', ['active', 1, ''], $sellers, 1800);
             return $sellers;
         } catch (Exception $e) {
-            error_log('Error loading sellers: ' . $e->getMessage());
+            $environment = $_ENV['ENVIRONMENT'] ?? getenv('ENVIRONMENT') ?: 'production';
+            if ($environment === 'development' || $environment === 'dev') {
+                error_log('Error loading sellers: ' . $e->getMessage());
+            }
             return [];
         }
     }

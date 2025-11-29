@@ -63,7 +63,8 @@
                                 <img src="<?= htmlspecialchars($inviterImageUrl) ?>" 
                                      alt="<?= $inviterName ?>"
                                      class="w-full h-full object-cover rounded-full"
-                                     loading="eager"
+                                     loading="lazy"
+                                     decoding="async"
                                      onerror="this.src='<?= ASSETS_URL ?>/images/default-avatar.png'">
                             </div>
                             <?php if ($isVip): ?>
@@ -71,6 +72,8 @@
                                     <img src="<?= ASSETS_URL ?>/images/icons/vip.png" 
                                          alt="VIP" 
                                          class="w-full h-full object-contain"
+                                         loading="lazy"
+                                         decoding="async"
                                          onerror="this.style.display='none';">
                                 </div>
                             <?php endif; ?>

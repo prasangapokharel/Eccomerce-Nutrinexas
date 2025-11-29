@@ -1,8 +1,9 @@
 <?php ob_start(); ?>
 
 <!-- Native App Style Forgot Password Page -->
+<link rel="preload" href="<?= ASSETS_URL ?>/images/screen/loginbg.png" as="image">
 <div class="min-h-screen relative flex items-center justify-center px-4 py-2 login-page fixed" 
-     style="background-image: url('<?= ASSETS_URL ?>/images/screen/loginbg.png');">
+     style="background-image: url('<?= ASSETS_URL ?>/images/screen/loginbg.png'); background-size: cover; background-position: center; background-repeat: no-repeat;">
     
     <!-- Overlay for better text readability -->
     <div class="absolute inset-0 bg-white bg-opacity-20"></div>

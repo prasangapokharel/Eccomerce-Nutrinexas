@@ -48,6 +48,11 @@ if (defined('DEBUG') && DEBUG) {
     <meta name="msapplication-TileColor" content="#6366F1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="<?= ASSETS_URL ?>/css/tailwind.css" as="style">
+    <link rel="preload" href="<?= ASSETS_URL ?>/css/app.css" as="style">
+    <link rel="preload" href="<?= \App\Core\View::asset('images/logo/logo.png') ?>" as="image" fetchpriority="high">
     <meta name="apple-mobile-web-app-title" content="NutriNexus">
     
     <!-- Canonical URL -->

@@ -12,6 +12,8 @@
                         <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg"
                             alt="Nutri Nexas"
                             class="w-full h-full rounded-full"
+                            loading="eager"
+                            fetchpriority="high"
                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
                     </div>
                     <div class="flex flex-col">

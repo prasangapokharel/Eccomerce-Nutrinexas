@@ -2,7 +2,7 @@
         <div class="flex flex-wrap justify-between gap-10">
             <div class="max-w-md">
                 <a href='<?= URLROOT ?>'>
-                    <img src="<?= \App\Core\View::asset('images/logo/logo.png') ?>" alt="Nutri Nexas" class='w-16 h-16 sm:w-20 sm:h-20 rounded-full' onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'" />
+                    <img src="<?= \App\Core\View::asset('images/logo/logo.png') ?>" alt="Nutri Nexas" class='w-16 h-16 sm:w-20 sm:h-20 rounded-full' loading="lazy" decoding="async" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'" />
                 </a>
                 <div class="mt-6">
                     <p class="text-gray-300 leading-relaxed text-sm">Nutri Nexas is your trusted source for premium quality supplements. We offer a wide range of products to support your health and fitness journey, from protein powders to vitamins and everything in between.</p>
@@ -80,7 +80,7 @@
 
                 <div class="mt-6 max-w-xs">
                     <a href="<?= URLROOT ?>/seller/login" class="w-full inline-flex items-center gap-3 px-4 py-3 bg-white text-primary rounded-2xl font-semibold text-sm border border-neutral-200 shadow-sm hover:bg-neutral-100">
-                        <img src="<?= \App\Core\View::asset('images/graphics/seller.png') ?>" alt="Seller portal" class="w-10 h-10 rounded-full border border-neutral-200">
+                        <img src="<?= \App\Core\View::asset('images/graphics/seller.png') ?>" alt="Seller portal" class="w-10 h-10 rounded-full border border-neutral-200" loading="lazy" decoding="async">
                         <div class="text-left">
                             <p class="leading-tight">Become a Seller</p>
                             <p class="text-xs font-normal text-neutral-500">0 selling commission</p>

@@ -83,6 +83,12 @@ class ProductController extends Controller
          */
         public function index()
         {
+            // Initialize performance cache
+            if (!class_exists('App\Helpers\PerformanceCache')) {
+                require_once ROOT_DIR . '/App/Helpers/PerformanceCache.php';
+            }
+            \App\Helpers\PerformanceCache::init();
+            
             $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
             $limit = 12;
             $offset = ($page - 1) * $limit;
@@ -93,6 +99,16 @@ class ProductController extends Controller
             $maxPrice = isset($_GET['max_price']) ? (float)$_GET['max_price'] : null;
             $inStock = isset($_GET['in_stock']) ? true : false;
             $lowStock = isset($_GET['low_stock']) ? true : false;
+
+            // Check cache for products list (only for page 1, no filters)
+            $cacheKey = 'products_index_' . $page . '_' . md5($sort . $minPrice . $maxPrice . $inStock . $lowStock);
+            if ($page === 1 && empty($sort) && $minPrice === null && $maxPrice === null && !$inStock && !$lowStock) {
+                $cachedData = \App\Helpers\PerformanceCache::getStaticContent($cacheKey);
+                if ($cachedData) {
+                    $this->view('products/index', $cachedData);
+                    return;
+                }
+            }
 
             // Apply filters and sorting
             $products = $this->getFilteredProducts($limit, $offset, $sort, $minPrice, $maxPrice, $inStock, $lowStock);
@@ -171,13 +187,20 @@ class ProductController extends Controller
             }
             unset($product);
 
-            $this->view('products/index', [
+            $viewData = [
                 'products' => $products,
                 'currentPage' => $page,
                 'totalPages' => $totalPages,
                 'totalProducts' => $totalProducts,
                 'title' => 'All Products',
-            ]);
+            ];
+            
+            // Cache the data for 30 minutes (only for page 1, no filters)
+            if ($page === 1 && empty($sort) && $minPrice === null && $maxPrice === null && !$inStock && !$lowStock) {
+                \App\Helpers\PerformanceCache::cacheStaticContent($cacheKey, $viewData, 1800);
+            }
+            
+            $this->view('products/index', $viewData);
         }
 
         /**
@@ -1155,6 +1178,12 @@ class ProductController extends Controller
                 return;
             }
 
+            // Initialize performance cache
+            if (!class_exists('App\Helpers\PerformanceCache')) {
+                require_once ROOT_DIR . '/App/Helpers/PerformanceCache.php';
+            }
+            \App\Helpers\PerformanceCache::init();
+
             // URL decode category and subtype
             $category = urldecode($category);
             if ($subtype) {
@@ -1167,6 +1196,16 @@ class ProductController extends Controller
             $sort = str_replace('-', '_', $sort);
             $limit = 12;
             $offset = ($page - 1) * $limit;
+            
+            // Check cache for category page (only for page 1, default sort)
+            $cacheKey = 'products_category_' . md5($category . $subtype . $sort . $page);
+            if ($page === 1 && $sort === 'newest') {
+                $cachedData = \App\Helpers\PerformanceCache::getStaticContent($cacheKey);
+                if ($cachedData) {
+                    $this->view('products/category', $cachedData);
+                    return;
+                }
+            }
 
             // If subtype is provided, filter by both category and subtype
             if ($subtype) {
@@ -1201,7 +1240,7 @@ class ProductController extends Controller
             $sponsoredAdsService = new \App\Services\SponsoredAdsService();
             $products = $sponsoredAdsService->insertSponsoredInCategoryResults($products, $category, $subtype);
 
-            $this->view('products/category', [
+            $viewData = [
                 'products' => $products,
                 'category' => $category,
                 'subtype' => $subtype,
@@ -1209,7 +1248,14 @@ class ProductController extends Controller
                 'totalPages' => $totalPages,
                 'sort' => $sort,
                 'title' => $title,
-            ]);
+            ];
+            
+            // Cache the data for 30 minutes (only for page 1, default sort)
+            if ($page === 1 && $sort === 'newest') {
+                \App\Helpers\PerformanceCache::cacheStaticContent($cacheKey, $viewData, 1800);
+            }
+            
+            $this->view('products/category', $viewData);
         }
 
         /**

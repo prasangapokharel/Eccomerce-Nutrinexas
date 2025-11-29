@@ -654,6 +654,7 @@ class App
         $this->router->post('admin/settings/backup-db', 'Admin\AdminSettingController@backupDb');
         $this->router->get('admin/settings/download-backup', 'Admin\AdminSettingController@downloadBackup');
         $this->router->get('admin/settings/export-db-xls', 'Admin\AdminSettingController@exportDbXls');
+        $this->router->post('admin/settings/clear-cache', 'Admin\AdminSettingController@clearCache');
         $this->router->get('admin/analytics', 'Admin\AdminController@analytics');
         $this->router->get('admin/reports/best-selling', 'Admin\AdminProductController@bestSelling');
         $this->router->get('admin/reports/low-stock', 'Admin\AdminController@lowStockAlerts');

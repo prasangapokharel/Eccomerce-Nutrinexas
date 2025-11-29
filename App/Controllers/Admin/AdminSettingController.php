@@ -331,6 +331,66 @@ class AdminSettingController extends Controller
     }
 
     /**
+     * Clear all cache
+     */
+    public function clearCache()
+    {
+        // Check if request is POST
+        if (Request::method() !== 'POST') {
+            Response::json(['success' => false, 'message' => 'Invalid request method']);
+            return;
+        }
+
+        try {
+            // Initialize PerformanceCache
+            if (!class_exists('App\Helpers\PerformanceCache')) {
+                require_once ROOT_DIR . '/App/Helpers/PerformanceCache.php';
+            }
+            \App\Helpers\PerformanceCache::init();
+            
+            // Clear all cache
+            \App\Helpers\PerformanceCache::clearAllCache();
+            
+            // Also clear cache directory manually to ensure everything is deleted
+            $cacheDir = ROOT_DIR . '/App/storage/cache/';
+            if (is_dir($cacheDir)) {
+                $this->deleteDirectoryContents($cacheDir);
+            }
+            
+            Response::json([
+                'success' => true, 
+                'message' => 'All cache cleared successfully'
+            ]);
+        } catch (\Exception $e) {
+            Response::json([
+                'success' => false, 
+                'message' => 'Error clearing cache: ' . $e->getMessage()
+            ]);
+        }
+    }
+    
+    /**
+     * Delete all contents of a directory
+     */
+    private function deleteDirectoryContents($dir)
+    {
+        if (!is_dir($dir)) {
+            return;
+        }
+        
+        $files = array_diff(scandir($dir), ['.', '..']);
+        foreach ($files as $file) {
+            $path = $dir . $file;
+            if (is_dir($path)) {
+                $this->deleteDirectoryContents($path);
+                @rmdir($path);
+            } else {
+                @unlink($path);
+            }
+        }
+    }
+
+    /**
      * Export database as an Excel-compatible HTML file
      */
     public function exportDbXls()

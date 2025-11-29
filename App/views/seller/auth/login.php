@@ -7,7 +7,7 @@
                 <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
 
                 <div class="flex items-center justify-center gap-3 mb-8">
-                    <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg" alt="NutriNexus" class="w-12 h-12 rounded-full border border-primary/20">
+                    <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg" alt="NutriNexus" class="w-12 h-12 rounded-full border border-primary/20" loading="eager" fetchpriority="high">
                     <div class="text-left">
                         <h1 class="text-2xl font-semibold text-primary">Seller Login</h1>
                         <p class="text-gray-600 text-xs">Sign in to manage products, orders, ads, and more.</p>

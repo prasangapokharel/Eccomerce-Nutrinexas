@@ -266,6 +266,38 @@
                 </div>
             </div>
         </div>
+
+        <!-- Cache Management -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
+            <div class="p-6 border-b border-gray-200">
+                <h2 class="text-lg font-semibold text-gray-900">Cache Management</h2>
+                <p class="text-sm text-gray-500 mt-1">Clear application cache to refresh stored data</p>
+            </div>
+            <div class="p-6">
+                <div class="space-y-6">
+                    <!-- Cache Status -->
+                    <div class="p-4 bg-gray-50 rounded-lg">
+                        <h3 class="text-sm font-medium text-gray-900">Cache Status</h3>
+                        <div class="mt-2 flex items-center">
+                            <div class="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                            <p class="text-sm text-gray-700">Cache system active</p>
+                        </div>
+                    </div>
+
+                    <!-- Cache Actions -->
+                    <div class="space-y-3">
+                        <button type="button" id="clearCacheBtn" class="w-full flex items-center justify-center px-4 py-2 border border-red-300 rounded-lg text-sm font-medium text-red-700 bg-red-50 hover:bg-red-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors">
+                            <i class="fas fa-trash-alt mr-2"></i>
+                            Clear All Cache
+                        </button>
+                        <p class="text-xs text-gray-500 text-center">This will delete all files in App/storage/cache/ folder</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Save Button -->
@@ -414,6 +446,41 @@ document.getElementById('exportDbXlsBtn').addEventListener('click', function() {
         this.disabled = false;
         this.innerHTML = '<i class="fas fa-file-excel mr-2"></i> Export Database (XLS)';
     }, 1500);
+});
+
+// Clear cache button
+document.getElementById('clearCacheBtn').addEventListener('click', function() {
+    if (!confirm('Are you sure you want to clear all cache? This will delete all cached files in App/storage/cache/ folder.')) {
+        return;
+    }
+    
+    this.disabled = true;
+    this.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Clearing...';
+    
+    fetch('<?= BASE_URL ?>/admin/settings/clear-cache', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'ngrok-skip-browser-warning': 'true',
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-trash-alt mr-2"></i> Clear All Cache';
+        
+        if (data.success) {
+            showNotification('Cache cleared successfully!');
+        } else {
+            showNotification('Error clearing cache: ' + (data.message || 'Unknown error'), 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        this.disabled = false;
+        this.innerHTML = '<i class="fas fa-trash-alt mr-2"></i> Clear All Cache';
+        showNotification('Error clearing cache', 'error');
+    });
 });
 </script>
 
