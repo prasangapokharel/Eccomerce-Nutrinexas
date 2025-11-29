@@ -265,11 +265,6 @@ include __DIR__ . '/../seo/product-seo.php';
                                 $mediaUrl = $media['image_url'] ?? '';
                                 $isMediaVideo = \App\Helpers\MediaHelper::isVideo($mediaUrl);
                             ?>
-                            
-                            foreach ($allMediaForSlider as $index => $media): 
-                                $mediaUrl = $media['image_url'] ?? '';
-                                $isMediaVideo = \App\Helpers\MediaHelper::isVideo($mediaUrl);
-                            ?>
                                 <div class="product-media-slide flex-shrink-0 w-full h-full">
                                     <?php if ($isMediaVideo): ?>
                                         <video src="<?= htmlspecialchars($mediaUrl) ?>" 
