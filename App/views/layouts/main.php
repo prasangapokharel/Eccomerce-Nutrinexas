@@ -98,6 +98,9 @@ if (defined('DEBUG') && DEBUG) {
  
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col">
+    <div id="global-page-loader" class="text-primary fixed inset-0 z-50 flex items-center justify-center pointer-events-none">
+        <img src="<?= \App\Core\View::publicAsset('images/loader/loader2.gif') ?>" alt="Loading..." class="w-19 h-19">
+    </div>
     <?php include ROOT_DIR . '/App/views/includes/navbar.php'; ?>
  
     <main class="flex-grow">
@@ -197,6 +200,8 @@ if (defined('DEBUG') && DEBUG) {
 
         // Footer visibility handled by CSS media queries
     </script>
+    
+    <script src="<?= ASSETS_URL ?>/js/loader.js"></script>
     
     <?php if (isset($extraScripts)): ?>
         <?= $extraScripts ?>

@@ -13,38 +13,38 @@ module.exports = {
       colors: {
         border: '#E5E7EB',
         input: '#E5E7EB',
-        ring: '#1F2937',
+        ring: '#F85606',
         background: '#FFFFFF',
         foreground: '#1F2937',
-        
+
         primary: {
-          DEFAULT: '#1F2937',
-          dark: '#111827',
-          light: '#374151',
-          50: '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          300: '#D1D5DB',
-          500: '#1F2937',
-          600: '#111827',
-          700: '#0F1419',
+          DEFAULT: '#F85606',
+          dark: '#E04E05',
+          light: '#FF6B1F',
+          50: '#FFF4F0',
+          100: '#FFE9E0',
+          200: '#FFD3C2',
+          300: '#FFBDA3',
+          500: '#F85606',
+          600: '#E04E05',
+          700: '#C74405',
           foreground: '#FFFFFF'
         },
         secondary: {
-          DEFAULT: '#F3F4F6',
-          dark: '#E5E7EB',
-          light: '#F9FAFB',
-          50: '#F9FAFB',
-          100: '#F3F4F6',
-          200: '#E5E7EB',
-          500: '#F3F4F6',
-          600: '#E5E7EB',
-          foreground: '#1F2937'
+          DEFAULT: '#2D1B4E',
+          dark: '#1F1235',
+          light: '#3D2563',
+          50: '#F5F3F7',
+          100: '#EBE7EF',
+          200: '#D7CFE0',
+          500: '#2D1B4E',
+          600: '#1F1235',
+          foreground: '#FFFFFF'
         },
         accent: {
-          DEFAULT: '#1F2937',
-          dark: '#111827',
-          light: '#374151',
+          DEFAULT: '#F85606',
+          dark: '#E04E05',
+          light: '#FF6B1F',
           foreground: '#FFFFFF'
         },
         muted: {
@@ -89,17 +89,17 @@ module.exports = {
           foreground: '#FFFFFF'
         },
         sale: {
-          DEFAULT: '#DC2626',
-          dark: '#B91C1C',
-          light: '#EF4444',
-          bg: '#FEF2F2',
+          DEFAULT: '#F85606',
+          dark: '#E04E05',
+          light: '#FF6B1F',
+          bg: '#FFF4F0',
           foreground: '#FFFFFF'
         },
         discount: {
-          DEFAULT: '#84CC16',
-          dark: '#65A30D',
-          light: '#A3E635',
-          bg: '#F7FEE7',
+          DEFAULT: '#10B981',
+          dark: '#059669',
+          light: '#34D399',
+          bg: '#ECFDF5',
           foreground: '#FFFFFF'
         },
         info: {
@@ -122,6 +122,11 @@ module.exports = {
           800: '#262626',
           900: '#171717',
           950: '#0A0A0A'
+        },
+        daraz: {
+          orange: '#F85606',
+          purple: '#2D1B4E',
+          yellow: '#FFD700'
         }
       },
       fontFamily: {
@@ -141,8 +146,9 @@ module.exports = {
         '5xl': ['3rem', { lineHeight: '1' }]
       },
       backgroundImage: {
-        'gradient-primary': 'linear-gradient(180deg, #1F2937 0%, #111827 100%)',
-        'gradient-secondary': 'linear-gradient(180deg, #F9FAFB 0%, #F3F4F6 100%)',
+        'gradient-primary': 'linear-gradient(135deg, #F85606 0%, #FF6B1F 100%)',
+        'gradient-secondary': 'linear-gradient(135deg, #2D1B4E 0%, #3D2563 100%)',
+        'gradient-hero': 'linear-gradient(135deg, #F85606 0%, #2D1B4E 100%)',
         'gradient-subtle': 'linear-gradient(180deg, #FFFFFF 0%, #F9FAFB 100%)'
       },
       boxShadow: {

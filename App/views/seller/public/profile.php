@@ -100,27 +100,27 @@ $pricingHelper = function($product) {
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Standard Top Bar: Search, Filter, Button -->
+        <!-- Search Bar -->
         <div class="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
-            <form method="GET" action="" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
-                <!-- Search Input -->
-                <div class="relative flex-1">
+            <form method="GET" action="" class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1 relative">
                     <input type="text" 
                            name="search" 
                            value="<?= htmlspecialchars($search) ?>"
                            placeholder="Search products in this store..."
-                           class="input native-input pr-10">
-                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                           class="input native-input"
+                           style="padding-left: 2.5rem;">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>
                 </div>
                 <button type="submit" 
-                        class="btn btn-sm btn-primary">
+                        class="btn btn-primary">
                     <i class="fas fa-search mr-2"></i>Search
                 </button>
                 <?php if (!empty($search)): ?>
                     <a href="<?= \App\Core\View::url('seller/' . urlencode($seller['company_name'] ?? $seller['name'])) ?>" 
-                       class="btn btn-sm btn-outline">
+                       class="btn btn-outline">
                         <i class="fas fa-times mr-2"></i>Clear
                     </a>
                 <?php endif; ?>

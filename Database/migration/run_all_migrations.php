@@ -185,6 +185,7 @@ try {
         'create_ads_tables.sql',
         'create_stock_movement_log.sql',
         'add_seller_profile_fields.sql',
+        'add_theme_color_to_sellers.sql',
         'create_products_views_table.sql',
         'create_products_social_table.sql'
     ];

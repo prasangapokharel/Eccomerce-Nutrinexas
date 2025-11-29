@@ -55,7 +55,6 @@ $mysteryPrice = null;
 $mysteryPriceRange = null;
 if (isset($product['is_scheduled']) && $product['is_scheduled'] == 1 && !empty($product['scheduled_date'])) {
     $scheduledTimestamp = strtotime($product['scheduled_date']);
-    $launchTimestamp = $scheduledTimestamp;
     $currentTimestamp = time();
     
     // Product is scheduled only if launch date is in the future
@@ -63,10 +62,12 @@ if (isset($product['is_scheduled']) && $product['is_scheduled'] == 1 && !empty($
     if ($scheduledTimestamp > $currentTimestamp) {
         $isScheduled = true;
         $isAvailable = false;
+        $launchTimestamp = $scheduledTimestamp; // Only set if date hasn't passed
         $remainingDays = ceil(($scheduledTimestamp - $currentTimestamp) / (60 * 60 * 24));
     } else {
         // Launch date has arrived or passed - allow ordering
         $isScheduled = false;
+        $launchTimestamp = null; // Don't set launchTimestamp if date has passed
         $isAvailable = isset($product['stock_quantity']) && $product['stock_quantity'] > 0;
     }
 
@@ -420,7 +421,7 @@ ob_start();
                         }
                         ?>
                         
-                        <?php if ($hasSale && $salePrice < $originalPrice): ?>
+                        <?php if (!$isScheduled && $hasSale && $salePrice < $originalPrice): ?>
                             <div class="flex items-baseline gap-2 flex-wrap">
                                 <span class="text-xl font-bold text-primary"><?= CurrencyHelper::format($salePrice) ?></span>
                                 <span class="text-sm text-gray-500 line-through"><?= CurrencyHelper::format($originalPrice) ?></span>
@@ -433,13 +434,13 @@ ob_start();
                                     Sale ends: <?= date('M j, Y', strtotime($product['sale_end_date'])) ?>
                                 </div>
                             <?php endif; ?>
-                        <?php else: ?>
+                        <?php elseif (!$isScheduled): ?>
                             <span class="text-xl font-bold text-primary"><?= CurrencyHelper::format($originalPrice) ?></span>
                         <?php endif; ?>
                     </div>
                     
                     <!-- Scheduled Date Display -->
-                    <?php if (!empty($product['scheduled_date']) && $launchTimestamp): ?>
+                    <?php if ($isScheduled && !empty($product['scheduled_date']) && $launchTimestamp): ?>
                         <div class="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-2xl">
                             <div class="flex items-center justify-between gap-4 flex-wrap">
                                 <div>
@@ -1015,12 +1016,12 @@ ob_start();
 <div class="fixed bottom-0 inset-x-0 bg-white rounded-t-3xl border-t border-gray-200 shadow-xl p-4 z-50 lg:hidden safe-bottom">
     <div class="flex gap-3">
         
-        <?php if ($isScheduled): ?>
+        <?php if ($isScheduled && $launchTimestamp): ?>
             <button type="button" class="flex-1 bg-primary text-white px-4 py-3 rounded-2xl font-semibold text-sm cursor-not-allowed">
                 <div class="flex items-center justify-between w-full">
                     <div>
                         <span class="text-xs text-white/70 block mb-1">Launches in</span>
-                        <span class="text-base font-semibold" data-launch-countdown="<?= $launchTimestamp ?? time() ?>" data-countdown-format="compact">--:--</span>
+                        <span class="text-base font-semibold" data-launch-countdown="<?= $launchTimestamp ?>" data-countdown-format="compact">--:--</span>
                     </div>
                     <div class="text-right">
                         <span class="text-xs text-white/70 block mb-1">Mystery Price</span>
@@ -1897,6 +1898,11 @@ document.addEventListener('DOMContentLoaded', function() {
     function openShareDrawer() {
         const drawer = document.getElementById('share-drawer');
         const overlay = document.getElementById('share-drawer-overlay');
+        const drawerImage = document.getElementById('share-drawer-image');
+        if (drawerImage && productImageShare) {
+            drawerImage.src = productImageShare.value;
+            drawerImage.alt = productNameShare.value || drawerImage.alt;
+        }
         if (drawer && overlay) {
             drawer.classList.remove('translate-y-full');
             overlay.classList.remove('hidden');
@@ -2227,8 +2233,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.success) {
                         const likeIcon = this.querySelector('i');
                         const likeCountEl = document.getElementById('like-count');
-                        
-                        if (data.is_liked) {
+
+                        const isLiked = !!(Object.prototype.hasOwnProperty.call(data, 'is_liked') ? data.is_liked : data.liked);
+                        if (isLiked) {
                             this.dataset.liked = '1';
                             if (likeIcon) {
                                 likeIcon.classList.remove('far', 'text-gray-600');

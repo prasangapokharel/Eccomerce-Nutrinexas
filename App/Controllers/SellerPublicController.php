@@ -112,7 +112,7 @@ class SellerPublicController extends Controller
         // Find seller by company name (handle both company_name and name fields)
         $seller = $this->sellerModel->getDb()->query(
             "SELECT id, name, company_name, email, phone, address, logo_url, cover_banner_url, 
-                    description, social_media, status, commission_rate, created_at, updated_at
+                    description, social_media, status, commission_rate, created_at, updated_at, theme_color
              FROM sellers 
              WHERE (company_name = ? OR name = ?) AND status = 'active'"
         )->bind([$companyName, $companyName])->single();

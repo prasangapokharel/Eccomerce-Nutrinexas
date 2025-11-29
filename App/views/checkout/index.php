@@ -957,76 +957,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateDeliveryFee();
     }
 
-// Auto-location detection
-function detectLocation() {
-    if (!navigator.geolocation) {
-        alert('Geolocation is not supported by this browser.');
-        return;
-    }
-    
-    const button = event.target.closest('button');
-    const originalContent = button.innerHTML;
-    button.innerHTML = '<svg class="w-5 h-5 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-    button.disabled = true;
-    
-    navigator.geolocation.getCurrentPosition(
-        function(position) {
-            const lat = position.coords.latitude;
-            const lng = position.coords.longitude;
-            
-            // Use reverse geocoding to get city name
-            fetch(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`)
-                .then(response => response.json())
-                .then(data => {
-                    const city = data.city || data.locality || data.principalSubdivision;
-                    if (city) {
-                        // Try to match with available delivery locations
-                        const cityInput = document.getElementById('city');
-                        const locations = Object.keys(deliveryMap || {});
-                        let matched = locations.find(loc => loc.toLowerCase().includes(city.toLowerCase()) || city.toLowerCase().includes(loc.toLowerCase()));
-                        if (matched) {
-                            cityInput.value = matched;
-                            updateDeliveryFee();
-                            showLocationAlert('success', `Location detected: ${city}. Delivery fee updated.`);
-                        } else {
-                            showLocationAlert('info', `Location detected: ${city}. Please type your city and select from suggestions.`);
-                        }
-                    } else {
-                        showLocationAlert('warning', 'Could not determine city from location. Please select manually.');
-                    }
-                })
-                .catch(error => {
-                    console.error('Geocoding error:', error);
-                    showLocationAlert('error', 'Could not determine city from location. Please select manually.');
-                })
-                .finally(() => {
-                    button.innerHTML = originalContent;
-                    button.disabled = false;
-                });
-        },
-        function(error) {
-            console.error('Geolocation error:', error);
-            let message = 'Could not detect location. ';
-            switch(error.code) {
-                case error.PERMISSION_DENIED:
-                    message += 'Location access denied.';
-                    break;
-                case error.POSITION_UNAVAILABLE:
-                    message += 'Location information unavailable.';
-                    break;
-                case error.TIMEOUT:
-                    message += 'Location request timed out.';
-                    break;
-                default:
-                    message += 'Unknown error occurred.';
-                    break;
-            }
-            showLocationAlert('error', message);
-            button.innerHTML = originalContent;
-            button.disabled = false;
-        }
-    );
-}
+// Auto-location detection removed; city must be selected manually by user
 
 function showLocationAlert(type, message) {
     const alertDiv = document.createElement('div');

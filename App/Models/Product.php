@@ -651,10 +651,35 @@ class Product extends Model
         $values = [];
         $existingSlug = $this->getSlugById($id);
         
-        $allowedFields = ['product_name', 'slug', 'description', 'short_description', 'price', 'sale_price',
-                         'stock_quantity', 'category', 'subtype', 'image', 'tags',
-                         'is_featured', 'status', 'approval_status', 'approval_notes', 'approved_by', 'approved_at',
-                         'meta_title', 'meta_description', 'seller_id', 'affiliate_commission'];
+        $allowedFields = [
+            'product_name',
+            'slug',
+            'description',
+            'short_description',
+            'price',
+            'sale_price',
+            'stock_quantity',
+            'category',
+            'subtype',
+            'image',
+            'tags',
+            'is_featured',
+            'status',
+            'approval_status',
+            'approval_notes',
+            'approved_by',
+            'approved_at',
+            'meta_title',
+            'meta_description',
+            'seller_id',
+            'affiliate_commission',
+            // Scheduling / launch fields
+            'is_scheduled',
+            'scheduled_date',
+            'scheduled_end_date',
+            'scheduled_duration',
+            'scheduled_message',
+        ];
         
         foreach ($allowedFields as $field) {
             if (array_key_exists($field, $data)) {

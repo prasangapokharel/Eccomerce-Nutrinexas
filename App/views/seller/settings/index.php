@@ -43,6 +43,20 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                            class="input native-input">
                 </div>
 
+                <div>
+                    <label for="theme_color" class="block text-sm font-medium text-gray-700 mb-2">Store Theme Color</label>
+                    <input
+                        type="text"
+                        id="theme_color"
+                        name="theme_color"
+                        value="<?= htmlspecialchars($seller['theme_color'] ?? '') ?>"
+                        placeholder="#1D4ED8"
+                        maxlength="7"
+                        class="input native-input"
+                    >
+                    <p class="text-xs text-gray-500 mt-1">Use a hex color code like <code>#1D4ED8</code> or <code>#F97316</code>. This controls your public store primary color.</p>
+                </div>
+
                 <div class="md:col-span-2">
                     <label for="address" class="block text-sm font-medium text-gray-700 mb-2">Address</label>
                     <textarea id="address" name="address" rows="3"

@@ -83,16 +83,22 @@
                         <label>Current Images</label>
                         <div class="grid grid-cols-4 gap-4">
                             <?php foreach ($images as $image): ?>
-                                <div style="position: relative;">
+                                <div class="relative group" data-image-id="<?= (int)($image['id'] ?? 0) ?>">
                                     <img src="<?= htmlspecialchars($image['image_url']) ?>" 
                                          alt="Product Image"
                                          style="width: 100%; height: 6rem; object-fit: cover; border-radius: 0.5rem; border: 1px solid var(--gray-200);">
-                                    <?php if ($image['is_primary']): ?>
-                                        <span class="badge badge-info" style="position: absolute; top: 0.25rem; right: 0.25rem;">Primary</span>
+                                    <?php if (!empty($image['is_primary'])): ?>
+                                        <span class="badge badge-info absolute top-1 right-1">Primary</span>
                                     <?php endif; ?>
+                                    <button type="button"
+                                            class="absolute top-1 left-1 bg-red-600 text-white text-[11px] px-2 py-0.5 rounded opacity-90 hover:opacity-100 seller-delete-image-btn"
+                                            data-image-id="<?= (int)($image['id'] ?? 0) ?>">
+                                        Delete
+                                    </button>
                                 </div>
                             <?php endforeach; ?>
                         </div>
+                        <p class="text-xs text-gray-500 mt-2">You can delete any image (including the primary). Product must keep at least one image.</p>
                     </div>
                 <?php endif; ?>
 
@@ -106,6 +112,80 @@
                     <label for="additional_images">Add Additional Image URLs</label>
                     <textarea id="additional_images" name="additional_images" rows="3" class="input native-input" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"></textarea>
                     <p class="text-xs text-gray-600 mt-1">Enter multiple image URLs separated by commas</p>
+                </div>
+            </div>
+
+            <!-- Product Scheduling -->
+            <div class="space-y-4" style="margin-top: 2rem;">
+                <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Product Scheduling</h3>
+
+                <div class="flex items-center p-4 border border-gray-200 rounded-lg bg-gray-50">
+                    <input type="checkbox" 
+                           id="is_scheduled" 
+                           name="is_scheduled" 
+                           value="1"
+                           <?= (isset($product['is_scheduled']) && $product['is_scheduled']) ? 'checked' : '' ?>
+                           class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                    <label for="is_scheduled" class="ml-3 cursor-pointer">
+                        <div class="text-sm font-medium text-gray-900">Schedule Product Launch</div>
+                        <div class="text-xs text-gray-500">Set a future date when this product becomes available for customers.</div>
+                    </label>
+                </div>
+
+                <div id="sellerSchedulingOptions" class="space-y-4 <?= (isset($product['is_scheduled']) && $product['is_scheduled']) ? '' : 'hidden' ?>">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="scheduled_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                Launch Date <span class="text-red-500">*</span>
+                            </label>
+                            <input type="datetime-local" 
+                                   id="scheduled_date" 
+                                   name="scheduled_date" 
+                                   value="<?= !empty($product['scheduled_date']) ? date('Y-m-d\TH:i', strtotime($product['scheduled_date'])) : '' ?>"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-sm">
+                            <p class="text-xs text-gray-500 mt-1">After this date/time, the product becomes orderable.</p>
+                        </div>
+
+                        <div>
+                            <label for="scheduled_end_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                End Date <span class="text-gray-400 text-xs">(Optional)</span>
+                            </label>
+                            <input type="datetime-local" 
+                                   id="scheduled_end_date" 
+                                   name="scheduled_end_date" 
+                                   value="<?= !empty($product['scheduled_end_date']) ? date('Y-m-d\TH:i', strtotime($product['scheduled_end_date'])) : '' ?>"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-sm">
+                            <p class="text-xs text-gray-500 mt-1">Optional: when the scheduled launch period ends.</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="scheduled_duration" class="block text-sm font-medium text-gray-700 mb-2">
+                                Launch Highlight Duration (days) <span class="text-gray-400 text-xs">(Optional)</span>
+                            </label>
+                            <input type="number" 
+                                   id="scheduled_duration" 
+                                   name="scheduled_duration" 
+                                   value="<?= htmlspecialchars($product['scheduled_duration'] ?? '') ?>"
+                                   min="1"
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-sm"
+                                   placeholder="e.g. 7">
+                            <p class="text-xs text-gray-500 mt-1">Controls how long the product is treated as a launch highlight.</p>
+                        </div>
+
+                        <div>
+                            <label for="scheduled_message" class="block text-sm font-medium text-gray-700 mb-2">
+                                Launch Message <span class="text-gray-400 text-xs">(Optional)</span>
+                            </label>
+                            <textarea id="scheduled_message" 
+                                      name="scheduled_message" 
+                                      rows="2"
+                                      class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors text-sm resize-none"
+                                      placeholder="Short note to show on product page before launch"><?= htmlspecialchars($product['scheduled_message'] ?? '') ?></textarea>
+                            <p class="text-xs text-gray-500 mt-1">Example: “Limited launch – special pricing for early buyers.”</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -152,6 +232,49 @@
         </form>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const scheduleCheckbox = document.getElementById('is_scheduled');
+    const scheduleOptions = document.getElementById('sellerSchedulingOptions');
+
+    if (scheduleCheckbox && scheduleOptions) {
+        scheduleCheckbox.addEventListener('change', function () {
+            if (this.checked) {
+                scheduleOptions.classList.remove('hidden');
+            } else {
+                scheduleOptions.classList.add('hidden');
+            }
+        });
+    }
+
+    // AJAX delete for product images
+    document.querySelectorAll('.seller-delete-image-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const imageId = this.dataset.imageId;
+            if (!imageId) return;
+            if (!confirm('Are you sure you want to delete this image?')) return;
+
+            fetch('<?= \App\Core\View::url('seller/products/delete-image/') ?>' + imageId, {
+                method: 'POST',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            }).then(resp => resp.json())
+              .then(data => {
+                  if (data.success) {
+                      const wrapper = this.closest('[data-image-id]');
+                      if (wrapper) wrapper.remove();
+                  } else {
+                      alert(data.message || 'Failed to delete image');
+                  }
+              }).catch(() => {
+                  alert('Failed to delete image');
+              });
+        });
+    });
+});
+</script>
 
 <?php $content = ob_get_clean(); ?>
 <?php include dirname(__DIR__) . '/layouts/main.php'; ?>

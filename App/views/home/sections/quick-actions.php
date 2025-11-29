@@ -49,14 +49,14 @@
                 <span class="text-[10px] sm:text-xs text-gray-600 mt-1.5 font-medium">Top Sale</span>
             </a>
 
-            <!-- New Arrivals -->
-            <a href="<?= \App\Core\View::url('products?sort=newest') ?>" 
+            <!-- Launching Soon -->
+            <a href="<?= \App\Core\View::url('products/launching') ?>" 
                class="flex flex-col items-center justify-center w-full relative group"
-               title="New Arrivals">
+               title="Launching Soon">
                 <div class="w-12 h-12 sm:w-16 sm:h-16 bg-gray-50 rounded-2xl flex items-center justify-center border border-gray-200 overflow-hidden">
                     <img src="<?= \App\Core\View::publicAsset('images/screen/schedule.svg') ?>" alt="New Arrivals" class="w-full h-full object-contain p-2">
                 </div>
-                <span class="text-[10px] sm:text-xs text-gray-600 mt-1.5 font-medium">New</span>
+                <span class="text-[10px] sm:text-xs text-gray-600 mt-1.5 font-medium">Launching</span>
             </a>
 
             <!-- Best Sellers -->

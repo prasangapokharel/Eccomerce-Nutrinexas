@@ -91,6 +91,7 @@ class App
         $this->router->get('products/category/{category}', 'Product\ProductController@category');
         $this->router->get('products/search', 'Product\ProductController@search');
         $this->router->get('products/liveSearch', 'Product\ProductController@liveSearch');
+        $this->router->get('products/launching', 'Product\ProductLaunchController@index');
         
         // Product view tracking routes
         $this->router->post('products/view/record', 'Product\ProductViewController@record');
@@ -164,6 +165,8 @@ class App
         $this->router->get('seller/products/bulk-upload', 'Seller\Products@bulkUpload');
         $this->router->post('seller/products/bulk-upload', 'Seller\Products@bulkUpload');
         $this->router->get('seller/products/download-csv-template', 'Seller\Products@downloadCsvTemplate');
+        // AJAX image management for sellers
+        $this->router->post('seller/products/delete-image/{id}', 'Seller\Products@deleteImage');
         $this->router->get('seller/orders', 'Seller\Orders@index');
         $this->router->get('seller/orders/detail/{id}', 'Seller\Orders@detail');
         $this->router->post('seller/orders/update-status/{id}', 'Seller\Orders@updateStatus');

@@ -55,6 +55,9 @@ class Settings extends BaseSellerController
             if (isset($_POST['city'])) {
                 $data['city'] = trim($_POST['city'] ?? '');
             }
+            if (isset($_POST['theme_color'])) {
+                $data['theme_color'] = self::normalizeThemeColor($_POST['theme_color']);
+            }
             if (isset($_POST['logo_url'])) {
                 $data['logo_url'] = trim($_POST['logo_url'] ?? '');
             }
@@ -139,6 +142,35 @@ class Settings extends BaseSellerController
         }
 
         $this->redirect('seller/settings');
+    }
+
+    /**
+     * Normalize and validate theme color input (simple hex sanitizer)
+     */
+    private static function normalizeThemeColor(?string $value): ?string
+    {
+        $value = trim((string)$value);
+        if ($value === '') {
+            return null;
+        }
+
+        // Ensure starts with #
+        if ($value[0] !== '#') {
+            $value = '#' . $value;
+        }
+
+        // Only allow 4 or 7 length (#RGB or #RRGGBB)
+        if (!in_array(strlen($value), [4, 7], true)) {
+            return null;
+        }
+
+        // Validate hex characters
+        $hex = substr($value, 1);
+        if (!ctype_xdigit($hex)) {
+            return null;
+        }
+
+        return strtoupper($value);
     }
 }
 

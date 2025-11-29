@@ -366,6 +366,71 @@ class Products extends BaseSellerController
     }
 
     /**
+     * Delete a product image via AJAX (seller side)
+     */
+    public function deleteImage($imageId = null)
+    {
+        header('Content-Type: application/json');
+
+        try {
+            if (!$imageId || $_SERVER['REQUEST_METHOD'] !== 'POST') {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Invalid request']);
+                return;
+            }
+
+            if (!is_numeric($imageId) || $imageId <= 0) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Invalid image ID']);
+                return;
+            }
+
+            $image = $this->productImageModel->find($imageId);
+            if (!$image) {
+                http_response_code(404);
+                echo json_encode(['success' => false, 'message' => 'Image not found']);
+                return;
+            }
+
+            // Ensure image belongs to a product owned by this seller
+            $product = $this->productModel->find($image['product_id']);
+            if (!$product || (int)$product['seller_id'] !== (int)$this->sellerId) {
+                http_response_code(403);
+                echo json_encode(['success' => false, 'message' => 'Not allowed to delete this image']);
+                return;
+            }
+
+            $imageCount = $this->productImageModel->getImageCount($image['product_id']);
+            if ($imageCount <= 1) {
+                http_response_code(400);
+                echo json_encode(['success' => false, 'message' => 'Cannot delete the only image. Product must have at least one image.']);
+                return;
+            }
+
+            $result = $this->productImageModel->deleteImage($imageId);
+            if ($result) {
+                // If deleted image was primary, set another image as primary
+                if (!empty($image['is_primary'])) {
+                    $remainingImages = $this->productImageModel->getByProductId($image['product_id']);
+                    if (!empty($remainingImages)) {
+                        $this->productImageModel->updateImage($remainingImages[0]['id'], ['is_primary' => 1]);
+                    }
+                }
+
+                http_response_code(200);
+                echo json_encode(['success' => true, 'message' => 'Image deleted successfully']);
+            } else {
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => 'Failed to delete image']);
+            }
+        } catch (\Exception $e) {
+            error_log('Seller delete image error: ' . $e->getMessage());
+            http_response_code(500);
+            echo json_encode(['success' => false, 'message' => 'An unexpected error occurred']);
+        }
+    }
+
+    /**
      * Download CSV template
      */
     public function downloadCsvTemplate()
@@ -687,6 +752,29 @@ class Products extends BaseSellerController
             'is_digital' => isset($_POST['is_digital']) ? 1 : 0
         ];
         
+        // Process scheduling fields on update (launch dates)
+        $data['is_scheduled'] = isset($_POST['is_scheduled']) ? 1 : 0;
+        if (!empty($_POST['scheduled_date'])) {
+            $data['scheduled_date'] = date('Y-m-d H:i:s', strtotime($_POST['scheduled_date']));
+        } else {
+            $data['scheduled_date'] = null;
+        }
+        if (!empty($_POST['scheduled_end_date'])) {
+            $data['scheduled_end_date'] = date('Y-m-d H:i:s', strtotime($_POST['scheduled_end_date']));
+        } else {
+            $data['scheduled_end_date'] = null;
+        }
+        if (!empty($_POST['scheduled_duration'])) {
+            $data['scheduled_duration'] = (int)$_POST['scheduled_duration'];
+        } else {
+            $data['scheduled_duration'] = null;
+        }
+        if (!empty($_POST['scheduled_message'])) {
+            $data['scheduled_message'] = trim($_POST['scheduled_message']);
+        } else {
+            $data['scheduled_message'] = null;
+        }
+        
         // Handle affiliate_commission: if empty string, set to NULL; if provided, validate and set
         if (isset($_POST['affiliate_commission'])) {
             if ($_POST['affiliate_commission'] === '' || $_POST['affiliate_commission'] === null) {
@@ -800,17 +888,15 @@ class Products extends BaseSellerController
      */
     private function handleProductImages($productId)
     {
+        // Update / replace primary image if a new primary URL is provided
         if (!empty($_POST['image_url'])) {
             $imageUrl = trim($_POST['image_url']);
             if (filter_var($imageUrl, FILTER_VALIDATE_URL)) {
-                $this->productImageModel->create([
-                    'product_id' => $productId,
-                    'image_url' => $imageUrl,
-                    'is_primary' => 1
-                ]);
+                // Use ProductImage helper to correctly handle primary flag
+                $this->productImageModel->addImage($productId, $imageUrl, true, 0);
             }
         }
-        
+
         // Handle additional image URLs if provided
         if (!empty($_POST['additional_images'])) {
             $additionalImagesInput = $_POST['additional_images'];
