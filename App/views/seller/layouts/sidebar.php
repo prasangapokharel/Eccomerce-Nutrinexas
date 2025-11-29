@@ -11,7 +11,7 @@ $currentPage = $page ?? 'dashboard';
                     <p class="text-xs text-white/70">Seller Panel</p>
                 </div>
             </a>
-            <button id="toggleSidebar" class="text-white/80 hover:text-white lg:block hidden p-2 hover:bg-white/10 flex-shrink-0">
+            <button id="toggleSidebar" class="text-white/80 lg:block hidden p-2 flex-shrink-0">
                 <i class="fas fa-bars text-sm"></i>
             </button>
         </div>
@@ -139,7 +139,7 @@ $currentPage = $page ?? 'dashboard';
             $companyLogo = $seller['logo_url'] ?? null;
             ?>
             <div class="pt-4 mt-4 border-t border-white/20">
-                <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors">
+                <div class="flex items-center space-x-3 p-3 rounded-lg bg-white/5">
                     <?php if ($companyLogo): ?>
                         <img src="<?= htmlspecialchars($companyLogo) ?>" 
                              alt="<?= htmlspecialchars($companyName) ?>"

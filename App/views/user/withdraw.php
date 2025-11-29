@@ -66,7 +66,7 @@
                         <div class="relative">
                             <span class="absolute left-3 top-3 text-neutral-500">रु</span>
                             <input type="number" name="amount" id="amount" min="100" max="<?= $balance['available_balance'] ?? 0 ?>" step="1" 
-                                class="input pl-8"
+                                class="input native-input pl-8"
                                 placeholder="Enter amount (minimum रु100)" required>
                         </div>
                         <p class="text-sm text-neutral-500 mt-1">Minimum withdrawal amount: रु500</p>
@@ -135,13 +135,13 @@
                             <div>
                                 <label for="account_name" class="block text-sm font-medium text-neutral-700 mb-1">Account Holder Name</label>
                                 <input type="text" name="account_name" id="account_name" 
-                                       class="input">
+                                       class="input native-input">
                             </div>
                             
                             <div>
                                 <label for="account_number" class="block text-sm font-medium text-neutral-700 mb-1">Account Number</label>
                                 <input type="text" name="account_number" id="account_number" 
-                                       class="input">
+                                       class="input native-input">
                             </div>
                         </div>
                         
@@ -149,13 +149,13 @@
                             <div>
                                 <label for="bank_name" class="block text-sm font-medium text-neutral-700 mb-1">Bank Name</label>
                                 <input type="text" name="bank_name" id="bank_name" 
-                                       class="input">
+                                       class="input native-input">
                             </div>
                             
                             <div>
                                 <label for="ifsc_code" class="block text-sm font-medium text-neutral-700 mb-1">IFSC Code</label>
                                 <input type="text" name="ifsc_code" id="ifsc_code" 
-                                       class="input">
+                                       class="input native-input">
                             </div>
                         </div>
                     </div>
@@ -166,7 +166,7 @@
                         <div>
                             <label for="esewa_id" class="block text-sm font-medium text-neutral-700 mb-1">eSewa ID</label>
                             <input type="text" name="esewa_id" id="esewa_id" 
-                                   class="input"
+                                   class="input native-input"
                                    placeholder="98******29">
                         </div>
                     </div>
@@ -177,13 +177,13 @@
                         <div>
                             <label for="khalti_number" class="block text-sm font-medium text-neutral-700 mb-1">Khalti Mobile Number</label>
                             <input type="text" name="khalti_number" id="khalti_number" 
-                                   class="input"
+                                   class="input native-input"
                                    placeholder="10-digit mobile number">
                         </div>
                     </div>
                     
                     <div class="mt-6">
-                        <button type="button" id="open-withdraw-confirm" class="btn btn-primary w-full px-6 py-3"
+                        <button type="button" id="open-withdraw-confirm" class="btn btn-primary w-full"
                                 <?= ($balance['available_balance'] ?? 0) < 100 ? 'disabled' : '' ?>>
                             Request Withdrawal
                         </button>
@@ -221,8 +221,8 @@
                             <p class="text-xs text-neutral-500">Note: Payment will be credited within 24 hours after approval. You'll receive a confirmation notification.</p>
                         </div>
                         <div class="mt-4 grid grid-cols-2 gap-3">
-                            <button type="button" id="cancel-withdraw" class="btn btn-secondary px-4 py-3">Cancel</button>
-                            <button type="button" id="confirm-withdraw" class="btn btn-primary px-4 py-3">Confirm & Submit</button>
+                            <button type="button" id="cancel-withdraw" class="btn btn-outline">Cancel</button>
+                            <button type="button" id="confirm-withdraw" class="btn btn-primary">Confirm & Submit</button>
                         </div>
                     </div>
                 </div>

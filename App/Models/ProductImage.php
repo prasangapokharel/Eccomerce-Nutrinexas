@@ -39,6 +39,23 @@ class ProductImage extends Model
         
         return $result;
     }
+    
+    /**
+     * Get images for multiple products (batch loading)
+     *
+     * @param array $productIds
+     * @return array
+     */
+    public function getByProductIds(array $productIds)
+    {
+        if (empty($productIds)) {
+            return [];
+        }
+        
+        $placeholders = str_repeat('?,', count($productIds) - 1) . '?';
+        $sql = "SELECT * FROM {$this->table} WHERE product_id IN ($placeholders) ORDER BY product_id, is_primary DESC, sort_order ASC";
+        return $this->db->query($sql)->bind($productIds)->all();
+    }
 
     /**
      * Add image to product

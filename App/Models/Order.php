@@ -44,7 +44,19 @@ class Order extends Model
             $updateData['status'] = 'shipped';
         }
 
-        return parent::update($orderId, $updateData);
+        $result = parent::update($orderId, $updateData);
+        
+        // Notify courier about order assignment
+        if ($result) {
+            try {
+                $courierNotificationController = new \App\Controllers\Notification\NotificationCourierController();
+                $courierNotificationController->notifyOrderAssigned($curiorId, $orderId);
+            } catch (\Exception $e) {
+                error_log("Order: Error sending courier assignment notification: " . $e->getMessage());
+            }
+        }
+        
+        return $result;
     }
 
     /**
@@ -333,9 +345,10 @@ class Order extends Model
     public function createOrder(array $orderData, array $cartItems)
     {
         try {
-            error_log('=== ORDER CREATION START ===');
-            error_log('Order data: ' . json_encode($orderData));
-            error_log('Cart items count: ' . count($cartItems));
+            if (defined('DEBUG') && DEBUG) {
+                error_log('=== ORDER CREATION START ===');
+                error_log('Cart items count: ' . count($cartItems));
+            }
             // Start transaction
             $this->db->beginTransaction();
             // Generate invoice number
@@ -377,7 +390,9 @@ class Order extends Model
                 throw new \Exception('Failed to create order');
             }
             $orderId = $this->db->lastInsertId();
-            error_log('Order created with ID: ' . $orderId);
+            if (defined('DEBUG') && DEBUG) {
+                error_log('Order created with ID: ' . $orderId);
+            }
             // Insert order items - MATCHING ACTUAL DATABASE SCHEMA (with color, size, and seller_id)
             $itemSql = "INSERT INTO order_items (order_id, product_id, seller_id, selected_color, selected_size, quantity, price, total, invoice)
                                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
@@ -395,7 +410,7 @@ class Order extends Model
                     $sellerId = (int)$item['seller_id'];
                 } else {
                     // Fetch seller_id from product if not in cart item
-                    $product = $this->db->query("SELECT seller_id FROM products WHERE id = ?", [$item['product_id']])->single();
+                    $product = $this->db->query("SELECT seller_id FROM products WHERE id = ? LIMIT 1", [$item['product_id']])->single();
                     $sellerId = $product ? (int)($product['seller_id'] ?? null) : null;
                 }
                 
@@ -434,11 +449,16 @@ class Order extends Model
                 if (!$itemResult) {
                     throw new \Exception('Failed to create order item for product: ' . ($item['product_name'] ?? ('ID ' . $item['product_id'])));
                 }
-                error_log('Order item created for product: ' . ($item['product_name'] ?? ('ID ' . $item['product_id'])) . ' with seller_id: ' . ($sellerId ?? 'NULL'));
+                if (defined('DEBUG') && DEBUG) {
+                    error_log('Order item created for product: ' . ($item['product_name'] ?? ('ID ' . $item['product_id'])) . ' with seller_id: ' . ($sellerId ?? 'NULL'));
+                }
             }
             // Commit transaction
             $this->db->commit();
-            error_log('=== ORDER CREATION SUCCESS ===');
+            
+            if (!defined('DEBUG') || !DEBUG) {
+                error_log('=== ORDER CREATION SUCCESS ===');
+            }
 
             // All post-order operations are async to not block checkout
             $orderModelInstance = $this;

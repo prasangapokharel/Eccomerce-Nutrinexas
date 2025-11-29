@@ -126,22 +126,26 @@ class Controller
     /**
      * Require user to be logged in
      * Also checks refresh token to restore session if needed (works in shared hosting)
+     * Checks if user is suspended and blocks access
      *
      * @return void
      */
     public function requireLogin()
     {
+        $userId = null;
+        
         // First check session
         if (Session::has('user_id')) {
-            return; // User is logged in
+            $userId = Session::get('user_id');
         }
         
         // If no session, check refresh token (for shared hosting compatibility)
-        if (!empty($_COOKIE['remember_token'])) {
+        if (!$userId && !empty($_COOKIE['remember_token'])) {
             try {
                 $userModel = new \App\Models\User();
                 $user = $userModel->findByRememberToken($_COOKIE['remember_token']);
                 if ($user) {
+                    $userId = $user['id'];
                     // Restore session from refresh token
                     Session::set('user_id', $user['id']);
                     Session::set('user_email', $user['email'] ?? '');
@@ -151,16 +155,38 @@ class Controller
                     
                     // Refresh token to extend expiration
                     $userModel->refreshRememberToken($user['id'], false);
-                    return; // User is now logged in
                 }
             } catch (\Exception $e) {
                 error_log('Refresh token check error in requireLogin: ' . $e->getMessage());
             }
         }
         
-        // No session and no valid refresh token - redirect to login
-        $this->setFlash('error', 'Please log in to access this page');
-        $this->redirect('auth/login');
+        // Check if user is logged in
+        if (!$userId) {
+            $this->setFlash('error', 'Please log in to access this page');
+            $this->redirect('auth/login');
+            return;
+        }
+        
+        // Check if user is suspended or inactive
+        $userModel = new \App\Models\User();
+        $user = $userModel->find($userId);
+        if ($user) {
+            $userStatus = $user['status'] ?? 'active';
+            if ($userStatus === 'suspended') {
+                Session::destroy();
+                $suspensionReason = $user['suspension_reason'] ?? 'Your account has been suspended';
+                $this->setFlash('error', "Account suspended: {$suspensionReason}. Please contact support.");
+                $this->redirect('auth/login');
+                exit;
+            }
+            if ($userStatus === 'inactive') {
+                Session::destroy();
+                $this->setFlash('error', 'Your account is inactive. Please contact support to reactivate.');
+                $this->redirect('auth/login');
+                exit;
+            }
+        }
     }
 
     /**

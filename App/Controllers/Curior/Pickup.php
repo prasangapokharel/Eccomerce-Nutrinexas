@@ -22,27 +22,72 @@ class Pickup extends BaseCuriorController
      */
     public function index()
     {
-        $sql = "SELECT o.*, 
-                       o.customer_name as order_customer_name,
-                       CONCAT(u.first_name, ' ', u.last_name) as user_full_name,
-                       u.email as customer_email,
-                       pm.name as payment_method,
-                       MIN(s.id) as seller_id,
-                       MIN(s.name) as seller_name,
-                       MIN(s.company_name) as seller_company,
-                       MIN(s.address) as seller_address,
-                       MIN(s.city) as seller_city,
-                       MIN(s.phone) as seller_phone
+        $sql = "SELECT 
+                    o.*,
+                    o.customer_name AS order_customer_name,
+                    CONCAT(u.first_name, ' ', u.last_name) AS user_full_name,
+                    u.email AS customer_email,
+                    pm.name AS payment_method,
+                    (
+                        SELECT COALESCE(oi2.seller_id, p2.seller_id)
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_id,
+                    (
+                        SELECT COALESCE(s.company_name, s.name) 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_company,
+                    (
+                        SELECT s.name 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_name,
+                    (
+                        SELECT s.address 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_address,
+                    (
+                        SELECT s.city 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_city,
+                    (
+                        SELECT s.phone 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_phone
                 FROM orders o
                 LEFT JOIN users u ON o.user_id = u.id
                 LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
-                LEFT JOIN order_items oi ON o.id = oi.order_id
-                LEFT JOIN products p ON oi.product_id = p.id
-                LEFT JOIN sellers s ON p.seller_id = s.id
-                WHERE o.curior_id = ? 
-                AND o.status IN ('processing', 'confirmed', 'shipped', 'ready_for_pickup')
-                GROUP BY o.id
-                ORDER BY o.created_at DESC";
+                WHERE o.curior_id = ?
+                AND o.status = 'ready_for_pickup'
+                AND o.curior_id IS NOT NULL
+                ORDER BY o.updated_at DESC, o.created_at DESC";
         
         $orders = $this->db->query($sql, [$this->curiorId])->all();
         

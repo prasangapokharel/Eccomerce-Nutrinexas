@@ -249,6 +249,10 @@ class Products extends BaseSellerController
 
             if ($productId) {
                 $this->handleProductImages($productId);
+                
+                // Handle digital product record
+                $this->handleDigitalProduct($productId, $data['is_digital'] ?? 0);
+                
                 // Clear product caches
                 $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');
                 $this->cache->delete('seller_product_count_' . $this->sellerId);
@@ -341,6 +345,10 @@ class Products extends BaseSellerController
 
             if ($result) {
                 $this->handleProductImages($id);
+                
+                // Handle digital product record
+                $this->handleDigitalProduct($id, $data['is_digital'] ?? 0);
+                
                 // Clear product caches
                 $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');
                 $this->cache->delete('seller_product_count_' . $this->sellerId);
@@ -610,6 +618,29 @@ class Products extends BaseSellerController
             'seller_id' => $this->sellerId
         ];
         
+        // Process scheduling fields
+        $data['is_scheduled'] = isset($_POST['is_scheduled']) ? 1 : 0;
+        if (!empty($_POST['scheduled_date'])) {
+            $data['scheduled_date'] = date('Y-m-d H:i:s', strtotime($_POST['scheduled_date']));
+        } else {
+            $data['scheduled_date'] = null;
+        }
+        if (!empty($_POST['scheduled_end_date'])) {
+            $data['scheduled_end_date'] = date('Y-m-d H:i:s', strtotime($_POST['scheduled_end_date']));
+        } else {
+            $data['scheduled_end_date'] = null;
+        }
+        if (!empty($_POST['scheduled_duration'])) {
+            $data['scheduled_duration'] = (int)$_POST['scheduled_duration'];
+        } else {
+            $data['scheduled_duration'] = null;
+        }
+        if (!empty($_POST['scheduled_message'])) {
+            $data['scheduled_message'] = trim($_POST['scheduled_message']);
+        } else {
+            $data['scheduled_message'] = null;
+        }
+        
         // Add affiliate_commission if provided (optional, defaults to NULL to use system default)
         // Validate range: 0-50 (as per requirements)
         if (isset($_POST['affiliate_commission']) && $_POST['affiliate_commission'] !== '') {
@@ -621,6 +652,14 @@ class Products extends BaseSellerController
                 // Invalid range, use NULL to fall back to default
                 error_log("Product creation: Invalid affiliate_commission {$affiliateCommission}% (must be 0-50), using default");
             }
+        }
+
+        // Add SEO fields
+        if (!empty($_POST['meta_title'])) {
+            $data['meta_title'] = trim($_POST['meta_title']);
+        }
+        if (!empty($_POST['meta_description'])) {
+            $data['meta_description'] = trim($_POST['meta_description']);
         }
         
         return $data;
@@ -644,7 +683,8 @@ class Products extends BaseSellerController
             'sale_price' => !empty($_POST['sale_price']) ? (float)$_POST['sale_price'] : null,
             'stock_quantity' => (int)($_POST['stock_quantity'] ?? 0),
             'category' => $selectedCategory,
-            'status' => trim($_POST['status'] ?? 'active')
+            'status' => trim($_POST['status'] ?? 'active'),
+            'is_digital' => isset($_POST['is_digital']) ? 1 : 0
         ];
         
         // Handle affiliate_commission: if empty string, set to NULL; if provided, validate and set
@@ -663,6 +703,14 @@ class Products extends BaseSellerController
                     $data['affiliate_commission'] = null;
                 }
             }
+        }
+
+        // Add SEO fields
+        if (isset($_POST['meta_title'])) {
+            $data['meta_title'] = !empty($_POST['meta_title']) ? trim($_POST['meta_title']) : null;
+        }
+        if (isset($_POST['meta_description'])) {
+            $data['meta_description'] = !empty($_POST['meta_description']) ? trim($_POST['meta_description']) : null;
         }
         
         return $data;
@@ -709,6 +757,44 @@ class Products extends BaseSellerController
         }
     }
 
+    /**
+     * Handle digital product record creation/update/deletion
+     */
+    private function handleDigitalProduct($productId, $isDigital)
+    {
+        $digitalProductModel = new \App\Models\DigitalProduct();
+        $existing = $digitalProductModel->getByProductId($productId);
+        
+        if ($isDigital) {
+            // Create or update digital_product record
+            if (!$existing) {
+                // Create new record with default values
+                $digitalProductModel->create([
+                    'product_id' => $productId,
+                    'file_download_link' => $_POST['file_download_link'] ?? 'https://example.com/download/product-' . $productId . '.pdf',
+                    'file_size' => $_POST['file_size'] ?? '2.5 MB'
+                ]);
+            } else {
+                // Update existing record if fields provided
+                $updateData = [];
+                if (!empty($_POST['file_download_link'])) {
+                    $updateData['file_download_link'] = $_POST['file_download_link'];
+                }
+                if (!empty($_POST['file_size'])) {
+                    $updateData['file_size'] = $_POST['file_size'];
+                }
+                if (!empty($updateData)) {
+                    $digitalProductModel->updateByProductId($productId, $updateData);
+                }
+            }
+        } else {
+            // Delete digital_product record if product is no longer digital
+            if ($existing) {
+                $digitalProductModel->deleteByProductId($productId);
+            }
+        }
+    }
+    
     /**
      * Handle product image URLs (CDN)
      */

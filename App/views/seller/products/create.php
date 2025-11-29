@@ -10,7 +10,7 @@
         </div>
         <div class="flex items-center space-x-3">
             <a href="<?= \App\Core\View::url('seller/products') ?>" 
-               class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+               class="btn btn-outline">
                 <i class="fas fa-arrow-left mr-2"></i>
                 Back to Products
             </a>
@@ -319,6 +319,77 @@
                     </div>
                 </div>
 
+                <!-- Product Scheduling -->
+                <div class="space-y-4">
+                    <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Product Scheduling</h3>
+                    
+                    <div class="flex items-center p-4 border border-gray-200 rounded-lg">
+                        <input type="checkbox" 
+                               id="is_scheduled" 
+                               name="is_scheduled" 
+                               value="1"
+                               class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded">
+                        <label for="is_scheduled" class="ml-3">
+                            <div class="text-sm font-medium text-gray-900">Schedule Product Release</div>
+                            <div class="text-xs text-gray-500">Set a future date when this product becomes available for purchase</div>
+                        </label>
+                    </div>
+
+                    <div id="schedulingOptions" class="space-y-4 hidden">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="scheduled_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Start Date <span class="text-red-500">*</span>
+                                </label>
+                                <input type="datetime-local" 
+                                       id="scheduled_date" 
+                                       name="scheduled_date" 
+                                       class="input native-input">
+                                <p class="text-xs text-gray-500 mt-1">When the product becomes available</p>
+                            </div>
+
+                            <div>
+                                <label for="scheduled_end_date" class="block text-sm font-medium text-gray-700 mb-2">
+                                    End Date <span class="text-gray-400 text-xs">(Optional)</span>
+                                </label>
+                                <input type="datetime-local" 
+                                       id="scheduled_end_date" 
+                                       name="scheduled_end_date" 
+                                       class="input native-input">
+                                <p class="text-xs text-gray-500 mt-1">When the scheduled period ends (leave empty for no end date)</p>
+                            </div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <label for="scheduled_duration" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Duration (Days) <span class="text-gray-400 text-xs">(Alternative)</span>
+                                </label>
+                                <input type="number" 
+                                       id="scheduled_duration" 
+                                       name="scheduled_duration" 
+                                       min="1"
+                                       max="365"
+                                       class="input native-input"
+                                       placeholder="Leave empty if using dates">
+                                <p class="text-xs text-gray-500 mt-1">Alternative: Product available for X days from start date</p>
+                            </div>
+                            
+                            <div>
+                                <label for="scheduled_message" class="block text-sm font-medium text-gray-700 mb-2">
+                                    Countdown Message
+                                </label>
+                                <input type="text" 
+                                       id="scheduled_message" 
+                                       name="scheduled_message" 
+                                       class="input native-input"
+                                       placeholder="Coming Soon! Get ready for this amazing product.">
+                                <p class="text-xs text-gray-500 mt-1">Message shown during the countdown period</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Status -->
                 <div class="space-y-4">
                     <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">Product Status</h3>
@@ -335,6 +406,42 @@
                 </div>
             </div>
 
+            <!-- SEO & Metadata -->
+            <div class="px-6 py-4 border-b border-gray-100 bg-gray-50">
+                <h2 class="text-lg font-semibold text-gray-900">SEO & Metadata</h2>
+                <p class="text-sm text-gray-600 mt-1">Optimize your product for search engines</p>
+            </div>
+
+            <div class="p-6 space-y-6">
+                <div class="space-y-4">
+                    <div>
+                        <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">
+                            Meta Title
+                        </label>
+                        <input type="text" 
+                               id="meta_title" 
+                               name="meta_title" 
+                               class="input native-input"
+                               placeholder="SEO title for search engines (50-60 characters recommended)"
+                               maxlength="60">
+                        <p class="text-xs text-gray-500 mt-1">Recommended: 50-60 characters</p>
+                    </div>
+                    
+                    <div>
+                        <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">
+                            Meta Description
+                        </label>
+                        <textarea id="meta_description" 
+                                  name="meta_description" 
+                                  rows="3"
+                                  class="input native-input resize-none"
+                                  placeholder="SEO description for search engines (150-160 characters recommended)"
+                                  maxlength="160"><?= htmlspecialchars($_POST['meta_description'] ?? '') ?></textarea>
+                        <p class="text-xs text-gray-500 mt-1">Recommended: 150-160 characters</p>
+                    </div>
+                </div>
+            </div>
+
             <!-- Form Footer -->
             <div class="px-6 py-4 border-t border-gray-100 bg-gray-50 flex flex-col sm:flex-row sm:justify-end gap-3">
                 <a href="<?= \App\Core\View::url('seller/products') ?>" 
@@ -342,7 +449,7 @@
                     Cancel
                 </a>
                 <button type="submit" 
-                        class="btn">
+                        class="btn btn-primary">
                     <i class="fas fa-plus mr-2"></i>
                     Create Product
                 </button>
@@ -404,6 +511,23 @@ document.addEventListener('DOMContentLoaded', function() {
             this.setCustomValidity('');
         }
     });
+
+    // Scheduling toggle
+    const isScheduledCheckbox = document.getElementById('is_scheduled');
+    const schedulingOptions = document.getElementById('schedulingOptions');
+    const scheduledDateInput = document.getElementById('scheduled_date');
+    
+    if (isScheduledCheckbox && schedulingOptions) {
+        isScheduledCheckbox.addEventListener('change', function() {
+            if (this.checked) {
+                schedulingOptions.classList.remove('hidden');
+                scheduledDateInput.setAttribute('required', 'required');
+            } else {
+                schedulingOptions.classList.add('hidden');
+                scheduledDateInput.removeAttribute('required');
+            }
+        });
+    }
 });
 </script>
 

@@ -32,56 +32,56 @@
                         <label for="recipient_name" class="block text-sm font-medium text-gray-700 mb-1">Recipient Name</label>
                         <input type="text" name="recipient_name" id="recipient_name" 
                                value="<?= isset($data['recipient_name']) ? htmlspecialchars($data['recipient_name']) : (isset($address['recipient_name']) ? htmlspecialchars($address['recipient_name']) : '') ?>" 
-                               class="input w-full" required>
+                               class="input native-input" required>
                     </div>
                     
                     <div>
                         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input type="text" name="phone" id="phone" 
                                value="<?= isset($data['phone']) ? htmlspecialchars($data['phone']) : (isset($address['phone']) ? htmlspecialchars($address['phone']) : '') ?>" 
-                               class="input w-full" required>
+                               class="input native-input" required>
                     </div>
                     
                     <div class="md:col-span-2">
                         <label for="address_line1" class="block text-sm font-medium text-gray-700 mb-1">Address Line 1</label>
                         <input type="text" name="address_line1" id="address_line1" 
                                value="<?= isset($data['address_line1']) ? htmlspecialchars($data['address_line1']) : (isset($address['address_line1']) ? htmlspecialchars($address['address_line1']) : '') ?>" 
-                               class="input w-full" required>
+                               class="input native-input" required>
                     </div>
                     
                     <div class="md:col-span-2">
                         <label for="address_line2" class="block text-sm font-medium text-gray-700 mb-1">Address Line 2 (Optional)</label>
                         <input type="text" name="address_line2" id="address_line2" 
                                value="<?= isset($data['address_line2']) ? htmlspecialchars($data['address_line2']) : (isset($address['address_line2']) ? htmlspecialchars($address['address_line2']) : '') ?>" 
-                               class="input w-full">
+                               class="input native-input">
                     </div>
                     
                     <div>
                         <label for="city" class="block text-sm font-medium text-gray-700 mb-1">City</label>
                         <input type="text" name="city" id="city" 
                                value="<?= isset($data['city']) ? htmlspecialchars($data['city']) : (isset($address['city']) ? htmlspecialchars($address['city']) : '') ?>" 
-                               class="input w-full" required>
+                               class="input native-input" required>
                     </div>
                     
                     <div>
                         <label for="state" class="block text-sm font-medium text-gray-700 mb-1">State</label>
                         <input type="text" name="state" id="state" 
                                value="<?= isset($data['state']) ? htmlspecialchars($data['state']) : (isset($address['state']) ? htmlspecialchars($address['state']) : '') ?>" 
-                               class="input w-full" required>
+                               class="input native-input" required>
                     </div>
                     
                     <div>
                         <label for="postal_code" class="block text-sm font-medium text-gray-700 mb-1">Postal Code <span class="text-gray-400 text-xs">(Optional)</span></label>
                         <input type="text" name="postal_code" id="postal_code" 
                                value="<?= isset($data['postal_code']) ? htmlspecialchars($data['postal_code']) : (isset($address['postal_code']) ? htmlspecialchars($address['postal_code']) : '') ?>" 
-                               class="input w-full">
+                               class="input native-input">
                     </div>
                     
                     <div>
                         <label for="country" class="block text-sm font-medium text-gray-700 mb-1">Country</label>
                         <input type="text" name="country" id="country" 
                                value="<?= isset($data['country']) ? htmlspecialchars($data['country']) : (isset($address['country']) ? htmlspecialchars($address['country']) : 'Nepal') ?>" 
-                               class="input w-full" required>
+                               class="input native-input" required>
                     </div>
                 </div>
                 
@@ -97,11 +97,10 @@
                 </div>
                 
                 <div class="mt-8 flex justify-end gap-3">
-                    <a href="<?= \App\Core\View::url('user/addresses') ?>" class="px-6 py-2.5 border border-gray-300 text-gray-700 rounded-xl hover:bg-gray-50 transition-colors font-medium">
+                    <a href="<?= \App\Core\View::url('user/addresses') ?>" class="btn btn-outline">
                         Cancel
                     </a>
-                    <button type="submit" class="px-6 py-2.5 bg-primary text-white rounded-xl hover:bg-primary-dark transition-colors font-medium">
-                        <!-- FIXED: Use $address instead of $user_id to determine button text -->
+                    <button type="submit" class="btn btn-primary">
                         <?= isset($address) && $address ? 'Update Address' : 'Save Address' ?>
                     </button>
                 </div>

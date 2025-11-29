@@ -127,69 +127,110 @@ ob_start();
     </a>
 </div>
 
-<!-- Orders Table -->
-<div class="bg-white shadow overflow-hidden sm:rounded-md" id="orders">
-    <div class="px-4 py-5 sm:px-6">
-        <h3 class="text-lg leading-6 font-medium text-gray-900">Your Orders</h3>
-        <p class="mt-1 max-w-2xl text-sm text-gray-500">Orders assigned to you for delivery</p>
+<!-- Orders Snapshot -->
+<?php $dashboardOrders = array_slice($orders ?? [], 0, 10); ?>
+<div class="bg-white rounded-xl shadow-sm border border-gray-100" id="dashboard-orders">
+    <div class="p-6 border-b border-gray-100 flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div>
+            <h3 class="text-lg font-semibold text-gray-900">Recent Assigned Orders</h3>
+            <p class="text-sm text-gray-500">Latest orders assigned to you. Use search to filter quickly.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
+            <div class="relative flex-1 min-w-[220px]">
+                <input type="text" 
+                       id="dashboardOrdersSearch" 
+                       placeholder="Search orders, customer, status..." 
+                       class="input native-input"
+                       style="padding-left: 2.5rem;">
+                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400 text-sm"></i>
+                </div>
+            </div>
+            <a href="<?= \App\Core\View::url('curior/orders') ?>" class="btn btn-outline">
+                View All
+            </a>
+        </div>
     </div>
     
-    <?php if (empty($orders)): ?>
+    <?php if (empty($dashboardOrders)): ?>
         <div class="text-center py-12">
-            <i class="fas fa-inbox text-gray-400 text-4xl mb-4"></i>
+            <i class="fas fa-inbox text-gray-300 text-4xl mb-4"></i>
             <h3 class="text-lg font-medium text-gray-900 mb-2">No orders assigned</h3>
-            <p class="text-gray-500">You don't have any orders assigned to you at the moment.</p>
+            <p class="text-gray-500">Orders assigned to you will appear here.</p>
         </div>
     <?php else: ?>
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200 data-table">
+            <table class="min-w-full divide-y divide-gray-100">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Order Details</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Customer</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date &amp; Time</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Amount</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Payment</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php foreach ($orders as $order): ?>
-                        <tr>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                #<?= $order['id'] ?>
+                <tbody class="bg-white divide-y divide-gray-100" id="dashboardOrdersBody">
+                    <?php foreach ($dashboardOrders as $order): ?>
+                        <?php
+                            $customerName = $order['customer_name'] ?? $order['order_customer_name'] ?? 'N/A';
+                            $customerEmail = $order['customer_email'] ?? $order['contact_no'] ?? 'N/A';
+                            $invoice = $order['invoice'] ?? '#' . ($order['id'] ?? '');
+                            $statusLabel = ucfirst(str_replace('_', ' ', $order['status'] ?? 'pending'));
+                            $paymentStatus = ucfirst($order['payment_status'] ?? 'pending');
+                            $paymentMethod = strtoupper($order['payment_method'] ?? 'COD');
+
+                            $statusClass = match ($order['status'] ?? 'pending') {
+                                'delivered' => 'bg-accent/10 text-accent-dark',
+                                'in_transit', 'shipped', 'dispatched', 'picked_up' => 'bg-primary/10 text-primary',
+                                'ready_for_pickup', 'processing' => 'bg-warning/10 text-warning-dark',
+                                'cancelled' => 'bg-error/10 text-error',
+                                default => 'bg-gray-100 text-gray-700'
+                            };
+
+                            $paymentClass = ($order['payment_status'] ?? '') === 'paid'
+                                ? 'text-success'
+                                : 'text-warning';
+                        ?>
+                        <tr data-dashboard-order
+                            data-order-id="<?= htmlspecialchars($order['id']) ?>"
+                            data-customer="<?= htmlspecialchars(strtolower($customerName)) ?>"
+                            data-status="<?= htmlspecialchars(strtolower($order['status'] ?? '')) ?>">
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <div class="text-sm font-semibold text-gray-900"><?= htmlspecialchars($invoice) ?></div>
+                                <div class="text-xs text-gray-500">#<?= $order['id'] ?></div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="text-sm text-gray-900"><?= htmlspecialchars($order['customer_name'] ?? $order['order_customer_name'] ?? 'N/A') ?></div>
-                                <div class="text-sm text-gray-500"><?= htmlspecialchars($order['customer_email'] ?? 'N/A') ?></div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                Rs <?= number_format($order['total_amount'] ?? 0, 2) ?>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
-                                    <?= $order['status'] === 'delivered' ? 'bg-accent/20 text-accent-dark' : 
-                                       ($order['status'] === 'shipped' || $order['status'] === 'in_transit' ? 'bg-primary-50 text-primary-700' : 
-                                       ($order['status'] === 'dispatched' || $order['status'] === 'picked_up' ? 'bg-primary-50 text-primary-700' : 
-                                       ($order['status'] === 'processing' ? 'bg-warning-50 text-warning-dark' : 'bg-gray-100 text-gray-800'))) ?>">
-                                    <?= ucfirst(str_replace('_', ' ', $order['status'])) ?>
-                                </span>
+                                <div class="text-sm text-gray-900"><?= htmlspecialchars($customerName) ?></div>
+                                <div class="text-xs text-gray-500"><?= htmlspecialchars($customerEmail) ?></div>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                <?= date('M d, Y', strtotime($order['created_at'])) ?>
+                                <?= date('M d, Y h:i A', strtotime($order['created_at'])) ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
+                                Rs <?= number_format($order['total_amount'] ?? 0, 2) ?>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm">
+                                <span class="<?= $paymentClass ?> font-medium"><?= $paymentMethod ?></span>
+                                <p class="text-xs text-gray-500"><?= $paymentStatus ?></p>
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium <?= $statusClass ?>">
+                                    <?= $statusLabel ?>
+                                </span>
                             </td>
                             <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <div class="flex space-x-2 items-center">
+                                <div class="flex items-center gap-2">
                                     <a href="<?= \App\Core\View::url('curior/order/view/' . $order['id']) ?>" 
-                                       class="text-primary hover:text-primary-dark transition-colors p-1 rounded hover:bg-primary-50" 
-                                       title="View Order">
-                                        <i class="fas fa-eye"></i>
+                                       class="btn btn-outline text-xs">
+                                        View
                                     </a>
                                     <a href="<?= \App\Core\View::url('receipt/previewReceipt/' . $order['id']) ?>" 
                                        target="_blank"
-                                       class="text-accent hover:text-accent-dark transition-colors p-1 rounded hover:bg-accent/10" 
-                                       title="View Receipt">
-                                        <i class="fas fa-file-pdf"></i>
+                                       class="btn btn-outline text-xs">
+                                        Receipt
                                     </a>
                                 </div>
                             </td>
@@ -200,6 +241,31 @@ ob_start();
         </div>
     <?php endif; ?>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const searchInput = document.getElementById('dashboardOrdersSearch');
+    const rows = document.querySelectorAll('#dashboardOrdersBody [data-dashboard-order]');
+
+    if (searchInput && rows.length) {
+        searchInput.addEventListener('input', function (event) {
+            const query = event.target.value.toLowerCase().trim();
+            rows.forEach(row => {
+                const orderId = row.getAttribute('data-order-id') || '';
+                const customer = row.getAttribute('data-customer') || '';
+                const status = row.getAttribute('data-status') || '';
+
+                const matches = !query ||
+                    orderId.includes(query) ||
+                    customer.includes(query) ||
+                    status.includes(query);
+
+                row.style.display = matches ? '' : 'none';
+            });
+        });
+    }
+});
+</script>
 
 <?php $content = ob_get_clean(); ?>
 <?php include __DIR__ . '/../layouts/main.php'; ?>

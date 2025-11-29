@@ -9,7 +9,7 @@ use App\Core\Router;
  */
 class App
 {
-    protected $controller = 'HomeController';
+    protected $controller = 'Home\HomeController';
     protected $method = 'index';
     protected $params = [];
     protected $router;
@@ -24,104 +24,123 @@ class App
     private function registerRoutes()
     {
         // Home routes
-        $this->router->get('', 'HomeController@index');
-        $this->router->get('/', 'HomeController@index');
-        $this->router->get('home', 'HomeController@index');
-        // Error routes (to handle redirects from global handlers)
-        $this->router->get('500', 'ErrorController@serverError');
-        $this->router->get('404', 'ErrorController@notFound');
-        $this->router->get('about', 'HomeController@about');
-        $this->router->get('pages/privacy', 'HomeController@privacy');
-        $this->router->get('privacy', 'HomeController@privacy');
-        $this->router->get('pages/terms', 'HomeController@terms');
-        $this->router->get('pages/faq', 'HomeController@faq');
-        $this->router->get('pages/returnPolicy', 'HomeController@returnPolicy');
-        $this->router->get('pages/shipping', 'HomeController@shipping');
-        $this->router->get('pages/contact', 'HomeController@contact');
-        $this->router->get('contact', 'HomeController@contact');
+        $this->router->get('', 'Home\HomeController@index');
+        $this->router->get('/', 'Home\HomeController@index');
+        $this->router->get('home', 'Home\HomeController@index');
+        // Error routes
+        $this->router->get('404', 'Error\ErrorController@notFound');
+        $this->router->get('403', 'Error\ErrorController@forbidden');
+        $this->router->get('500', 'Error\ErrorController@serverError');
+        $this->router->get('about', 'Home\HomeController@about');
+        $this->router->get('pages/privacy', 'Home\HomeController@privacy');
+        $this->router->get('privacy', 'Home\HomeController@privacy');
+        $this->router->get('pages/terms', 'Home\HomeController@terms');
+        $this->router->get('pages/faq', 'Home\HomeController@faq');
+        $this->router->get('pages/returnPolicy', 'Home\HomeController@returnPolicy');
+        $this->router->get('pages/shipping', 'Home\HomeController@shipping');
+        $this->router->get('pages/contact', 'Home\HomeController@contact');
+        $this->router->get('contact', 'Home\HomeController@contact');
         
         // Auth routes
-        $this->router->get('auth/login', 'AuthController@login');
-        $this->router->post('auth/processLogin', 'AuthController@processLogin');
-        $this->router->get('auth/register', 'AuthController@register');
-        $this->router->post('auth/processRegister', 'AuthController@processRegister');
-        $this->router->get('auth/register/auth0', 'AuthController@registerWithAuth0');
-        $this->router->get('auth/logout', 'AuthController@logout');
-        $this->router->get('auth/forgotPassword', 'AuthController@forgotPassword');
-        $this->router->post('auth/forgotPassword', 'AuthController@forgotPassword');
-        $this->router->get('auth/resetPassword/{token}', 'AuthController@resetPassword');
-        $this->router->post('auth/resetPassword/{token}', 'AuthController@resetPassword');
+        $this->router->get('auth/login', 'Auth\AuthController@login');
+        $this->router->post('auth/processLogin', 'Auth\AuthController@processLogin');
+        $this->router->get('auth/register', 'Auth\AuthController@register');
+        $this->router->post('auth/processRegister', 'Auth\AuthController@processRegister');
+        $this->router->get('auth/register/auth0', 'Auth\AuthController@registerWithAuth0');
+        $this->router->get('auth/logout', 'Auth\AuthController@logout');
+        $this->router->get('auth/forgotPassword', 'Auth\AuthController@forgotPassword');
+        $this->router->post('auth/forgotPassword', 'Auth\AuthController@forgotPassword');
+        $this->router->get('auth/resetPassword/{token}', 'Auth\AuthController@resetPassword');
+        $this->router->post('auth/resetPassword/{token}', 'Auth\AuthController@resetPassword');
         
         // OAuth routes
-        $this->router->get('oauth/login', 'OAuthController@login');
-        $this->router->get('oauth/callback', 'OAuthController@callback');
-        $this->router->get('oauth/logout', 'OAuthController@logout');
-        $this->router->get('oauth/link', 'OAuthController@link');
-        $this->router->get('oauth/link/callback', 'OAuthController@linkCallback');
-        $this->router->post('oauth/unlink', 'OAuthController@unlink');
-        $this->router->get('oauth/providers', 'OAuthController@getProviders');
-        $this->router->get('oauth/status', 'OAuthController@getStatus');
+        $this->router->get('oauth/login', 'Auth\OAuthController@login');
+        $this->router->get('oauth/callback', 'Auth\OAuthController@callback');
+        $this->router->get('oauth/logout', 'Auth\OAuthController@logout');
+        $this->router->get('oauth/link', 'Auth\OAuthController@link');
+        $this->router->get('oauth/link/callback', 'Auth\OAuthController@linkCallback');
+        $this->router->post('oauth/unlink', 'Auth\OAuthController@unlink');
+        $this->router->get('oauth/providers', 'Auth\OAuthController@getProviders');
+        $this->router->get('oauth/status', 'Auth\OAuthController@getStatus');
         
         // Auth0 routes
-        $this->router->get('auth0/login', 'Auth0Controller@login');
-        $this->router->get('auth0/callback', 'Auth0Controller@callback');
-        $this->router->get('auth0/logout', 'Auth0Controller@logout');
-        $this->router->get('auth0/profile', 'Auth0Controller@profile');
-        $this->router->get('auth0/link', 'Auth0Controller@link');
-        $this->router->get('auth0/link/callback', 'Auth0Controller@linkCallback');
-        $this->router->post('auth0/unlink', 'Auth0Controller@unlink');
-        $this->router->get('auth0/status', 'Auth0Controller@status');
-        $this->router->get('auth0/providers', 'Auth0Controller@providers');
+        $this->router->get('auth0/login', 'Auth\Auth0Controller@login');
+        $this->router->get('auth0/callback', 'Auth\Auth0Controller@callback');
+        $this->router->get('auth0/logout', 'Auth\Auth0Controller@logout');
+        $this->router->get('auth0/profile', 'Auth\Auth0Controller@profile');
+        $this->router->get('auth0/link', 'Auth\Auth0Controller@link');
+        $this->router->get('auth0/link/callback', 'Auth\Auth0Controller@linkCallback');
+        $this->router->post('auth0/unlink', 'Auth\Auth0Controller@unlink');
+        $this->router->get('auth0/status', 'Auth\Auth0Controller@status');
+        $this->router->get('auth0/providers', 'Auth\Auth0Controller@providers');
         
         // Guide routes
-        $this->router->get('guide', 'GuideController@index');
+        $this->router->get('guide', 'Home\GuideController@index');
 
         // Maintenance route
-        $this->router->get('maintenance', 'ErrorController@maintenance');
+        $this->router->get('maintenance', 'Error\ErrorController@maintenance');
 
         // Ads routes
-        $this->router->get('ads', 'AdsController@index');
+        $this->router->get('ads', 'Ads\AdsController@index');
         
         // Product routes
-        $this->router->get('products', 'ProductController@index');
-        $this->router->get('products/filter', 'ProductController@filter');
-        $this->router->get('products/view/{slug}', 'ProductController@viewProduct');
-        $this->router->get('products/category/{category}/{subtype}', 'ProductController@category');
-        $this->router->get('products/category/{category}', 'ProductController@category');
-        $this->router->get('products/search', 'ProductController@search');
-        $this->router->get('products/liveSearch', 'ProductController@liveSearch');
+        $this->router->get('products', 'Product\ProductController@index');
+        $this->router->get('products/filter', 'Product\ProductController@filter');
+        $this->router->get('products/view/{slug}', 'Product\ProductController@viewProduct');
+        $this->router->get('products/category/{category}/{subtype}', 'Product\ProductController@category');
+        $this->router->get('products/category/{category}', 'Product\ProductController@category');
+        $this->router->get('products/search', 'Product\ProductController@search');
+        $this->router->get('products/liveSearch', 'Product\ProductController@liveSearch');
+        
+        // Product view tracking routes
+        $this->router->post('products/view/record', 'Product\ProductViewController@record');
+        $this->router->post('products/view/record/{productId}', 'Product\ProductViewController@record');
+        $this->router->get('products/view/count/{productId}', 'Product\ProductViewController@getCount');
+        
+        // Digital product download routes
+        $this->router->get('digitaldownload/{orderId}', 'Product\DigitalProductController@downloadPage');
+        $this->router->get('products/digital/download/{productId}', 'Product\DigitalProductController@download');
+        
+        // Product like/unlike routes
+        $this->router->post('products/like', 'Product\ProductLikeController@like');
+        $this->router->post('products/like/{productId}', 'Product\ProductLikeController@like');
+        $this->router->post('products/unlike', 'Product\ProductLikeController@unlike');
+        $this->router->post('products/unlike/{productId}', 'Product\ProductLikeController@unlike');
+        $this->router->post('products/like/toggle', 'Product\ProductLikeController@toggle');
+        $this->router->post('products/like/toggle/{productId}', 'Product\ProductLikeController@toggle');
+        $this->router->get('products/like/count/{productId}', 'Product\ProductLikeController@getCount');
         
         // API routes
-        $this->router->get('api/products/infinite', 'ProductController@infiniteScroll');
-        $this->router->get('products/infinite', 'ProductController@infiniteScroll');
-        $this->router->get('products/view/{slug}', 'ProductController@viewProduct');
-        $this->router->get('products/category/{category}/{subtype}', 'ProductController@category');
-        $this->router->get('products/category/{category}', 'ProductController@category');
-        $this->router->get('products/search', 'ProductController@search');
-        $this->router->get('products/liveSearch', 'ProductController@liveSearch');
+        $this->router->get('api/products/infinite', 'Product\ProductController@infiniteScroll');
+        $this->router->get('products/infinite', 'Product\ProductController@infiniteScroll');
+        $this->router->get('products/view/{slug}', 'Product\ProductController@viewProduct');
+        $this->router->get('products/category/{category}/{subtype}', 'Product\ProductController@category');
+        $this->router->get('products/category/{category}', 'Product\ProductController@category');
+        $this->router->get('products/search', 'Product\ProductController@search');
+        $this->router->get('products/liveSearch', 'Product\ProductController@liveSearch');
         
         // Admin Slider routes - Fixed and organized
-        $this->router->get('admin/slider', 'SliderController@index');
-        $this->router->get('admin/slider/create', 'SliderController@create');
-        $this->router->post('admin/slider/create', 'SliderController@create');
-        $this->router->get('admin/slider/edit/{id}', 'SliderController@edit');
-        $this->router->post('admin/slider/edit/{id}', 'SliderController@edit');
-        $this->router->post('admin/slider/delete/{id}', 'SliderController@delete');
-        $this->router->post('admin/slider/toggle/{id}', 'SliderController@toggleStatus');
+        $this->router->get('admin/slider', 'Slider\SliderController@index');
+        $this->router->get('admin/slider/create', 'Slider\SliderController@create');
+        $this->router->post('admin/slider/create', 'Slider\SliderController@create');
+        $this->router->get('admin/slider/edit/{id}', 'Slider\SliderController@edit');
+        $this->router->post('admin/slider/edit/{id}', 'Slider\SliderController@edit');
+        $this->router->post('admin/slider/delete/{id}', 'Slider\SliderController@delete');
+        $this->router->post('admin/slider/toggle/{id}', 'Slider\SliderController@toggleStatus');
         
         // Admin Banner routes
-        $this->router->get('admin/banners', 'BannerController@adminIndex');
-        $this->router->get('admin/banners/create', 'BannerController@create');
-        $this->router->post('admin/banners/create', 'BannerController@create');
-        $this->router->get('admin/banners/edit/{id}', 'BannerController@edit');
-        $this->router->post('admin/banners/edit/{id}', 'BannerController@edit');
-        $this->router->post('admin/banners/delete/{id}', 'BannerController@delete');
-        $this->router->post('admin/banners/bulk-delete', 'BannerController@bulkDelete');
-        $this->router->post('admin/banners/toggle/{id}', 'BannerController@toggleStatus');
+        $this->router->get('admin/banners', 'Ads\BannerController@adminIndex');
+        $this->router->get('admin/banners/create', 'Ads\BannerController@create');
+        $this->router->post('admin/banners/create', 'Ads\BannerController@create');
+        $this->router->get('admin/banners/edit/{id}', 'Ads\BannerController@edit');
+        $this->router->post('admin/banners/edit/{id}', 'Ads\BannerController@edit');
+        $this->router->post('admin/banners/delete/{id}', 'Ads\BannerController@delete');
+        $this->router->post('admin/banners/bulk-delete', 'Ads\BannerController@bulkDelete');
+        $this->router->post('admin/banners/toggle/{id}', 'Ads\BannerController@toggleStatus');
         
         // Banner click tracking
-        $this->router->get('banner/click/{id}', 'BannerController@trackClick');
-        $this->router->post('banner/view/{id}', 'BannerController@trackView');
+        $this->router->get('banner/click/{id}', 'Ads\BannerController@trackClick');
+        $this->router->post('banner/view/{id}', 'Ads\BannerController@trackView');
         
         // Admin Cancel routes
         $this->router->get('admin/cancels', 'CancelController@adminIndex');
@@ -151,7 +170,10 @@ class App
         $this->router->post('seller/orders/accept/{id}', 'Seller\Orders@accept');
         $this->router->post('seller/orders/reject/{id}', 'Seller\Orders@reject');
         $this->router->get('seller/orders/print-invoice/{id}', 'Seller\Orders@printInvoice');
-        $this->router->get('seller/orders/print-shipping-label/{id}', 'Seller\Orders@printShippingLabel');
+        $this->router->get('seller/orders/print-shipping-label/{id}', 'Billing\ShippingLabelController@print');
+        
+        // Shipping Label routes
+        $this->router->get('billing/shipping-label/print/{id}', 'Billing\ShippingLabelController@print');
         $this->router->get('seller/orders/bulk-print-labels', 'Seller\Orders@bulkPrintLabels');
         $this->router->get('seller/stock-movement', 'Seller\StockMovement@index');
         $this->router->get('seller/inventory', 'Seller\Inventory@index');
@@ -205,73 +227,72 @@ class App
         $this->router->post('seller/bank-account/delete/{id}', 'Seller\BankAccount@delete');
         
         // Category routes
-        $this->router->get('admin/categories', 'CategoryController@index');
-        $this->router->get('categories', 'CategoryController@publicIndex');
-        $this->router->get('category/{slug}', 'CategoryController@show');
+        $this->router->get('admin/categories', 'Category\CategoryController@index');
+        $this->router->get('categories', 'Category\CategoryController@publicIndex');
+        $this->router->get('category/{slug}', 'Category\CategoryController@show');
         
         // Review routes
-        $this->router->post('products/submitReview', 'ReviewController@submit');
-        $this->router->post('reviews/submit', 'ReviewController@submit');
-        $this->router->post('reviews/submitAjax', 'ReviewController@submitAjax');
-        $this->router->post('reviews/delete', 'ReviewController@delete');
-        $this->router->get('reviews/edit/{id}', 'ProductController@editReview');
-        $this->router->post('reviews/update/{id}', 'ProductController@updateReview');
-        $this->router->post('reviews/delete/{id}', 'ProductController@deleteReview');
+        $this->router->post('products/submitReview', 'Review\ReviewController@submit');
+        $this->router->post('reviews/submit', 'Review\ReviewController@submit');
+        $this->router->post('reviews/submitAjax', 'Review\ReviewController@submitAjax');
+        $this->router->post('reviews/delete', 'Review\ReviewController@delete');
+        $this->router->get('reviews/edit/{id}', 'Product\ProductController@editReview');
+        $this->router->post('reviews/update/{id}', 'Product\ProductController@updateReview');
+        $this->router->post('reviews/delete/{id}', 'Product\ProductController@deleteReview');
         
         // Cart routes
-        $this->router->get('cart', 'CartController@index');
-        $this->router->post('cart/add', 'CartController@add');
-        $this->router->post('cart/update', 'CartController@update');
-        $this->router->get('cart/remove/{id}', 'CartController@remove');
-        $this->router->post('cart/remove', 'CartController@remove');
-        $this->router->get('cart/clear', 'CartController@clear');
-        $this->router->post('cart/clear', 'CartController@clear');
-        $this->router->get('cart/count', 'CartController@count');
+        $this->router->get('cart', 'Cart\CartController@index');
+        $this->router->post('cart/add', 'Cart\CartController@add');
+        $this->router->post('cart/update', 'Cart\CartController@update');
+        $this->router->get('cart/remove/{id}', 'Cart\CartController@remove');
+        $this->router->post('cart/remove', 'Cart\CartController@remove');
+        $this->router->get('cart/clear', 'Cart\CartController@clear');
+        $this->router->post('cart/clear', 'Cart\CartController@clear');
+        $this->router->get('cart/count', 'Cart\CartController@count');
         
         // Wishlist routes
-        $this->router->get('wishlist', 'WishlistController@index');
-        $this->router->post('wishlist/add', 'WishlistController@add');
-        $this->router->post('wishlist/remove', 'WishlistController@remove');
-        $this->router->get('wishlist/remove/{id}', 'WishlistController@remove');
-        $this->router->post('wishlist/moveToCart', 'WishlistController@moveToCart');
-        $this->router->get('wishlist/moveToCart/{id}', 'WishlistController@moveToCart');
+        $this->router->get('wishlist', 'Wishlist\WishlistController@index');
+        $this->router->post('wishlist/add', 'Wishlist\WishlistController@add');
+        $this->router->post('wishlist/remove', 'Wishlist\WishlistController@remove');
+        $this->router->get('wishlist/remove/{id}', 'Wishlist\WishlistController@remove');
+        $this->router->post('wishlist/moveToCart', 'Wishlist\WishlistController@moveToCart');
+        $this->router->get('wishlist/moveToCart/{id}', 'Wishlist\WishlistController@moveToCart');
         
         // Checkout routes
-        $this->router->get('checkout', 'CheckoutController@index');
-        $this->router->post('checkout/process', 'CheckoutController@process');
-        $this->router->get('checkout/success/{order_id}', 'CheckoutController@success');
-        $this->router->post('checkout/validateCoupon', 'CheckoutController@validateCoupon');
+        $this->router->get('checkout', 'Checkout\CheckoutController@index');
+        $this->router->post('checkout/process', 'Checkout\CheckoutController@process');
+        $this->router->get('checkout/success/{order_id}', 'Checkout\CheckoutController@success');
+        $this->router->post('checkout/validateCoupon', 'Checkout\CheckoutController@validateCoupon');
 
         // User Orders routes
-        $this->router->get('orders', 'OrderController@index');
-        $this->router->get('orders/view/{id}', 'OrderController@viewOrder');
-        $this->router->get('orders/track', 'OrderController@track');
-        $this->router->get('orders/track-result', 'OrderController@trackResult');
-        $this->router->post('orders/cancel/{id}', 'OrderController@cancel');
-        $this->router->get('orders/reorder/{id}', 'OrderController@reorder');
-        $this->router->post('checkout/removeCoupon', 'CheckoutController@removeCoupon');
+        $this->router->get('orders', 'Order\OrderController@index');
+        $this->router->get('orders/view/{id}', 'Order\OrderController@viewOrder');
+        $this->router->get('orders/track', 'Order\OrderController@track');
+        $this->router->get('orders/track-result', 'Order\OrderController@trackResult');
+        $this->router->post('orders/cancel/{id}', 'Order\OrderController@cancel');
+        $this->router->get('orders/reorder/{id}', 'Order\OrderController@reorder');
+        $this->router->post('checkout/removeCoupon', 'Checkout\CheckoutController@removeCoupon');
         
         // Khalti payment routes
-        $this->router->get('checkout/khalti/{order_id}', 'CheckoutController@khalti');
-        $this->router->post('checkout/initiateKhalti/{order_id}', 'CheckoutController@initiateKhalti');
-        $this->router->post('checkout/verifyKhalti', 'CheckoutController@verifyKhalti');
-        // Use dynamic return route with order id and correct controller
-        $this->router->get('payment/khalti/success/{order_id}', 'PaymentController@khaltiReturn');
-        // Omnipay routes for multi-gateway support
-        $this->router->post('checkout/initiateOmnipay/{slug}/{order_id}', 'PaymentController@initiateOmnipay');
-        $this->router->get('payment/omnipay/return/{slug}/{order_id}', 'PaymentController@completeOmnipay');
-        $this->router->get('payment/omnipay/cancel/{slug}/{order_id}', 'PaymentController@cancelOmnipay');
-        $this->router->post('payment/omnipay/webhook/{slug}', 'PaymentController@webhookOmnipay');
+        $this->router->get('checkout/khalti/{order_id}', 'Checkout\CheckoutController@khalti');
+        // Legacy route for backward compatibility - delegates to new KhaltiController
+        $this->router->post('checkout/initiateKhalti/{order_id}', 'Payment\KhaltiController@initiate');
+        // New dedicated payment controller routes
+        $this->router->post('payment/khalti/initiate/{order_id}', 'Payment\KhaltiController@initiate');
+        $this->router->post('payment/khalti/verify', 'Payment\KhaltiController@verify');
+        $this->router->get('payment/khalti/success/{order_id}', 'Payment\KhaltiController@return');
+        $this->router->get('payment/khalti/failure', 'Payment\KhaltiController@failure');
+        $this->router->post('payment/khalti/webhook', 'Payment\KhaltiController@webhook');
         
         // Order routes
-        $this->router->get('orders', 'OrderController@index');
-        $this->router->get('orders/view/{id}', 'OrderController@viewOrder');
-        $this->router->get('orders/success/{id}', 'OrderController@success');
-        $this->router->get('orders/track', 'OrderController@track');
-        $this->router->post('orders/track', 'OrderController@track');
-        $this->router->get('orders/cancel/{id}', 'OrderController@cancel');
-        $this->router->post('orders/cancel/{id}', 'OrderController@cancel');
-        $this->router->post('orders/updateStatus/{id}', 'OrderController@updateStatus');
+        $this->router->get('orders', 'Order\OrderController@index');
+        $this->router->get('orders/view/{id}', 'Order\OrderController@viewOrder');
+        $this->router->get('orders/success/{id}', 'Order\OrderController@success');
+        $this->router->get('orders/track', 'Order\OrderController@track');
+        $this->router->post('orders/track', 'Order\OrderController@track');
+        $this->router->get('orders/cancel/{id}', 'Order\OrderController@cancel');
+        $this->router->post('orders/cancel/{id}', 'Order\OrderController@cancel');
+        $this->router->post('orders/updateStatus/{id}', 'Order\OrderController@updateStatus');
         
         // User routes
         $this->router->get('user/account', 'UserController@account');
@@ -280,8 +301,8 @@ class App
         $this->router->get('user/balance', 'UserController@balance');
         
         // Affiliate routes
-        $this->router->get('affiliate', 'AffiliateController@products');
-        $this->router->get('affiliate/products', 'AffiliateController@products');
+        $this->router->get('affiliate', 'Affiliate\AffiliateController@products');
+        $this->router->get('affiliate/products', 'Affiliate\AffiliateController@products');
         $this->router->get('user/profile', 'UserController@profile');
         $this->router->post('user/updateProfile', 'UserController@updateProfile');
         $this->router->get('user/api-keys', 'UserController@apiKeys');
@@ -305,7 +326,7 @@ class App
         $this->router->get('profileimage/{filename}', 'UserController@serveProfileImage');
         
         // Review image route
-        $this->router->get('review/{filename}', 'ReviewController@serveReviewImage');
+        $this->router->get('review/{filename}', 'Review\ReviewController@serveReviewImage');
         
         // Payment Gateway routes
         $this->router->get('admin/payment', 'GatewayController@index');
@@ -324,69 +345,69 @@ class App
         $this->router->get('gateway/active', 'GatewayController@getActiveGateways');
         
         // Admin routes
-        $this->router->get('admin', 'AdminController@index');
-        $this->router->get('admin/products', 'AdminController@products');
-        $this->router->post('admin/products/updateStock', 'AdminController@updateStock');
-        $this->router->get('admin/addProduct', 'AdminController@addProduct');
-        $this->router->post('admin/addProduct', 'AdminController@addProduct');
-        $this->router->get('admin/editProduct/{id}', 'AdminController@editProduct');
-        $this->router->post('admin/editProduct/{id}', 'AdminController@editProduct');
-        $this->router->post('admin/updateProduct/{id}', 'AdminController@updateProduct');
-        $this->router->post('admin/deleteProduct/{id}', 'AdminController@deleteProduct');
-        $this->router->get('admin/orders', 'AdminController@orders');
+        $this->router->get('admin', 'Admin\AdminController@index');
+        $this->router->get('admin/products', 'Admin\AdminController@products');
+        $this->router->post('admin/products/updateStock', 'Admin\AdminController@updateStock');
+        $this->router->get('admin/addProduct', 'Admin\AdminController@addProduct');
+        $this->router->post('admin/addProduct', 'Admin\AdminController@addProduct');
+        $this->router->get('admin/editProduct/{id}', 'Admin\AdminController@editProduct');
+        $this->router->post('admin/editProduct/{id}', 'Admin\AdminController@editProduct');
+        $this->router->post('admin/updateProduct/{id}', 'Admin\AdminController@updateProduct');
+        $this->router->post('admin/deleteProduct/{id}', 'Admin\AdminController@deleteProduct');
+        $this->router->get('admin/orders', 'Admin\AdminController@orders');
         // Admin: Create Order page
-        $this->router->get('admin/orders/create', 'AdminController@createOrder');
-        $this->router->post('admin/orders/create', 'AdminController@storeOrder');
+        $this->router->get('admin/orders/create', 'Admin\AdminController@createOrder');
+        $this->router->post('admin/orders/create', 'Admin\AdminController@storeOrder');
         // Alias: some views post to /admin/orders/store
-        $this->router->post('admin/orders/store', 'AdminController@storeOrder');
-        $this->router->post('admin/validateOrderCoupon', 'AdminController@validateOrderCoupon');
-        $this->router->get('admin/viewOrder/{id}', 'AdminController@viewOrder');
-        $this->router->post('admin/updateOrderStatus/{id}', 'AdminController@updateOrderStatus');
-        $this->router->post('admin/updateOrderPaymentStatus/{id}', 'AdminController@updateOrderPaymentStatus');
-        $this->router->post('admin/orders/assignCurior', 'AdminCuriorController@assignCurior');
-        $this->router->get('admin/users', 'AdminController@users');
-        $this->router->get('admin/viewUser/{id}', 'AdminController@viewUser');
-        $this->router->post('admin/updateUserRole/{id}', 'AdminController@updateUserRole');
-        $this->router->post('admin/updateUserStatus/{id}', 'AdminController@updateUserStatus');
-        $this->router->post('admin/updateSponsorStatus', 'AdminController@updateSponsorStatus');
-        $this->router->post('admin/updateReferralCode', 'AdminController@updateReferralCode');
+        $this->router->post('admin/orders/store', 'Admin\AdminController@storeOrder');
+        $this->router->post('admin/validateOrderCoupon', 'Admin\AdminController@validateOrderCoupon');
+        $this->router->get('admin/viewOrder/{id}', 'Admin\AdminController@viewOrder');
+        $this->router->post('admin/updateOrderStatus/{id}', 'Admin\AdminController@updateOrderStatus');
+        $this->router->post('admin/updateOrderPaymentStatus/{id}', 'Admin\AdminController@updateOrderPaymentStatus');
+        $this->router->post('admin/orders/assignCurior', 'Admin\AdminCuriorController@assignCurior');
+        $this->router->get('admin/users', 'Admin\AdminController@users');
+        $this->router->get('admin/viewUser/{id}', 'Admin\AdminController@viewUser');
+        $this->router->post('admin/updateUserRole/{id}', 'Admin\AdminController@updateUserRole');
+        $this->router->post('admin/updateUserStatus/{id}', 'Admin\AdminController@updateUserStatus');
+        $this->router->post('admin/updateSponsorStatus', 'Admin\AdminController@updateSponsorStatus');
+        $this->router->post('admin/updateReferralCode', 'Admin\AdminController@updateReferralCode');
         // Admin Staff and Curior routes (added)
-        $this->router->get('admin/staff', 'AdminStaffController@index');
-        $this->router->get('admin/staff/create', 'AdminStaffController@create');
-        $this->router->post('admin/staff/create', 'AdminStaffController@create');
-        $this->router->get('admin/curior', 'AdminCuriorController@index');
-        $this->router->get('admin/curior/create', 'AdminCuriorController@create');
-        $this->router->post('admin/curior/create', 'AdminCuriorController@create');
-        $this->router->get('admin/curior/edit/{id}', 'AdminCuriorController@edit');
-        $this->router->post('admin/curior/edit/{id}', 'AdminCuriorController@edit');
-        $this->router->get('admin/curior/delete/{id}', 'AdminCuriorController@delete');
-        $this->router->post('admin/curior/delete/{id}', 'AdminCuriorController@delete');
-        $this->router->post('admin/curior/toggleStatus/{id}', 'AdminCuriorController@toggleStatus');
-        $this->router->post('admin/curior/reset-password/{id}', 'AdminCuriorController@sendResetLink');
+        $this->router->get('admin/staff', 'Staff\AdminStaffController@index');
+        $this->router->get('admin/staff/create', 'Staff\AdminStaffController@create');
+        $this->router->post('admin/staff/create', 'Staff\AdminStaffController@create');
+        $this->router->get('admin/curior', 'Admin\AdminCuriorController@index');
+        $this->router->get('admin/curior/create', 'Admin\AdminCuriorController@create');
+        $this->router->post('admin/curior/create', 'Admin\AdminCuriorController@create');
+        $this->router->get('admin/curior/edit/{id}', 'Admin\AdminCuriorController@edit');
+        $this->router->post('admin/curior/edit/{id}', 'Admin\AdminCuriorController@edit');
+        $this->router->get('admin/curior/delete/{id}', 'Admin\AdminCuriorController@delete');
+        $this->router->post('admin/curior/delete/{id}', 'Admin\AdminCuriorController@delete');
+        $this->router->post('admin/curior/toggleStatus/{id}', 'Admin\AdminCuriorController@toggleStatus');
+        $this->router->post('admin/curior/reset-password/{id}', 'Admin\AdminCuriorController@sendResetLink');
 
         // Admin Inventory routes
-        $this->router->get('admin/inventory', 'InventoryController@index');
+        $this->router->get('admin/inventory', 'Inventory\InventoryController@index');
         // Use singular path for supplier management as expected by views and redirects
-        $this->router->get('admin/inventory/supplier', 'InventoryController@suppliers');
-        $this->router->get('admin/inventory/products', 'InventoryController@products');
-        $this->router->post('admin/inventory/scanBarcode', 'InventoryController@scanBarcode');
+        $this->router->get('admin/inventory/supplier', 'Inventory\InventoryController@suppliers');
+        $this->router->get('admin/inventory/products', 'Inventory\InventoryController@products');
+        $this->router->post('admin/inventory/scanBarcode', 'Inventory\InventoryController@scanBarcode');
         // Optional extended inventory sections
-        $this->router->get('admin/inventory/purchases', 'InventoryController@purchases');
-        $this->router->get('admin/inventory/payments', 'InventoryController@payments');
+        $this->router->get('admin/inventory/purchases', 'Inventory\InventoryController@purchases');
+        $this->router->get('admin/inventory/payments', 'Inventory\InventoryController@payments');
 
         // Admin Delivery Charges Management routes
-        $this->router->get('admin/delivery', 'AdminDeliveryController@index');
-        $this->router->get('admin/delivery/create', 'AdminDeliveryController@create');
-        $this->router->post('admin/delivery/create', 'AdminDeliveryController@create');
-        $this->router->get('admin/delivery/edit/{id}', 'AdminDeliveryController@edit');
-        $this->router->post('admin/delivery/edit/{id}', 'AdminDeliveryController@edit');
-        $this->router->get('admin/delivery/delete/{id}', 'AdminDeliveryController@delete');
-        $this->router->post('admin/delivery/delete/{id}', 'AdminDeliveryController@delete');
+        $this->router->get('admin/delivery', 'Admin\AdminDeliveryController@index');
+        $this->router->get('admin/delivery/create', 'Admin\AdminDeliveryController@create');
+        $this->router->post('admin/delivery/create', 'Admin\AdminDeliveryController@create');
+        $this->router->get('admin/delivery/edit/{id}', 'Admin\AdminDeliveryController@edit');
+        $this->router->post('admin/delivery/edit/{id}', 'Admin\AdminDeliveryController@edit');
+        $this->router->get('admin/delivery/delete/{id}', 'Admin\AdminDeliveryController@delete');
+        $this->router->post('admin/delivery/delete/{id}', 'Admin\AdminDeliveryController@delete');
         // AJAX helpers
-        $this->router->get('admin/delivery/charges', 'AdminDeliveryController@getCharges');
-        $this->router->post('admin/delivery/quickAdd', 'AdminDeliveryController@quickAdd');
-        $this->router->post('admin/delivery/toggleFree', 'AdminDeliveryController@toggleFreeDelivery');
-        $this->router->post('admin/delivery/setDefaultFee', 'AdminDeliveryController@setDefaultFee');
+        $this->router->get('admin/delivery/charges', 'Admin\AdminDeliveryController@getCharges');
+        $this->router->post('admin/delivery/quickAdd', 'Admin\AdminDeliveryController@quickAdd');
+        $this->router->post('admin/delivery/toggleFree', 'Admin\AdminDeliveryController@toggleFreeDelivery');
+        $this->router->post('admin/delivery/setDefaultFee', 'Admin\AdminDeliveryController@setDefaultFee');
 
         // Public Curior routes - Module based
         $this->router->get('curior', 'Curior\Auth@login');
@@ -457,22 +478,22 @@ class App
         $this->router->get('curior/history', 'Curior\History@index');
         
         // SMS routes - FIXED AND COMPLETE
-        $this->router->get('admin/sms', 'SMSController@index');
-        $this->router->get('admin/sms/marketing', 'SMSController@marketing');
-        $this->router->get('admin/sms/logs', 'SMSController@viewLogs');
-        $this->router->post('admin/sms/send', 'SMSController@send');
-        $this->router->post('admin/sms/sendAll', 'SMSController@sendAll');  // ADDED THIS MISSING ROUTE
-        $this->router->post('admin/sms/test', 'SMSController@testSMS');  // ADDED TEST SMS ROUTE
-        $this->router->post('admin/sms/create', 'SMSController@createTemplate');
-        $this->router->get('admin/sms/template/{id}', 'SMSController@getTemplate');  // ADDED FOR AJAX
-        $this->router->get('admin/sms/update/{id}', 'SMSController@updateTemplate');
-        $this->router->post('admin/sms/update/{id}', 'SMSController@updateTemplate');
-        $this->router->post('admin/sms/delete/{id}', 'SMSController@deleteTemplate');
-        $this->router->post('admin/sms/toggle/{id}', 'SMSController@toggleTemplate');
-        $this->router->post('admin/sms/duplicate/{id}', 'SMSController@duplicateTemplate');
-        $this->router->get('admin/sms/variables/{id}', 'SMSController@getVariables');
-        $this->router->post('admin/sms/marketing', 'SMSController@sendLatestProductMarketing');
-        $this->router->post('admin/sms/sendRefillReminders', 'SMSController@sendRefillReminders');
+        $this->router->get('admin/sms', 'Sms\SMSController@index');
+        $this->router->get('admin/sms/marketing', 'Sms\SMSController@marketing');
+        $this->router->get('admin/sms/logs', 'Sms\SMSController@viewLogs');
+        $this->router->post('admin/sms/send', 'Sms\SMSController@send');
+        $this->router->post('admin/sms/sendAll', 'Sms\SMSController@sendAll');  // ADDED THIS MISSING ROUTE
+        $this->router->post('admin/sms/test', 'Sms\SMSController@testSMS');  // ADDED TEST SMS ROUTE
+        $this->router->post('admin/sms/create', 'Sms\SMSController@createTemplate');
+        $this->router->get('admin/sms/template/{id}', 'Sms\SMSController@getTemplate');  // ADDED FOR AJAX
+        $this->router->get('admin/sms/update/{id}', 'Sms\SMSController@updateTemplate');
+        $this->router->post('admin/sms/update/{id}', 'Sms\SMSController@updateTemplate');
+        $this->router->post('admin/sms/delete/{id}', 'Sms\SMSController@deleteTemplate');
+        $this->router->post('admin/sms/toggle/{id}', 'Sms\SMSController@toggleTemplate');
+        $this->router->post('admin/sms/duplicate/{id}', 'Sms\SMSController@duplicateTemplate');
+        $this->router->get('admin/sms/variables/{id}', 'Sms\SMSController@getVariables');
+        $this->router->post('admin/sms/marketing', 'Sms\SMSController@sendLatestProductMarketing');
+        $this->router->post('admin/sms/sendRefillReminders', 'Sms\SMSController@sendRefillReminders');
         
         // Receipt routes
         // Public receipt routes
@@ -485,59 +506,59 @@ class App
         $this->router->get('admin/receipt/preview/{id}', 'ReceiptController@previewReceipt');
         
         // Admin Review Management routes
-        $this->router->get('admin/reviews', 'AdminController@reviews');
-        $this->router->post('admin/deleteReview/{id}', 'AdminController@deleteReview');
+        $this->router->get('admin/reviews', 'Admin\AdminController@reviews');
+        $this->router->post('admin/deleteReview/{id}', 'Admin\AdminController@deleteReview');
         
         // Admin Referral Management routes
-        $this->router->get('admin/referrals', 'AdminController@referrals');
-        $this->router->post('admin/updateReferralStatus/{id}', 'AdminController@updateReferralStatus');
-        $this->router->post('admin/processMissingReferrals', 'AdminController@processMissingReferrals');
-        $this->router->get('admin/withdrawals', 'AdminController@withdrawals');
-        $this->router->post('admin/updateWithdrawalStatus/{id}', 'AdminController@updateWithdrawalStatus');
+        $this->router->get('admin/referrals', 'Admin\AdminController@referrals');
+        $this->router->post('admin/updateReferralStatus/{id}', 'Admin\AdminController@updateReferralStatus');
+        $this->router->post('admin/processMissingReferrals', 'Admin\AdminController@processMissingReferrals');
+        $this->router->get('admin/withdrawals', 'Admin\AdminController@withdrawals');
+        $this->router->post('admin/updateWithdrawalStatus/{id}', 'Admin\AdminController@updateWithdrawalStatus');
         
         // Admin Sale Management routes
-        $this->router->get('admin/sales', 'AdminSaleController@index');
-        $this->router->get('admin/sales/create', 'AdminSaleController@create');
-        $this->router->post('admin/sales/create', 'AdminSaleController@create');
-        $this->router->get('admin/sales/edit/{id}', 'AdminSaleController@update');
-        $this->router->post('admin/sales/update/{id}', 'AdminSaleController@update');
-        $this->router->post('admin/sales/delete/{id}', 'AdminSaleController@delete');
-        $this->router->post('admin/sales/toggle/{id}', 'AdminSaleController@toggleStatus');
-        $this->router->post('admin/withdrawals/update/{id}', 'AdminController@updateWithdrawalStatus');
-        $this->router->get('admin/withdrawals/view/{id}', 'WithdrawController@details');
-        $this->router->get('admin/withdrawal/view/{id}', 'WithdrawController@details');
-        $this->router->get('admin/withdrawal/user/{id}', 'WithdrawController@userWithdrawals');
+        $this->router->get('admin/sales', 'Admin\AdminSaleController@index');
+        $this->router->get('admin/sales/create', 'Admin\AdminSaleController@create');
+        $this->router->post('admin/sales/create', 'Admin\AdminSaleController@create');
+        $this->router->get('admin/sales/edit/{id}', 'Admin\AdminSaleController@update');
+        $this->router->post('admin/sales/update/{id}', 'Admin\AdminSaleController@update');
+        $this->router->post('admin/sales/delete/{id}', 'Admin\AdminSaleController@delete');
+        $this->router->post('admin/sales/toggle/{id}', 'Admin\AdminSaleController@toggleStatus');
+        $this->router->post('admin/withdrawals/update/{id}', 'Admin\AdminController@updateWithdrawalStatus');
+        $this->router->get('admin/withdrawals/view/{id}', 'Withdraw\WithdrawController@details');
+        $this->router->get('admin/withdrawal/view/{id}', 'Withdraw\WithdrawController@details');
+        $this->router->get('admin/withdrawal/user/{id}', 'Withdraw\WithdrawController@userWithdrawals');
         
         // Admin Product Image Management routes
-        $this->router->post('admin/deleteProductImage/{id}', 'AdminController@deleteProductImage');
-        $this->router->post('admin/setPrimaryImage/{id}', 'AdminController@setPrimaryImage');
+        $this->router->post('admin/deleteProductImage/{id}', 'Admin\AdminController@deleteProductImage');
+        $this->router->post('admin/setPrimaryImage/{id}', 'Admin\AdminController@setPrimaryImage');
         
         // Admin Coupon Management routes
-        $this->router->get('admin/coupons', 'AdminController@coupons');
-        $this->router->get('admin/coupons/create', 'AdminController@createCoupon');
-        $this->router->post('admin/coupons/create', 'AdminController@createCoupon');
-        $this->router->get('admin/coupons/edit/{id}', 'AdminController@editCoupon');
-        $this->router->post('admin/coupons/edit/{id}', 'AdminController@editCoupon');
-        $this->router->post('admin/coupons/delete/{id}', 'AdminController@deleteCoupon');
-        $this->router->post('admin/coupons/toggle/{id}', 'AdminController@toggleCoupon');
-        $this->router->post('admin/coupons/toggleVisibility/{id}', 'AdminController@toggleCouponVisibility');
-        $this->router->get('admin/coupons/stats/{id}', 'AdminController@couponStats');
+        $this->router->get('admin/coupons', 'Admin\AdminController@coupons');
+        $this->router->get('admin/coupons/create', 'Admin\AdminController@createCoupon');
+        $this->router->post('admin/coupons/create', 'Admin\AdminController@createCoupon');
+        $this->router->get('admin/coupons/edit/{id}', 'Admin\AdminController@editCoupon');
+        $this->router->post('admin/coupons/edit/{id}', 'Admin\AdminController@editCoupon');
+        $this->router->post('admin/coupons/delete/{id}', 'Admin\AdminController@deleteCoupon');
+        $this->router->post('admin/coupons/toggle/{id}', 'Admin\AdminController@toggleCoupon');
+        $this->router->post('admin/coupons/toggleVisibility/{id}', 'Admin\AdminController@toggleCouponVisibility');
+        $this->router->get('admin/coupons/stats/{id}', 'Admin\AdminController@couponStats');
         
         // Public Coupon routes
-        $this->router->get('coupons', 'CouponController@index');
-        $this->router->post('coupons/validate', 'CouponController@validate');
-        $this->router->post('coupons/apply', 'CouponController@apply');
-        $this->router->post('coupons/remove', 'CouponController@remove');
-        $this->router->post('coupons/debug', 'CouponController@debug');
-        $this->router->post('coupons/getCouponDetails', 'CouponController@getCouponDetails');
+        $this->router->get('coupons', 'Coupon\CouponController@index');
+        $this->router->post('coupons/validate', 'Coupon\CouponController@validate');
+        $this->router->post('coupons/apply', 'Coupon\CouponController@apply');
+        $this->router->post('coupons/remove', 'Coupon\CouponController@remove');
+        $this->router->post('coupons/debug', 'Coupon\CouponController@debug');
+        $this->router->post('coupons/getCouponDetails', 'Coupon\CouponController@getCouponDetails');
         
         // API routes
-        $this->router->post('api/cart/add', 'CartController@add');
-        $this->router->post('api/cart/update', 'CartController@update');
-        $this->router->post('api/cart/remove', 'CartController@remove');
-        $this->router->get('api/cart/count', 'Api\CartController@count');
-        $this->router->post('api/wishlist/add', 'WishlistController@add');
-        $this->router->post('api/wishlist/remove', 'WishlistController@remove');
+        $this->router->post('api/cart/add', 'Cart\CartController@add');
+        $this->router->post('api/cart/update', 'Cart\CartController@update');
+        $this->router->post('api/cart/remove', 'Cart\CartController@remove');
+        $this->router->get('api/cart/count', 'Cart\CartController@count');
+        $this->router->post('api/wishlist/add', 'Wishlist\WishlistController@add');
+        $this->router->post('api/wishlist/remove', 'Wishlist\WishlistController@remove');
         
         // Notification API routes
         $this->router->get('api/notifications/count', 'Api\NotificationsController@count');
@@ -578,78 +599,86 @@ class App
         $this->router->post('api/auth/api-keys', 'Api\AuthApiController@generateApiKey');
         
         // API Key Management
-        $this->router->get('api/generate', 'ApiKeyController@generate');
-        $this->router->get('api/manage', 'ApiKeyController@manage');
-        $this->router->post('api/create', 'ApiKeyController@create');
-        $this->router->post('api/deactivate/{id}', 'ApiKeyController@deactivate');
+        $this->router->get('api/generate', 'Api\ApiKeyController@generate');
+        $this->router->get('api/manage', 'Api\ApiKeyController@manage');
+        $this->router->post('api/create', 'Api\ApiKeyController@create');
+        $this->router->post('api/deactivate/{id}', 'Api\ApiKeyController@deactivate');
         
         // API Tester route
         $this->router->get('api/test', 'ApiController@showTester');
         $this->router->get('api/test-key', 'ApiController@showTestKey');
         
         // API Key Management routes
-        $this->router->post('api/keys/generate', 'ApiKeyController@generateKey');
-        $this->router->get('api/keys/list', 'ApiKeyController@listKeys');
-        $this->router->post('api/keys/update', 'ApiKeyController@updateKey');
-        $this->router->post('api/keys/revoke', 'ApiKeyController@revokeKey');
-        $this->router->get('api/keys/stats', 'ApiKeyController@getStats');
+        $this->router->post('api/keys/generate', 'Api\ApiKeyController@generateKey');
+        $this->router->get('api/keys/list', 'Api\ApiKeyController@listKeys');
+        $this->router->post('api/keys/update', 'Api\ApiKeyController@updateKey');
+        $this->router->post('api/keys/revoke', 'Api\ApiKeyController@revokeKey');
+        $this->router->get('api/keys/stats', 'Api\ApiKeyController@getStats');
         
         // Payment gateway routes
         // eSewa routes: add checkout page and dynamic success/failure with order id
-        $this->router->get('checkout/esewa/{order_id}', 'CheckoutController@esewa');
-        $this->router->post('checkout/initiateEsewa/{order_id}', 'CheckoutController@initiateEsewa');
-        $this->router->post('checkout/checkEsewaStatus', 'CheckoutController@checkEsewaStatus');
-        $this->router->get('payment/esewa/success/{order_id}', 'PaymentController@esewaSuccess');
-        $this->router->get('payment/esewa/failure/{order_id}', 'PaymentController@esewaFailure');
-        $this->router->get('payment/khalti/failure', 'PaymentController@khaltiFailure');
-        $this->router->post('payment/esewa/webhook', 'PaymentController@esewaWebhook');
-        $this->router->post('payment/khalti/webhook', 'PaymentController@khaltiWebhook');
+        $this->router->get('checkout/esewa/{order_id}', 'Checkout\CheckoutController@esewa');
+        // Legacy route for backward compatibility - delegates to new EsewaController
+        $this->router->post('checkout/initiateEsewa/{order_id}', 'Payment\EsewaController@initiate');
+        // New dedicated payment controller routes
+        $this->router->post('payment/esewa/initiate/{order_id}', 'Payment\EsewaController@initiate');
+        $this->router->post('payment/esewa/verify', 'Payment\EsewaController@verify');
+        $this->router->post('payment/esewa/check-status', 'Payment\EsewaController@checkStatus');
+        $this->router->get('payment/esewa/success/{order_id}', 'Payment\EsewaController@success');
+        $this->router->get('payment/esewa/failure/{order_id}', 'Payment\EsewaController@failure');
+        $this->router->post('payment/esewa/webhook', 'Payment\EsewaController@webhook');
+        
+        // COD (Cash on Delivery) payment routes
+        $this->router->post('payment/cod/initiate/{order_id}', 'Payment\CODController@initiate');
+        $this->router->post('payment/cod/confirm/{order_id}', 'Payment\CODController@confirm');
+        $this->router->post('payment/cod/cancel/{order_id}', 'Payment\CODController@cancel');
+        $this->router->get('payment/cod/status/{order_id}', 'Payment\CODController@status');
         
         // Utility routes
        // SEO routes
-        $this->router->get('sitemap.xml', 'SeoController@sitemapIndex');
-        $this->router->get('page-sitemap.xml', 'SeoController@pageSitemap');
-        $this->router->get('category-sitemap.xml', 'SeoController@categorySitemap');
-        $this->router->get('product-sitemap.xml', 'SeoController@productSitemap');
-        $this->router->get('robots.txt', 'SeoController@robots');
+        $this->router->get('sitemap.xml', 'Seo\SeoController@sitemapIndex');
+        $this->router->get('page-sitemap.xml', 'Seo\SeoController@pageSitemap');
+        $this->router->get('category-sitemap.xml', 'Seo\SeoController@categorySitemap');
+        $this->router->get('product-sitemap.xml', 'Seo\SeoController@productSitemap');
+        $this->router->get('robots.txt', 'Seo\SeoController@robots');
         
         // Admin settings routes
-        $this->router->get('admin/settings', 'AdminSettingController@index');
-        $this->router->post('admin/settings/update', 'AdminSettingController@update');
-        $this->router->post('admin/settings/optimize-db', 'AdminSettingController@optimizeDb');
-        $this->router->post('admin/settings/backup-db', 'AdminSettingController@backupDb');
-        $this->router->get('admin/settings/download-backup', 'AdminSettingController@downloadBackup');
-        $this->router->get('admin/settings/export-db-xls', 'AdminSettingController@exportDbXls');
-        $this->router->get('admin/analytics', 'AdminController@analytics');
-        $this->router->get('admin/reports/best-selling', 'AdminController@bestSellingProducts');
-        $this->router->get('admin/reports/low-stock', 'AdminController@lowStockAlerts');
-        $this->router->get('admin/reports', 'AdminController@reports');
-        $this->router->get('admin/notifications', 'AdminController@notifications');
-        $this->router->post('admin/notifications/markRead/{id}', 'AdminController@markNotificationRead');
+        $this->router->get('admin/settings', 'Admin\AdminSettingController@index');
+        $this->router->post('admin/settings/update', 'Admin\AdminSettingController@update');
+        $this->router->post('admin/settings/optimize-db', 'Admin\AdminSettingController@optimizeDb');
+        $this->router->post('admin/settings/backup-db', 'Admin\AdminSettingController@backupDb');
+        $this->router->get('admin/settings/download-backup', 'Admin\AdminSettingController@downloadBackup');
+        $this->router->get('admin/settings/export-db-xls', 'Admin\AdminSettingController@exportDbXls');
+        $this->router->get('admin/analytics', 'Admin\AdminController@analytics');
+        $this->router->get('admin/reports/best-selling', 'Admin\AdminController@bestSellingProducts');
+        $this->router->get('admin/reports/low-stock', 'Admin\AdminController@lowStockAlerts');
+        $this->router->get('admin/reports', 'Admin\AdminController@reports');
+        $this->router->get('admin/notifications', 'Admin\AdminController@notifications');
+        $this->router->post('admin/notifications/markRead/{id}', 'Admin\AdminController@markNotificationRead');
         
         // Admin referral management routes
-        $this->router->get('admin/refer', 'AdminReferController@index');
-        $this->router->post('admin/refer/save-settings', 'AdminReferController@saveSettings');
+        $this->router->get('admin/refer', 'Admin\AdminReferController@index');
+        $this->router->post('admin/refer/save-settings', 'Admin\AdminReferController@saveSettings');
         
         // Bulk operations routes
-        $this->router->post('admin/orders/bulkUpdate', 'AdminController@bulkUpdateOrders');
-        $this->router->post('admin/products/bulkUpdate', 'AdminController@bulkUpdateProducts');
-        $this->router->post('admin/users/bulkUpdate', 'AdminController@bulkUpdateUsers');
-        $this->router->get('admin/editUser/{id}', 'AdminController@editUser');
-        $this->router->post('admin/editUser/{id}', 'AdminController@updateUser');
-        $this->router->post('admin/deleteUser/{id}', 'AdminController@deleteUser');
+        $this->router->post('admin/orders/bulkUpdate', 'Admin\AdminController@bulkUpdateOrders');
+        $this->router->post('admin/products/bulkUpdate', 'Admin\AdminController@bulkUpdateProducts');
+        $this->router->post('admin/users/bulkUpdate', 'Admin\AdminController@bulkUpdateUsers');
+        $this->router->get('admin/editUser/{id}', 'Admin\AdminController@editUser');
+        $this->router->post('admin/editUser/{id}', 'Admin\AdminController@updateUser');
+        $this->router->post('admin/deleteUser/{id}', 'Admin\AdminController@deleteUser');
         
         // Export/Import routes
-        $this->router->get('admin/export/orders', 'AdminController@exportOrders');
-        $this->router->get('admin/export/products', 'AdminController@exportProducts');
-        $this->router->get('admin/export/users', 'AdminController@exportUsers');
-        $this->router->post('admin/import/products', 'AdminController@importProducts');
+        $this->router->get('admin/export/orders', 'Admin\AdminController@exportOrders');
+        $this->router->get('admin/export/products', 'Admin\AdminController@exportProducts');
+        $this->router->get('admin/export/users', 'Admin\AdminController@exportUsers');
+        $this->router->post('admin/import/products', 'Admin\AdminController@importProducts');
         
         // Additional order management routes
-        $this->router->get('admin/orders/search', 'AdminController@searchOrders');
-        $this->router->get('admin/orders/filter/{status}', 'AdminController@filterOrdersByStatus');
-        $this->router->post('admin/orders/addNote/{id}', 'AdminController@addOrderNote');
-        $this->router->post('admin/deleteOrder/{id}', 'AdminController@deleteOrder');
+        $this->router->get('admin/orders/search', 'Admin\AdminController@searchOrders');
+        $this->router->get('admin/orders/filter/{status}', 'Admin\AdminController@filterOrdersByStatus');
+        $this->router->post('admin/orders/addNote/{id}', 'Admin\AdminController@addOrderNote');
+        $this->router->post('admin/deleteOrder/{id}', 'Admin\AdminController@deleteOrder');
         
         // Customer management routes
         $this->router->get('admin/customers', 'CustomerController@index');
@@ -662,61 +691,61 @@ class App
         $this->router->get('admin/customers/search', 'CustomerController@search');
         
         // Admin Seller management routes
-        $this->router->get('admin/seller', 'AdminSellerController@index');
-        $this->router->get('admin/seller/create', 'AdminSellerController@create');
-        $this->router->post('admin/seller/create', 'AdminSellerController@create');
-        $this->router->get('admin/seller/details/{id}', 'AdminSellerController@details');
-        $this->router->get('admin/seller/edit/{id}', 'AdminSellerController@edit');
-        $this->router->post('admin/seller/edit/{id}', 'AdminSellerController@edit');
-        $this->router->post('admin/seller/approve/{id}', 'AdminSellerController@approve');
-        $this->router->post('admin/seller/reject/{id}', 'AdminSellerController@reject');
-        $this->router->get('admin/seller/withdraws', 'AdminSellerController@withdraws');
-        $this->router->get('admin/seller/withdraws/{id}', 'AdminSellerController@withdraws');
-        $this->router->post('admin/seller/withdraws/approve/{id}', 'AdminSellerController@approveWithdraw');
-        $this->router->post('admin/seller/withdraws/reject/{id}', 'AdminSellerController@rejectWithdraw');
-        $this->router->post('admin/seller/withdraws/complete/{id}', 'AdminSellerController@completeWithdraw');
+        $this->router->get('admin/seller', 'Admin\AdminSellerController@index');
+        $this->router->get('admin/seller/create', 'Admin\AdminSellerController@create');
+        $this->router->post('admin/seller/create', 'Admin\AdminSellerController@create');
+        $this->router->get('admin/seller/details/{id}', 'Admin\AdminSellerController@details');
+        $this->router->get('admin/seller/edit/{id}', 'Admin\AdminSellerController@edit');
+        $this->router->post('admin/seller/edit/{id}', 'Admin\AdminSellerController@edit');
+        $this->router->post('admin/seller/approve/{id}', 'Admin\AdminSellerController@approve');
+        $this->router->post('admin/seller/reject/{id}', 'Admin\AdminSellerController@reject');
+        $this->router->get('admin/seller/withdraws', 'Admin\AdminSellerController@withdraws');
+        $this->router->get('admin/seller/withdraws/{id}', 'Admin\AdminSellerController@withdraws');
+        $this->router->post('admin/seller/withdraws/approve/{id}', 'Admin\AdminSellerController@approveWithdraw');
+        $this->router->post('admin/seller/withdraws/reject/{id}', 'Admin\AdminSellerController@rejectWithdraw');
+        $this->router->post('admin/seller/withdraws/complete/{id}', 'Admin\AdminSellerController@completeWithdraw');
         
         // Admin Seller Products Approval routes
-        $this->router->get('admin/seller/products', 'AdminSellerProductsController@index');
-        $this->router->get('admin/seller/products/detail/{id}', 'AdminSellerProductsController@detail');
-        $this->router->post('admin/seller/products/detail/{id}', 'AdminSellerProductsController@detail');
+        $this->router->get('admin/seller/products', 'Admin\AdminSellerProductsController@index');
+        $this->router->get('admin/seller/products/detail/{id}', 'Admin\AdminSellerProductsController@detail');
+        $this->router->post('admin/seller/products/detail/{id}', 'Admin\AdminSellerProductsController@detail');
         
         // Admin Ads routes
-        $this->router->get('admin/ads', 'AdminAdsController@index');
-        $this->router->get('admin/ads/show/{id}', 'AdminAdsController@show');
-        $this->router->post('admin/ads/update-status/{id}', 'AdminAdsController@updateStatus');
-        $this->router->post('admin/ads/approve/{id}', 'AdminAdsController@approve');
-        $this->router->post('admin/ads/reject/{id}', 'AdminAdsController@rejectAd');
-        $this->router->get('admin/ads/costs', 'AdminAdsController@costs');
-        $this->router->post('admin/ads/costs/create', 'AdminAdsController@createCost');
-        $this->router->get('admin/ads/costs/edit/{id}', 'AdminAdsController@editCost');
-        $this->router->post('admin/ads/costs/update/{id}', 'AdminAdsController@updateCost');
-        $this->router->post('admin/ads/costs/delete/{id}', 'AdminAdsController@deleteCost');
-        $this->router->post('admin/ads/settings/update', 'AdminAdsController@updateSettings');
-        $this->router->get('admin/ads/admin-settings', 'AdminAdsController@adminSettings');
-        $this->router->post('admin/ads/admin-settings/update', 'AdminAdsController@updateAdminSettings');
-        $this->router->post('admin/ads/payment/update-status/{id}', 'AdminAdsController@updatePaymentStatus');
+        $this->router->get('admin/ads', 'Ads\AdminAdsController@index');
+        $this->router->get('admin/ads/show/{id}', 'Ads\AdminAdsController@show');
+        $this->router->post('admin/ads/update-status/{id}', 'Ads\AdminAdsController@updateStatus');
+        $this->router->post('admin/ads/approve/{id}', 'Ads\AdminAdsController@approve');
+        $this->router->post('admin/ads/reject/{id}', 'Ads\AdminAdsController@rejectAd');
+        $this->router->get('admin/ads/costs', 'Ads\AdminAdsController@costs');
+        $this->router->post('admin/ads/costs/create', 'Ads\AdminAdsController@createCost');
+        $this->router->get('admin/ads/costs/edit/{id}', 'Ads\AdminAdsController@editCost');
+        $this->router->post('admin/ads/costs/update/{id}', 'Ads\AdminAdsController@updateCost');
+        $this->router->post('admin/ads/costs/delete/{id}', 'Ads\AdminAdsController@deleteCost');
+        $this->router->post('admin/ads/settings/update', 'Ads\AdminAdsController@updateSettings');
+        $this->router->get('admin/ads/admin-settings', 'Ads\AdminAdsController@adminSettings');
+        $this->router->post('admin/ads/admin-settings/update', 'Ads\AdminAdsController@updateAdminSettings');
+        $this->router->post('admin/ads/payment/update-status/{id}', 'Ads\AdminAdsController@updatePaymentStatus');
 
 
 // Blog routes
         // Blog routes
-        $this->router->get('blog', 'BlogController@index');
+        $this->router->get('blog', 'Blogs\BlogController@index');
         // Alias routes to support plural '/blogs' paths
-        $this->router->get('blogs', 'BlogController@index');
-        $this->router->get('blog/page/{page}', 'BlogController@index');
-        $this->router->get('blog/view/{slug}', 'BlogController@show');  // Changed from @view to @show
-        $this->router->get('blog/category/{slug}', 'BlogController@category');
-        $this->router->get('blog/category/{slug}/page/{page}', 'BlogController@category');
-        $this->router->get('blog/search', 'BlogController@search');
+        $this->router->get('blogs', 'Blogs\BlogController@index');
+        $this->router->get('blog/page/{page}', 'Blogs\BlogController@index');
+        $this->router->get('blog/view/{slug}', 'Blogs\BlogController@show');  // Changed from @view to @show
+        $this->router->get('blog/category/{slug}', 'Blogs\BlogController@category');
+        $this->router->get('blog/category/{slug}/page/{page}', 'Blogs\BlogController@category');
+        $this->router->get('blog/search', 'Blogs\BlogController@search');
         
         // Admin Blog routes
-        $this->router->get('admin/blog', 'BlogController@adminIndex');
-        $this->router->get('admin/blog/create', 'BlogController@create');
-        $this->router->post('admin/blog/create', 'BlogController@create');
-        $this->router->get('admin/blog/edit/{id}', 'BlogController@edit');
-        $this->router->post('admin/blog/edit/{id}', 'BlogController@edit');
-        $this->router->post('admin/blog/delete/{id}', 'BlogController@delete');
-        $this->router->post('admin/blog/bulkDelete', 'BlogController@bulkDelete');
+        $this->router->get('admin/blog', 'Blogs\BlogController@adminIndex');
+        $this->router->get('admin/blog/create', 'Blogs\BlogController@create');
+        $this->router->post('admin/blog/create', 'Blogs\BlogController@create');
+        $this->router->get('admin/blog/edit/{id}', 'Blogs\BlogController@edit');
+        $this->router->post('admin/blog/edit/{id}', 'Blogs\BlogController@edit');
+        $this->router->post('admin/blog/delete/{id}', 'Blogs\BlogController@delete');
+        $this->router->post('admin/blog/bulkDelete', 'Blogs\BlogController@bulkDelete');
 
 
         // Customer service routes
@@ -729,29 +758,29 @@ class App
         $this->router->get('newsletter/unsubscribe/{token}', 'NewsletterController@unsubscribe');
         
         // Social media integration routes
-        $this->router->get('auth/google', 'AuthController@googleLogin');
-        $this->router->get('auth/google/callback', 'AuthController@googleCallback');
-        $this->router->get('auth/facebook', 'AuthController@facebookLogin');
-        $this->router->get('auth/facebook/callback', 'AuthController@facebookCallback');
+        $this->router->get('auth/google', 'Auth\AuthController@googleLogin');
+        $this->router->get('auth/google/callback', 'Auth\AuthController@googleCallback');
+        $this->router->get('auth/facebook', 'Auth\AuthController@facebookLogin');
+        $this->router->get('auth/facebook/callback', 'Auth\AuthController@facebookCallback');
         
         // Debug routes
-        $this->router->get('debug', 'DebugController@index');
-        $this->router->get('debug/test', 'DebugController@test');
+        $this->router->get('debug', 'Debug\DebugController@index');
+        $this->router->get('debug/test', 'Debug\DebugController@test');
         
         
         // Order Processing routes for seller earnings
-        $this->router->post('admin/orders/deliver/{id}', 'OrderProcessor@processDelivery');
-        $this->router->post('admin/orders/cancel/{id}', 'OrderProcessor@processCancellation');
-        $this->router->post('admin/orders/return/{id}', 'OrderProcessor@processReturn');
+        $this->router->post('admin/orders/deliver/{id}', 'Order\OrderProcessor@processDelivery');
+        $this->router->post('admin/orders/cancel/{id}', 'Order\OrderProcessor@processCancellation');
+        $this->router->post('admin/orders/return/{id}', 'Order\OrderProcessor@processReturn');
         
         // Email queue management
-        $this->router->get('admin/email-queue', 'AdminEmailQueueController@index');
-        $this->router->post('admin/email-queue/process', 'AdminEmailQueueController@process');
-        $this->router->post('admin/email-queue/clean', 'AdminEmailQueueController@clean');
+        $this->router->get('admin/email-queue', 'Admin\AdminEmailQueueController@index');
+        $this->router->post('admin/email-queue/process', 'Admin\AdminEmailQueueController@process');
+        $this->router->post('admin/email-queue/clean', 'Admin\AdminEmailQueueController@clean');
         
         // Ad tracking routes
-        $this->router->post('ads/click', 'AdTrackingController@logClick');
-        $this->router->post('ads/reach', 'AdTrackingController@logReach');
+        $this->router->post('ads/click', 'Ads\AdTrackingController@logClick');
+        $this->router->post('ads/reach', 'Ads\AdTrackingController@logReach');
     }
 
     private function resolveRoute()
@@ -784,15 +813,12 @@ class App
                         error_log('Route execution error: ' . $e->getMessage());
                         error_log('Stack trace: ' . $e->getTraceAsString());
                         
-                        // Show error page in development, generic error in production
-                        // Use constant() to satisfy static analysis when ENVIRONMENT may not be defined at parse time
+                        // Show error page - use ErrorController
+                        $errorController = new \App\Controllers\Error\ErrorController();
                         if (defined('ENVIRONMENT') && constant('ENVIRONMENT') === 'development') {
-                            echo '<h1>Application Error</h1>';
-                            echo '<p><strong>Error:</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
-                            echo '<pre>' . htmlspecialchars($e->getTraceAsString()) . '</pre>';
+                            $errorController->serverError();
                         } else {
-                            header("HTTP/1.0 500 Internal Server Error");
-                            echo "Internal Server Error";
+                            $errorController->serverError();
                         }
                         return;
                     }
@@ -804,16 +830,9 @@ class App
             }
         }
         
-        // Enhanced 404 handling
-        header("HTTP/1.0 404 Not Found");
-        
-        // Try to show a custom 404 page if it exists
-        $notFoundView = dirname(dirname(__DIR__)) . '/App/views/errors/404.php';
-        if (file_exists($notFoundView)) {
-            include $notFoundView;
-        } else {
-            echo "Page not found";
-        }
+        // Enhanced 404 handling - use ErrorController
+        $errorController = new \App\Controllers\Error\ErrorController();
+        $errorController->notFound();
     }
     
     /**

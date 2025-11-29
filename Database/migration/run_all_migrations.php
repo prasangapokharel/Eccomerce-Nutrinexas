@@ -184,7 +184,9 @@ try {
         'add_seller_id_to_order_cancel_log.sql',
         'create_ads_tables.sql',
         'create_stock_movement_log.sql',
-        'add_seller_profile_fields.sql'
+        'add_seller_profile_fields.sql',
+        'create_products_views_table.sql',
+        'create_products_social_table.sql'
     ];
     
     $executed = 0;

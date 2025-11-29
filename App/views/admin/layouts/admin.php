@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/admin.css">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/app.css">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/sidebar.css">
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/modal.css">
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
@@ -32,7 +33,7 @@
                             <p class="text-xs text-white/70">Admin Panel</p>
                         </div>
                     </a>
-                    <button id="toggleSidebar" class="text-white/80 hover:text-white lg:block hidden p-2 rounded-lg hover:bg-white/10 flex-shrink-0">
+                    <button id="toggleSidebar" class="text-white/80 lg:block hidden p-2 rounded-lg flex-shrink-0">
                         <i class="fas fa-bars text-sm"></i>
                     </button>
                 </div>
@@ -58,14 +59,14 @@
                                 <i class="fas fa-shopping-cart w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Orders</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="ordersChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs flex-shrink-0" id="ordersChevron"></i>
                         </button>
                         <div id="ordersDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/orders') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/orders') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Orders</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/cancels') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/cancels') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-times-circle w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Cancellations</span>
                             </a>
@@ -103,14 +104,14 @@
                                 <i class="fas fa-store w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Sellers</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="sellersChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs flex-shrink-0" id="sellersChevron"></i>
                         </button>
                         <div id="sellersDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/seller') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/seller') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-users w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Manage Sellers</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/seller/products') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/seller/products') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-box w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Product Approval</span>
                                 <?php
@@ -122,7 +123,7 @@
                                     <span class="ml-auto bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center"><?= $pendingCount ?></span>
                                 <?php endif; } catch (Exception $e) {} ?>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/seller/withdraws') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/seller/withdraws') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-money-bill-wave w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Seller Withdrawals</span>
                                 <?php
@@ -156,26 +157,26 @@
                                 <i class="fas fa-warehouse w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Inventory</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="inventoryChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs flex-shrink-0" id="inventoryChevron"></i>
                         </button>
                         <div id="inventoryDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/inventory') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/inventory') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-tachometer-alt w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Dashboard</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/inventory/supplier') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/inventory/supplier') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-truck w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Suppliers</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/inventory/products') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/inventory/products') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-box w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Products</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/inventory/purchases') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/inventory/purchases') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-shopping-cart w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Purchases</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/inventory/payments') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/inventory/payments') ?>" class="flex items-center p-2 rounded-md">
                                 <i class="fas fa-credit-card w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Payments</span>
                             </a>
@@ -189,14 +190,14 @@
                                 <i class="fas fa-tags w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Coupons</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="couponsChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="couponsChevron"></i>
                         </button>
                         <div id="couponsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/coupons') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/coupons') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Coupons</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/coupons/create') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/coupons/create') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Create Coupon</span>
                             </a>
@@ -216,14 +217,14 @@
                                 <i class="fas fa-newspaper w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Blog</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="blogChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="blogChevron"></i>
                         </button>
                         <div id="blogDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/blog') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/blog') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Posts</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/blog/create') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/blog/create') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Create Post</span>
                             </a>
@@ -237,14 +238,14 @@
                                 <i class="fas fa-images w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Sliders</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="sliderChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="sliderChevron"></i>
                         </button>
                         <div id="sliderDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/slider') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/slider') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Sliders</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/slider/create') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/slider/create') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Create Slider</span>
                             </a>
@@ -258,14 +259,14 @@
                                 <i class="fas fa-image w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Banners</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="bannersChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="bannersChevron"></i>
                         </button>
                         <div id="bannersDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/banners') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/banners') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Banners</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/banners/create') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/banners/create') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-plus w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Create Banner</span>
                             </a>
@@ -279,14 +280,14 @@
                                 <i class="fas fa-ad w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Ads</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="adsChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="adsChevron"></i>
                         </button>
                         <div id="adsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/ads') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/ads') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Ads</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/ads/costs') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/ads/costs') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-dollar-sign w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Ad Costs</span>
                             </a>
@@ -300,14 +301,14 @@
                                 <i class="fas fa-sms w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">SMS</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="smsChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="smsChevron"></i>
                         </button>
                         <div id="smsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/sms') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/sms') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-list w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">All Templates</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/sms/marketing') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/sms/marketing') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-user w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Marketing</span>
                             </a>
@@ -345,14 +346,14 @@
                                 <i class="fas fa-chart-bar w-5 text-golden flex-shrink-0"></i>
                                 <span class="ml-3 sidebar-text font-medium">Reports</span>
                             </div>
-                            <i class="fas fa-chevron-down sidebar-text text-xs transition-transform duration-200 flex-shrink-0" id="reportsChevron"></i>
+                            <i class="fas fa-chevron-down sidebar-text text-xs  flex-shrink-0" id="reportsChevron"></i>
                         </button>
                         <div id="reportsDropdown" class="dropdown-menu ml-8 mt-2 space-y-1 sidebar-text">
-                            <a href="<?= \App\Core\View::url('admin/reports/best-selling') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/reports/best-selling') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-star w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Best Selling</span>
                             </a>
-                            <a href="<?= \App\Core\View::url('admin/reports/low-stock') ?>" class="flex items-center p-2 rounded-md hover:bg-white/10 transition-colors">
+                            <a href="<?= \App\Core\View::url('admin/reports/low-stock') ?>" class="flex items-center p-2 rounded-md ">
                                 <i class="fas fa-exclamation-triangle w-4 text-golden/80 flex-shrink-0"></i>
                                 <span class="ml-2 text-sm">Low Stock Alerts</span>
                             </a>
@@ -391,7 +392,7 @@
                         <!-- Breadcrumb -->
                         <nav class="hidden md:flex" aria-label="Breadcrumb">
                             <ol class="flex items-center space-x-2 text-sm text-gray-500">
-                                <li><a href="<?= \App\Core\View::url('admin') ?>" class="hover:text-primary transition-colors">Admin</a></li>
+                                <li><a href="<?= \App\Core\View::url('admin') ?>" class="">Admin</a></li>
                                 <li><i class="fas fa-chevron-right text-xs"></i></li>
                                 <li class="text-gray-900 font-medium"><?= $title ?? 'Dashboard' ?></li>
                             </ol>

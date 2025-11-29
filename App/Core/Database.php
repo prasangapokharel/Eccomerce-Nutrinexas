@@ -21,21 +21,29 @@ class Database
             PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
             PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
             PDO::ATTR_EMULATE_PREPARES => false,
+            // Persistent connections disabled for better stability
+            PDO::ATTR_PERSISTENT => false,
+            PDO::ATTR_TIMEOUT => 5,
+            PDO::MYSQL_ATTR_INIT_COMMAND => "SET SESSION sql_mode='STRICT_TRANS_TABLES,NO_ZERO_DATE,NO_ZERO_IN_DATE,ERROR_FOR_DIVISION_BY_ZERO', wait_timeout=28800, interactive_timeout=28800",
+            PDO::MYSQL_ATTR_USE_BUFFERED_QUERY => true,
+            PDO::MYSQL_ATTR_COMPRESS => true,
         ];
 
         try {
-            error_log("Database: Connecting to " . DB_HOST . "/" . DB_NAME . " as " . DB_USER);
+            if (!defined('DEBUG') || !DEBUG) {
+                error_log("Database: Connecting to " . DB_HOST . "/" . DB_NAME);
+            }
             $this->pdo = new PDO($dsn, DB_USER, DB_PASS, $options);
-            error_log("Database: Connection successful");
             
-            // Test the connection with a simple query
+            if (!defined('DEBUG') || !DEBUG) {
+                error_log("Database: Connection successful");
+            }
+            
             $this->pdo->query("SELECT 1");
-            error_log("Database: Connection test successful");
         } catch (PDOException $e) {
             $errorMsg = "Database: Connection failed: " . $e->getMessage();
             error_log($errorMsg);
             
-            // Enhanced error reporting for debugging
             if (defined('DEBUG') && DEBUG) {
                 echo "<div style='background: #ffebee; border: 1px solid #f44336; padding: 15px; margin: 10px; border-radius: 4px;'>";
                 echo "<h3 style='color: #d32f2f; margin: 0 0 10px 0;'>Database Connection Error</h3>";

@@ -16,7 +16,7 @@
                 <div class="aspect-video bg-neutral-100 rounded-lg overflow-hidden mb-4">
                     <iframe 
                         class="w-full h-full" 
-                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        src="https://www.youtube.com/embed/1x4Om4xrHl0?si=bvu9W8q58ksbuZnC" 
                         title="How to Register on NutriNexus"
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -46,7 +46,7 @@
                 <div class="aspect-video bg-neutral-100 rounded-lg overflow-hidden mb-4">
                     <iframe 
                         class="w-full h-full" 
-                        src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                        src="https://www.youtube.com/embed/0fSF55ln9ts?si=JoC9gyszHiFPzSGh" 
                         title="How to Register as Seller on NutriNexus"
                         frameborder="0" 
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
@@ -88,28 +88,6 @@
                        rel="noopener"
                        class="btn btn-primary">
                         Get Quote on WhatsApp
-                    </a>
-                    <a href="mailto:ads@nutrinexus.com?subject=External%20Banner%20Ad%20Quote"
-                       class="btn btn-secondary">
-                        Email Media Desk
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="bg-white rounded-xl shadow-sm border border-neutral-200 overflow-hidden">
-            <div class="p-6 border-b border-neutral-200">
-                <h2 class="text-2xl font-semibold text-primary">Need More Help?</h2>
-            </div>
-            <div class="p-6">
-                <div class="space-y-4">
-                    <a href="<?= \App\Core\View::url('contact') ?>" class="block p-4 border border-neutral-200 rounded-lg text-primary hover:bg-primary/5">
-                        <h3 class="font-semibold text-mountain mb-1">Contact Support</h3>
-                        <p class="text-sm text-neutral-600">Get help from our support team</p>
-                    </a>
-                    <a href="<?= \App\Core\View::url('pages/faq') ?>" class="block p-4 border border-neutral-200 rounded-lg text-primary hover:bg-primary/5">
-                        <h3 class="font-semibold text-mountain mb-1">FAQ</h3>
-                        <p class="text-sm text-neutral-600">Frequently asked questions</p>
                     </a>
                 </div>
             </div>

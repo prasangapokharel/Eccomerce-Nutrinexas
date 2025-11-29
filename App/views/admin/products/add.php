@@ -678,11 +678,13 @@ document.addEventListener('DOMContentLoaded', function() {
     dropZone.addEventListener('drop', function(e) {
         e.preventDefault();
         dropZone.classList.remove('border-primary', 'bg-primary-50');
-        
-        const files = e.dataTransfer.files;
-        if (files.length > 0) {
-            imagesInput.files = files;
-            handleFileSelection(files);
+
+        const droppedFiles = e.dataTransfer.files;
+        if (droppedFiles.length > 0) {
+            const dataTransfer = new DataTransfer();
+            Array.from(droppedFiles).forEach(file => dataTransfer.items.add(file));
+            imagesInput.files = dataTransfer.files;
+            handleFileSelection(dataTransfer.files);
         }
     });
 

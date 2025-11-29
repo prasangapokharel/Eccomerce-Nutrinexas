@@ -17,15 +17,17 @@
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <h2 class="text-lg font-semibold text-gray-900">Customer List</h2>
                 
-                <!-- Search -->
-                <div class="relative max-w-md">
-                    <input type="text" 
-                           id="searchInput" 
-                           placeholder="Search customers by name, email..." 
-                           class="input native-input"
-                           style="padding-left: 2.5rem;">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400 text-sm"></i>
+                <!-- Standard Top Bar: Search, Filter, Button -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
+                        <input type="text" 
+                               id="searchInput" 
+                               placeholder="Search customers by name, email..." 
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -69,7 +71,7 @@
                         </tr>
                     <?php else: ?>
                         <?php foreach ($customers as $customer): ?>
-                            <tr class="hover:bg-gray-50 transition-colors customer-row" 
+                            <tr class="hover:bg-gray-50 customer-row" 
                                 data-name="<?= strtolower(htmlspecialchars(($customer['first_name'] ?? '') . ' ' . ($customer['last_name'] ?? ''))) ?>"
                                 data-email="<?= strtolower(htmlspecialchars($customer['email'] ?? '')) ?>">
                                 <td class="px-6 py-4">
@@ -102,7 +104,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <a href="<?= \App\Core\View::url('seller/customers/detail/' . $customer['id']) ?>" 
-                                       class="text-primary hover:text-primary-dark transition-colors"
+                                       class="text-primary hover:text-primary-dark"
                                        title="View Details">
                                         <i class="fas fa-eye"></i>
                                     </a>

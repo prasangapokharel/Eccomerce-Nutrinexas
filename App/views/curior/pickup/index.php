@@ -89,10 +89,10 @@ ob_start();
                                     <?php endif; ?>
                                 </td>
                                 <td class="px-6 py-4">
-                                    <?php if (!empty($order['seller_address']) || !empty($order['seller_name'])): ?>
+                                    <?php if (!empty($order['seller_company']) || !empty($order['seller_name']) || !empty($order['seller_address']) || !empty($order['seller_city']) || !empty($order['seller_phone'])): ?>
                                         <div class="text-sm font-medium text-gray-900">
                                             <i class="fas fa-store text-primary mr-1"></i>
-                                            <?= htmlspecialchars($order['seller_company'] ?? $order['seller_name'] ?? 'N/A') ?>
+                                            <?= htmlspecialchars($order['seller_company'] ?? $order['seller_name'] ?? 'Seller') ?>
                                         </div>
                                         <?php if (!empty($order['seller_address'])): ?>
                                             <div class="text-xs text-gray-600 mt-1">
@@ -100,7 +100,7 @@ ob_start();
                                             </div>
                                         <?php endif; ?>
                                         <?php if (!empty($order['seller_city'])): ?>
-                                            <div class="text-xs text-gray-500">
+                                            <div class="text-xs text-gray-500 mt-1">
                                                 <i class="fas fa-map-marker-alt text-accent mr-1"></i>
                                                 <?= htmlspecialchars($order['seller_city']) ?>
                                             </div>
@@ -169,19 +169,19 @@ ob_start();
             
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Upload Pickup Proof (Optional)</label>
-                <input type="file" name="pickup_proof" accept="image/*" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                <input type="file" name="pickup_proof" accept="image/*" class="input native-input">
             </div>
             
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
-                <textarea name="notes" rows="3" class="w-full border border-gray-300 rounded-lg px-4 py-2" placeholder="Add any notes about the pickup"></textarea>
+                <textarea name="notes" rows="3" class="input native-input" placeholder="Add any notes about the pickup"></textarea>
             </div>
             
             <div class="flex justify-end space-x-3">
-                <button type="button" onclick="closePickupModal()" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50">
+                <button type="button" onclick="closePickupModal()" class="btn btn-outline">
                     Cancel
                 </button>
-                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-check-circle mr-2"></i>Confirm Pickup
                 </button>
             </div>

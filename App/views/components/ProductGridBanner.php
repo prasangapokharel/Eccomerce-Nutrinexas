@@ -38,3 +38,8 @@ $banner = $bannerService->getProductGridBanner();
 <?php endif; ?>
 
 
+
+
+
+
+

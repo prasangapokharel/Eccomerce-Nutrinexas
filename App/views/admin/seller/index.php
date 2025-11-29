@@ -1,16 +1,19 @@
 <?php ob_start(); ?>
 
 <div class="space-y-6">
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <!-- Standard Action Row: Title Left, Search/Filter/Add Button Right -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Seller Management</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Seller Management</h1>
             <p class="mt-1 text-sm text-gray-500">Manage sellers and their documents</p>
         </div>
-        <a href="<?= \App\Core\View::url('admin/seller/create') ?>" 
-           class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
-            <i class="fas fa-plus mr-2"></i>Create Seller
-        </a>
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Add Button -->
+            <a href="<?= \App\Core\View::url('admin/seller/create') ?>" 
+               class="btn btn-primary">
+                <i class="fas fa-plus mr-2"></i>Create Seller
+            </a>
+        </div>
     </div>
 
     <!-- Statistics Cards -->

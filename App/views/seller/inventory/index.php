@@ -10,11 +10,11 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
             <a href="<?= \App\Core\View::url('seller/inventory') ?>" 
-               class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= !$lowStockFilter ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+               class="px-3 py-2 rounded-lg text-sm font-medium <?= !$lowStockFilter ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
                 All Products
             </a>
             <a href="<?= \App\Core\View::url('seller/inventory?low_stock=1') ?>" 
-               class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= $lowStockFilter ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+               class="px-3 py-2 rounded-lg text-sm font-medium <?= $lowStockFilter ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
                 <i class="fas fa-exclamation-triangle mr-2"></i>Low Stock
             </a>
         </div>
@@ -27,15 +27,17 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <h2 class="text-lg font-semibold text-gray-900">Product Inventory</h2>
                 
-                <!-- Search -->
-                <div class="relative max-w-md">
-                    <input type="text" 
-                           id="searchInput" 
-                           placeholder="Search products..." 
-                           class="input native-input"
-                           style="padding-left: 2.5rem;">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400 text-sm"></i>
+                <!-- Standard Top Bar: Search, Filter, Button -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
+                        <input type="text" 
+                               id="searchInput" 
+                               placeholder="Search products..." 
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -82,7 +84,7 @@
                                     </p>
                                     <?php if (!$lowStockFilter): ?>
                                         <a href="<?= \App\Core\View::url('seller/products/create') ?>" 
-                                           class="btn">
+                                           class="btn btn-primary">
                                             <i class="fas fa-plus mr-2"></i>
                                             Add Product
                                         </a>
@@ -92,7 +94,7 @@
                         </tr>
                     <?php else: ?>
                         <?php foreach ($products as $product): ?>
-                            <tr class="hover:bg-gray-50 transition-colors inventory-row" 
+                            <tr class="hover:bg-gray-50 inventory-row" 
                                 data-name="<?= strtolower(htmlspecialchars($product['product_name'])) ?>">
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
@@ -182,7 +184,7 @@
                                 </td>
                                 <td class="px-6 py-4">
                                     <button onclick="openStockModal(<?= $product['id'] ?>, '<?= htmlspecialchars(addslashes($product['product_name'])) ?>', <?= $product['stock_quantity'] ?? 0 ?>)" 
-                                            class="text-primary hover:text-primary-dark transition-colors"
+                                            class="text-primary hover:text-primary-dark"
                                             title="Update Stock">
                                         <i class="fas fa-edit"></i>
                                     </button>
@@ -203,7 +205,7 @@
         <div class="bg-white rounded-xl shadow-lg p-6" style="max-width: 28rem; width: 100%;">
             <div class="flex items-center justify-between mb-4">
                 <h3 class="text-lg font-semibold text-gray-900">Update Stock</h3>
-                <button onclick="closeStockModal()" class="text-gray-400 hover:text-gray-600 transition-colors">
+                <button onclick="closeStockModal()" class="text-gray-400 hover:text-gray-600">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
@@ -229,7 +231,7 @@
                         Cancel
                     </button>
                     <button type="submit" 
-                            class="btn flex-1">
+                            class="btn btn-primary flex-1">
                         Update Stock
                     </button>
                 </div>

@@ -1,19 +1,30 @@
 <?php ob_start(); ?>
 
 <div class="space-y-6">
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <!-- Standard Action Row: Title Left, Search/Filter/Add Button Right -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Manage Orders</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Manage Orders</h1>
             <p class="mt-1 text-sm text-gray-500">Track and manage all customer orders</p>
         </div>
-        <div class="flex items-center space-x-3">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Search Input -->
+            <div class="relative flex-1 sm:flex-initial sm:w-64">
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Search orders by invoice, customer name..." 
+                       class="input native-input pr-10">
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400 text-sm"></i>
+                </div>
+            </div>
+            
+            <!-- Add Button -->
             <a href="<?= \App\Core\View::url('admin/orders/create') ?>" 
-               class="btn">
+               class="btn btn-primary">
                 <i class="fas fa-plus mr-2"></i>
                 Create Order
             </a>
-            
         </div>
     </div>
 
@@ -89,12 +100,12 @@
                 <span id="selectedOrdersCount" class="text-xs text-gray-500">0 selected</span>
             </div>
             <div class="flex flex-wrap gap-2">
-                <button onclick="bulkUpdateOrdersStatus('paid')" class="px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200">Mark Paid</button>
-                <button onclick="bulkUpdateOrdersStatus('processing')" class="px-3 py-1 bg-blue-100 text-blue-700 rounded text-sm hover:bg-blue-200">Processing</button>
-                <button onclick="bulkUpdateOrdersStatus('shipped')" class="px-3 py-1 bg-purple-100 text-purple-700 rounded text-sm hover:bg-purple-200">Shipped</button>
-                <button onclick="bulkUpdateOrdersStatus('delivered')" class="px-3 py-1 bg-green-200 text-green-800 rounded text-sm hover:bg-green-300">Delivered</button>
-                <button onclick="bulkUpdateOrdersStatus('cancelled')" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">Cancel</button>
-                <button onclick="bulkDeleteOrders()" class="px-3 py-1 bg-red-600 text-white rounded text-sm hover:bg-red-700">Delete Selected</button>
+                <button onclick="bulkUpdateOrdersStatus('paid')" class="btn btn-sm btn-primary">Mark Paid</button>
+                <button onclick="bulkUpdateOrdersStatus('processing')" class="btn btn-sm btn-primary">Processing</button>
+                <button onclick="bulkUpdateOrdersStatus('shipped')" class="btn btn-sm btn-primary">Shipped</button>
+                <button onclick="bulkUpdateOrdersStatus('delivered')" class="btn btn-sm btn-primary">Delivered</button>
+                <button onclick="bulkUpdateOrdersStatus('cancelled')" class="btn btn-sm btn-outline">Cancel</button>
+                <button onclick="bulkDeleteOrders()" class="btn btn-sm btn-delete">Delete Selected</button>
             </div>
         </div>
     </div>
@@ -139,19 +150,6 @@
                 </div>
             </div>
             
-            <!-- Search Bar -->
-            <div class="mt-4">
-                <div class="relative max-w-md">
-                    <input type="text" 
-                           id="searchInput" 
-                           placeholder="Search orders by invoice, customer name..." 
-                           class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                           style="appearance: none; -webkit-appearance: none; border-radius: 0.5rem; -webkit-border-radius: 0.5rem;">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400 text-sm"></i>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Table Content -->
@@ -395,55 +393,49 @@
 </div>
 
 <!-- Status Update Modal -->
-<div id="statusModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white">
-        <div class="mt-3 text-center">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-blue-100">
+<div id="statusModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h3 class="modal-title">Update Order Status</h3>
+            <button id="cancelStatusBtn" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-blue-100 mx-auto mb-4">
                 <i class="fas fa-edit text-blue-600"></i>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Update Order Status</h3>
-            <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500" id="statusModalText">
-                    Are you sure you want to update this order status?
-                </p>
-            </div>
-            <div class="items-center px-4 py-3">
-                <button id="confirmStatusBtn" 
-                        class="px-4 py-2 bg-primary text-white text-base font-medium rounded-lg w-24 mr-2 hover:bg-primary-dark focus:outline-none focus:ring-2 focus:ring-primary-300">
-                    Update
-                </button>
-                <button id="cancelStatusBtn" 
-                        class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-lg w-24 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Cancel
-                </button>
-            </div>
+            <p class="text-sm text-gray-500 text-center" id="statusModalText">
+                Are you sure you want to update this order status?
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button id="cancelStatusBtn2" class="btn btn-outline">Cancel</button>
+            <button id="confirmStatusBtn" class="btn btn-primary">Update</button>
         </div>
     </div>
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white">
-        <div class="mt-3 text-center">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+<div id="deleteModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm Deletion</h3>
+            <button id="cancelDeleteBtn" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mx-auto mb-4">
                 <i class="fas fa-exclamation-triangle text-red-600"></i>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Confirm Deletion</h3>
-            <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500" id="deleteModalText">
-                    Are you sure you want to delete this order? This action cannot be undone.
-                </p>
-            </div>
-            <div class="items-center px-4 py-3">
-                <button id="confirmDeleteBtn" 
-                        class="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-lg w-24 mr-2 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500">
-                    Delete
-                </button>
-                <button id="cancelDeleteBtn" 
-                        class="px-4 py-2 bg-gray-300 text-gray-800 text-base font-medium rounded-lg w-24 hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Cancel
-                </button>
-            </div>
+            <p class="text-sm text-gray-500 text-center" id="deleteModalText">
+                Are you sure you want to delete this order? This action cannot be undone.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button id="cancelDeleteBtn2" class="btn btn-outline">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btn-delete">Delete</button>
         </div>
     </div>
 </div>
@@ -513,9 +505,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusModal = document.getElementById('statusModal');
     const confirmStatusBtn = document.getElementById('confirmStatusBtn');
     const cancelStatusBtn = document.getElementById('cancelStatusBtn');
+    const cancelStatusBtn2 = document.getElementById('cancelStatusBtn2');
     const deleteModal = document.getElementById('deleteModal');
     const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
     const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+    const cancelDeleteBtn2 = document.getElementById('cancelDeleteBtn2');
     
     // Search functionality
     searchInput.addEventListener('input', function() {
@@ -589,6 +583,14 @@ document.addEventListener('DOMContentLoaded', function() {
         orderToUpdate = null;
         statusToUpdate = null;
     });
+    
+    if (cancelStatusBtn2) {
+        cancelStatusBtn2.addEventListener('click', function() {
+            statusModal.classList.add('hidden');
+            orderToUpdate = null;
+            statusToUpdate = null;
+        });
+    }
 
     confirmDeleteBtn.addEventListener('click', function() {
         deleteModal.classList.add('hidden');
@@ -601,6 +603,14 @@ document.addEventListener('DOMContentLoaded', function() {
         orderToUpdate = null; // Clear orderToUpdate for status updates
         statusToUpdate = null; // Clear statusToUpdate for status updates
     });
+    
+    if (cancelDeleteBtn2) {
+        cancelDeleteBtn2.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            orderToUpdate = null;
+            statusToUpdate = null;
+        });
+    }
     
     // Close modal on outside click
     statusModal.addEventListener('click', function(e) {

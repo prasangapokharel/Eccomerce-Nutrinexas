@@ -7,11 +7,67 @@
         <p class="text-gray-600">Manage your bank accounts for withdrawals</p>
     </div>
 
+    <!-- Show Existing Account Details -->
+    <?php if (!empty($hasAccount) && !empty($existingAccount)): ?>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h2 class="text-lg font-semibold text-gray-900 mb-4">Your Bank Account Details</h2>
+            
+            <div class="border border-gray-200 rounded-lg p-6 bg-blue-50 border-blue-200">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name</label>
+                        <p class="text-gray-900 font-semibold"><?= htmlspecialchars($existingAccount['bank_name']) ?></p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Account Holder Name</label>
+                        <p class="text-gray-900 font-semibold"><?= htmlspecialchars($existingAccount['account_holder_name']) ?></p>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Account Number</label>
+                        <p class="text-gray-900 font-semibold"><?= htmlspecialchars($existingAccount['account_number']) ?></p>
+                    </div>
+                    
+                    <?php if (!empty($existingAccount['branch_name'])): ?>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Branch Name</label>
+                        <p class="text-gray-900 font-semibold"><?= htmlspecialchars($existingAccount['branch_name']) ?></p>
+                    </div>
+                    <?php endif; ?>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <span class="inline-flex items-center px-3 py-1 bg-primary text-white text-sm rounded-full">
+                            <?= $existingAccount['is_default'] ? 'Default Account' : 'Active Account' ?>
+                        </span>
+                    </div>
+                    
+                    <?php if (!empty($existingAccount['created_at'])): ?>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Added On</label>
+                        <p class="text-gray-600 text-sm"><?= date('F j, Y', strtotime($existingAccount['created_at'])) ?></p>
+                    </div>
+                    <?php endif; ?>
+                </div>
+            </div>
+        </div>
+    <?php endif; ?>
+
     <!-- Add/Edit Form -->
     <div class="bg-white rounded-lg shadow p-6">
         <h2 class="text-lg font-semibold text-gray-900 mb-4">
             <?= $defaultAccount ? 'Update Bank Account' : 'Add Bank Account' ?>
         </h2>
+        
+        <?php if (!empty($hasAccount)): ?>
+            <div class="mb-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+                <p class="text-sm text-yellow-800">
+                    <i class="fas fa-info-circle mr-2"></i>
+                    You already have a bank account saved. You can update it below or contact support to add additional accounts.
+                </p>
+            </div>
+        <?php endif; ?>
         
         <form action="<?= \App\Core\View::url('seller/bank-account') ?>" method="POST">
             <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
@@ -27,7 +83,7 @@
                     </label>
                     <input type="text" id="bank_name" name="bank_name" 
                            value="<?= htmlspecialchars($defaultAccount['bank_name'] ?? '') ?>" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                           class="input native-input"
                            placeholder="e.g., Nabil Bank, Nepal Investment Bank">
                 </div>
 
@@ -37,7 +93,7 @@
                     </label>
                     <input type="text" id="account_holder_name" name="account_holder_name" 
                            value="<?= htmlspecialchars($defaultAccount['account_holder_name'] ?? '') ?>" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
@@ -46,7 +102,7 @@
                     </label>
                     <input type="text" id="account_number" name="account_number" 
                            value="<?= htmlspecialchars($defaultAccount['account_number'] ?? '') ?>" required
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
+                           class="input native-input">
                 </div>
 
                 <div>
@@ -55,7 +111,7 @@
                     </label>
                     <input type="text" id="branch_name" name="branch_name" 
                            value="<?= htmlspecialchars($defaultAccount['branch_name'] ?? '') ?>"
-                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary"
+                           class="input native-input"
                            placeholder="e.g., Kathmandu Branch">
                 </div>
 
@@ -70,7 +126,7 @@
             </div>
 
             <div class="mt-6 flex justify-end gap-3">
-                <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark">
+                <button type="submit" class="btn btn-primary">
                     <?= $defaultAccount ? 'Update Account' : 'Add Account' ?>
                 </button>
             </div>

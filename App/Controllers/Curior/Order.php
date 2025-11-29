@@ -325,6 +325,22 @@ class Order extends BaseCuriorController
 
             if ($order['payment_status'] === 'pending') {
                 $updateData['payment_status'] = 'paid';
+                
+                // Send payment confirmation SMS for COD orders
+                try {
+                    $smsController = new \App\Controllers\Sms\SmsOrderController();
+                    $smsController->sendPaymentConfirmationSms($orderId);
+                } catch (\Exception $e) {
+                    error_log("Courier Order: Error sending payment confirmation SMS: " . $e->getMessage());
+                }
+                
+                // Handle digital products after COD payment
+                try {
+                    $digitalController = new \App\Controllers\Product\DigitalProductController();
+                    $digitalController->processDigitalProductsAfterPayment($orderId);
+                } catch (\Exception $e) {
+                    error_log("Courier Order: Error processing digital products: " . $e->getMessage());
+                }
             }
 
             if ($this->orderModel->update($orderId, $updateData)) {
@@ -339,16 +355,22 @@ class Order extends BaseCuriorController
                 $this->logOrderActivity($orderId, 'delivered', json_encode($activityData));
                 $this->notifyOrderUpdate($orderId, 'delivered', $activityData);
                 
+                $this->db->commit();
+                
+                // Process post-delivery tasks after commit (they manage their own transactions)
                 $this->processPostDelivery($orderId);
                 
-                $this->db->commit();
                 $this->jsonResponse(['success' => true, 'message' => 'Order delivered successfully']);
             } else {
-                $this->db->rollback();
+                if ($this->db->inTransaction()) {
+                    $this->db->rollback();
+                }
                 $this->jsonResponse(['success' => false, 'message' => 'Failed to update order status']);
             }
         } catch (\Exception $e) {
-            $this->db->rollback();
+            if ($this->db->inTransaction()) {
+                $this->db->rollback();
+            }
             error_log('Curior Order: Delivery confirmation error: ' . $e->getMessage());
             $this->jsonResponse(['success' => false, 'message' => 'Error confirming delivery']);
         }
@@ -647,12 +669,41 @@ class Order extends BaseCuriorController
             $order = $this->orderModel->find($orderId);
             if (!$order) return;
 
-            $notificationService = new \App\Services\OrderNotificationService();
             $oldStatus = $order['status'];
             $newStatus = $this->getStatusFromAction($action);
             
             if ($newStatus) {
-                $notificationService->sendStatusChangeSMS($orderId, $oldStatus, $newStatus);
+                // Send SMS to customer
+                try {
+                    $smsControllerPath = __DIR__ . '/../Sms/SmsOrderController.php';
+                    if (file_exists($smsControllerPath)) {
+                        require_once $smsControllerPath;
+                    }
+                    $smsOrderController = new \App\Controllers\Sms\SmsOrderController();
+                    $smsOrderController->sendOrderStatusSms($orderId, $oldStatus, $newStatus);
+                } catch (\Exception $e) {
+                    error_log('Failed to send order status SMS: ' . $e->getMessage());
+                }
+                
+                // Notify customer about order status change
+                if (!empty($order['user_id'])) {
+                    try {
+                        $customerNotificationController = new \App\Controllers\Notification\NotificationCustomerController();
+                        $customerNotificationController->notifyOrderStatusChange($order['user_id'], $orderId, $oldStatus, $newStatus);
+                    } catch (\Exception $e) {
+                        error_log('Failed to send customer notification: ' . $e->getMessage());
+                    }
+                }
+                
+                // Notify courier about status update
+                if (!empty($this->curiorId)) {
+                    try {
+                        $courierNotificationController = new \App\Controllers\Notification\NotificationCourierController();
+                        $courierNotificationController->notifyOrderStatusUpdate($this->curiorId, $orderId, $newStatus);
+                    } catch (\Exception $e) {
+                        error_log('Failed to send courier notification: ' . $e->getMessage());
+                    }
+                }
             }
         } catch (\Exception $e) {
             error_log('Failed to send notification: ' . $e->getMessage());
@@ -679,6 +730,7 @@ class Order extends BaseCuriorController
 
     /**
      * Process post-delivery tasks
+     * Note: This runs after transaction commit, so each service manages its own transactions
      */
     private function processPostDelivery($orderId)
     {
@@ -693,16 +745,16 @@ class Order extends BaseCuriorController
         }
         
         try {
-            $sellerBalanceService = new \App\Services\SellerBalanceService();
-            $balanceResult = $sellerBalanceService->processBalanceRelease($orderId);
+            $payoutController = new \App\Controllers\Seller\Payout\PayoutController();
+            $result = $payoutController->processSellerPayout($orderId);
             
-            if ($balanceResult['success']) {
-                error_log("Courier Order: ✅ Seller balance released for order #{$orderId}: रु " . ($balanceResult['total_released'] ?? 0));
+            if ($result) {
+                error_log("Courier Order: ✅ Seller payout processed for order #{$orderId}");
             } else {
-                error_log("Courier Order: ❌ Seller balance release failed for order #{$orderId}: " . ($balanceResult['message'] ?? 'Unknown error'));
+                error_log("Courier Order: ⚠️ No seller payout processed for order #{$orderId} (may already be processed)");
             }
         } catch (\Exception $e) {
-            error_log("Courier Order: ❌ Seller balance service error for order #{$orderId}: " . $e->getMessage());
+            error_log("Courier Order: ❌ Seller payout error for order #{$orderId}: " . $e->getMessage());
             error_log("Courier Order: Stack trace: " . $e->getTraceAsString());
         }
     }

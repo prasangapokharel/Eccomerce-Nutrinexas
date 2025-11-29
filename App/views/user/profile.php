@@ -59,25 +59,25 @@
                     <div>
                         <label for="first_name" class="block text-sm font-medium text-gray-700 mb-1">First Name</label>
                         <input type="text" name="first_name" id="first_name" value="<?= $user['first_name'] ?? '' ?>" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                               class="input native-input">
                     </div>
                     
                     <div>
                         <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
                         <input type="text" name="last_name" id="last_name" value="<?= $user['last_name'] ?? '' ?>" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                               class="input native-input">
                     </div>
                     
                     <div>
                         <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
                         <input type="email" name="email" id="email" value="<?= $user['email'] ?? '' ?>" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                               class="input native-input">
                     </div>
                     
                     <div>
                         <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
                         <input type="text" name="phone" id="phone" value="<?= $user['phone'] ?? '' ?>" 
-                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                               class="input native-input">
                     </div>
                 </div>
                 
@@ -89,7 +89,7 @@
                         <div>
                             <label for="current_password" class="block text-sm font-medium text-gray-700 mb-1">Current Password</label>
                             <input type="password" name="current_password" id="current_password" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                                   class="input native-input">
                         </div>
                         
                         <div></div>
@@ -97,19 +97,19 @@
                         <div>
                             <label for="new_password" class="block text-sm font-medium text-gray-700 mb-1">New Password</label>
                             <input type="password" name="new_password" id="new_password" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                                   class="input native-input">
                         </div>
                         
                         <div>
                             <label for="confirm_password" class="block text-sm font-medium text-gray-700 mb-1">Confirm New Password</label>
                             <input type="password" name="confirm_password" id="confirm_password" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-primary focus:border-primary">
+                                   class="input native-input">
                         </div>
                     </div>
                 </div>
                 
                 <div class="mt-8 flex justify-end">
-                    <button type="submit" class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+                    <button type="submit" class="btn btn-primary">
                         Save Changes
                     </button>
                 </div>

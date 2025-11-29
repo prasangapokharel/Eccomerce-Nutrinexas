@@ -16,33 +16,30 @@ ob_start();
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
                 <input type="text" name="name" value="<?= htmlspecialchars($curior['name'] ?? '') ?>" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Phone</label>
                 <input type="text" name="phone" value="<?= htmlspecialchars($curior['phone'] ?? '') ?>" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
                 <input type="email" name="email" value="<?= htmlspecialchars($curior['email'] ?? '') ?>"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Address</label>
                 <textarea name="address" rows="3"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"><?= htmlspecialchars($curior['address'] ?? '') ?></textarea>
+                          class="input native-input"><?= htmlspecialchars($curior['address'] ?? '') ?></textarea>
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">City <span class="text-red-500">*</span></label>
-                <select name="city" required
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
-                    <option value="">Select City</option>
-                    <?php
+                <?php
                     $cities = [
                         'Kathmandu', 'Lalitpur', 'Bhaktapur', 'Pokhara', 'Bharatpur', 
                         'Biratnagar', 'Birgunj', 'Dharan', 'Butwal', 'Hetauda',
@@ -55,10 +52,20 @@ ob_start();
                         'Ramechhap', 'Manthali', 'Charikot', 'Jiri', 'Sindhuli',
                         'Jaleshwar', 'Siraha', 'Mechinagar', 'Birtamod', 'Kakarbhitta'
                     ];
-                    sort($cities);
                     $currentCity = trim($curior['city'] ?? '');
-                    foreach ($cities as $city): ?>
-                        <option value="<?= htmlspecialchars($city) ?>" <?= (strcasecmp($currentCity, $city) === 0) ? 'selected' : '' ?>>
+                    $normalizedCities = array_map('strtolower', $cities);
+                    $currentCityNormalized = strtolower($currentCity);
+                    $cityExists = $currentCity && in_array($currentCityNormalized, $normalizedCities, true);
+                    sort($cities);
+                    if ($currentCity && !$cityExists) {
+                        array_unshift($cities, $currentCity);
+                    }
+                ?>
+                <select name="city" required
+                        class="input native-input">
+                    <option value=""><?= $currentCity ? 'Change City' : 'Select City' ?></option>
+                    <?php foreach ($cities as $city): ?>
+                        <option value="<?= htmlspecialchars($city) ?>" <?= ($currentCity && strcasecmp($currentCity, $city) === 0) ? 'selected' : '' ?>>
                             <?= htmlspecialchars($city) ?>
                         </option>
                     <?php endforeach; ?>
@@ -74,12 +81,12 @@ ob_start();
                 <label class="block text-sm font-medium text-gray-700 mb-2">Branch (Optional)</label>
                 <input type="text" name="branch" value="<?= htmlspecialchars($curior['branch'] ?? '') ?>"
                        placeholder="e.g., Main Branch, North Branch"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
         </div>
         
         <div class="mt-6 flex justify-end">
-            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+            <button type="submit" class="btn btn-primary">
                 <i class="fas fa-save mr-2"></i>Update Profile
             </button>
         </div>
@@ -96,24 +103,24 @@ ob_start();
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
                 <input type="password" name="current_password" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
                 <input type="password" name="new_password" required minlength="6"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Confirm Password</label>
                 <input type="password" name="confirm_password" required minlength="6"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
         </div>
         
         <div class="mt-6 flex justify-end">
-            <button type="submit" class="px-6 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+            <button type="submit" class="btn btn-primary">
                 <i class="fas fa-key mr-2"></i>Change Password
             </button>
         </div>

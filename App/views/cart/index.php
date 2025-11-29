@@ -627,8 +627,11 @@ if (appliedCouponCode) {
 // Update cart item quantity
 function updateCartItem(productId, action) {
     const quantityDisplay = document.querySelector(`[data-product-id="${productId}"].quantity-display-main`);
+    const originalQuantity = quantityDisplay ? parseInt(quantityDisplay.textContent) || 1 : 1;
+    
     if (quantityDisplay) {
         quantityDisplay.textContent = '...';
+        quantityDisplay.setAttribute('data-original-quantity', originalQuantity);
     }
     
     fetch('<?= ASSETS_URL ?>/cart/update', {
@@ -639,44 +642,60 @@ function updateCartItem(productId, action) {
         },
         body: `product_id=${productId}&action=${action}`
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             const cartCountElements = document.querySelectorAll('.cart-count');
             cartCountElements.forEach(element => {
-                element.textContent = data.cart_count;
+                element.textContent = data.cart_count || 0;
             });
             
             const quantityDisplays = document.querySelectorAll(`[data-product-id="${productId}"].quantity-display, [data-product-id="${productId}"].quantity-display-main`);
             quantityDisplays.forEach(display => {
-                display.textContent = data.item_quantity;
+                display.textContent = data.item_quantity || 0;
             });
             
-            document.cookie = `cart_count=${data.cart_count}; path=/; max-age=86400`;
-            document.cookie = `cart_total=${data.cart_total}; path=/; max-age=86400`;
+            document.cookie = `cart_count=${data.cart_count || 0}; path=/; max-age=86400`;
+            document.cookie = `cart_total=${data.cart_total || 0}; path=/; max-age=86400`;
             
-            if (data.item_quantity === 0) {
+            if (data.item_quantity === 0 || !data.item_quantity) {
                 removeCartItemFromDOM(productId);
+                if (data.cart_count === 0) {
+                    setTimeout(() => location.reload(), 500);
+                }
             }
 
             refreshTotalsFromResponse(data);
         } else {
             if (quantityDisplay) {
-                quantityDisplay.textContent = quantityDisplay.getAttribute('data-original-quantity') || '1';
+                quantityDisplay.textContent = originalQuantity;
             }
-            showMessage('Failed to update cart: ' + data.message, 'error');
+            const errorMsg = data.message || 'Failed to update cart';
+            showMessage(errorMsg, 'error');
         }
     })
-    .catch(() => {
+    .catch(error => {
         if (quantityDisplay) {
-            quantityDisplay.textContent = quantityDisplay.getAttribute('data-original-quantity') || '1';
+            quantityDisplay.textContent = originalQuantity;
         }
         showMessage('Error updating cart. Please try again.', 'error');
+        console.error('Cart update error:', error);
     });
 }
 
 // Remove cart item (no confirmation)
 function removeCartItem(cartItemId, productId) {
+    const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+    if (cartItem) {
+        cartItem.style.opacity = '0.5';
+        cartItem.style.pointerEvents = 'none';
+    }
+    
     fetch('<?= ASSETS_URL ?>/cart/remove', {
         method: 'POST',
         headers: {
@@ -685,30 +704,45 @@ function removeCartItem(cartItemId, productId) {
         },
         body: `cart_item_id=${cartItemId}&product_id=${productId}`
     })
-    .then(response => response.json())
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        return response.json();
+    })
     .then(data => {
         if (data.success) {
             const cartCountElements = document.querySelectorAll('.cart-count');
             cartCountElements.forEach(element => {
-                element.textContent = data.cart_count;
+                element.textContent = data.cart_count || 0;
             });
             
-            document.cookie = `cart_count=${data.cart_count}; path=/; max-age=86400`;
-            document.cookie = `cart_total=${data.cart_total}; path=/; max-age=86400`;
+            document.cookie = `cart_count=${data.cart_count || 0}; path=/; max-age=86400`;
+            document.cookie = `cart_total=${data.cart_total || 0}; path=/; max-age=86400`;
             
             removeCartItemFromDOM(productId);
 
             refreshTotalsFromResponse(data);
             
-            if (data.cart_count === 0) {
-                location.reload();
+            if (data.cart_count === 0 || !data.cart_count) {
+                setTimeout(() => location.reload(), 500);
             }
         } else {
-            showMessage('Failed to remove item: ' + data.message, 'error');
+            if (cartItem) {
+                cartItem.style.opacity = '1';
+                cartItem.style.pointerEvents = 'auto';
+            }
+            const errorMsg = data.message || 'Failed to remove item';
+            showMessage(errorMsg, 'error');
         }
     })
-    .catch(() => {
+    .catch(error => {
+        if (cartItem) {
+            cartItem.style.opacity = '1';
+            cartItem.style.pointerEvents = 'auto';
+        }
         showMessage('Error removing item. Please try again.', 'error');
+        console.error('Cart remove error:', error);
     });
 }
 

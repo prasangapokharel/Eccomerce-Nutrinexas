@@ -36,15 +36,14 @@ $pricingHelper = function($product) {
                 <!-- Logo/Avatar -->
                 <div class="relative">
                     <div class="w-24 h-24 md:w-32 md:h-32 rounded-full border-4 border-white bg-white shadow-lg overflow-hidden">
-                        <?php if (!empty($seller['logo_url'])): ?>
-                            <img src="<?= htmlspecialchars($seller['logo_url']) ?>" 
-                                 alt="<?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>"
-                                 class="w-full h-full object-cover"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                        <?php endif; ?>
-                        <div class="w-full h-full bg-primary text-white flex items-center justify-center text-2xl md:text-3xl font-bold <?= !empty($seller['logo_url']) ? 'hidden' : 'flex' ?>">
-                            <?= strtoupper(substr($seller['company_name'] ?? $seller['name'] ?? 'S', 0, 1)) ?>
-                        </div>
+                        <?php 
+                        $defaultLogo = \App\Core\View::asset('images/graphics/store.png');
+                        $logoUrl = !empty($seller['logo_url']) ? $seller['logo_url'] : $defaultLogo;
+                        ?>
+                        <img src="<?= htmlspecialchars($logoUrl) ?>" 
+                             alt="<?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>"
+                             class="w-full h-full object-cover"
+                             onerror="this.src='<?= htmlspecialchars($defaultLogo) ?>'; this.onerror=null;">
                     </div>
                 </div>
                 
@@ -101,26 +100,27 @@ $pricingHelper = function($product) {
 
     <!-- Main Content -->
     <div class="max-w-7xl mx-auto px-4 py-8">
-        <!-- Search Bar -->
+        <!-- Standard Top Bar: Search, Filter, Button -->
         <div class="bg-white rounded-xl shadow-sm p-4 md:p-6 mb-6">
-            <form method="GET" action="" class="flex flex-col sm:flex-row gap-3">
-                <div class="flex-1 relative">
+            <form method="GET" action="" class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <!-- Search Input -->
+                <div class="relative flex-1">
                     <input type="text" 
                            name="search" 
                            value="<?= htmlspecialchars($search) ?>"
                            placeholder="Search products in this store..."
-                           class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <i class="fas fa-search text-gray-400"></i>
+                           class="input native-input pr-10">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                        <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>
                 </div>
                 <button type="submit" 
-                        class="px-6 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                        class="btn btn-sm btn-primary">
                     <i class="fas fa-search mr-2"></i>Search
                 </button>
                 <?php if (!empty($search)): ?>
                     <a href="<?= \App\Core\View::url('seller/' . urlencode($seller['company_name'] ?? $seller['name'])) ?>" 
-                       class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors font-medium flex items-center justify-center">
+                       class="btn btn-sm btn-outline">
                         <i class="fas fa-times mr-2"></i>Clear
                     </a>
                 <?php endif; ?>

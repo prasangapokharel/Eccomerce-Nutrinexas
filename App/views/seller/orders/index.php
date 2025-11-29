@@ -15,19 +15,12 @@
         <!-- Table Header with Filters -->
         <div class="p-6 border-b border-gray-100">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-                <div class="flex items-center gap-4">
-                    <h2 class="text-lg font-semibold text-gray-900">Order List</h2>
-                    <button id="bulkPrintBtn" 
-                            class="hidden px-4 py-2 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors text-sm font-medium"
-                            onclick="bulkPrintLabels()">
-                        <i class="fas fa-print mr-2"></i>Print Shipping Labels (<span id="selectedCount">0</span>)
-                    </button>
-                </div>
+                <h2 class="text-lg font-semibold text-gray-900">Order List</h2>
                 
                 <!-- Status Filter Pills -->
                 <div class="flex flex-wrap gap-2">
                     <a href="<?= \App\Core\View::url('seller/orders') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= !isset($statusFilter) || $statusFilter === '' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="px-3 py-2 rounded-lg text-sm font-medium <?= !isset($statusFilter) || $statusFilter === '' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
                         All Orders
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?payment_type=cod') ?>" 
@@ -65,15 +58,15 @@
                 </div>
             </div>
             
-            <!-- Search Bar -->
-            <div class="mt-4">
-                <div class="relative max-w-md">
+            <!-- Standard Top Bar: Search, Filter, Button -->
+            <div class="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                <!-- Search Input -->
+                <div class="relative flex-1">
                     <input type="text" 
                            id="searchInput" 
                            placeholder="Search orders by invoice, customer name..." 
-                           class="input native-input"
-                           style="padding-left: 2.5rem;">
-                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                           class="input native-input pr-10">
+                    <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                         <i class="fas fa-search text-gray-400 text-sm"></i>
                     </div>
                 </div>
@@ -85,9 +78,6 @@
             <table class="min-w-full divide-y divide-gray-100">
                 <thead class="bg-gray-50">
                     <tr>
-                        <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider" style="width: 40px;">
-                            <input type="checkbox" id="selectAll" onchange="toggleSelectAll(this)" class="w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary">
-                        </th>
                         <th scope="col" class="px-6 py-4 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Order Details
                         </th>
@@ -114,7 +104,7 @@
                 <tbody class="bg-white divide-y divide-gray-100" id="ordersTableBody">
                     <?php if (empty($orders)): ?>
                         <tr id="noOrdersRow">
-                            <td colspan="8" class="px-6 py-12 text-center">
+                            <td colspan="7" class="px-6 py-12 text-center">
                                 <div class="flex flex-col items-center">
                                     <i class="fas fa-shopping-cart text-4xl text-gray-300 mb-4"></i>
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">No orders found</h3>
@@ -130,16 +120,10 @@
                         </tr>
                     <?php else: ?>
                         <?php foreach ($orders as $order): ?>
-                            <tr class="hover:bg-gray-50 transition-colors order-row" 
+                            <tr class="hover:bg-gray-50 order-row" 
                                 data-invoice="<?= strtolower(htmlspecialchars($order['invoice'] ?? '')) ?>"
                                 data-customer="<?= strtolower(htmlspecialchars($order['customer_name'] ?? ($order['first_name'] . ' ' . $order['last_name']))) ?>"
                                 data-order-id="<?= $order['id'] ?>">
-                                <td class="px-6 py-4">
-                                    <input type="checkbox" 
-                                           class="order-checkbox w-4 h-4 text-primary border-gray-300 rounded focus:ring-primary" 
-                                           value="<?= $order['id'] ?>"
-                                           onchange="updateBulkPrintButton()">
-                                </td>
                                 <td class="px-6 py-4">
                                     <div class="flex items-center">
                                         <div class="flex-shrink-0 h-10 w-10">
@@ -161,9 +145,12 @@
                                     <div class="text-sm font-medium text-gray-900">
                                         <?= htmlspecialchars($order['customer_name'] ?? ($order['first_name'] . ' ' . $order['last_name']) ?? 'Unknown Customer') ?>
                                     </div>
-                                    <?php if (!empty($order['customer_email'] ?? $order['email'])): ?>
+                                    <?php 
+                                    $customerEmail = $order['customer_email'] ?? $order['email'] ?? null;
+                                    if (!empty($customerEmail)): 
+                                    ?>
                                         <div class="text-xs text-gray-500">
-                                            <?= htmlspecialchars($order['customer_email'] ?? $order['email']) ?>
+                                            <?= htmlspecialchars($customerEmail) ?>
                                         </div>
                                     <?php endif; ?>
                                     <?php if (!empty($order['contact_no'])): ?>
@@ -271,41 +258,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Bulk selection functions
-function toggleSelectAll(checkbox) {
-    const checkboxes = document.querySelectorAll('.order-checkbox');
-    checkboxes.forEach(cb => {
-        cb.checked = checkbox.checked;
-    });
-    updateBulkPrintButton();
-}
-
-function updateBulkPrintButton() {
-    const checked = document.querySelectorAll('.order-checkbox:checked');
-    const btn = document.getElementById('bulkPrintBtn');
-    const count = document.getElementById('selectedCount');
-    
-    if (checked.length > 0) {
-        btn.classList.remove('hidden');
-        count.textContent = checked.length;
-    } else {
-        btn.classList.add('hidden');
-    }
-}
-
-function bulkPrintLabels() {
-    const checked = document.querySelectorAll('.order-checkbox:checked');
-    const orderIds = Array.from(checked).map(cb => cb.value);
-    
-    if (orderIds.length === 0) {
-        alert('Please select at least one order');
-        return;
-    }
-    
-    // Open bulk print page in new window
-    const url = '<?= \App\Core\View::url('seller/orders/bulk-print-labels') ?>?ids=' + orderIds.join(',');
-    window.open(url, '_blank');
-}
 </script>
 
 <?php $content = ob_get_clean(); ?>

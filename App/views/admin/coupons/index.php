@@ -5,20 +5,21 @@ use App\Helpers\CurrencyHelper;
 ?>
 
 <div class="space-y-6">
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <!-- Standard Action Row: Title Left, Search/Filter/Add Button Right -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Manage Coupons</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Manage Coupons</h1>
             <p class="mt-1 text-sm text-gray-500">Create and manage discount coupons</p>
         </div>
-        <div class="flex gap-3">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Add Button -->
             <a href="<?= \App\Core\View::url('admin/coupons/addStatusField') ?>" 
-               class="px-4 py-2 bg-accent text-white rounded-lg hover:bg-accent/90 transition-colors"
+               class="btn btn-outline"
                onclick="return confirm('This will add a status field to the coupons table. Continue?')">
                 <i class="fas fa-database mr-2"></i>Add Status Field
             </a>
             <a href="<?= \App\Core\View::url('admin/coupons/create') ?>" 
-               class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors font-medium">
+               class="btn btn-primary">
                 <i class="fas fa-plus mr-2"></i>Create Coupon
             </a>
         </div>
@@ -305,20 +306,23 @@ use App\Helpers\CurrencyHelper;
 </div>
 
 <!-- Confirmation Modal -->
-<div id="confirmModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white p-6 rounded-lg shadow-lg max-w-md w-full mx-4">
-        <div class="flex items-center space-x-3 mb-4">
-            <div class="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center">
-                <i class="fas fa-exclamation-triangle text-white"></i>
-            </div>
-            <div>
-                <h3 class="text-lg font-medium text-gray-900">Confirm Deletion</h3>
-                <p class="text-gray-600" id="confirmMessage"></p>
-            </div>
+<div id="confirmModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirm Deletion</h3>
+            <button onclick="closeConfirmModal()" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
-        <div class="flex justify-end space-x-3">
-            <button onclick="closeConfirmModal()" class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50">Cancel</button>
-            <button onclick="confirmDelete()" class="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Delete</button>
+        <div class="modal-body">
+            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mx-auto mb-4">
+                <i class="fas fa-exclamation-triangle text-red-600"></i>
+            </div>
+            <p class="text-sm text-gray-500 text-center" id="confirmMessage"></p>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeConfirmModal()" class="btn btn-outline">Cancel</button>
+            <button onclick="confirmDelete()" class="btn btn-delete">Delete</button>
         </div>
     </div>
 </div>

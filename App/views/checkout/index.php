@@ -137,8 +137,9 @@ if (isset($_COOKIE['guest_postal_code'])) {
                             <div class="relative">
                                 <input type="text" name="city" id="city" list="city-list" required
                                        value="<?= htmlspecialchars($defaultCity) ?>"
-                                       class="w-full px-2 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:border-primary"
-                                       placeholder="Type to search city">
+                                       class="w-full px-2 py-2 pr-10 border border-gray-300 rounded-lg bg-white text-gray-900 focus:ring-2 focus:ring-primary focus:border-primary"
+                                       placeholder="Type to search city"
+                                       style="appearance: none; -webkit-appearance: none; -moz-appearance: textfield;">
                                 <datalist id="city-list">
                                     <?php foreach ($deliveryCharges as $charge): ?>
                                         <option value="<?= htmlspecialchars($charge['location_name']) ?>"></option>
@@ -148,7 +149,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                                 <!-- Custom suggestions for full cross-device support -->
                                 <div id="city-suggest-box" class="absolute left-0 right-10 top-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-56 overflow-auto hidden z-40"></div>
                                 <button type="button" onclick="detectLocation()" 
-                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary hover:text-primary-dark">
+                                        class="absolute right-2 top-1/2 transform -translate-y-1/2 text-primary hover:text-primary-dark z-10">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -471,6 +472,18 @@ if (isset($_COOKIE['guest_postal_code'])) {
                     onclick="document.getElementById('place-order-btn').click();">
                 Complete Purchase
             </button>
+
+            <div class="mt-4 flex items-start gap-3 bg-primary/5 border border-primary/15 rounded-2xl px-4 py-3">
+                <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary border border-primary/20">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                    </svg>
+                </div>
+                <div class="text-sm text-neutral-600 text-left">
+                    <p class="font-semibold text-foreground">Safe and Secure Payments</p>
+                    <p class="text-neutral-500 text-xs">Easy returns. 100% authentic products.</p>
+                </div>
+            </div>
         </div>
     </aside>
             </div>
@@ -505,11 +518,11 @@ if (isset($_COOKIE['guest_postal_code'])) {
     <!-- Sticky Place Order Button -->
     <div class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-100 p-4 shadow-lg z-50 lg:hidden">
         <div class="grid grid-cols-2 gap-3">
-            <button type="button" id="cod-quick-btn" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 w-full flex justify-center">
+            <button type="button" id="back-btn" onclick="window.history.back()" class="border border-primary text-primary bg-transparent px-4 py-2.5 rounded-2xl font-medium hover:bg-primary/10 w-full flex justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
                 </svg>
-                COD
+                Back
             </button>
             <button type="submit" form="checkout-form" id="place-order-btn" class="bg-primary text-white px-4 py-2.5 rounded-2xl font-medium hover:bg-primary-dark w-full flex justify-center">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -525,7 +538,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
 document.addEventListener('DOMContentLoaded', function() {
     const checkoutForm = document.getElementById('checkout-form');
     const placeOrderBtn = document.getElementById('place-order-btn');
-    const codQuickBtn = document.getElementById('cod-quick-btn');
+    // Back button (replaced COD button)
     const addressInput = document.getElementById('address_line1');
     const phoneInput = document.getElementById('phone');
     const nameInput = document.getElementById('recipient_name');
@@ -587,32 +600,11 @@ document.addEventListener('DOMContentLoaded', function() {
         );
     }
 
-    if (codQuickBtn) {
-        codQuickBtn.addEventListener('click', function() {
-            let codSelected = false;
-            paymentMethods.forEach(function(method) {
-                if (method.dataset.cod === '1') {
-                    method.checked = true;
-                    codSelected = true;
-                }
-            });
-            if (!codSelected) {
-                paymentMethods.forEach(function(method) {
-                    const txt = method.closest('label').innerText.toLowerCase();
-                    if (txt.includes('cash on delivery') || txt.includes('cod')) {
-                        method.checked = true;
-                        codSelected = true;
-                    }
-                });
-            }
-            codQuickBtn.classList.add('ring-2','ring-accent-light');
-            setTimeout(()=>codQuickBtn.classList.remove('ring-2','ring-accent-light'),800);
-            if (minimalValid()) {
-                confirmed = true;
-                checkoutForm.submit();
-            } else {
-                errorToast('Please fill Name, Phone, Address, City');
-            }
+    // Back button functionality (replaced COD button)
+    const backBtn = document.getElementById('back-btn');
+    if (backBtn) {
+        backBtn.addEventListener('click', function() {
+            window.history.back();
         });
     }
 
@@ -1154,6 +1146,22 @@ function showLocationAlert(type, message) {
     }
 });
 </script>
+
+<style>
+/* Hide datalist dropdown arrow on city input */
+#city::-webkit-calendar-picker-indicator {
+    display: none !important;
+    -webkit-appearance: none;
+}
+#city::-webkit-list-button {
+    display: none !important;
+}
+#city {
+    -webkit-appearance: none;
+    -moz-appearance: textfield;
+    appearance: none;
+}
+</style>
 
 <script>
 // Lightweight removal handler for checkout summary items

@@ -66,14 +66,14 @@
                         <div class="flex space-x-2">
                             <?php if ($currentPage > 1): ?>
                                 <a href="<?= \App\Core\View::url('user/transactions?page=' . ($currentPage - 1)) ?>" 
-                                   class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                                   class="btn btn-outline">
                                     Previous
                                 </a>
                             <?php endif; ?>
                             
                             <?php if ($currentPage < $totalPages): ?>
                                 <a href="<?= \App\Core\View::url('user/transactions?page=' . ($currentPage + 1)) ?>" 
-                                   class="px-3 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors">
+                                   class="btn btn-outline">
                                     Next
                                 </a>
                             <?php endif; ?>

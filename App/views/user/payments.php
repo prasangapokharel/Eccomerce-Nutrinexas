@@ -70,7 +70,7 @@ $description = 'Manage your payment methods and billing information.';
             <p class="text-xs text-primary/70 leading-relaxed">All payment methods are secure and encrypted. We never store your full payment details. For any payment-related queries, contact our support team.</p>
         </div>
 
-        <a href="<?= \App\Core\View::url('pages/contact') ?>" class="w-full bg-primary text-white font-semibold py-3 rounded-2xl text-center block hover:bg-primary/90 transition-colors">
+        <a href="<?= \App\Core\View::url('pages/contact') ?>" class="btn btn-primary w-full">
             Contact Support
         </a>
     </div>

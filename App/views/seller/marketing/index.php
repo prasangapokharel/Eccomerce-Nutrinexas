@@ -11,7 +11,7 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
             <a href="<?= \App\Core\View::url('seller/marketing/create-coupon') ?>" 
-               class="btn">
+               class="btn btn-primary">
                 <i class="fas fa-plus mr-2"></i>
                 Create Coupon
             </a>
@@ -30,7 +30,7 @@
                 <h3 class="text-xl font-medium text-gray-900 mb-2">No coupons found</h3>
                 <p class="text-gray-600 mb-6">Get started by creating your first coupon</p>
                 <a href="<?= \App\Core\View::url('seller/marketing/create-coupon') ?>" 
-                   class="btn">
+                   class="btn btn-primary">
                     Create Coupon
                 </a>
             </div>

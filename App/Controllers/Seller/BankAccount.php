@@ -24,23 +24,25 @@ class BankAccount extends BaseSellerController
             return;
         }
 
-        $bankAccounts = $this->db->query(
-            "SELECT * FROM seller_bank_accounts WHERE seller_id = ? ORDER BY is_default DESC, created_at DESC",
+        // Get existing bank account for this seller
+        $existingAccount = $this->db->query(
+            "SELECT * FROM seller_bank_accounts WHERE seller_id = ? ORDER BY is_default DESC, created_at DESC LIMIT 1",
             [$this->sellerId]
-        )->all();
+        )->single();
 
-        $defaultAccount = null;
-        foreach ($bankAccounts as $account) {
-            if ($account['is_default']) {
-                $defaultAccount = $account;
-                break;
-            }
+        $bankAccounts = [];
+        if ($existingAccount) {
+            $bankAccounts = [$existingAccount];
         }
+
+        $defaultAccount = $existingAccount;
 
         $this->view('seller/bank-account/index', [
             'title' => 'Bank Account',
             'bankAccounts' => $bankAccounts,
-            'defaultAccount' => $defaultAccount
+            'defaultAccount' => $defaultAccount,
+            'hasAccount' => !empty($existingAccount),
+            'existingAccount' => $existingAccount
         ]);
     }
 
@@ -168,6 +170,18 @@ class BankAccount extends BaseSellerController
                     $this->setFlash('error', 'Failed to update bank account. Please try again.');
                 }
             } else {
+                // Check if seller already has a bank account
+                $existingAccount = $this->db->query(
+                    "SELECT id FROM seller_bank_accounts WHERE seller_id = ? LIMIT 1",
+                    [$this->sellerId]
+                )->single();
+
+                if ($existingAccount) {
+                    $this->setFlash('error', 'You already have a bank account saved. Please update the existing account instead.');
+                    $this->redirect('seller/bank-account');
+                    return;
+                }
+
                 // Create new account
                 // If setting as default, unset other defaults
                 if ($data['is_default']) {

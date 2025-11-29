@@ -4,10 +4,10 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Products Management</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Products Management</h1>
             <p class="text-gray-600 mt-2">Manage your wholesale products and inventory</p>
         </div>
-        <a href="<?= \App\Core\View::url('admin/inventory/add-product') ?>" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
+        <a href="<?= \App\Core\View::url('admin/inventory/add-product') ?>" class="btn btn-primary">
             <i class="fas fa-plus mr-2"></i>Add Product
         </a>
     </div>
@@ -85,22 +85,27 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex justify-between items-center">
                 <h2 class="text-lg font-semibold text-gray-900">All Products</h2>
-                <div class="flex items-center space-x-4">
+                <!-- Standard Top Bar: Search, Filter, Button -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
                     <!-- Barcode/SKU Scanner -->
-                    <div class="relative">
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
                         <input type="text" id="barcodeScanner" placeholder="Scan barcode/SKU..." 
-                               class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                               class="input native-input pl-10"
                                autocomplete="off">
-                        <i class="fas fa-barcode absolute left-3 top-3 text-gray-400"></i>
-                        <button onclick="startBarcodeScan()" class="absolute right-2 top-2 text-blue-600 hover:text-blue-800" title="Start Camera Scanner">
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <i class="fas fa-barcode text-gray-400 text-sm"></i>
+                        </div>
+                        <button onclick="startBarcodeScan()" class="absolute right-2 top-2 text-primary hover:text-primary-dark" title="Start Camera Scanner">
                             <i class="fas fa-camera"></i>
                         </button>
                     </div>
-                    <!-- Search -->
-                    <div class="relative">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
                         <input type="text" id="searchProducts" placeholder="Search products..." 
-                               class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
                     </div>
                 </div>
             </div>

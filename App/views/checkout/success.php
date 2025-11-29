@@ -29,12 +29,21 @@ use App\Helpers\CurrencyHelper;
                         <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium <?= $data['order']['payment_status'] === 'paid' ? 'bg-success/10 text-success-dark' : 'bg-accent/10 text-accent-dark' ?>">
                             <?= $data['order']['payment_status'] === 'paid' ? 'Paid' : ucfirst(htmlspecialchars($data['order']['status'])) ?>
                         </span>
+                        <?php if (!empty($data['hasDigitalProducts']) && $data['order']['payment_status'] === 'paid'): ?>
+                            <a href="<?= \App\Core\View::url('digitaldownload/' . $data['order']['id']) ?>" 
+                               class="inline-flex items-center justify-center px-4 py-2 bg-primary text-white rounded-xl font-medium text-xs hover:bg-primary-dark transition-colors shadow-md">
+                                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                                </svg>
+                                Download
+                            </a>
+                        <?php endif; ?>
                         <a href="<?= URLROOT ?>/receipt/download/<?= $data['order']['id'] ?>" 
                            class="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
                             <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
                             </svg>
-                            Download
+                            Receipt
                         </a>
                     </div>
                 </div>
@@ -118,6 +127,7 @@ use App\Helpers\CurrencyHelper;
                         $discountAmount = $data['order']['discount_amount'] ?? 0;
                         $taxAmount = $data['order']['tax_amount'] ?? 0;
                         $deliveryFee = $data['order']['delivery_fee'] ?? 0;
+                        $taxRate = (new \App\Models\Setting())->get('tax_rate', 12);
                         $calculatedTotal = $subtotal - $discountAmount + $taxAmount + $deliveryFee;
                         ?>
                         <div class="flex justify-between">
@@ -132,7 +142,7 @@ use App\Helpers\CurrencyHelper;
                         <?php endif; ?>
                         <?php if ($taxAmount > 0): ?>
                             <div class="flex justify-between">
-                                <span class="text-gray-600">Tax (<?= number_format((($taxAmount / max(1, $subtotal - $discountAmount)) * 100), 0) ?>%)</span>
+                                <span class="text-gray-600">Tax (<?= $taxRate ?>%)</span>
                                 <span class="font-medium text-gray-900"><?= CurrencyHelper::format($taxAmount) ?></span>
                             </div>
                         <?php endif; ?>
@@ -180,6 +190,30 @@ use App\Helpers\CurrencyHelper;
                 </div>
             </div>
         </div>
+
+        <!-- Digital Products Download Button -->
+        <?php 
+        $showDownloadButton = !empty($data['hasDigitalProducts']) && $data['order']['payment_status'] === 'paid';
+        if ($showDownloadButton): ?>
+            <div class="bg-white shadow-sm rounded-lg overflow-hidden mb-6">
+                <div class="p-6 text-center">
+                    <div class="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-2">Your Download Link</h3>
+                    <p class="text-sm text-gray-600 mb-4">Access your digital products instantly</p>
+                    <a href="<?= \App\Core\View::url('digitaldownload/' . $data['order']['id']) ?>" 
+                       class="inline-flex items-center justify-center px-6 py-3 bg-primary text-white rounded-xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+                        </svg>
+                        Download Files
+                    </a>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Action Buttons -->
         <div class="flex flex-col sm:flex-row gap-4 justify-center">

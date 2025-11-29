@@ -26,14 +26,74 @@ $esewaLogo = PaymentGatewayHelper::getGatewayLogo('eSewa');
 
         <div class="mb-8">
             <h2 class="text-xl font-semibold text-gray-900 mb-4">Order Summary</h2>
-            <div class="bg-gray-50 p-6 rounded-lg">
-                <div class="flex justify-between mb-2">
-                    <span class="text-gray-600">Order Number:</span>
-                    <span class="font-medium"><?= htmlspecialchars($order['invoice']) ?></span>
+            <div class="bg-neutral-50 p-6 rounded-2xl border border-neutral-200">
+                <div class="flex justify-between mb-4 pb-3 border-b border-neutral-200">
+                    <span class="text-neutral-600">Order Number:</span>
+                    <span class="font-semibold text-gray-900"><?= htmlspecialchars($order['invoice']) ?></span>
                 </div>
-                <div class="flex justify-between">
-                    <span class="text-gray-600">Total Amount:</span>
-                    <span class="font-medium"><?= CurrencyHelper::format($order['total_amount']) ?></span>
+                
+                <?php
+                // Recalculate totals using same logic as checkout to ensure accuracy
+                // Get order items to calculate subtotal
+                $orderItemModel = new \App\Models\OrderItem();
+                $orderItems = $orderItemModel->getByOrderId($order['id']);
+                $itemCount = count($orderItems);
+                
+                // Calculate subtotal from order items (same as checkout)
+                $subtotal = 0;
+                foreach ($orderItems as $item) {
+                    $itemPrice = ($item['price'] ?? 0);
+                    $itemQuantity = ($item['quantity'] ?? 1);
+                    $subtotal += $itemPrice * $itemQuantity;
+                }
+                
+                // Get stored values
+                $discountAmount = round($order['discount_amount'] ?? 0, 2);
+                $deliveryFee = round($order['delivery_fee'] ?? 0, 2);
+                $taxRate = (new \App\Models\Setting())->get('tax_rate', 12);
+                
+                // Recalculate using same service as checkout
+                $totals = \App\Services\OrderCalculationService::calculateTotals(
+                    $subtotal,
+                    $discountAmount,
+                    $deliveryFee,
+                    $taxRate
+                );
+                
+                // Use recalculated values for display
+                $taxAmount = round($totals['tax'], 2);
+                $totalAmount = round($totals['total'], 2);
+                ?>
+                
+                <div class="space-y-3 text-sm text-neutral-600">
+                    <div class="flex justify-between">
+                        <span>Subtotal (<?= $itemCount ?> items)</span>
+                        <span class="font-semibold text-gray-900"><?= CurrencyHelper::format($subtotal) ?></span>
+                    </div>
+                    
+                    <?php if ($discountAmount > 0): ?>
+                        <div class="flex justify-between text-success">
+                            <span>Coupon Discount</span>
+                            <span class="font-semibold">-<?= CurrencyHelper::format($discountAmount) ?></span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="flex justify-between">
+                        <span>Tax (<?= $taxRate ?>%)</span>
+                        <span class="font-semibold text-gray-900"><?= CurrencyHelper::format($taxAmount) ?></span>
+                    </div>
+                    
+                    <?php if ($deliveryFee > 0): ?>
+                        <div class="flex justify-between">
+                            <span>Delivery Fee</span>
+                            <span class="font-semibold text-gray-900"><?= CurrencyHelper::format($deliveryFee) ?></span>
+                        </div>
+                    <?php endif; ?>
+                    
+                    <div class="border-t border-neutral-200 pt-3 flex items-center justify-between">
+                        <span class="text-base font-semibold text-gray-900">Total</span>
+                        <span class="text-xl font-bold text-primary"><?= CurrencyHelper::format($totalAmount) ?></span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -74,9 +134,8 @@ $esewaLogo = PaymentGatewayHelper::getGatewayLogo('eSewa');
         </div>
 
         <div class="flex justify-center">
-            <button id="payment-button" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark transition-colors shadow-lg flex items-center justify-center">
-                <span class="mr-2">Pay with eSewa</span>
-                <img src="<?= htmlspecialchars($esewaLogo) ?>" alt="eSewa" class="h-6 w-auto" onerror="this.style.display='none';">
+            <button id="payment-button" class="w-full px-6 py-3 bg-primary text-white rounded-2xl font-semibold text-sm hover:bg-primary-dark shadow-lg">
+                Pay with eSewa
             </button>
         </div>
 
@@ -100,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
         paymentError.classList.remove('hidden');
         errorMessage.textContent = message || 'Payment failed. Please try again.';
         paymentButton.disabled = false;
-        paymentButton.innerHTML = '<span class="mr-2">Pay with eSewa</span><img src="<?= htmlspecialchars($esewaLogo) ?>" alt="eSewa" class="h-6 w-auto">';
+        paymentButton.innerHTML = 'Pay with eSewa';
     }
     
     function initiatePayment() {

@@ -143,10 +143,13 @@ class Product extends Model
             $now = date('Y-m-d H:i:s');
             $scheduledDate = $product['scheduled_date'];
             
+            // Product is scheduled only if launch date is in the future
+            // If launch date equals or is before current date, allow ordering
             if ($scheduledDate > $now) {
                 $product['is_scheduled'] = 1;
                 $product['scheduled_available'] = false;
             } else {
+                // Launch date has arrived or passed - allow ordering
                 $product['is_scheduled'] = 0;
                 $product['scheduled_available'] = true;
             }
@@ -484,7 +487,7 @@ class Product extends Model
             ) category_trend ON p.category = category_trend.category
             WHERE p.status = 'active'
             AND (p.approval_status = 'approved' OR p.approval_status IS NULL OR p.seller_id IS NULL OR p.seller_id = 0)
-            GROUP BY p.id
+            GROUP BY p.id, category_trend.score
             ORDER BY score DESC, p.created_at DESC
             LIMIT ? OFFSET ?
         ";
@@ -561,7 +564,8 @@ class Product extends Model
     {
         $fields = ['product_name', 'slug', 'description', 'short_description', 'price', 'sale_price',
                    'stock_quantity', 'category', 'subtype', 'image', 'tags',
-                   'is_featured', 'status', 'approval_status', 'meta_title', 'meta_description', 'seller_id'];
+                   'is_featured', 'status', 'approval_status', 'meta_title', 'meta_description', 'seller_id',
+                   'is_scheduled', 'scheduled_date', 'scheduled_end_date', 'scheduled_duration', 'scheduled_message'];
         $placeholders = [];
         $values = [];
         
@@ -591,6 +595,44 @@ class Product extends Model
 
         if ($result) {
             $this->invalidateCache();
+            
+            // Clear PerformanceCache for homepage
+            if (class_exists('App\Helpers\PerformanceCache')) {
+                try {
+                    // Clear all homepage cache files
+                    $cacheDir = ROOT_DIR . '/App/storage/cache/static/';
+                    if (is_dir($cacheDir)) {
+                        $files = glob($cacheDir . '*');
+                        foreach ($files as $file) {
+                            if (is_file($file)) {
+                                $content = @file_get_contents($file);
+                                if ($content) {
+                                    $data = @unserialize(@gzuncompress($content));
+                                    if ($data && isset($data['content']) && is_array($data['content'])) {
+                                        // Check if this is homepage data cache
+                                        if (isset($data['content']['sliders']) || isset($data['content']['products'])) {
+                                            @unlink($file);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Clear database query cache
+                    $dbCacheDir = ROOT_DIR . '/App/storage/cache/database/';
+                    if (is_dir($dbCacheDir)) {
+                        $files = glob($dbCacheDir . '*');
+                        foreach ($files as $file) {
+                            if (is_file($file)) {
+                                @unlink($file);
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    error_log('Product create cache clear error: ' . $e->getMessage());
+                }
+            }
+            
             return $this->db->lastInsertId();
         }
         return false;
@@ -638,6 +680,42 @@ class Product extends Model
         $result = $this->db->query($sql, $values)->execute();
 
         if ($result) {
+            // Clear PerformanceCache for homepage when product is updated
+            if (class_exists('App\Helpers\PerformanceCache')) {
+                try {
+                    // Clear all homepage cache files
+                    $cacheDir = ROOT_DIR . '/App/storage/cache/static/';
+                    if (is_dir($cacheDir)) {
+                        $files = glob($cacheDir . '*');
+                        foreach ($files as $file) {
+                            if (is_file($file)) {
+                                $content = @file_get_contents($file);
+                                if ($content) {
+                                    $data = @unserialize(@gzuncompress($content));
+                                    if ($data && isset($data['content']) && is_array($data['content'])) {
+                                        // Check if this is homepage data cache
+                                        if (isset($data['content']['sliders']) || isset($data['content']['products'])) {
+                                            @unlink($file);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    // Clear database query cache
+                    $dbCacheDir = ROOT_DIR . '/App/storage/cache/database/';
+                    if (is_dir($dbCacheDir)) {
+                        $files = glob($dbCacheDir . '*');
+                        foreach ($files as $file) {
+                            if (is_file($file)) {
+                                @unlink($file);
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    error_log('Product update cache clear error: ' . $e->getMessage());
+                }
+            }
             $newSlug = $data['slug'] ?? null;
             $slugsToInvalidate = array_filter(array_unique([$existingSlug, $newSlug]), function ($value) {
                 return !empty($value);
@@ -1010,6 +1088,69 @@ class Product extends Model
                 WHERE product_id = ?";
         
         $result = $this->db->query($sql, [$productId])->single();
+        
+        if (!$result) {
+            return [
+                'total_reviews' => 0,
+                'average_rating' => 0,
+                'five_star' => 0,
+                'four_star' => 0,
+                'three_star' => 0,
+                'two_star' => 0,
+                'one_star' => 0
+            ];
+        }
+        
+        return [
+            'total_reviews' => (int)$result['total_reviews'],
+            'average_rating' => round((float)$result['average_rating'], 2),
+            'five_star' => (int)$result['five_star'],
+            'four_star' => (int)$result['four_star'],
+            'three_star' => (int)$result['three_star'],
+            'two_star' => (int)$result['two_star'],
+            'one_star' => (int)$result['one_star']
+        ];
+    }
+    
+    /**
+     * Get review stats for multiple products (batch loading)
+     *
+     * @param array $productIds
+     * @return array
+     */
+    public function getReviewStatsBatch(array $productIds)
+    {
+        if (empty($productIds)) {
+            return [];
+        }
+        
+        $placeholders = str_repeat('?,', count($productIds) - 1) . '?';
+        $sql = "SELECT 
+                    product_id,
+                    COUNT(*) as total_reviews,
+                    AVG(rating) as average_rating
+                FROM reviews 
+                WHERE product_id IN ($placeholders)
+                GROUP BY product_id";
+        
+        $results = $this->db->query($sql, $productIds)->all();
+        
+        $stats = [];
+        foreach ($productIds as $id) {
+            $stats[$id] = [
+                'total_reviews' => 0,
+                'average_rating' => 0
+            ];
+        }
+        
+        foreach ($results as $row) {
+            $stats[$row['product_id']] = [
+                'total_reviews' => (int)$row['total_reviews'],
+                'average_rating' => round((float)$row['average_rating'], 2)
+            ];
+        }
+        
+        return $stats;
         
         if (!$result) {
             return [

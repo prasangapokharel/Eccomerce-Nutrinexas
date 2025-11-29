@@ -199,7 +199,7 @@ $days = ['monday' => 'Monday', 'tuesday' => 'Tuesday', 'wednesday' => 'Wednesday
                 <a href="<?= \App\Core\View::url('seller/dashboard') ?>" class="btn btn-outline">
                     Cancel
                 </a>
-                <button type="submit" class="btn">
+                <button type="submit" class="btn btn-primary">
                     Save Changes
                 </button>
             </div>

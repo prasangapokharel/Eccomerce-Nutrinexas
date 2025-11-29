@@ -4,8 +4,8 @@
 <div class="space-y-6">
     <div class="page-header">
         <h1 class="page-title">Create Coupon</h1>
-        <a href="<?= \App\Core\View::url('seller/marketing') ?>" class="link-gray">
-            <i class="fas fa-arrow-left icon-spacing"></i> Back to Marketing
+        <a href="<?= \App\Core\View::url('seller/marketing') ?>" class="btn btn-outline">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Marketing
         </a>
     </div>
 
@@ -16,12 +16,12 @@
             <div class="grid grid-cols-1 grid-cols-2">
                 <div>
                     <label for="code">Coupon Code *</label>
-                    <input type="text" id="code" name="code" required placeholder="SAVE10" oninput="this.value = this.value.toUpperCase()">
+                    <input type="text" id="code" name="code" required placeholder="SAVE10" oninput="this.value = this.value.toUpperCase()" class="input native-input">
                 </div>
 
                 <div>
                     <label for="discount_type">Discount Type *</label>
-                    <select id="discount_type" name="discount_type" required>
+                    <select id="discount_type" name="discount_type" required class="input native-input">
                         <option value="percentage">Percentage</option>
                         <option value="fixed">Fixed Amount</option>
                     </select>
@@ -29,37 +29,37 @@
 
                 <div>
                     <label for="discount_value">Discount Value *</label>
-                    <input type="number" id="discount_value" name="discount_value" step="0.01" required>
+                    <input type="number" id="discount_value" name="discount_value" step="0.01" required class="input native-input">
                 </div>
 
                 <div>
                     <label for="min_purchase">Minimum Purchase (रु)</label>
-                    <input type="number" id="min_purchase" name="min_purchase" step="0.01">
+                    <input type="number" id="min_purchase" name="min_purchase" step="0.01" class="input native-input">
                 </div>
 
                 <div>
                     <label for="max_discount">Max Discount (रु)</label>
-                    <input type="number" id="max_discount" name="max_discount" step="0.01">
+                    <input type="number" id="max_discount" name="max_discount" step="0.01" class="input native-input">
                 </div>
 
                 <div>
                     <label for="usage_limit">Usage Limit</label>
-                    <input type="number" id="usage_limit" name="usage_limit" min="1" placeholder="Leave empty for unlimited">
+                    <input type="number" id="usage_limit" name="usage_limit" min="1" placeholder="Leave empty for unlimited" class="input native-input">
                 </div>
 
                 <div>
                     <label for="valid_from">Valid From</label>
-                    <input type="date" id="valid_from" name="valid_from" value="<?= date('Y-m-d') ?>">
+                    <input type="date" id="valid_from" name="valid_from" value="<?= date('Y-m-d') ?>" class="input native-input">
                 </div>
 
                 <div>
                     <label for="valid_until">Valid Until</label>
-                    <input type="date" id="valid_until" name="valid_until">
+                    <input type="date" id="valid_until" name="valid_until" class="input native-input">
                 </div>
 
                 <div>
                     <label for="status">Status *</label>
-                    <select id="status" name="status" required>
+                    <select id="status" name="status" required class="input native-input">
                         <option value="active">Active</option>
                         <option value="inactive">Inactive</option>
                     </select>
@@ -67,7 +67,7 @@
             </div>
 
             <div class="flex items-center justify-end gap-4 mt-6">
-                <a href="<?= \App\Core\View::url('seller/marketing') ?>" class="btn btn-secondary">
+                <a href="<?= \App\Core\View::url('seller/marketing') ?>" class="btn btn-outline">
                     Cancel
                 </a>
                 <button type="submit" class="btn btn-primary">

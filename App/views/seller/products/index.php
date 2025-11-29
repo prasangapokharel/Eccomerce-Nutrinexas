@@ -15,7 +15,7 @@
                 Bulk Upload
             </a>
             <a href="<?= \App\Core\View::url('seller/products/create') ?>" 
-               class="btn">
+               class="btn btn-primary">
                 <i class="fas fa-plus mr-2"></i>
                 Add Product
             </a>
@@ -30,7 +30,7 @@
                 <div class="flex items-center gap-4">
                     <span id="selectedCount" class="text-sm font-medium text-gray-700">0 selected</span>
                     <button id="bulkDeleteBtn" 
-                            class="px-4 py-2 bg-red-600 text-white rounded-lg text-sm font-medium hover:bg-red-700 transition-colors">
+                            class="btn btn-delete">
                         <i class="fas fa-trash mr-2"></i>Delete Selected
                     </button>
                     <button id="clearSelectionBtn" 
@@ -54,21 +54,22 @@
                     <h2 class="text-lg font-semibold text-gray-900">Product List</h2>
                 </div>
                 
-                <!-- Search and Filters -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative">
+                <!-- Standard Top Bar: Search, Filter, Button -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
                         <input type="text" 
                                id="searchInput" 
                                placeholder="Search products..." 
-                               class="input native-input"
-                               style="padding-left: 2.5rem;">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
                             <i class="fas fa-search text-gray-400 text-sm"></i>
                         </div>
                     </div>
                     
+                    <!-- Status Filter -->
                     <select id="statusFilter"
-                            class="input native-input">
+                            class="input native-input sm:w-40">
                         <?php $currentStatus = $_GET['status'] ?? ''; ?>
                         <option value="" <?= $currentStatus === '' ? 'selected' : '' ?>>All Statuses</option>
                         <option value="active" <?= $currentStatus === 'active' ? 'selected' : '' ?>>Active</option>
@@ -76,8 +77,9 @@
                         <option value="inactive" <?= $currentStatus === 'inactive' ? 'selected' : '' ?>>Inactive</option>
                     </select>
 
+                    <!-- Approval Filter -->
                     <select id="approvalFilter"
-                            class="input native-input">
+                            class="input native-input sm:w-40">
                         <option value="">All Approvals</option>
                         <option value="approved">Approved</option>
                         <option value="pending">Pending</option>
@@ -129,7 +131,7 @@
                                     <h3 class="text-lg font-medium text-gray-900 mb-2">No products found</h3>
                                     <p class="text-gray-500 mb-4">Get started by adding your first product.</p>
                                     <a href="<?= \App\Core\View::url('seller/products/create') ?>" 
-                                       class="btn">
+                                       class="btn btn-primary">
                                         <i class="fas fa-plus mr-2"></i>
                                         Add Product
                                     </a>
@@ -138,7 +140,7 @@
                         </tr>
                     <?php else: ?>
                         <?php foreach ($products as $product): ?>
-                            <tr class="hover:bg-gray-50 transition-colors product-row" 
+                            <tr class="hover:bg-gray-50 product-row" 
                                 data-name="<?= strtolower(htmlspecialchars($product['product_name'])) ?>"
                                 data-status="<?= strtolower(htmlspecialchars($product['status'] ?? '')) ?>"
                                 data-approval="<?= strtolower(htmlspecialchars($product['approval_status'] ?? 'pending')) ?>"
@@ -250,7 +252,7 @@
                                         </label>
                                         
                                         <a href="<?= \App\Core\View::url('seller/products/edit/' . $product['id']) ?>" 
-                                           class="text-primary hover:text-primary-dark transition-colors"
+                                           class="text-primary hover:text-primary-dark"
                                            title="Edit Product">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -260,7 +262,7 @@
                                               class="inline-block">
                                             <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
                                             <button type="submit" 
-                                                    class="text-red-600 hover:text-red-800 transition-colors"
+                                                    class="text-red-600 hover:text-red-800"
                                                     title="Delete Product">
                                                 <i class="fas fa-trash"></i>
                                             </button>

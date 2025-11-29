@@ -24,26 +24,65 @@ class Delivery extends BaseCuriorController
     {
         $status = $_GET['status'] ?? null;
         
-        // Get orders that are picked up or in transit (ready for delivery)
-        $orders = $this->orderModel->getOrdersByCurior($this->curiorId);
+        // Query orders that are picked up or in transit (ready for delivery)
+        $sql = "SELECT 
+                    o.*,
+                    o.customer_name AS order_customer_name,
+                    CONCAT(u.first_name, ' ', u.last_name) AS user_full_name,
+                    u.email AS customer_email,
+                    pm.name AS payment_method,
+                    (
+                        SELECT COALESCE(oi2.seller_id, p2.seller_id)
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_id,
+                    (
+                        SELECT COALESCE(s.company_name, s.name) 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_company,
+                    (
+                        SELECT s.name 
+                        FROM order_items oi2
+                        INNER JOIN products p2 ON oi2.product_id = p2.id
+                        LEFT JOIN sellers s ON COALESCE(oi2.seller_id, p2.seller_id) = s.id
+                        WHERE oi2.order_id = o.id
+                        ORDER BY oi2.id ASC
+                        LIMIT 1
+                    ) AS seller_name
+                FROM orders o
+                LEFT JOIN users u ON o.user_id = u.id
+                LEFT JOIN payment_methods pm ON o.payment_method_id = pm.id
+                WHERE o.curior_id = ?
+                AND o.curior_id IS NOT NULL";
         
-        // Filter for delivery-ready orders
-        $deliveryOrders = array_filter($orders, function($order) use ($status) {
-            $orderStatus = $order['status'];
-            // Show picked_up, in_transit orders (ready for delivery)
-            if ($status) {
-                return $orderStatus === $status;
-            }
-            return in_array($orderStatus, ['picked_up', 'in_transit']);
-        });
+        $params = [$this->curiorId];
         
-        // Sort by created_at (newest first)
-        usort($deliveryOrders, function($a, $b) {
-            return strtotime($b['created_at']) - strtotime($a['created_at']);
-        });
+        // Filter by status
+        if ($status) {
+            $sql .= " AND o.status = ?";
+            $params[] = $status;
+        } else {
+            // Show picked_up and in_transit orders (ready for delivery)
+            $sql .= " AND o.status IN ('picked_up', 'in_transit')";
+        }
+        
+        $sql .= " ORDER BY o.updated_at DESC, o.created_at DESC";
+        
+        $orders = $this->db->query($sql, $params)->all();
+        
+        // Debug logging
+        error_log("Courier Delivery: Courier #{$this->curiorId} - Found " . count($orders) . " orders for delivery");
         
         $this->view('curior/delivery/index', [
-            'orders' => array_values($deliveryOrders),
+            'orders' => $orders,
             'status' => $status,
             'page' => 'delivery',
             'title' => 'Delivery Management'
@@ -85,6 +124,8 @@ class Delivery extends BaseCuriorController
         try {
             $this->db->beginTransaction();
 
+            $oldStatus = $order['status'];
+            
             $updateData = [
                 'status' => 'in_transit',
                 'updated_at' => date('Y-m-d H:i:s')
@@ -98,7 +139,7 @@ class Delivery extends BaseCuriorController
                 ];
                 
                 $this->logOrderActivity($orderId, 'out_for_delivery', json_encode($activityData));
-                $this->notifyOrderUpdate($orderId, 'out_for_delivery', $activityData);
+                $this->notifyOrderUpdate($orderId, 'out_for_delivery', $oldStatus);
                 
                 $this->db->commit();
                 $this->jsonResponse(['success' => true, 'message' => 'Order marked as out for delivery']);
@@ -126,14 +167,29 @@ class Delivery extends BaseCuriorController
         }
     }
 
-    private function notifyOrderUpdate($orderId, $action, $data = [])
+    private function notifyOrderUpdate($orderId, $action, $oldStatus)
     {
         try {
-            $notificationService = new \App\Services\OrderNotificationService();
-            $notificationService->sendStatusChangeSMS($orderId, $action, $data);
+            $newStatus = $this->getStatusFromAction($action);
+            
+            if ($newStatus && $oldStatus) {
+                $notificationService = new \App\Services\OrderNotificationService();
+                $notificationService->sendStatusChangeSMS($orderId, $oldStatus, $newStatus);
+            }
         } catch (\Exception $e) {
             error_log('Delivery: Error sending notification: ' . $e->getMessage());
         }
+    }
+
+    private function getStatusFromAction($action)
+    {
+        $statusMap = [
+            'out_for_delivery' => 'in_transit',
+            'delivered' => 'delivered',
+            'delivery_attempted' => 'delivery_attempted'
+        ];
+        
+        return $statusMap[$action] ?? null;
     }
     
 }

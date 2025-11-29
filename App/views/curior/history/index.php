@@ -18,18 +18,18 @@ ob_start();
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date From</label>
                 <input type="date" name="date_from" value="<?= htmlspecialchars($dateFrom ?? '') ?>" 
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Date To</label>
                 <input type="date" name="date_to" value="<?= htmlspecialchars($dateTo ?? '') ?>" 
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                <select name="status" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                <select name="status" class="input native-input">
                     <option value="">All Status</option>
                     <option value="delivered" <?= (isset($status) && $status === 'delivered') ? 'selected' : '' ?>>Delivered</option>
                     <option value="cancelled" <?= (isset($status) && $status === 'cancelled') ? 'selected' : '' ?>>Cancelled</option>
@@ -39,7 +39,7 @@ ob_start();
             
             <div>
                 <label class="block text-sm font-medium text-gray-700 mb-2">Action</label>
-                <select name="action" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                <select name="action" class="input native-input">
                     <option value="">All Actions</option>
                     <option value="pickup_confirmed" <?= (isset($action) && $action === 'pickup_confirmed') ? 'selected' : '' ?>>Pickup Confirmed</option>
                     <option value="delivery_attempted" <?= (isset($action) && $action === 'delivery_attempted') ? 'selected' : '' ?>>Delivery Attempted</option>
@@ -48,10 +48,10 @@ ob_start();
             </div>
             
             <div class="md:col-span-4 flex justify-end space-x-3">
-                <button type="submit" class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary/90 transition-colors">
+                <button type="submit" class="btn btn-primary">
                     <i class="fas fa-filter mr-2"></i>Filter
                 </button>
-                <a href="<?= \App\Core\View::url('curior/history') ?>" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors">
+                <a href="<?= \App\Core\View::url('curior/history') ?>" class="btn btn-outline">
                     <i class="fas fa-redo mr-2"></i>Reset
                 </a>
             </div>

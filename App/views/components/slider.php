@@ -77,11 +77,48 @@ foreach ($preparedSlides as $slideMeta) {
 </div>
 
 <script>
+(function() {
+    'use strict';
+    
+    // Reset slider position on page load/visibility change
+    function resetSliderPosition() {
+        const viewport = document.getElementById('app-hero');
+        if (viewport) {
+            // Force reset to first slide
+            viewport.scrollLeft = 0;
+        }
+    }
+    
+    // Reset on page load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', resetSliderPosition);
+    } else {
+        resetSliderPosition();
+    }
+    
+    // Reset when page becomes visible (returning from another page)
+    document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+            setTimeout(resetSliderPosition, 100);
+        }
+    });
+    
+    // Reset on pageshow (back/forward navigation)
+    window.addEventListener('pageshow', function(event) {
+        if (event.persisted) {
+            setTimeout(resetSliderPosition, 100);
+        }
+    });
+})();
+
 document.addEventListener('DOMContentLoaded', function () {
     const viewport = document.getElementById('app-hero');
     if (!viewport) {
         return;
     }
+
+    // Reset scroll position immediately
+    viewport.scrollLeft = 0;
 
     const cards = Array.from(viewport.querySelectorAll('.app-hero__card'));
     const dots = Array.from(document.querySelectorAll('#app-hero-dots .app-hero__dot'));
@@ -194,8 +231,15 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     });
 
+    // Ensure we start at slide 0
+    viewport.scrollLeft = 0;
     setActive(0, false);
-    startAuto();
+    
+    // Small delay to ensure layout is ready
+    setTimeout(() => {
+        viewport.scrollLeft = 0;
+        startAuto();
+    }, 100);
 });
 </script>
 
@@ -231,6 +275,7 @@ document.addEventListener('DOMContentLoaded', function () {
     background: #ffffff;
     color: inherit;
     transition: transform 0.4s ease, box-shadow 0.4s ease;
+    width: 92%;
 }
 
 .app-hero__card.is-active {

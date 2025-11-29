@@ -4,8 +4,8 @@
 <div class="space-y-6">
     <div class="page-header">
         <h1 class="page-title">Edit Product</h1>
-        <a href="<?= \App\Core\View::url('seller/products') ?>" class="link-gray">
-            <i class="fas fa-arrow-left icon-spacing"></i> Back to Products
+        <a href="<?= \App\Core\View::url('seller/products') ?>" class="btn btn-outline">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Products
         </a>
     </div>
 
@@ -106,6 +106,38 @@
                     <label for="additional_images">Add Additional Image URLs</label>
                     <textarea id="additional_images" name="additional_images" rows="3" class="input native-input" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"></textarea>
                     <p class="text-xs text-gray-600 mt-1">Enter multiple image URLs separated by commas</p>
+                </div>
+            </div>
+
+            <!-- SEO & Metadata -->
+            <div class="space-y-4" style="margin-top: 2rem;">
+                <h3 class="text-lg font-medium text-gray-900 border-b border-gray-200 pb-2">SEO & Metadata</h3>
+                
+                <div>
+                    <label for="meta_title" class="block text-sm font-medium text-gray-700 mb-2">
+                        Meta Title
+                    </label>
+                    <input type="text" 
+                           id="meta_title" 
+                           name="meta_title" 
+                           value="<?= htmlspecialchars($product['meta_title'] ?? '') ?>"
+                           class="input native-input"
+                           placeholder="SEO title for search engines (50-60 characters recommended)"
+                           maxlength="60">
+                    <p class="text-xs text-gray-500 mt-1">Recommended: 50-60 characters</p>
+                </div>
+                
+                <div>
+                    <label for="meta_description" class="block text-sm font-medium text-gray-700 mb-2">
+                        Meta Description
+                    </label>
+                    <textarea id="meta_description" 
+                              name="meta_description" 
+                              rows="3"
+                              class="input native-input resize-none"
+                              placeholder="SEO description for search engines (150-160 characters recommended)"
+                              maxlength="160"><?= htmlspecialchars($product['meta_description'] ?? '') ?></textarea>
+                    <p class="text-xs text-gray-500 mt-1">Recommended: 150-160 characters</p>
                 </div>
             </div>
 

@@ -225,7 +225,7 @@ ob_start();
             </button>
         <?php endif; ?>
         
-        <?php if ($order['payment_method_id'] == 1 && $order['payment_status'] === 'pending'): ?>
+        <?php if (!empty($order['payment_method_id']) && $order['payment_method_id'] == 1 && !empty($order['payment_status']) && $order['payment_status'] === 'pending'): ?>
             <button onclick="collectCOD(<?= $order['id'] ?>, <?= $order['total_amount'] ?>)" 
                     class="px-4 py-3 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
                 <i class="fas fa-money-bill-wave mr-2"></i>Collect COD
@@ -245,12 +245,12 @@ ob_start();
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">OTP (if applicable)</label>
                 <input type="text" name="otp" placeholder="Enter OTP or leave blank"
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
             </div>
             
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Customer Signature</label>
-                <select name="signature" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                <select name="signature" class="input native-input">
                     <option value="yes">Yes, signature provided</option>
                     <option value="no">No signature</option>
                 </select>
@@ -259,14 +259,14 @@ ob_start();
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Upload Delivery Proof (Max 300KB)</label>
                 <input type="file" name="delivery_proof" accept="image/*" required
-                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary">
+                       class="input native-input">
                 <p class="text-xs text-gray-500 mt-1">Image will be compressed automatically</p>
             </div>
             
             <div class="mb-4">
                 <label class="block text-sm font-medium text-gray-700 mb-2">Notes (Optional)</label>
                 <textarea name="notes" rows="3" placeholder="Additional delivery notes"
-                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"></textarea>
+                          class="input native-input"></textarea>
             </div>
             
             <div class="flex justify-end space-x-3">

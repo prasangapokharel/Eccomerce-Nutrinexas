@@ -4,7 +4,7 @@
     <!-- Header -->
     <div class="flex justify-between items-center mb-8">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900">Purchase Payments</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Purchase Payments</h1>
             <p class="text-gray-600 mt-2">Track and manage payments for purchases</p>
         </div>
         <a href="<?= \App\Core\View::url('admin/inventory/add-payment') ?>" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition-colors">
@@ -85,11 +85,13 @@
         <div class="px-6 py-4 border-b border-gray-200">
             <div class="flex justify-between items-center">
                 <h2 class="text-lg font-semibold text-gray-900">All Payments</h2>
-                <div class="flex items-center space-x-4">
+                <div class="flex items-center gap-3">
                     <div class="relative">
                         <input type="text" id="searchPayments" placeholder="Search payments..." 
-                               class="pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                        <i class="fas fa-search absolute left-3 top-3 text-gray-400"></i>
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
                     </div>
                 </div>
             </div>

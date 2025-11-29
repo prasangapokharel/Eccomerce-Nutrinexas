@@ -3,7 +3,7 @@
 
 <div class="space-y-6 max-w-4xl">
     <div class="mb-6">
-        <a href="<?= \App\Core\View::url('seller/ads') ?>" class="text-primary hover:text-primary-dark mb-4 inline-block">
+        <a href="<?= \App\Core\View::url('seller/ads') ?>" class="btn btn-outline">
             <i class="fas fa-arrow-left mr-2"></i>Back to Ads
         </a>
         <h1 class="text-2xl font-bold text-gray-800">Ad Details</h1>

@@ -4,8 +4,8 @@
 <div class="space-y-6">
     <div class="page-header">
         <h1 class="page-title">Wallet Transactions</h1>
-        <a href="<?= \App\Core\View::url('seller/wallet') ?>" class="link-gray">
-            <i class="fas fa-arrow-left icon-spacing"></i> Back to Wallet
+        <a href="<?= \App\Core\View::url('seller/wallet') ?>" class="btn btn-outline">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Wallet
         </a>
     </div>
 
@@ -35,7 +35,7 @@
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <?php foreach ($transactions as $transaction): ?>
-                            <tr class="hover:bg-gray-50">
+                            <tr>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
                                     <?= date('M j, Y g:i A', strtotime($transaction['created_at'])) ?>
                                 </td>
@@ -71,10 +71,10 @@
                     </div>
                     <div class="flex gap-2">
                         <?php if ($currentPage > 1): ?>
-                            <a href="?page=<?= $currentPage - 1 ?>" class="btn btn-secondary">Previous</a>
+                            <button type="button" onclick="window.location.href='?page=<?= $currentPage - 1 ?>'" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium">Previous</button>
                         <?php endif; ?>
                         <?php if ($currentPage < $totalPages): ?>
-                            <a href="?page=<?= $currentPage + 1 ?>" class="btn btn-secondary">Next</a>
+                            <button type="button" onclick="window.location.href='?page=<?= $currentPage + 1 ?>'" class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg font-medium">Next</button>
                         <?php endif; ?>
                     </div>
                 </div>

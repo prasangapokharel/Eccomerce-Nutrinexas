@@ -73,12 +73,11 @@
                 <div class="mb-8">
                     <h3 class="text-lg font-semibold text-foreground mb-4">Order Status Timeline</h3>
                     
-                    <div class="relative">
-                        <div class="absolute left-5 top-0 h-full w-0.5 bg-neutral-200"></div>
+                    <div class="relative order-timeline pl-3">
                         
                         <!-- Order Placed -->
-                        <div class="relative flex items-start mb-6">
-                            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
+                        <div class="timeline-step relative flex items-start mb-6">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
@@ -92,8 +91,8 @@
                         
                         <!-- Payment Status -->
                         <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['paid', 'processing', 'shipped', 'delivered'])): ?>
-                            <div class="relative flex items-start mb-6">
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
+                            <div class="timeline-step relative flex items-start mb-6">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"></path>
                                     </svg>
@@ -108,8 +107,8 @@
                         
                         <!-- Processing Status -->
                         <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['processing', 'shipped', 'delivered'])): ?>
-                            <div class="relative flex items-start mb-6">
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-info/10 text-info z-10 border-2 border-info/30">
+                            <div class="timeline-step relative flex items-start mb-6">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-info/10 text-info z-10 border-2 border-info/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -125,8 +124,8 @@
                         
                         <!-- Shipping Status -->
                         <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['shipped', 'delivered'])): ?>
-                            <div class="relative flex items-start mb-6">
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-info/10 text-info z-10 border-2 border-info/30">
+                            <div class="timeline-step relative flex items-start mb-6">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-info/10 text-info z-10 border-2 border-info/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"></path>
                                     </svg>
@@ -142,7 +141,7 @@
                         <!-- Delivered Status -->
                         <?php if (strtolower($order['status'] ?? '') === 'delivered'): ?>
                             <div class="relative flex items-start mb-6">
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-success/10 text-success z-10 border-2 border-success/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4-8-4V7m16 0L12 3 4 7"></path>
                                     </svg>
@@ -157,8 +156,8 @@
                         
                         <!-- Cancelled Status -->
                         <?php if (strtolower($order['status'] ?? '') === 'cancelled'): ?>
-                            <div class="relative flex items-start">
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-error/10 text-error z-10 border-2 border-error/30">
+                            <div class="timeline-step relative flex items-start">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-error/10 text-error z-10 border-2 border-error/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                                     </svg>
@@ -173,8 +172,8 @@
                         
                         <!-- Pending Payment -->
                         <?php if (in_array(strtolower($order['status'] ?? 'pending'), ['pending', 'unpaid'])): ?>
-                            <div class="relative flex items-start">
-                                <div class="flex items-center justify-center w-10 h-10 rounded-full bg-warning/10 text-warning z-10 border-2 border-warning/30">
+                            <div class="timeline-step relative flex items-start">
+                            <div class="timeline-icon flex items-center justify-center w-10 h-10 rounded-full bg-warning/10 text-warning z-10 border-2 border-warning/30">
                                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
@@ -330,6 +329,45 @@
         <?php endif; ?>
     </div>
 </div>
+
+<style>
+.order-timeline {
+    position: relative;
+}
+.order-timeline::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 24px;
+    width: 2px;
+    background: #e5e7eb;
+}
+.timeline-step {
+    position: relative;
+    padding-left: 0.75rem;
+}
+.timeline-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    left: 24px;
+    top: 40px;
+    bottom: -10px;
+    width: 2px;
+    background: #e5e7eb;
+}
+.timeline-icon {
+    position: relative;
+    z-index: 10;
+    background-color: #fff;
+}
+@media (max-width: 640px) {
+    .order-timeline::before,
+    .timeline-step:not(:last-child)::after {
+        left: 20px;
+    }
+}
+</style>
 
 <?php $content = ob_get_clean(); ?>
 <?php include dirname(dirname(__FILE__)) . '/layouts/main.php'; ?>

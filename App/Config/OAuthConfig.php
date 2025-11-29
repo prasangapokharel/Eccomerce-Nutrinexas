@@ -12,7 +12,19 @@ class OAuthConfig
         // Include config to access env() function
         require_once dirname(__DIR__) . '/Config/config.php';
         
+        $appUrl = env('APP_URL', defined('BASE_URL') ? BASE_URL : 'http://localhost:8000');
+        $appUrl = rtrim($appUrl, '/');
+        
         return [
+            'google' => [
+                'client_id' => env('GOOGLE_CLIENT_ID', ''),
+                'client_secret' => env('GOOGLE_CLIENT_SECRET', ''),
+                'redirect_uri' => env('GOOGLE_REDIRECT_URI', $appUrl . '/auth/google/callback'),
+                'auth_url' => 'https://accounts.google.com/o/oauth2/v2/auth',
+                'token_url' => 'https://oauth2.googleapis.com/token',
+                'user_info_url' => 'https://www.googleapis.com/oauth2/v3/userinfo',
+                'scope' => 'openid email profile'
+            ],
             'auth0' => [
                 'domain' => env('AUTH0_DOMAIN', ''),
                 'client_id' => env('AUTH0_CLIENT_ID', ''),
@@ -43,19 +55,20 @@ class OAuthConfig
         $enabled = [];
 
         foreach ($providers as $key => $config) {
-            // Check for valid credentials (not placeholder values)
-            $hasValidCredentials = false;
-            
-            if ($key === 'supabase') {
-                $hasValidCredentials = !empty($config['url']) && 
-                    !str_contains($config['url'], 'your_supabase');
-            } else {
-                $hasValidCredentials = !empty($config['client_id']) && 
-                    !str_contains($config['client_id'], 'your_') &&
-                    !empty($config['client_secret']) && 
+            $hasValidCredentials = true;
+
+            if (isset($config['client_id'])) {
+                $hasValidCredentials = $hasValidCredentials &&
+                    !empty($config['client_id']) &&
+                    !str_contains($config['client_id'], 'your_');
+            }
+
+            if (isset($config['client_secret'])) {
+                $hasValidCredentials = $hasValidCredentials &&
+                    !empty($config['client_secret']) &&
                     !str_contains($config['client_secret'], 'your_');
             }
-            
+
             if ($hasValidCredentials) {
                 $enabled[$key] = $config;
             }
@@ -75,12 +88,12 @@ class OAuthConfig
         }
 
         // Check for placeholder credentials
-        if (str_contains($config['client_id'], 'your_') || 
-            str_contains($config['client_secret'], 'your_')) {
+        if ((isset($config['client_id']) && str_contains($config['client_id'], 'your_')) || 
+            (isset($config['client_secret']) && str_contains($config['client_secret'], 'your_'))) {
             throw new \Exception(
                 "OAuth provider '{$provider}' is not properly configured. " .
-                "Please set up your OAuth credentials in Google Cloud Console and " .
-                "update the GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET in your .env file."
+                "Please set up your {$provider} OAuth credentials in your cloud console and " .
+                "update the related environment variables (client ID and secret) in your .env file."
             );
         }
 

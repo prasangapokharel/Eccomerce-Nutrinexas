@@ -9,7 +9,7 @@
             <p class="mt-1 text-sm text-gray-500">Manage your product advertisements</p>
         </div>
         <div class="flex flex-col sm:flex-row gap-3">
-            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="btn">
+            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="btn btn-primary">
                 <i class="fas fa-plus mr-2"></i>Create New Ad
             </a>
         </div>
@@ -20,7 +20,7 @@
             <i class="fas fa-ad text-6xl text-gray-300 mb-4"></i>
             <h3 class="text-xl font-semibold text-gray-700 mb-2">No Ads Yet</h3>
             <p class="text-gray-500 mb-4">Create your first ad to promote your products</p>
-            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="btn">
+            <a href="<?= \App\Core\View::url('seller/ads/create') ?>" class="btn btn-primary">
                 Create Ad
             </a>
         </div>

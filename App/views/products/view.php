@@ -41,19 +41,62 @@ $productDescription = strip_tags($product['description'] ?? '');
 $productPrice = isset($product['sale_price']) && $product['sale_price'] > 0 ? $product['sale_price'] : $product['price'] ?? 0;
 $productCurrency = 'NPR';
 $productCategory = htmlspecialchars($product['category'] ?? '');
+$normalizedCategory = strtolower(trim($product['category'] ?? ''));
 $productBrand = 'NutriNexus';
 
 // Check if product is scheduled
-$isScheduled = isset($product['is_scheduled']) && $product['is_scheduled'] == 1;
-$isAvailable = isset($product['stock_quantity']) && $product['stock_quantity'] > 0 && !$isScheduled;
+$isScheduled = false;
+$isAvailable = isset($product['stock_quantity']) && $product['stock_quantity'] > 0;
 
 // Calculate remaining days for scheduled products
 $remainingDays = 0;
-if ($isScheduled && !empty($product['scheduled_date'])) {
+$launchTimestamp = null;
+$mysteryPrice = null;
+$mysteryPriceRange = null;
+if (isset($product['is_scheduled']) && $product['is_scheduled'] == 1 && !empty($product['scheduled_date'])) {
     $scheduledTimestamp = strtotime($product['scheduled_date']);
+    $launchTimestamp = $scheduledTimestamp;
     $currentTimestamp = time();
+    
+    // Product is scheduled only if launch date is in the future
+    // If launch date equals or is before current date, allow ordering
     if ($scheduledTimestamp > $currentTimestamp) {
+        $isScheduled = true;
+        $isAvailable = false;
         $remainingDays = ceil(($scheduledTimestamp - $currentTimestamp) / (60 * 60 * 24));
+    } else {
+        // Launch date has arrived or passed - allow ordering
+        $isScheduled = false;
+        $isAvailable = isset($product['stock_quantity']) && $product['stock_quantity'] > 0;
+    }
+
+    // Calculate mystery price range without leaking sale price
+    $regularPrice = floatval($product['price'] ?? 0);
+    
+    if ($regularPrice > 0) {
+        // Create a range that doesn't reveal the actual sale price
+        // Use regular price as ceiling and 30% discount as floor (ensures sale price is within range but not revealed)
+        $ceilingPrice = $regularPrice;
+        $floorPrice = $regularPrice * 0.70; // 30% discount floor (sale_price will be somewhere in this range but not revealed)
+        
+        // Ensure minimum floor price
+        if ($floorPrice <= 0) {
+            $floorPrice = max($ceilingPrice * 0.7, 1);
+        }
+        
+        // Ensure floor is less than ceiling
+        if ($floorPrice >= $ceilingPrice) {
+            $floorPrice = $ceilingPrice * 0.7;
+        }
+        
+        $minCents = (int) round($floorPrice * 100);
+        $maxCents = (int) round($ceilingPrice * 100);
+        if ($maxCents < $minCents) {
+            $maxCents = $minCents;
+        }
+        $randomCents = mt_rand($minCents, $maxCents);
+        $mysteryPrice = $randomCents / 100;
+        $mysteryPriceRange = [$floorPrice, $ceilingPrice];
     }
 }
 $productSku = $product['id'] ?? '';
@@ -299,41 +342,52 @@ ob_start();
                 <!-- Product Info -->
                 <div class="p-4 lg:p-6 flex flex-col">
         <!-- Product Title -->
-                    <h1 class="text-2xl lg:text-3xl font-bold text-primary mb-3"><?= $productName ?></h1>
+                    <div class="flex items-start justify-between gap-3 mb-2">
+                        <h1 class="text-2xl lg:text-3xl font-bold text-primary flex-1">
+                            <?= $productName ?>
+                        </h1>
+                        <button type="button"
+                                id="share-product-link"
+                                class="w-11 h-11 rounded-full border border-neutral-200 text-primary flex items-center justify-center bg-white"
+                                aria-label="Copy product link">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+                            </svg>
+                        </button>
+                    </div>
+                    <input type="hidden" id="product-url-copy" value="<?= $absoluteProductUrl ?>">
+                    <input type="hidden" id="product-name-share" value="<?= htmlspecialchars($productName) ?>">
+                    <input type="hidden" id="product-image-share" value="<?= htmlspecialchars($mainImageUrl) ?>">
+                    <p id="product-share-feedback" class="text-xs text-success hidden mb-3">Link copied!</p>
                     
-                    <!-- Seller Info -->
-                    <?php if (!empty($seller)): ?>
-                        <div class="mb-3">
-                            <a href="<?= \App\Core\View::url('seller/' . urlencode($seller['company_name'] ?? $seller['name'])) ?>" 
-                               class="inline-flex items-center gap-2 px-3 py-2 bg-gray-50 hover:bg-gray-100 rounded-2xl transition-colors group">
-                                <div class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 group-hover:border-primary transition-colors flex-shrink-0">
-                                    <?php if (!empty($seller['logo_url'])): ?>
-                                        <img src="<?= htmlspecialchars($seller['logo_url']) ?>" 
-                                             alt="<?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>"
-                                             class="w-full h-full object-cover"
-                                             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-                                    <?php endif; ?>
-                                    <div class="w-full h-full bg-primary text-white flex items-center justify-center text-xs font-bold <?= !empty($seller['logo_url']) ? 'hidden' : 'flex' ?>">
-                                        <?= strtoupper(substr($seller['company_name'] ?? $seller['name'] ?? 'S', 0, 1)) ?>
-                                    </div>
-                                </div>
-                                <div class="flex flex-col">
-                                    <span class="text-xs text-gray-500">Sold by</span>
-                                    <span class="text-sm font-semibold text-gray-900 group-hover:text-primary transition-colors">
-                                        <?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>
-                                    </span>
-                                </div>
-                                <i class="fas fa-chevron-right text-xs text-gray-400 group-hover:text-primary ml-auto transition-colors"></i>
-                            </a>
-                        </div>
-                    <?php endif; ?>
-                    
-                    <!-- Category Badge -->
-                    <div class="mb-3">
+                    <!-- Category Badge and Stats -->
+                    <div class="mb-3 flex items-center gap-3 flex-wrap">
                         <span class="inline-flex items-center px-2 py-1 bg-primary/10 text-primary text-xs font-medium rounded">
                             <?= htmlspecialchars($product['category'] ?? 'Product') ?>
                         </span>
+                        
+                        <!-- View Count -->
+                        <div class="flex items-center gap-1 text-xs text-gray-600">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                            </svg>
+                            <span id="view-count"><?= number_format($viewCount ?? 0) ?></span>
+                            <span class="text-gray-500">watched</span>
                         </div>
+                        
+                        <!-- Like Count -->
+                        <div class="flex items-center gap-1 text-xs text-gray-600">
+                            <button type="button" 
+                                    id="like-btn" 
+                                    class="flex items-center gap-1 hover:text-primary transition-colors"
+                                    data-product-id="<?= $product['id'] ?>"
+                                    data-liked="<?= ($isLiked ?? false) ? '1' : '0' ?>">
+                                <i class="<?= ($isLiked ?? false) ? 'fas' : 'far' ?> fa-heart text-sm <?= ($isLiked ?? false) ? 'text-red-500' : 'text-gray-600' ?>"></i>
+                                <span id="like-count"><?= number_format($likeCount ?? 0) ?></span>
+                            </button>
+                        </div>
+                    </div>
                         
                     <!-- Price -->
                     <div class="mb-4">
@@ -385,16 +439,35 @@ ob_start();
                     </div>
                     
                     <!-- Scheduled Date Display -->
-                    <?php if (!empty($product['scheduled_date']) && strtotime($product['scheduled_date']) > time()): ?>
-                        <div class="mb-4 p-3 bg-primary/10 border border-primary/20 rounded-2xl">
-                            <div class="flex items-center text-primary text-sm font-semibold">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                    <?php if (!empty($product['scheduled_date']) && $launchTimestamp): ?>
+                        <div class="mb-4 p-4 bg-primary/10 border border-primary/20 rounded-2xl">
+                            <div class="flex items-center justify-between gap-4 flex-wrap">
+                                <div>
+                                    <p class="text-xs font-semibold text-primary uppercase tracking-[0.2em]">Launches in</p>
+                                    <p class="text-lg font-bold text-primary" data-launch-countdown="<?= $launchTimestamp ?>" data-countdown-format="full">--:--:--</p>
+                                </div>
+                                <?php if (!empty($mysteryPrice)): ?>
+                                <div class="text-right">
+                                    <p class="text-xs text-neutral-500 uppercase tracking-wide">Mystery launch price</p>
+                                    <p class="text-xl font-semibold text-primary mystery-price-animated" 
+                                       data-min="<?= $mysteryPriceRange[0] ?? $mysteryPrice ?>" 
+                                       data-max="<?= $mysteryPriceRange[1] ?? $mysteryPrice ?>">
+                                        <?= CurrencyHelper::format($mysteryPrice) ?>
+                                    </p>
+                                    <?php if (!empty($mysteryPriceRange)): ?>
+                                        <p class="text-[10px] text-neutral-500">Between <?= CurrencyHelper::format($mysteryPriceRange[0]) ?> – <?= CurrencyHelper::format($mysteryPriceRange[1]) ?></p>
+                                    <?php endif; ?>
+                                </div>
+                                <?php endif; ?>
+                            </div>
+                            <div class="mt-3 flex items-center gap-2 text-xs text-primary">
+                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                 </svg>
-                                <span>Launch Date: <?= date('F j, Y', strtotime($product['scheduled_date'])) ?></span>
+                                <span>Launches on <?= date('F j, Y g:i A', $launchTimestamp) ?></span>
                             </div>
                             <?php if (!empty($product['scheduled_message'])): ?>
-                                <p class="text-xs text-primary mt-1"><?= htmlspecialchars($product['scheduled_message']) ?></p>
+                                <p class="text-xs text-neutral-600 mt-2"><?= htmlspecialchars($product['scheduled_message']) ?></p>
                             <?php endif; ?>
                         </div>
                     <?php endif; ?>
@@ -424,16 +497,17 @@ ob_start();
                     <?php 
                     $isDigital = !empty($product['is_digital']);
                     $productType = $product['product_type_main'] ?? $product['product_type'] ?? null;
+                    $showProductTypeBadge = $productType && strtolower(trim($productType)) !== $normalizedCategory;
                     $colors = !empty($product['colors']) ? (is_string($product['colors']) ? json_decode($product['colors'], true) : $product['colors']) : [];
                     ?>
-                    <?php if ($isDigital || $productType): ?>
+                    <?php if ($isDigital || $showProductTypeBadge): ?>
                         <div class="mb-4 flex items-center gap-2 flex-wrap">
                             <?php if ($isDigital): ?>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-purple-100 text-purple-800">
                                     <i class="fas fa-download mr-1"></i>Digital Product - No Shipping Required
                                 </span>
                             <?php endif; ?>
-                            <?php if ($productType): ?>
+                            <?php if ($showProductTypeBadge): ?>
                                 <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium
                                     <?php
                                     switch(strtolower($productType)) {
@@ -686,6 +760,18 @@ ob_start();
                                                 </div>
                                             <?php endforeach; ?>
                                         </div>
+                                        <div class="mt-4 flex items-start gap-3 rounded-2xl border border-neutral-200 bg-neutral-50 px-4 py-3">
+                                            <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                            <svg class="w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z" />
+</svg>
+
+                                            </div>
+                                            <p class="text-sm text-foreground leading-5">
+                                                <span class="font-semibold">Safe and Secure Payments.</span>
+                                               <br> Easy returns. 100% Authentic products.
+                                            </p>
+                                        </div>
                                     </div>
                                     <?php endif; ?>
                                 </div>
@@ -694,6 +780,72 @@ ob_start();
                     </div>
                 </div>
                 
+
+        <!-- Seller Info Section -->
+        <?php if (!empty($seller)): ?>
+            <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
+                <div class="p-4">
+                    <h2 class="text-base font-semibold text-gray-900 mb-3">Store Information</h2>
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-3 bg-neutral-50 rounded-2xl">
+                        <div class="flex items-center gap-3 flex-1 w-full md:w-auto">
+                            <div class="w-12 h-12 rounded-lg overflow-hidden border-2 border-neutral-200 flex-shrink-0">
+                                <?php 
+                                $storeImage = !empty($seller['logo_url']) ? $seller['logo_url'] : 
+                                             \App\Core\View::asset('images/graphics/store.png');
+                                ?>
+                                <img src="<?= htmlspecialchars($storeImage) ?>" 
+                                     alt="<?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>"
+                                     class="w-full h-full object-cover"
+                                     onerror="this.src='<?= \App\Core\View::asset('images/graphics/store.png') ?>'; this.onerror=null;">
+                            </div>
+                            <div class="flex flex-col flex-1 min-w-0">
+                                <span class="text-sm font-semibold text-gray-900 truncate">
+                                    <?= htmlspecialchars($seller['company_name'] ?? $seller['name']) ?>
+                                </span>
+                                <?php if (!empty($sellerStats)): ?>
+                                    <div class="flex items-center gap-4 mt-1 text-xs text-neutral-600">
+                                        <?php if ($sellerStats['positive_seller_percent'] > 0): ?>
+                                            <span class="flex items-center gap-1">
+                                                <span class="text-success font-medium"><?= $sellerStats['positive_seller_percent'] ?>%</span>
+                                                <span>Positive</span>
+                                            </span>
+                                        <?php endif; ?>
+                                        <?php if ($sellerStats['ship_on_time_percent'] > 0): ?>
+                                            <span class="flex items-center gap-1">
+                                                <span class="text-success font-medium"><?= $sellerStats['ship_on_time_percent'] ?>%</span>
+                                                <span>Ship on Time</span>
+                                            </span>
+                                        <?php endif; ?>
+                                        <?php if ($sellerStats['total_reviews'] > 0): ?>
+                                            <span class="flex items-center gap-1">
+                                                <span class="text-primary font-medium">
+                                                    <?= $sellerStats['positive_reviews'] + $sellerStats['good_reviews'] ?>
+                                                </span>
+                                                <span>Good</span>
+                                                <?php if ($sellerStats['average_reviews'] > 0): ?>
+                                                    <span class="mx-1">•</span>
+                                                    <span class="text-warning font-medium"><?= $sellerStats['average_reviews'] ?></span>
+                                                    <span>Avg</span>
+                                                <?php endif; ?>
+                                                <?php if ($sellerStats['negative_reviews'] > 0): ?>
+                                                    <span class="mx-1">•</span>
+                                                    <span class="text-error font-medium"><?= $sellerStats['negative_reviews'] ?></span>
+                                                    <span>Poor</span>
+                                                <?php endif; ?>
+                                            </span>
+                                        <?php endif; ?>
+                                    </div>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <a href="<?= \App\Core\View::url('seller/' . urlencode($seller['company_name'] ?? $seller['name'])) ?>" 
+                           class="btn btn-outline flex-shrink-0 w-full md:w-auto">
+                            Visit Store
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <?php endif; ?>
 
         <!-- Product Description -->
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
@@ -785,46 +937,7 @@ ob_start();
             </div>
         </div>
 
-        <!-- Suggested Products Section -->
-        <?php if (!empty($lowPriceProducts) && count($lowPriceProducts) > 0): ?>
-        <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
-            <div class="p-4">
-                <h3 class="text-sm font-semibold text-gray-900 mb-3">You May Also Like</h3>
-                <div class="grid grid-cols-2 gap-3">
-                    <?php foreach (array_slice($lowPriceProducts, 0, 2) as $suggested): ?>
-                        <?php
-                        $suggestedPrice = isset($suggested['sale_price']) && $suggested['sale_price'] > 0 ? $suggested['sale_price'] : $suggested['price'] ?? 0;
-                        $suggestedImageUrl = $suggested['image_url'] ?? ASSETS_URL . '/images/products/default.jpg';
-                        $suggestedName = htmlspecialchars($suggested['product_name'] ?? 'Product');
-                        $suggestedSlug = $suggested['slug'] ?? $suggested['id'] ?? '';
-                        ?>
-                        <div class="bg-white rounded-2xl border border-gray-200 p-3 hover:shadow-md transition-shadow relative group">
-                            <div class="flex items-start gap-2">
-                                <div class="w-16 h-16 flex-shrink-0 bg-gray-100 rounded-lg overflow-hidden">
-                                    <img src="<?= htmlspecialchars($suggestedImageUrl) ?>" 
-                                         alt="<?= $suggestedName ?>" 
-                                         class="w-full h-full object-cover"
-                                         onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'; this.onerror=null;">
-                                </div>
-                                <div class="flex-1 min-w-0">
-                                    <h4 class="text-xs font-medium text-gray-900 truncate mb-1"><?= $suggestedName ?></h4>
-                                    <p class="text-sm font-semibold text-primary">रु<?= number_format($suggestedPrice, 2) ?></p>
-                                </div>
-                                <button type="button" 
-                                        onclick="addSuggestedToCart(<?= $suggested['id'] ?>)"
-                                        class="flex-shrink-0 w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center hover:bg-primary-dark transition-colors"
-                                        title="Add to cart">
-                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                                    </svg>
-                                </button>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                </div>
-            </div>
-        </div>
-        <?php endif; ?>
+     
 
         <!-- Reviews -->
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden mt-4">
@@ -905,15 +1018,18 @@ ob_start();
         <?php if ($isScheduled): ?>
             <button type="button" class="flex-1 bg-primary text-white px-4 py-3 rounded-2xl font-semibold text-sm cursor-not-allowed">
                 <div class="flex items-center justify-between w-full">
-                    <span>
-                        <i class="fas fa-clock mr-2"></i>
-                        <?php if ($remainingDays > 0): ?>
-                            Launching in <?= $remainingDays ?> <?= $remainingDays == 1 ? 'day' : 'days' ?>
-                        <?php else: ?>
-                            Coming Soon
-                        <?php endif; ?>
-                    </span>
-                    <span class="text-xs text-white/80 launch-countdown">Launches soon</span>
+                    <div>
+                        <span class="text-xs text-white/70 block mb-1">Launches in</span>
+                        <span class="text-base font-semibold" data-launch-countdown="<?= $launchTimestamp ?? time() ?>" data-countdown-format="compact">--:--</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xs text-white/70 block mb-1">Mystery Price</span>
+                        <span class="text-sm font-semibold mystery-price-animated" 
+                              data-min="<?= $mysteryPriceRange[0] ?? ($mysteryPrice ?? $productPrice ?? ($product['price'] ?? 0)) ?>" 
+                              data-max="<?= $mysteryPriceRange[1] ?? ($mysteryPrice ?? $productPrice ?? ($product['price'] ?? 0)) ?>">
+                            <?= CurrencyHelper::format($mysteryPrice ?? $productPrice ?? ($product['price'] ?? 0)) ?>
+                        </span>
+                    </div>
                 </div>
             </button>
         <?php elseif ($isAvailable): ?>
@@ -1104,29 +1220,46 @@ ob_start();
 document.addEventListener('DOMContentLoaded', function() {
   // Launch countdown for scheduled products
   (function(){
-    var targets = document.querySelectorAll('.launch-countdown');
-    if (!targets || targets.length === 0) return;
-    var targetStr = '<?= isset($scheduledDate) && $scheduledDate ? $scheduledDate->format('Y-m-d H:i:s') : '' ?>';
-    if (!targetStr) return;
-    var targetTime = new Date(targetStr.replace(' ', 'T')).getTime();
-    function fmt(n){ return n.toString().padStart(2,'0'); }
-    function render(){
-      var now = Date.now();
-      var diff = targetTime - now;
-      var text = '';
+    const targets = Array.from(document.querySelectorAll('[data-launch-countdown]')).map(el => {
+      const targetTs = parseInt(el.dataset.launchCountdown, 10);
+      if (!targetTs) return null;
+      return {
+        el,
+        target: targetTs * 1000,
+        format: el.dataset.countdownFormat || 'full'
+      };
+    }).filter(Boolean);
+    
+    if (!targets.length) return;
+    
+    const pad = (num) => num.toString().padStart(2, '0');
+    
+    function formatCountdown(diff, format) {
       if (diff <= 0) {
-        text = 'Launching now';
-      } else {
-        var d = Math.floor(diff / (1000*60*60*24));
-        var h = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
-        var m = Math.floor((diff % (1000*60*60)) / (1000*60));
-        var s = Math.floor((diff % (1000*60)) / 1000);
-        text = 'Launches in ' + d + 'd ' + fmt(h) + ':' + fmt(m) + ':' + fmt(s);
+        return format === 'compact' ? 'Live' : 'Launching now';
       }
-      targets.forEach(function(el){ el.textContent = text; });
+      const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+      
+      if (format === 'compact') {
+        return days > 0 ? `${days}d ${pad(hours)}h` : `${pad(hours)}:${pad(minutes)}`;
+      }
+      
+      const dayText = days > 0 ? `${days}d ` : '';
+      return `${dayText}${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
     }
-    render();
-    setInterval(render, 1000);
+    
+    function renderCountdown() {
+      const now = Date.now();
+      targets.forEach(({ el, target, format }) => {
+        el.textContent = formatCountdown(target - now, format);
+      });
+    }
+    
+    renderCountdown();
+    setInterval(renderCountdown, 1000);
   })();
 
   // Review Drawer Functionality
@@ -1744,31 +1877,230 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // Share Product Link Functionality (Native, no animation)
+    // Share Product Drawer Functionality
     const shareLinkBtn = document.getElementById('share-product-link');
     const productUrlCopy = document.getElementById('product-url-copy');
+    const productNameShare = document.getElementById('product-name-share');
+    const productImageShare = document.getElementById('product-image-share');
+    const shareFeedback = document.getElementById('product-share-feedback');
+    let shareFeedbackTimeout;
     
-    if (shareLinkBtn && productUrlCopy) {
-        shareLinkBtn.addEventListener('click', function() {
-            const url = productUrlCopy.value;
+    function showShareFeedback() {
+        if (!shareFeedback) return;
+        shareFeedback.classList.remove('hidden');
+        clearTimeout(shareFeedbackTimeout);
+        shareFeedbackTimeout = setTimeout(() => {
+            shareFeedback.classList.add('hidden');
+        }, 3000);
+    }
+    
+    function openShareDrawer() {
+        const drawer = document.getElementById('share-drawer');
+        const overlay = document.getElementById('share-drawer-overlay');
+        if (drawer && overlay) {
+            drawer.classList.remove('translate-y-full');
+            overlay.classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    function closeShareDrawer() {
+        const drawer = document.getElementById('share-drawer');
+        const overlay = document.getElementById('share-drawer-overlay');
+        if (drawer && overlay) {
+            drawer.classList.add('translate-y-full');
+            overlay.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+    }
+    
+    function shareToFacebook() {
+        const url = encodeURIComponent(productUrlCopy.value);
+        const name = encodeURIComponent(productNameShare.value);
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${url}&quote=${name}`, '_blank', 'width=600,height=400');
+    }
+    
+    function shareToInstagram() {
+        const url = productUrlCopy.value;
+        window.open(`https://www.instagram.com/`, '_blank');
+    }
+    
+    function shareToWhatsApp() {
+        const url = encodeURIComponent(productUrlCopy.value);
+        const name = encodeURIComponent(productNameShare.value);
+        window.open(`https://wa.me/?text=${name}%20${url}`, '_blank');
+    }
+    
+    function shareToTelegram() {
+        const url = encodeURIComponent(productUrlCopy.value);
+        const name = encodeURIComponent(productNameShare.value);
+        window.open(`https://t.me/share/url?url=${url}&text=${name}`, '_blank');
+    }
+    
+    function copyProductLink() {
+        const url = productUrlCopy.value;
+        const copyIcon = document.getElementById('copy-link-icon');
+        const copyCheck = document.getElementById('copy-link-check');
+        const copyText = document.getElementById('copy-link-text');
+        const copyBtn = document.getElementById('copy-link-btn');
+        
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(url)
+                .then(() => {
+                    if (copyIcon) copyIcon.classList.add('hidden');
+                    if (copyCheck) copyCheck.classList.remove('hidden');
+                    if (copyText) copyText.textContent = 'Copied!';
+                    if (copyBtn) copyBtn.classList.add('bg-green-50', 'border', 'border-green-500');
+                    
+                    setTimeout(() => {
+                        if (copyIcon) copyIcon.classList.remove('hidden');
+                        if (copyCheck) copyCheck.classList.add('hidden');
+                        if (copyText) copyText.textContent = 'Copy Link';
+                        if (copyBtn) copyBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
+                    }, 2000);
+                })
+                .catch(() => {
+                    const textArea = document.createElement('textarea');
+                    textArea.value = url;
+                    textArea.style.position = 'fixed';
+                    textArea.style.left = '-999999px';
+                    document.body.appendChild(textArea);
+                    textArea.select();
+                    document.execCommand('copy');
+                    document.body.removeChild(textArea);
+                    
+                    if (copyIcon) copyIcon.classList.add('hidden');
+                    if (copyCheck) copyCheck.classList.remove('hidden');
+                    if (copyText) copyText.textContent = 'Copied!';
+                    if (copyBtn) copyBtn.classList.add('bg-green-50', 'border', 'border-green-500');
+                    
+                    setTimeout(() => {
+                        if (copyIcon) copyIcon.classList.remove('hidden');
+                        if (copyCheck) copyCheck.classList.add('hidden');
+                        if (copyText) copyText.textContent = 'Copy Link';
+                        if (copyBtn) copyBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
+                    }, 2000);
+                });
+        } else {
+            const textArea = document.createElement('textarea');
+            textArea.value = url;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textArea);
             
-            // Use Clipboard API if available
-            if (navigator.clipboard && navigator.clipboard.writeText) {
-                navigator.clipboard.writeText(url);
-            } else {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = url;
-                textArea.style.position = 'fixed';
-                textArea.style.left = '-999999px';
-                textArea.style.top = '-999999px';
-                document.body.appendChild(textArea);
-                textArea.focus();
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-            }
-        });
+            if (copyIcon) copyIcon.classList.add('hidden');
+            if (copyCheck) copyCheck.classList.remove('hidden');
+            if (copyText) copyText.textContent = 'Copied!';
+            if (copyBtn) copyBtn.classList.add('bg-green-50', 'border', 'border-green-500');
+            
+            setTimeout(() => {
+                if (copyIcon) copyIcon.classList.remove('hidden');
+                if (copyCheck) copyCheck.classList.add('hidden');
+                if (copyText) copyText.textContent = 'Copy Link';
+                if (copyBtn) copyBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
+            }, 2000);
+        }
+    }
+    
+    function saveProductImage() {
+        const imageUrl = productImageShare.value;
+        const saveIcon = document.getElementById('save-image-icon');
+        const saveCheck = document.getElementById('save-image-check');
+        const saveText = document.getElementById('save-image-text');
+        const saveBtn = document.getElementById('save-image-btn');
+        
+        fetch(imageUrl)
+            .then(response => response.blob())
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = productNameShare.value.replace(/[^a-z0-9]/gi, '_') + '.jpg';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(url);
+                
+                if (saveIcon) saveIcon.classList.add('hidden');
+                if (saveCheck) saveCheck.classList.remove('hidden');
+                if (saveText) saveText.textContent = 'Saved!';
+                if (saveBtn) saveBtn.classList.add('bg-green-50', 'border', 'border-green-500');
+                
+                setTimeout(() => {
+                    if (saveIcon) saveIcon.classList.remove('hidden');
+                    if (saveCheck) saveCheck.classList.add('hidden');
+                    if (saveText) saveText.textContent = 'Save';
+                    if (saveBtn) saveBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
+                }, 2000);
+            })
+            .catch(() => {
+                const link = document.createElement('a');
+                link.href = imageUrl;
+                link.download = productNameShare.value.replace(/[^a-z0-9]/gi, '_') + '.jpg';
+                link.target = '_blank';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                
+                if (saveIcon) saveIcon.classList.add('hidden');
+                if (saveCheck) saveCheck.classList.remove('hidden');
+                if (saveText) saveText.textContent = 'Saved!';
+                if (saveBtn) saveBtn.classList.add('bg-green-50', 'border', 'border-green-500');
+                
+                setTimeout(() => {
+                    if (saveIcon) saveIcon.classList.remove('hidden');
+                    if (saveCheck) saveCheck.classList.add('hidden');
+                    if (saveText) saveText.textContent = 'Save';
+                    if (saveBtn) saveBtn.classList.remove('bg-green-50', 'border', 'border-green-500');
+                }, 2000);
+            });
+    }
+    
+    if (shareLinkBtn) {
+        shareLinkBtn.addEventListener('click', openShareDrawer);
+    }
+    
+    const shareOverlay = document.getElementById('share-drawer-overlay');
+    if (shareOverlay) {
+        shareOverlay.addEventListener('click', closeShareDrawer);
+    }
+    
+    const shareDrawerClose = document.getElementById('share-drawer-close');
+    if (shareDrawerClose) {
+        shareDrawerClose.addEventListener('click', closeShareDrawer);
+    }
+    
+    const shareFacebookBtn = document.getElementById('share-facebook');
+    if (shareFacebookBtn) {
+        shareFacebookBtn.addEventListener('click', shareToFacebook);
+    }
+    
+    const shareInstagramBtn = document.getElementById('share-instagram');
+    if (shareInstagramBtn) {
+        shareInstagramBtn.addEventListener('click', shareToInstagram);
+    }
+    
+    const shareWhatsAppBtn = document.getElementById('share-whatsapp');
+    if (shareWhatsAppBtn) {
+        shareWhatsAppBtn.addEventListener('click', shareToWhatsApp);
+    }
+    
+    const shareTelegramBtn = document.getElementById('share-telegram');
+    if (shareTelegramBtn) {
+        shareTelegramBtn.addEventListener('click', shareToTelegram);
+    }
+    
+    const copyLinkBtn = document.getElementById('copy-link-btn');
+    if (copyLinkBtn) {
+        copyLinkBtn.addEventListener('click', copyProductLink);
+    }
+    
+    const saveImageBtn = document.getElementById('save-image-btn');
+    if (saveImageBtn) {
+        saveImageBtn.addEventListener('click', saveProductImage);
     }
     });
     
@@ -1843,7 +2175,196 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     </script>
 
-    
+    <!-- Product View Tracking and Like Functionality -->
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const productId = <?= $product['id'] ?? 0 ?>;
+        
+        // Record product view
+        if (productId) {
+            fetch('<?= \App\Core\View::url('products/view/record') ?>', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: 'product_id=' + productId
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success && data.view_count !== undefined) {
+                    const viewCountEl = document.getElementById('view-count');
+                    if (viewCountEl) {
+                        viewCountEl.textContent = data.view_count.toLocaleString();
+                    }
+                }
+            })
+            .catch(error => {
+                console.error('View tracking error:', error);
+            });
+        }
+        
+        // Like/Unlike functionality
+        const likeBtn = document.getElementById('like-btn');
+        if (likeBtn) {
+            likeBtn.addEventListener('click', function() {
+                const userId = <?= $isLoggedIn ? 'true' : 'false' ?>;
+                if (!userId) {
+                    window.location.href = '<?= \App\Core\View::url('auth/login') ?>';
+                    return;
+                }
+                
+                fetch('<?= \App\Core\View::url('products/like/toggle') ?>', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                    body: 'product_id=' + productId
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        const likeIcon = this.querySelector('i');
+                        const likeCountEl = document.getElementById('like-count');
+                        
+                        if (data.is_liked) {
+                            this.dataset.liked = '1';
+                            if (likeIcon) {
+                                likeIcon.classList.remove('far', 'text-gray-600');
+                                likeIcon.classList.add('fas', 'text-red-500');
+                            }
+                        } else {
+                            this.dataset.liked = '0';
+                            if (likeIcon) {
+                                likeIcon.classList.remove('fas', 'text-red-500');
+                                likeIcon.classList.add('far', 'text-gray-600');
+                            }
+                        }
+                        
+                        if (likeCountEl) {
+                            likeCountEl.textContent = data.like_count.toLocaleString();
+                        }
+                    } else {
+                        if (data.message && (data.message.includes('login') || data.message.includes('Please login'))) {
+                            window.location.href = '<?= \App\Core\View::url('auth/login') ?>';
+                        } else {
+                            alert(data.message || 'Failed to update like status');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Like error:', error);
+                    alert('An error occurred. Please try again.');
+                });
+            });
+        }
+    });
+
+    // Mystery Price Animation (Casino Effect - Infinite)
+    document.addEventListener('DOMContentLoaded', function() {
+        const mysteryPriceElements = document.querySelectorAll('.mystery-price-animated');
+        
+        mysteryPriceElements.forEach(function(element) {
+            const min = parseFloat(element.getAttribute('data-min')) || 0;
+            const max = parseFloat(element.getAttribute('data-max')) || 0;
+            
+            if (min <= 0 || max <= 0 || min >= max) return;
+            
+            let animationId;
+            const updateInterval = 120; // Slower update - every 120ms for more excitement
+            
+            function formatCurrency(value) {
+                return 'रु' + value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            }
+            
+            function animate() {
+                // Random value between min and max
+                const randomValue = min + (max - min) * Math.random();
+                element.textContent = formatCurrency(randomValue);
+                
+                // Infinite loop - keep animating
+                animationId = setTimeout(animate, updateInterval);
+            }
+            
+            // Start infinite animation
+            animate();
+        });
+    });
+    </script>
+
+<!-- Share Drawer Component -->
+<div id="share-drawer-overlay" class="fixed inset-0 bg-black/50 z-50 hidden transition-opacity duration-300"></div>
+<div id="share-drawer" class="fixed bottom-0 left-0 right-0 bg-white rounded-t-3xl shadow-2xl z-50 transform translate-y-full transition-transform duration-300 ease-out max-h-[90vh] overflow-y-auto">
+    <div class="p-6">
+        <!-- Drawer Header -->
+        <div class="flex items-center justify-between mb-6">
+            <h3 class="text-lg font-semibold text-gray-900">Share Product</h3>
+            <button id="share-drawer-close" type="button" class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Product Image -->
+        <div class="mb-6">
+            <div class="aspect-square overflow-hidden rounded-2xl bg-gray-50">
+                <img id="share-drawer-image" src="<?= htmlspecialchars($mainImageUrl) ?>" alt="<?= htmlspecialchars($productName) ?>" class="w-full h-full object-contain">
+            </div>
+        </div>
+        
+        <!-- Share Buttons Row -->
+        <div class="grid grid-cols-4 gap-3 mb-4">
+            <button id="share-facebook" type="button" class="flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-600 hover:bg-blue-700 text-white transition-colors">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+            </button>
+            
+            <button id="share-instagram" type="button" class="flex items-center justify-center w-14 h-14 rounded-2xl bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 hover:opacity-90 text-white transition-opacity">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+            </button>
+            
+            <button id="share-whatsapp" type="button" class="flex items-center justify-center w-14 h-14 rounded-2xl bg-green-500 hover:bg-green-600 text-white transition-colors">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/>
+                </svg>
+            </button>
+            
+            <button id="share-telegram" type="button" class="flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-400 hover:bg-blue-500 text-white transition-colors">
+                <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Action Buttons Row -->
+        <div class="flex items-center gap-3">
+            <button id="copy-link-btn" type="button" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-xl font-medium transition-colors relative">
+                <svg id="copy-link-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244" />
+                </svg>
+                <svg id="copy-link-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-green-600 hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span id="copy-link-text">Copy Link</span>
+            </button>
+            
+            <button id="save-image-btn" type="button" class="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gray-100 hover:bg-gray-200 text-gray-900 rounded-xl font-medium transition-colors relative">
+                <svg id="save-image-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5m-13.5-9L12 3m0 0l4.5 4.5M12 3v13.5" />
+                </svg>
+                <svg id="save-image-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-green-600 hidden">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                </svg>
+                <span id="save-image-text">Save</span>
+            </button>
+        </div>
+    </div>
+</div>
 
 <style>
 /* Ensure review actions sit above floating sticky elements */

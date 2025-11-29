@@ -55,17 +55,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 hideProcessingModal();
                 
                 if (data.success) {
-                    // Show success message
-                    showSuccessMessage(data.message || 'Order placed successfully!');
-                    
-                    // Redirect to success page after a short delay
-                    setTimeout(() => {
-                        if (data.redirect) {
-                            window.location.href = data.redirect;
-                        } else {
-                            window.location.href = window.location.origin + '/orders';
-                        }
-                    }, 2000);
+                    // Redirect immediately for fast checkout
+                    if (data.redirect) {
+                        window.location.href = data.redirect;
+                    } else {
+                        window.location.href = window.location.origin + '/orders';
+                    }
                 } else {
                     // Show error message
                     showErrorMessage(data.message || 'Failed to process order');

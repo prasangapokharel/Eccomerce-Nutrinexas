@@ -3,412 +3,132 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Order Confirmation - {{company_name}}</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            background-color: #f8f9fa;
-            padding: 20px;
-        }
-        
-        .email-container {
-            max-width: 650px;
-            margin: 0 auto;
-            background: #ffffff;
-            border-radius: 16px;
-            box-shadow: 0 8px 32px rgba(10, 49, 103, 0.1);
-            overflow: hidden;
-        }
-        
-        .header {
-            background: linear-gradient(135deg, #0A3167 0%, #082A5A 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-        
-        .header h1 {
-            font-size: 32px;
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-        
-        .header p {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-        
-        .content {
-            padding: 40px 30px;
-        }
-        
-        .greeting {
-            font-size: 20px;
-            margin-bottom: 25px;
-            color: #0A3167;
-            font-weight: 600;
-        }
-        
-        .message {
-            font-size: 16px;
-            margin-bottom: 30px;
-            color: #555;
-            line-height: 1.7;
-        }
-        
-        .order-summary {
-            background: linear-gradient(135deg, #C5A572 0%, #d4b87a 100%);
-            color: white;
-            padding: 30px;
-            border-radius: 16px;
-            margin: 30px 0;
-            text-align: center;
-            box-shadow: 0 8px 25px rgba(197, 165, 114, 0.3);
-        }
-        
-        .order-summary h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        
-        .order-number {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 10px 0;
-        }
-        
-        .order-info {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 25px 0;
-            border-left: 4px solid #C5A572;
-        }
-        
-        .order-info h4 {
-            color: #0A3167;
-            font-size: 18px;
-            margin-bottom: 15px;
-            font-weight: 600;
-        }
-        
-        .info-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-        }
-        
-        .info-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .info-item:last-child {
-            border-bottom: none;
-        }
-        
-        .info-label {
-            font-weight: 600;
-            color: #495057;
-        }
-        
-        .info-value {
-            color: #0A3167;
-            font-weight: 500;
-        }
-        
-        .order-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 25px 0;
-            background: white;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-        }
-        
-        .order-table th {
-            background: #0A3167;
-            color: white;
-            padding: 15px 12px;
-            text-align: left;
-            font-weight: 600;
-            font-size: 14px;
-        }
-        
-        .order-table td {
-            padding: 15px 12px;
-            border-bottom: 1px solid #dee2e6;
-            font-size: 14px;
-        }
-        
-        .order-table tr:last-child td {
-            border-bottom: none;
-        }
-        
-        .order-table tr:nth-child(even) {
-            background-color: #f8f9fa;
-        }
-        
-        .product-name {
-            font-weight: 600;
-            color: #2c3e50;
-        }
-        
-        .price {
-            font-weight: 600;
-            color: #0A3167;
-        }
-        
-        .total-section {
-            background: #f8f9fa;
-            padding: 25px;
-            border-radius: 12px;
-            margin: 25px 0;
-        }
-        
-        .total-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #dee2e6;
-        }
-        
-        .total-row:last-child {
-            border-bottom: none;
-            font-size: 18px;
-            font-weight: 700;
-            color: #0A3167;
-            padding-top: 15px;
-            border-top: 2px solid #C5A572;
-        }
-        
-        .delivery-info {
-            background: #e7f3ff;
-            border: 1px solid #b3d9ff;
-            color: #0c5aa6;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 25px 0;
-        }
-        
-        .delivery-info h4 {
-            color: #0a4275;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-        
-        .action-buttons {
-            text-align: center;
-            margin: 30px 0;
-        }
-        
-        .btn {
-            display: inline-block;
-            padding: 12px 25px;
-            margin: 5px 10px;
-            text-decoration: none;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            transition: all 0.3s ease;
-        }
-        
-        .btn-primary {
-            background: #C5A572;
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .footer {
-            background: #f8f9fa;
-            padding: 40px 30px;
-            text-align: center;
-            border-top: 1px solid #dee2e6;
-        }
-        
-        .footer h4 {
-            color: #0A3167;
-            font-size: 20px;
-            margin-bottom: 15px;
-        }
-        
-        .footer p {
-            color: #6c757d;
-            font-size: 14px;
-            margin: 8px 0;
-        }
-        
-        .footer .contact-info {
-            background: white;
-            padding: 20px;
-            border-radius: 12px;
-            margin: 20px 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-        }
-        
-        .footer .copyright {
-            margin-top: 25px;
-            padding-top: 25px;
-            border-top: 1px solid #dee2e6;
-            font-size: 12px;
-            color: #adb5bd;
-        }
-        
-        @media (max-width: 600px) {
-            .email-container {
-                margin: 10px;
-                border-radius: 12px;
-            }
-            
-            .header, .content, .footer {
-                padding: 25px 20px;
-            }
-            
-            .header h1 {
-                font-size: 28px;
-            }
-            
-            .order-table {
-                font-size: 12px;
-            }
-            
-            .order-table th,
-            .order-table td {
-                padding: 10px 8px;
-            }
-            
-            .info-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .total-row {
-                font-size: 14px;
-            }
-            
-            .total-row:last-child {
-                font-size: 16px;
-            }
-        }
-    </style>
+    <title>Your Order Confirmation</title>
 </head>
-<body>
-    <div class="email-container">
-        <div class="header">
-            <h1>🎉 Order Confirmation</h1>
-            <p>Thank you for your purchase!</p>
-        </div>
-        
-        <div class="content">
-            <div class="greeting">
-                Hello <strong>{{customer_name}}</strong>,
-            </div>
-            
-            <div class="message">
-                We're excited to confirm that we've received your order and it's being processed. Thank you for choosing {{company_name}} for your nutrition needs!
-            </div>
-            
-            <div class="order-summary">
-                <h3>Order Confirmed</h3>
-                <div class="order-number">#{{order_number}}</div>
-                <p>Placed on {{order_date}}</p>
-            </div>
-            
-            <div class="order-info">
-                <h4>📋 Order Information</h4>
-                <div class="info-grid">
-                    <div class="info-item">
-                        <span class="info-label">Order Number:</span>
-                        <span class="info-value">#{{order_number}}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Order Date:</span>
-                        <span class="info-value">{{order_date}}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Payment Method:</span>
-                        <span class="info-value">{{payment_method}}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Status:</span>
-                        <span class="info-value">{{order_status}}</span>
-                    </div>
-                </div>
-            </div>
-            
-            <h4>🛍️ Order Items</h4>
-            <table class="order-table">
-                <thead>
+<body style="margin: 0; padding: 0; background-color: #f4f4f4; font-family: Arial, sans-serif;">
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="table-layout: fixed; background-color: #f4f4f4;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <table border="0" cellpadding="0" cellspacing="0" width="600" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);">
                     <tr>
-                        <th>Product</th>
-                        <th>Qty</th>
-                        <th>Price</th>
-                        <th>Total</th>
+                        <td style="padding: 20px 30px; background-color: #ffffff; border-top-left-radius: 8px; border-top-right-radius: 8px;">
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td align="left" style="width: 50%;">
+                                        <img src="{{logo_url}}" alt="{{company_name}} Logo" style="display: block; width: auto; max-width: 150px; height: auto;">
+                                    </td>
+                                    <td align="right" style="width: 50%; font-size: 24px; font-weight: bold; color: #1976D2;">
+                                        Order Confirmed
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    {{order_items}}
-                </tbody>
-            </table>
-            
-            <div class="total-section">
-                <div class="total-row">
-                    <span>Subtotal:</span>
-                    <span class="price">रु{{subtotal}}</span>
-                </div>
-                <div class="total-row">
-                    <span>Delivery Fee:</span>
-                    <span class="price">रु{{delivery_fee}}</span>
-                </div>
-                <div class="total-row">
-                    <span>Total Amount:</span>
-                    <span class="price">रु{{total_amount}}</span>
-                </div>
-            </div>
-            
-            <div class="delivery-info">
-                <h4>🚚 Delivery Information</h4>
-                <p><strong>Delivery Address:</strong></p>
-                <p>{{delivery_address}}</p>
-                <p><strong>Estimated Delivery:</strong> 3-5 business days</p>
-                <p>You'll receive a tracking notification once your order ships.</p>
-            </div>
-            
-            <div class="action-buttons">
-                <a href="{{track_url}}" class="btn btn-primary">Track Your Order</a>
-                <a href="{{support_url}}" class="btn btn-secondary">Contact Support</a>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <h4>{{company_name}}</h4>
-            <div class="contact-info">
-                <p><strong>Need Help?</strong></p>
-                <p>Email: nutrinexusnp@gmail.com</p>
-                <p>Phone: 977-9811388848</p>
-                <p>Delivery: Everest Courier</p>
-            </div>
-            <p>Thank you for choosing us for your nutrition and wellness journey!</p>
-            <div class="copyright">
-                © 2025 {{company_name}}. All rights reserved.
-            </div>
-        </div>
-    </div>
+                    
+                    <tr>
+                        <td style="padding: 10px 30px 20px 30px; color: #333333; font-size: 16px; line-height: 1.6;">
+                            <p style="margin: 0 0 20px 0;">Hi <strong>{{customer_name}}</strong>, <br>Thank you for your purchase! Here are the details of your order. You can track your shipment using the link below.</p>
+                            
+                            <table border="0" cellpadding="10" cellspacing="0" width="100%" style="margin-bottom: 20px; border: 1px solid #eeeeee; border-radius: 4px;">
+                                <tr style="background-color: #f9f9f9;">
+                                    <td style="width: 50%; font-weight: bold; color: #333333;">Order Number:</td>
+                                    <td style="font-weight: bold; color: #1976D2;"><strong>#{{order_id}}</strong></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 50%; font-weight: bold;">Order Date:</td>
+                                    <td>{{order_date}}</td>
+                                </tr>
+                                <tr style="background-color: #f9f9f9;">
+                                    <td style="width: 50%; font-weight: bold;">Tracking Link:</td>
+                                    <td><a href="{{tracking_url}}" style="color: #1976D2; text-decoration: none;">Track Your Order</a></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="padding: 0 30px;">
+                            <h3 style="color: #1976D2; margin: 0 0 10px 0; border-bottom: 2px solid #1976D2; padding-bottom: 5px;">
+                                Items Ordered
+                            </h3>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="padding: 0 30px 20px 30px;">
+                            <table border="0" cellpadding="10" cellspacing="0" width="100%" style="font-size: 14px; border: 1px solid #eeeeee; border-collapse: collapse;">
+                                <thead>
+                                    <tr style="background-color: #f4f4f4;">
+                                        <th align="left" style="border: 1px solid #eeeeee;">Product</th>
+                                        <th align="center" style="border: 1px solid #eeeeee; width: 60px;">Qty</th>
+                                        <th align="right" style="border: 1px solid #eeeeee; width: 100px;">Price</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{order_items}}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                    
+                    <tr>
+                        <td style="padding: 0 30px 20px 30px;">
+                            <table border="0" cellpadding="8" cellspacing="0" width="100%" style="font-size: 14px;">
+                                <tr>
+                                    <td align="right" style="width: 70%; font-weight: normal;">Subtotal:</td>
+                                    <td align="right" style="width: 30%;">{{subtotal}}</td>
+                                </tr>
+                                <tr>
+                                    <td align="right" style="font-weight: normal;">Shipping:</td>
+                                    <td align="right">{{shipping_cost}}</td>
+                                </tr>
+                                {{tax_row}}
+                                <tr style="background-color: #e6f2ff; border-top: 1px solid #1976D2;">
+                                    <td align="right" style="font-weight: bold; font-size: 18px;">Grand Total:</td>
+                                    <td align="right" style="font-weight: bold; font-size: 18px;"><strong>{{grand_total}}</strong></td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    {{digital_download_section}}
+                    <tr>
+                        <td style="padding: 0 30px 30px 30px;">
+                             <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tr>
+                                    <td style="width: 50%; padding-right: 15px; vertical-align: top;">
+                                        <h4 style="color: #1976D2; margin: 0 0 10px 0;">Shipping Address</h4>
+                                        <p style="margin: 0; font-size: 14px; line-height: 1.4;">
+                                            <strong>{{shipping_name}}</strong><br>
+                                            {{shipping_address_line_1}}<br>
+                                            {{shipping_city}}, {{shipping_postal_code}}<br>
+                                            {{shipping_country}}
+                                        </p>
+                                    </td>
+                                    <td style="width: 50%; padding-left: 15px; vertical-align: top;">
+                                        <h4 style="color: #1976D2; margin: 0 0 10px 0;">Billing & Payment</h4>
+                                        <p style="margin: 0; font-size: 14px; line-height: 1.4;">
+                                            {{payment_method_type}}<br>
+                                            Bill to: {{billing_name}}<br>
+                                            Transaction ID: {{transaction_id}}
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td align="center" style="padding: 20px 30px; background-color: #333333; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px;">
+                            <p style="color: #ffffff; margin: 0; font-size: 12px;">
+                                Have questions? Contact us at {{phone_number}} or reply to this email.
+                            </p>
+                            <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">
+                                &copy; {{current_year}} {{company_name}}. All rights reserved.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
 </body>
 </html>

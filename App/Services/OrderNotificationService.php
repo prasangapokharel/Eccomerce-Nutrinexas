@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Controllers\SMSController;
+use App\Controllers\Sms\SMSController;
 use App\Models\Order;
 use Exception;
 

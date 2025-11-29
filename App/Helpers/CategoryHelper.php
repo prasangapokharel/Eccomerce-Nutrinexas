@@ -13,7 +13,8 @@ class CategoryHelper
         'Protein' => 'Protein',
         'Clean Protein' => 'Clean Protein',
         'Cycle' => 'Cycle',
-        'Equipments' => 'Equipments'
+        'Equipments' => 'Equipments',
+        'Digital' => 'Digital Products'
     ];
 
     /**
@@ -63,6 +64,13 @@ class CategoryHelper
             'Weights' => 'Weights',
             'Machines' => 'Machines',
             'Accessories' => 'Accessories'
+        ],
+        'Digital' => [
+            'E-books' => 'E-books',
+            'Meal Plans' => 'Meal Plans',
+            'Training Programs' => 'Training Programs',
+            'Coaching Sessions' => 'Coaching Sessions',
+            'Software' => 'Software'
         ]
     ];
 
@@ -103,7 +111,7 @@ class CategoryHelper
     public static function getMainCategoryForSubtype($subtype)
     {
         foreach (self::SUBTYPES as $mainCategory => $subtypes) {
-            if (in_array($subtype, $subtypes)) {
+            if (in_array($subtype, $subtypes, true)) {
                 return $mainCategory;
             }
         }

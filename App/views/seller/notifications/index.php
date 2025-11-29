@@ -4,26 +4,18 @@
 <div class="space-y-6">
     <div class="page-header">
         <h1 class="page-title">Notifications</h1>
-        <?php if ($unreadCount > 0): ?>
-            <form action="<?= \App\Core\View::url('seller/notifications/mark-all-read') ?>" method="POST" class="inline">
-                <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
-                <button type="submit" class="btn btn-secondary">
-                    <i class="fas fa-check-double icon-spacing"></i> Mark All Read
-                </button>
-            </form>
-        <?php endif; ?>
     </div>
 
     <!-- Filter -->
     <div class="bg-white p-4 rounded-lg shadow flex gap-4">
-        <a href="<?= \App\Core\View::url('seller/notifications') ?>" 
-           class="px-4 py-2 rounded-lg <?= !$unreadOnly ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700' ?>">
+        <button type="button" onclick="window.location.href='<?= \App\Core\View::url('seller/notifications') ?>'" 
+           class="px-4 py-2 rounded-lg border <?= !$unreadOnly ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300' ?>">
             All (<?= count($notifications) ?>)
-        </a>
-        <a href="<?= \App\Core\View::url('seller/notifications?unread=1') ?>" 
-           class="px-4 py-2 rounded-lg <?= $unreadOnly ? 'bg-primary text-white' : 'bg-gray-200 text-gray-700' ?>">
+        </button>
+        <button type="button" onclick="window.location.href='<?= \App\Core\View::url('seller/notifications?unread=1') ?>'" 
+           class="px-4 py-2 rounded-lg border <?= $unreadOnly ? 'bg-primary text-white border-primary' : 'bg-white text-gray-700 border-gray-300' ?>">
             Unread (<?= $unreadCount ?>)
-        </a>
+        </button>
     </div>
 
     <?php if (empty($notifications)): ?>
@@ -33,11 +25,18 @@
             <p class="empty-state-text">You're all caught up!</p>
         </div>
     <?php else: ?>
+        <div class="bg-white rounded-lg shadow p-4 mb-4">
+            <label class="flex items-center gap-2 cursor-pointer">
+                <input type="checkbox" id="selectAllNotifications" class="w-4 h-4 text-primary border-gray-300 rounded">
+                <span class="text-sm font-medium text-gray-700">Select All</span>
+            </label>
+        </div>
         <div class="space-y-3">
             <?php foreach ($notifications as $notification): ?>
                 <div class="bg-white rounded-lg shadow p-6 <?= !$notification['is_read'] ? 'border-l-4 border-primary' : '' ?>">
                     <div class="flex items-start justify-between">
                         <div class="flex items-start flex-1">
+                            <input type="checkbox" class="notification-checkbox w-4 h-4 text-primary border-gray-300 rounded mr-3 mt-1" value="<?= $notification['id'] ?>" data-notification-id="<?= $notification['id'] ?>">
                             <?php if (!empty($notification['icon'])): ?>
                                 <div class="p-2 bg-primary/10 rounded-lg mr-4">
                                     <i class="fas <?= htmlspecialchars($notification['icon']) ?> text-primary"></i>
@@ -62,17 +61,9 @@
                         </div>
                         <div class="flex gap-2 ml-4">
                             <?php if (!$notification['is_read']): ?>
-                                <form action="<?= \App\Core\View::url('seller/notifications/mark-read/' . $notification['id']) ?>" method="POST" class="inline">
-                                    <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
-                                    <button type="submit" class="text-primary hover:text-primary-dark" title="Mark as read">
-                                        <i class="fas fa-check"></i>
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                            <?php if (!empty($notification['link'])): ?>
-                                <a href="<?= htmlspecialchars($notification['link']) ?>" class="text-primary hover:text-primary-dark">
-                                    <i class="fas fa-arrow-right"></i>
-                                </a>
+                                <button type="button" onclick="markAsRead(<?= $notification['id'] ?>)" class="text-primary" title="Mark as read">
+                                    <i class="fas fa-check"></i>
+                                </button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -80,6 +71,54 @@
             <?php endforeach; ?>
         </div>
     <?php endif; ?>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const selectAll = document.getElementById('selectAllNotifications');
+    const checkboxes = document.querySelectorAll('.notification-checkbox');
+    
+    if (selectAll) {
+        selectAll.addEventListener('change', function() {
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+        });
+    }
+    
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', function() {
+            if (!this.checked) {
+                if (selectAll) selectAll.checked = false;
+            } else {
+                const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+                if (selectAll) selectAll.checked = allChecked;
+            }
+        });
+    });
+});
+
+function markAsRead(notificationId) {
+    fetch('<?= \App\Core\View::url("seller/notifications/mark-read") ?>/' + notificationId, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-Requested-With': 'XMLHttpRequest'
+        },
+        body: JSON.stringify({
+            _csrf_token: '<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>'
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            location.reload();
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
 </div>
 
 <?php $content = ob_get_clean(); ?>

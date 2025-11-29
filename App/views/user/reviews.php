@@ -19,7 +19,7 @@ $title = 'My Reviews - NutriNexus';
                 </div>
                 <h3 class="text-lg font-semibold text-foreground mb-2">No Reviews Yet</h3>
                 <p class="text-sm text-neutral-600 mb-6">You haven't reviewed any products yet.</p>
-                <a href="<?= \App\Core\View::url('products') ?>" class="bg-primary text-white px-6 py-2.5 rounded-2xl font-medium hover:bg-primary-dark inline-block">
+                <a href="<?= \App\Core\View::url('products') ?>" class="btn btn-primary">
                     Browse Products
                 </a>
             </div>

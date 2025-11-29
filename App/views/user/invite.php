@@ -1,4 +1,7 @@
 <?php ob_start(); ?>
+<?php
+$referralLink = \App\Core\View::url('auth/register?ref=' . ($user['referral_code'] ?? ''));
+?>
 <div class="min-h-screen bg-neutral-50">
     <div class="container mx-auto px-4 py-6 max-w-4xl">
             <h1 class="font-heading text-3xl text-primary mb-8">Invite Friends & Earn</h1>
@@ -26,16 +29,17 @@
                 
                 <div class="p-6">
                     <div class="flex flex-col sm:flex-row gap-4">
-                        <input type="text" value="<?= \App\Core\View::url('auth/register?ref=' . ($user['referral_code'] ?? '')) ?>" 
-                               class="input flex-1 bg-neutral-50" readonly id="referralLink">
-                        <button onclick="copyReferralLink()" class="btn btn-primary px-6 py-3">
+                        <input type="text" value="<?= htmlspecialchars($referralLink, ENT_QUOTES, 'UTF-8') ?>" 
+                               class="input native-input flex-1 bg-neutral-50" readonly id="referralLink" data-referral-link="<?= htmlspecialchars($referralLink, ENT_QUOTES, 'UTF-8') ?>">
+                        <button type="button" onclick="copyReferralLink()" class="btn btn-primary" id="copyReferralBtn">
                             Copy Link
                         </button>
                     </div>
                     <p id="copyMessage" class="text-success mt-2 hidden">Link copied to clipboard!</p>
+                    <p id="copyError" class="text-error mt-2 hidden">Unable to copy automatically. Please copy the link manually.</p>
                 </div>
             </div>
-            <?php else: ?>
+<?php else: ?>
             <div class="bg-white rounded-2xl shadow-sm border border-error/30 overflow-hidden mb-8">
                 <div class="p-6 border-b border-error/40">
                     <h2 class="font-heading text-xl text-error">Sponsorship Inactive</h2>
@@ -193,7 +197,7 @@
                         </div>
                         <h3 class="text-lg font-medium text-mountain mb-2">No referrals yet</h3>
                         <p class="text-neutral-500 mb-6">Start sharing your referral link to earn commissions!</p>
-                        <button onclick="copyReferralLink()" class="btn btn-primary px-6 py-3">
+                        <button type="button" onclick="copyReferralLink()" class="btn btn-primary" id="copyReferralBtnEmpty">
                             Copy Your Referral Link
                         </button>
                     </div>
@@ -204,18 +208,46 @@
 </div>
 
 <script>
-function copyReferralLink() {
-   var copyText = document.getElementById("referralLink");
-   copyText.select();
-   copyText.setSelectionRange(0, 99999);
-   document.execCommand("copy");
-   
-   var copyMessage = document.getElementById("copyMessage");
-   copyMessage.classList.remove("hidden");
-   
-   setTimeout(function() {
-       copyMessage.classList.add("hidden");
-   }, 3000);
+async function copyReferralLink() {
+    var linkInput = document.getElementById("referralLink");
+    var referralUrl = linkInput?.dataset?.referralLink || linkInput?.value || "";
+    var successMessage = document.getElementById("copyMessage");
+    var errorMessage = document.getElementById("copyError");
+
+    if (successMessage) { successMessage.classList.add("hidden"); }
+    if (errorMessage) { errorMessage.classList.add("hidden"); }
+
+    if (!referralUrl) {
+        if (errorMessage) { errorMessage.classList.remove("hidden"); }
+        return;
+    }
+
+    try {
+        if (navigator.clipboard && window.isSecureContext) {
+            await navigator.clipboard.writeText(referralUrl);
+        } else {
+            linkInput.readOnly = false;
+            linkInput.focus();
+            linkInput.select();
+            document.execCommand("copy");
+            linkInput.readOnly = true;
+            linkInput.setSelectionRange(0, 0);
+        }
+
+        if (successMessage) {
+            successMessage.classList.remove("hidden");
+            setTimeout(function() {
+                successMessage.classList.add("hidden");
+            }, 2500);
+        }
+    } catch (error) {
+        if (errorMessage) {
+            errorMessage.classList.remove("hidden");
+            setTimeout(function() {
+                errorMessage.classList.add("hidden");
+            }, 3500);
+        }
+    }
 }
 </script>
 <?php $content = ob_get_clean(); ?>

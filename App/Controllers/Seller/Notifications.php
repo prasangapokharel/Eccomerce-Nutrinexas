@@ -54,10 +54,17 @@ class Notifications extends BaseSellerController
                 [$id, $this->sellerId]
             )->execute();
             
+            if ($this->isAjaxRequest()) {
+                $this->jsonResponse(['success' => true]);
+                return;
+            }
+            
             $this->setFlash('success', 'Notification marked as read');
         }
         
-        $this->redirect('seller/notifications');
+        if (!$this->isAjaxRequest()) {
+            $this->redirect('seller/notifications');
+        }
     }
 
     public function markAllRead()

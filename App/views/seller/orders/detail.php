@@ -4,8 +4,8 @@
 <div class="space-y-6">
     <div class="page-header">
         <h1 class="page-title">Order Details #<?= $order['id'] ?></h1>
-        <a href="<?= \App\Core\View::url('seller/orders') ?>" class="link-gray">
-            <i class="fas fa-arrow-left icon-spacing"></i> Back to Orders
+        <a href="<?= \App\Core\View::url('seller/orders') ?>" class="btn btn-outline">
+            <i class="fas fa-arrow-left mr-2"></i>Back to Orders
         </a>
     </div>
 
@@ -90,11 +90,11 @@
                     <div class="space-y-2">
                         <form action="<?= \App\Core\View::url('seller/orders/accept/' . $order['id']) ?>" method="POST" class="mb-2">
                             <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
-                            <button type="submit" class="btn btn-success" style="width: 100%;">
+                            <button type="submit" class="btn btn-primary w-full">
                                 <i class="fas fa-check mr-2"></i>Accept Order
                             </button>
                         </form>
-                        <button onclick="showRejectModal()" class="btn btn-danger" style="width: 100%;">
+                        <button onclick="showRejectModal()" class="btn btn-delete w-full">
                             <i class="fas fa-times mr-2"></i>Reject Order
                         </button>
                     </div>
@@ -102,18 +102,19 @@
             <?php endif; ?>
 
             <!-- Print Actions -->
-            <div class="card">
-                <h2 class="card-title">Print</h2>
-                <div class="space-y-3">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <h2 class="text-lg font-semibold text-gray-900 mb-4">Print</h2>
+                <div class="flex items-center gap-3">
                     <a href="<?= \App\Core\View::url('orders/receipt/' . $order['id']) ?>" 
                        target="_blank"
-                       class="btn w-full">
-                        <i class="fas fa-file-invoice mr-2"></i>Print Invoice
+                       class="btn btn-primary flex items-center justify-center flex-1">
+                        <i class="fas fa-file-invoice mr-2"></i>
+                        <span>Print Invoice</span>
                     </a>
-                    <a href="<?= \App\Core\View::url('seller/orders/print-shipping-label/' . $order['id']) ?>" 
+                    <a href="<?= \App\Core\View::url('billing/shipping-label/print/' . $order['id']) ?>" 
                        target="_blank"
-                       class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors font-medium">
-                        <i class="fas fa-truck mr-2"></i>Print Shipping Label
+                       class="btn btn-outline flex items-center justify-center w-12 h-12 flex-shrink-0">
+                        <i class="fas fa-truck"></i>
                     </a>
                 </div>
             </div>
@@ -132,7 +133,7 @@
                             <option value="ready_for_pickup" <?= $order['status'] === 'ready_for_pickup' ? 'selected' : '' ?>>Ready for Pickup</option>
                         </select>
                     </div>
-                    <button type="submit" class="w-full inline-flex items-center justify-center px-4 py-2.5 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors font-medium">
+                    <button type="submit" class="btn btn-primary w-full">
                         <i class="fas fa-save mr-2"></i>Update Status
                     </button>
                 </form>
@@ -183,7 +184,7 @@
                 <button type="button" onclick="hideRejectModal()" class="btn btn-outline">
                     Cancel
                 </button>
-                <button type="submit" class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700">
+                <button type="submit" class="btn btn-delete">
                     Reject Order
                 </button>
             </div>

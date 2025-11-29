@@ -13,36 +13,47 @@
     <!-- Filters -->
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <div class="p-6 border-b border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-900 mb-4">Filters</h2>
-            <form method="GET" class="flex flex-col sm:flex-row gap-4">
-                <div class="flex-1">
-                    <label for="product_id" class="block text-sm font-medium text-gray-700 mb-2">Product</label>
-                    <select id="product_id" name="product_id" class="input native-input">
-                        <option value="">All Products</option>
-                        <?php foreach ($products as $product): ?>
-                            <option value="<?= $product['id'] ?>" <?= $productFilter == $product['id'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($product['product_name']) ?>
-                            </option>
-                        <?php endforeach; ?>
-                    </select>
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-4">
+                <h2 class="text-lg font-semibold text-gray-900">Stock Movement Filters</h2>
+                
+                <!-- Standard Top Bar: Search, Filter, Button -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
+                        <input type="text" 
+                               id="searchInput" 
+                               placeholder="Search by product name..." 
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
+                    </div>
                 </div>
-                <div class="flex-1">
-                    <label for="type" class="block text-sm font-medium text-gray-700 mb-2">Movement Type</label>
-                    <select id="type" name="type" class="input native-input">
-                        <option value="">All Types</option>
-                        <option value="in" <?= $typeFilter === 'in' ? 'selected' : '' ?>>Stock In</option>
-                        <option value="out" <?= $typeFilter === 'out' ? 'selected' : '' ?>>Stock Out</option>
-                        <option value="sale" <?= $typeFilter === 'sale' ? 'selected' : '' ?>>Sale</option>
-                        <option value="return" <?= $typeFilter === 'return' ? 'selected' : '' ?>>Return</option>
-                        <option value="cancellation" <?= $typeFilter === 'cancellation' ? 'selected' : '' ?>>Cancellation</option>
-                        <option value="adjustment" <?= $typeFilter === 'adjustment' ? 'selected' : '' ?>>Adjustment</option>
-                    </select>
-                </div>
-                <div class="flex items-end">
-                    <button type="submit" class="btn">
-                        Filter
-                    </button>
-                </div>
+            </div>
+            
+            <form method="GET" class="flex flex-col sm:flex-row gap-3">
+                <select id="product_id" name="product_id" class="input native-input sm:w-48">
+                    <option value="">All Products</option>
+                    <?php foreach ($products as $product): ?>
+                        <option value="<?= $product['id'] ?>" <?= $productFilter == $product['id'] ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($product['product_name']) ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                
+                <select id="type" name="type" class="input native-input sm:w-48">
+                    <option value="">All Types</option>
+                    <option value="in" <?= $typeFilter === 'in' ? 'selected' : '' ?>>Stock In</option>
+                    <option value="out" <?= $typeFilter === 'out' ? 'selected' : '' ?>>Stock Out</option>
+                    <option value="sale" <?= $typeFilter === 'sale' ? 'selected' : '' ?>>Sale</option>
+                    <option value="return" <?= $typeFilter === 'return' ? 'selected' : '' ?>>Return</option>
+                    <option value="cancellation" <?= $typeFilter === 'cancellation' ? 'selected' : '' ?>>Cancellation</option>
+                    <option value="adjustment" <?= $typeFilter === 'adjustment' ? 'selected' : '' ?>>Adjustment</option>
+                </select>
+                
+                <button type="submit" class="btn btn-sm btn-primary">
+                    Filter
+                </button>
             </form>
         </div>
     </div>

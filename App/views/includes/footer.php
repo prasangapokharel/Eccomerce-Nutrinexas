@@ -77,6 +77,16 @@
                         </button>
                     </div>
                 </form>
+
+                <div class="mt-6 max-w-xs">
+                    <a href="<?= URLROOT ?>/seller/login" class="w-full inline-flex items-center gap-3 px-4 py-3 bg-white text-primary rounded-2xl font-semibold text-sm border border-neutral-200 shadow-sm hover:bg-neutral-100">
+                        <img src="<?= \App\Core\View::asset('images/graphics/seller.png') ?>" alt="Seller portal" class="w-10 h-10 rounded-full border border-neutral-200">
+                        <div class="text-left">
+                            <p class="leading-tight">Become a Seller</p>
+                            <p class="text-xs font-normal text-neutral-500">0 selling commission</p>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
 

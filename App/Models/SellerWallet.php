@@ -17,8 +17,16 @@ class SellerWallet extends Model
         )->single();
         
         if (!$wallet) {
-            $this->createWallet($sellerId);
-            return $this->getWalletBySellerId($sellerId);
+            $created = $this->createWallet($sellerId);
+            if ($created) {
+                $wallet = $this->db->query(
+                    "SELECT * FROM {$this->table} WHERE seller_id = ?",
+                    [$sellerId]
+                )->single();
+            } else {
+                error_log("SellerWallet: Failed to create wallet for seller #{$sellerId} - seller may not exist");
+                return null;
+            }
         }
         
         return $wallet;
@@ -26,17 +34,43 @@ class SellerWallet extends Model
 
     public function createWallet($sellerId)
     {
-        $this->db->query(
-            "INSERT INTO {$this->table} (seller_id, balance, total_earnings, total_withdrawals, pending_withdrawals) 
-             VALUES (?, 0, 0, 0, 0)",
+        if (empty($sellerId)) {
+            error_log("SellerWallet: Cannot create wallet - seller_id is empty");
+            return false;
+        }
+
+        $sellerExists = $this->db->query(
+            "SELECT id FROM sellers WHERE id = ?",
             [$sellerId]
-        )->execute();
-        return true;
+        )->single();
+
+        if (!$sellerExists) {
+            error_log("SellerWallet: Cannot create wallet - seller #{$sellerId} does not exist in sellers table");
+            return false;
+        }
+
+        try {
+            $result = $this->db->query(
+                "INSERT INTO {$this->table} (seller_id, balance, total_earnings, total_withdrawals, pending_withdrawals) 
+                 VALUES (?, 0, 0, 0, 0)",
+                [$sellerId]
+            )->execute();
+            
+            return $result;
+        } catch (\Exception $e) {
+            error_log("SellerWallet: Error creating wallet for seller #{$sellerId}: " . $e->getMessage());
+            return false;
+        }
     }
 
     public function updateBalance($sellerId, $amount, $type = 'credit')
     {
         $wallet = $this->getWalletBySellerId($sellerId);
+        
+        if (!$wallet) {
+            error_log("SellerWallet: Cannot update balance - wallet not found for seller #{$sellerId}");
+            return false;
+        }
         
         if ($type === 'credit') {
             $newBalance = $wallet['balance'] + $amount;

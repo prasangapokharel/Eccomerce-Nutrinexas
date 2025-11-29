@@ -2,6 +2,8 @@
 
 namespace App\Controllers\Seller;
 
+use App\Controllers\Order\OrderAssign;
+use App\Core\Database;
 use App\Models\Order;
 use App\Models\OrderItem;
 use App\Core\Cache;
@@ -12,6 +14,8 @@ class Orders extends BaseSellerController
     private $orderModel;
     private $orderItemModel;
     private $cache;
+    protected $db;
+    private OrderAssign $orderAssign;
 
     public function __construct()
     {
@@ -19,6 +23,8 @@ class Orders extends BaseSellerController
         $this->orderModel = new Order();
         $this->orderItemModel = new OrderItem();
         $this->cache = new Cache();
+        $this->db = Database::getInstance();
+        $this->orderAssign = new OrderAssign();
     }
 
     /**
@@ -236,7 +242,8 @@ class Orders extends BaseSellerController
             return;
         }
 
-        $this->renderShippingLabel($order, $orderItems);
+        $shippingLabelController = new \App\Controllers\Billing\ShippingLabelController();
+        $shippingLabelController->print($id);
     }
 
     /**
@@ -253,565 +260,26 @@ class Orders extends BaseSellerController
             return;
         }
 
-        $orders = [];
+        $validOrderIds = [];
         foreach ($orderIds as $orderId) {
             $order = $this->orderModel->find($orderId);
             $orderItems = $this->orderItemModel->getByOrderIdAndSellerId($orderId, $this->sellerId);
             
             if ($order && !empty($orderItems)) {
-                $orders[] = [
-                    'order' => $order,
-                    'orderItems' => $orderItems
-                ];
+                $validOrderIds[] = $orderId;
             }
         }
 
-        if (empty($orders)) {
+        if (empty($validOrderIds)) {
             $this->setFlash('error', 'No valid orders found');
             $this->redirect('seller/orders');
             return;
         }
 
-        $this->renderBulkShippingLabels($orders);
+        $shippingLabelController = new \App\Controllers\Billing\ShippingLabelController();
+        $shippingLabelController->print($validOrderIds[0]);
     }
 
-    /**
-     * Render single shipping label using HTML template
-     */
-    private function renderShippingLabel($order, $orderItems)
-    {
-        $sellerModel = new \App\Models\Seller();
-        $seller = $sellerModel->find($this->sellerId);
-        
-        $format = $_GET['format'] ?? 'html';
-        
-        try {
-            if ($format === 'pdf') {
-                $this->generateShippingLabelPDF($order, $orderItems, $seller);
-            } else {
-                $this->generateShippingLabelHTML($order, $orderItems, $seller);
-            }
-        } catch (Exception $e) {
-            error_log('Shipping label generation error: ' . $e->getMessage());
-            error_log('Stack trace: ' . $e->getTraceAsString());
-            
-            $this->setFlash('error', 'Failed to generate shipping label: ' . $e->getMessage());
-            $this->redirect('seller/orders');
-        }
-    }
-    
-    /**
-     * Generate shipping label as HTML using template
-     */
-    private function generateShippingLabelHTML($order, $orderItems, $seller)
-    {
-        $templatePath = (defined('ROOT') ? ROOT : dirname(dirname(dirname(__DIR__)))) . '/assets/templates/shipping/label.html';
-        
-        if (!file_exists($templatePath)) {
-            throw new Exception('Shipping label template not found at: ' . $templatePath);
-        }
-        
-        $template = file_get_contents($templatePath);
-        $data = $this->prepareShippingLabelData($order, $orderItems, $seller);
-        
-        $barcodeNumber = $data['4711081517432'];
-        $trackingNumber = $data['00000-0000-0000-000'];
-        
-        $logoUrl = $seller['logo_url'] ?? '';
-        $logoHtml = '';
-        if (!empty($logoUrl)) {
-            $logoHtml = '<img src="' . htmlspecialchars($logoUrl, ENT_QUOTES) . '" alt="' . htmlspecialchars($data['COMPANY NAME'], ENT_QUOTES) . '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'block\';"><div class="logo-placeholder" style="display:none;">(LOGO HERE)</div>';
-        } else {
-            $logoHtml = '<div class="logo-placeholder">(LOGO HERE)</div>';
-        }
-        
-        $replacements = [
-            '{{LOGO_IMAGE}}' => $logoHtml,
-            '{{COMPANY NAME}}' => htmlspecialchars($data['COMPANY NAME']),
-            '{{YOUR STREET ADDRESS}}' => htmlspecialchars($data['YOUR STREET ADDRESS']),
-            '{{CITY, STATE, ZIP CODE}}' => htmlspecialchars($data['CITY, STATE, ZIP CODE']),
-            '{Date}' => htmlspecialchars($data['{Date}']),
-            '{}' => htmlspecialchars($data['{}']),
-            '{{Type Recipient Name Here}}' => htmlspecialchars($data['Type Recipient Name Here']),
-            '{{STREET ADDRESS}}' => htmlspecialchars($data['STREET ADDRESS']),
-            '00000-0000-0000-000' => htmlspecialchars($trackingNumber),
-            '4711081517432' => htmlspecialchars($barcodeNumber)
-        ];
-        
-        foreach ($replacements as $search => $replace) {
-            $template = str_replace($search, $replace, $template);
-        }
-        
-        $template = str_replace(
-            'JsBarcode("#barcode-bottom", "4711081517432"',
-            'JsBarcode("#barcode-bottom", "' . htmlspecialchars($barcodeNumber, ENT_QUOTES) . '"',
-            $template
-        );
-        
-        header('Content-Type: text/html; charset=utf-8');
-        echo $template;
-        exit;
-    }
-    
-    /**
-     * Get payment method label
-     */
-    private function getPaymentMethodLabel($order)
-    {
-        $paymentMethod = $order['payment_method'] ?? '';
-        if (stripos($paymentMethod, 'COD') !== false || stripos($paymentMethod, 'Cash') !== false) {
-            return 'COD';
-        }
-        return 'PREPAID';
-    }
-    
-    /**
-     * Format order items for label
-     */
-    private function formatOrderItems($orderItems)
-    {
-        $items = [];
-        foreach ($orderItems as $item) {
-            $productName = $item['product_name'] ?? 'Product';
-            $quantity = $item['quantity'] ?? 1;
-            $items[] = htmlspecialchars($productName) . ' (' . $quantity . ' pcs)';
-        }
-        return implode(',<br />', $items);
-    }
-    
-    /**
-     * Generate shipping label as Word document using PHPOffice
-     */
-    private function generateShippingLabelWord($order, $orderItems, $seller)
-    {
-        if (!class_exists('\PhpOffice\PhpWord\PhpWord')) {
-            throw new Exception('PHPOffice PhpWord library not installed');
-        }
-        
-        $phpWord = new \PhpOffice\PhpWord\PhpWord();
-        $section = $phpWord->addSection([
-            'marginTop' => 400,
-            'marginBottom' => 400,
-            'marginLeft' => 400,
-            'marginRight' => 400
-        ]);
-        
-        $data = $this->prepareShippingLabelData($order, $orderItems, $seller);
-        
-        $section->addText('SHIPPING FROM:', ['bold' => true, 'size' => 11]);
-        $section->addText($data['COMPANY NAME'], ['size' => 10]);
-        $section->addText($data['YOUR STREET ADDRESS'], ['size' => 10]);
-        $section->addText($data['CITY, STATE, ZIP CODE'], ['size' => 10]);
-        
-        $section->addTextBreak(1);
-        $section->addText('Tracking no: ' . $data['00000-0000-0000-000'], ['bold' => true, 'size' => 10]);
-        
-        $section->addTextBreak(2);
-        
-        $section->addText('SHIPPING TO:', ['bold' => true, 'size' => 11]);
-        $section->addText($data['Type Recipient Name Here'], ['size' => 10]);
-        $section->addText($data['STREET ADDRESS'], ['size' => 10]);
-        
-        $section->addTextBreak(1);
-        $section->addText('Shipping Date: ' . $data['{Date}'], ['size' => 9]);
-        $section->addText('Weight: ' . $data['{}'], ['size' => 9]);
-        
-        $invoice = $order['invoice'] ?? 'NTX' . str_pad($order['id'], 6, '0', STR_PAD_LEFT);
-        $filename = 'Shipping-Label-' . $invoice . '.docx';
-        
-        header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-        
-        $writer = \PhpOffice\PhpWord\IOFactory::createWriter($phpWord, 'Word2007');
-        $writer->save('php://output');
-        exit;
-    }
-    
-    /**
-     * Generate shipping label as PDF using mPDF
-     */
-    private function generateShippingLabelPDF($order, $orderItems, $seller)
-    {
-        if (!class_exists('\Mpdf\Mpdf')) {
-            throw new Exception('mPDF library not installed');
-        }
-        
-        $templatePath = (defined('ROOT') ? ROOT : dirname(dirname(dirname(__DIR__)))) . '/assets/templates/shipping/label.html';
-        
-        if (!file_exists($templatePath)) {
-            throw new Exception('Shipping label template not found');
-        }
-        
-        $template = file_get_contents($templatePath);
-        $data = $this->prepareShippingLabelData($order, $orderItems, $seller);
-        
-        $barcodeNumber = $data['4711081517432'];
-        $trackingNumber = $data['00000-0000-0000-000'];
-        
-        $logoUrl = $seller['logo_url'] ?? '';
-        $logoHtml = '';
-        if (!empty($logoUrl)) {
-            $logoHtml = '<img src="' . htmlspecialchars($logoUrl, ENT_QUOTES) . '" alt="' . htmlspecialchars($data['COMPANY NAME'], ENT_QUOTES) . '" style="max-width: 100%; max-height: 15mm; object-fit: contain;">';
-        } else {
-            $logoHtml = '<div class="logo-placeholder">(LOGO HERE)</div>';
-        }
-        
-        $replacements = [
-            '{{LOGO_IMAGE}}' => $logoHtml,
-            '{{COMPANY NAME}}' => htmlspecialchars($data['COMPANY NAME']),
-            '{{YOUR STREET ADDRESS}}' => htmlspecialchars($data['YOUR STREET ADDRESS']),
-            '{{CITY, STATE, ZIP CODE}}' => htmlspecialchars($data['CITY, STATE, ZIP CODE']),
-            '{Date}' => htmlspecialchars($data['{Date}']),
-            '{}' => htmlspecialchars($data['{}']),
-            '{{Type Recipient Name Here}}' => htmlspecialchars($data['Type Recipient Name Here']),
-            '{{STREET ADDRESS}}' => htmlspecialchars($data['STREET ADDRESS']),
-            '00000-0000-0000-000' => htmlspecialchars($trackingNumber),
-            '4711081517432' => htmlspecialchars($barcodeNumber)
-        ];
-        
-        foreach ($replacements as $search => $replace) {
-            $template = str_replace($search, $replace, $template);
-        }
-        
-        $template = preg_replace('/<script[^>]*>.*?<\/script>/is', '', $template);
-        
-        $barcodeSvg = $this->generateBarcodeSVG($barcodeNumber, 'CODE128');
-        $template = str_replace(
-            '<svg id="barcode-bottom"></svg>',
-            $barcodeSvg,
-            $template
-        );
-        
-        $mpdf = new \Mpdf\Mpdf([
-            'mode' => 'utf-8',
-            'format' => [110, 150],
-            'margin_left' => 3,
-            'margin_right' => 3,
-            'margin_top' => 3,
-            'margin_bottom' => 3,
-            'margin_header' => 0,
-            'margin_footer' => 0,
-            'default_font_size' => 10,
-            'default_font' => 'Arial',
-            'tempDir' => sys_get_temp_dir(),
-            'dpi' => 96
-        ]);
-        
-        $mpdf->WriteHTML($template);
-        
-        $invoice = $order['invoice'] ?? 'NTX' . str_pad($order['id'], 6, '0', STR_PAD_LEFT);
-        $filename = 'Shipping-Label-' . $invoice . '.pdf';
-        
-        header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="' . $filename . '"');
-        header('Cache-Control: max-age=0');
-        
-        $mpdf->Output($filename, \Mpdf\Output\Destination::DOWNLOAD);
-        exit;
-    }
-    
-    /**
-     * Generate barcode SVG for PDF
-     */
-    private function generateBarcodeSVG($code, $format = 'CODE128')
-    {
-        $width = 1;
-        $height = 10;
-        
-        $svg = '<svg width="100%" height="' . $height . 'mm" xmlns="http://www.w3.org/2000/svg">';
-        $svg .= '<rect width="100%" height="100%" fill="white"/>';
-        
-        $barcodeData = $this->generateBarcodePattern($code, $format);
-        $x = 0;
-        $barWidth = 0.5;
-        
-        foreach ($barcodeData as $bar) {
-            if ($bar) {
-                $svg .= '<rect x="' . $x . 'mm" y="0" width="' . $barWidth . 'mm" height="' . $height . 'mm" fill="black"/>';
-            }
-            $x += $barWidth;
-        }
-        
-        $svg .= '</svg>';
-        
-        return $svg;
-    }
-    
-    /**
-     * Generate barcode pattern (simplified)
-     */
-    private function generateBarcodePattern($code, $format)
-    {
-        $pattern = [];
-        $codeLength = strlen($code);
-        
-        for ($i = 0; $i < $codeLength * 10; $i++) {
-            $pattern[] = ($i % 2 == 0);
-        }
-        
-        return $pattern;
-    }
-    
-    /**
-     * Prepare shipping label data from order
-     */
-    private function prepareShippingLabelData($order, $orderItems, $seller)
-    {
-        // Seller/Company information
-        $companyName = $seller['company_name'] ?? $seller['name'] ?? 'Nutri Nexus';
-        $sellerAddress = $seller['address'] ?? '';
-        $sellerCityStateZip = '';
-        
-        if ($sellerAddress) {
-            $addressParts = array_map('trim', explode(',', $sellerAddress));
-            if (count($addressParts) > 1) {
-                $sellerCityStateZip = implode(', ', array_slice($addressParts, -2));
-            } else {
-                $sellerCityStateZip = $sellerAddress;
-            }
-        }
-        
-        // Tracking number - format as shown in template
-        $trackingCode = $order['invoice'] ?? 'NTX' . str_pad($order['id'], 8, '0', STR_PAD_LEFT);
-        $trackingFormatted = $this->formatTrackingNumber($trackingCode);
-        
-        // Shipping date
-        $shippingDate = date('Y-m-d');
-        if (!empty($order['shipped_at'])) {
-            $shippingDate = date('Y-m-d', strtotime($order['shipped_at']));
-        }
-        
-        // Calculate weight
-        $totalWeight = 0;
-        foreach ($orderItems as $item) {
-            $weight = floatval($item['weight'] ?? 0);
-            $quantity = intval($item['quantity'] ?? 1);
-            $totalWeight += $weight * $quantity;
-        }
-        $weightText = $totalWeight > 0 ? number_format($totalWeight, 2) . ' kg' : '0.5 kg';
-        
-        // Recipient information
-        $recipientName = $order['customer_name'] ?? $order['order_customer_name'] ?? $order['user_full_name'] ?? 'Customer';
-        $recipientAddress = $order['address'] ?? $order['shipping_address'] ?? '';
-        
-        // Parse recipient address
-        $recipientStreet = $recipientAddress;
-        if ($recipientAddress) {
-            $recipientParts = array_map('trim', explode(',', $recipientAddress));
-            $recipientStreet = $recipientParts[0] ?? $recipientAddress;
-        }
-        
-        // Barcode number (EAN-13 format)
-        $barcodeNumber = $this->generateBarcodeNumber($order);
-        
-        return [
-            'COMPANY NAME' => $companyName,
-            'YOUR STREET ADDRESS' => $sellerAddress,
-            'CITY, STATE, ZIP CODE' => $sellerCityStateZip,
-            '00000-0000-0000-000' => $trackingFormatted,
-            'Type Recipient Name Here' => $recipientName,
-            'STREET ADDRESS' => $recipientStreet,
-            '{Date}' => $shippingDate,
-            '{}' => $weightText,
-            '4711081517432' => $barcodeNumber
-        ];
-    }
-    
-    /**
-     * Format tracking number
-     */
-    private function formatTrackingNumber($code)
-    {
-        $clean = preg_replace('/[^0-9A-Z]/', '', strtoupper($code));
-        $len = strlen($clean);
-        
-        if ($len <= 5) {
-            return str_pad($clean, 5, '0', STR_PAD_LEFT) . '-0000-0000-000';
-        } elseif ($len <= 9) {
-            return substr($clean, 0, 5) . '-' . str_pad(substr($clean, 5), 4, '0', STR_PAD_LEFT) . '-0000-000';
-        } elseif ($len <= 13) {
-            return substr($clean, 0, 5) . '-' . substr($clean, 5, 4) . '-' . str_pad(substr($clean, 9), 4, '0', STR_PAD_LEFT) . '-000';
-        } else {
-            return substr($clean, 0, 5) . '-' . substr($clean, 5, 4) . '-' . substr($clean, 9, 4) . '-' . substr($clean, 13, 3);
-        }
-    }
-    
-    /**
-     * Generate barcode number (EAN-13 format)
-     */
-    private function generateBarcodeNumber($order)
-    {
-        $code = $order['invoice'] ?? str_pad($order['id'], 8, '0', STR_PAD_LEFT);
-        $clean = preg_replace('/[^0-9]/', '', $code);
-        
-        // Ensure 13 digits for EAN-13
-        if (strlen($clean) < 13) {
-            $clean = '471' . str_pad($clean, 10, '0', STR_PAD_LEFT);
-        }
-        
-        return substr($clean, 0, 13);
-    }
-
-    /**
-     * Render bulk shipping labels using template
-     */
-    private function renderBulkShippingLabels($orders)
-    {
-        $sellerModel = new \App\Models\Seller();
-        $seller = $sellerModel->find($this->sellerId);
-        
-        // Read template
-        $templatePath = __DIR__ . '/../../../assets/templates/shipping/label.html';
-        $fullTemplate = file_get_contents($templatePath);
-        
-        // Extract head and body structure
-        preg_match('/(.*<body[^>]*>)/s', $fullTemplate, $headMatch);
-        preg_match('/(<\/body>.*<\/html>)/s', $fullTemplate, $footMatch);
-        
-        $head = $headMatch[1] ?? '';
-        $foot = $footMatch[1] ?? '';
-        
-        // Extract single page content
-        preg_match('/<div class="page[^"]*">(.*?)<\/div>\s*<\/div>\s*<\/div>/s', $fullTemplate, $pageMatch);
-        $singlePageContent = $pageMatch[1] ?? '';
-        
-        // Build pages
-        $pagesHtml = '';
-        $allScripts = '';
-        foreach ($orders as $index => $orderData) {
-            $pageHtml = $this->replaceLabelPlaceholders($singlePageContent, $orderData['order'], $orderData['orderItems'], $seller);
-            $pageClass = 'page' . ($index > 0 ? ' page-breaker' : '');
-            $pagesHtml .= '<div class="' . $pageClass . '">' . $pageHtml . '</div></div>';
-            
-            // Extract scripts from this page
-            preg_match('/<script>(.*?)<\/script>/s', $pageHtml, $scriptMatch);
-            if (!empty($scriptMatch[1])) {
-                $allScripts .= $scriptMatch[1];
-            }
-        }
-        
-        // Build final HTML
-        $html = $head . '<div class="container">' . $pagesHtml . '</div>';
-        
-        // Add scripts once at the end
-        if (!empty($allScripts)) {
-            $html .= '<script>' . $allScripts . '</script>';
-        }
-        
-        $html .= $foot;
-        
-        echo $html;
-        exit;
-    }
-
-    /**
-     * Replace placeholders in template
-     */
-    private function replaceLabelPlaceholders($template, $order, $orderItems, $seller)
-    {
-        // Get payment method
-        $paymentMethod = 'Prepaid';
-        $isCOD = false;
-        if (!empty($order['payment_method_id'])) {
-            $db = \App\Core\Database::getInstance();
-            $pm = $db->query("SELECT name FROM payment_methods WHERE id = ?", [$order['payment_method_id']])->single();
-            if ($pm && (stripos($pm['name'], 'COD') !== false || stripos($pm['name'], 'Cash') !== false)) {
-                $paymentMethod = 'COD';
-                $isCOD = true;
-            } else {
-                $paymentMethod = $pm['name'] ?? 'Prepaid';
-            }
-        } else {
-            $paymentMethod = 'COD';
-            $isCOD = true;
-        }
-        
-        // Tracking code
-        $trackingCode = $order['invoice'] ?? 'NTX' . str_pad($order['id'], 8, '0', STR_PAD_LEFT);
-        
-        // Calculate weight
-        $totalWeight = 0;
-        foreach ($orderItems as $item) {
-            $weight = $item['weight'] ?? 0.5;
-            $totalWeight += $weight * ($item['quantity'] ?? 1);
-        }
-        
-        // Parse addresses
-        $senderAddress = $seller['address'] ?? '';
-        $senderParts = explode(',', $senderAddress);
-        $senderCity = trim($senderParts[count($senderParts) - 1] ?? '');
-        
-        $recipientAddress = $order['address'] ?? $order['shipping_address'] ?? '';
-        $recipientParts = explode(',', $recipientAddress);
-        $recipientCity = trim($recipientParts[count($recipientParts) - 1] ?? '');
-        
-        // Product list
-        $productList = [];
-        foreach ($orderItems as $item) {
-            $productList[] = htmlspecialchars($item['product_name']) . ' (' . $item['quantity'] . ' pcs)';
-        }
-        $productListStr = implode(',<br />', $productList);
-        
-        // Generate barcode placeholder (will be generated by JS)
-        $barcodePlaceholder = '<svg id="barcode-' . $order['id'] . '" class="barcode__image"></svg>';
-        $qrPlaceholder = '<canvas id="qr-' . $order['id'] . '" class="barcode__image"></canvas>';
-        
-        // Replace placeholders
-        $replacements = [
-            '$courier-label' => '',
-            'J&amp;T Express' => htmlspecialchars($seller['company_name'] ?? $seller['name'] ?? 'NutriNexus'),
-            'AWB No. JP9365780159' => 'AWB No. ' . htmlspecialchars($trackingCode),
-            'NON COD' => $isCOD ? 'COD' : 'NON COD',
-            '4 kg' => number_format($totalWeight, 1) . ' kg',
-            'INDONESIAMALL' => htmlspecialchars($seller['company_name'] ?? $seller['name'] ?? 'Company Name'),
-            '08155556586' => htmlspecialchars($seller['phone'] ?? ''),
-            'Suryodiningratan - Mantrijeron' => htmlspecialchars($senderAddress ?: 'Address'),
-            'Oriana paramita dewi' => htmlspecialchars($order['customer_name'] ?: 'Customer Name'),
-            '6281542222291' => htmlspecialchars($order['contact_no'] ?? ''),
-            'Jalan Gondang Waras No.17C, RT.10 RW.04, Sendangadi, Mlati, Sleman, Yogyakarta, KAB. SLEMAN, MLATI, DI YOGYAKARTA, ID, 55597' => htmlspecialchars($recipientAddress ?: 'Address'),
-            'Sendangadi, Mlati, Sleman' => htmlspecialchars($recipientCity ?: 'City'),
-            'DI YOGYAKARTA' => htmlspecialchars($recipientCity ?: 'City'),
-            ' - 55597' => '',
-            'Rp 0' => 'Rs ' . number_format($order['total_amount'] ?? 0, 2),
-            'ADS-TBM-001 (5 pcs),<br />DRR-KPB-002 (1 pcs)' => $productListStr,
-            'DLV15265' => htmlspecialchars($trackingCode)
-        ];
-        
-        foreach ($replacements as $search => $replace) {
-            $template = str_replace($search, $replace, $template);
-        }
-        
-        // Replace barcode images with placeholders and add JS generation
-        $template = preg_replace('/<img[^>]*class="barcode__image"[^>]*>/', $barcodePlaceholder, $template);
-        $template = preg_replace('/<img[^>]*alt=""[^>]*class="barcode__image"[^>]*>/', $qrPlaceholder, $template);
-        
-        // Add barcode generation script if not exists
-        if (strpos($template, 'JsBarcode') === false) {
-            $barcodeScript = '<script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/JsBarcode.all.min.js"></script>';
-            $qrScript = '<script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>';
-            $template = str_replace('</head>', $barcodeScript . $qrScript . '</head>', $template);
-        }
-        
-        // Add initialization script
-        $initScript = '<script>
-            document.addEventListener("DOMContentLoaded", function() {
-                JsBarcode("#barcode-' . $order['id'] . '", "' . htmlspecialchars($trackingCode) . '", {
-                    format: "CODE128",
-                    width: 1,
-                    height: 40,
-                    displayValue: false
-                });
-                QRCode.toCanvas(document.getElementById("qr-' . $order['id'] . '"), "' . htmlspecialchars($trackingCode) . '", {
-                    width: 80,
-                    margin: 1
-                });
-            });
-        </script>';
-        $template = str_replace('</body>', $initScript . '</body>', $template);
-        
-        return $template;
-    }
 
     /**
      * Update order status
@@ -854,6 +322,29 @@ class Orders extends BaseSellerController
             $result = $this->orderModel->updateStatus($id, $status);
             
             if ($result) {
+                // Send SMS when order status changes
+                if ($oldStatus !== $status) {
+                    try {
+                        $smsControllerClass = '\App\Controllers\Sms\SmsOrderController';
+                        if (!class_exists($smsControllerClass)) {
+                            $smsControllerPath = dirname(__DIR__) . '/Sms/SmsOrderController.php';
+                            if (file_exists($smsControllerPath)) {
+                                require_once $smsControllerPath;
+                            } else {
+                                throw new \RuntimeException('SmsOrderController file not found at ' . $smsControllerPath);
+                            }
+                        }
+                        if (class_exists($smsControllerClass)) {
+                            $smsOrderController = new $smsControllerClass();
+                            $smsOrderController->sendOrderStatusSms($id, $oldStatus, $status);
+                        } else {
+                            throw new \RuntimeException('SmsOrderController class not available after requiring file.');
+                        }
+                    } catch (\Exception $e) {
+                        error_log("Seller Orders: Error sending order status SMS: " . $e->getMessage());
+                    }
+                }
+                
                 // Clear order caches
                 $this->cache->deletePattern('seller_orders_' . $this->sellerId . '_*');
                 $this->cache->delete('seller_order_total_' . $id . '_' . $this->sellerId);
@@ -861,77 +352,30 @@ class Orders extends BaseSellerController
                 // Auto-assign courier when seller marks order as "ready_for_pickup"
                 if ($status === 'ready_for_pickup' && $oldStatus !== 'ready_for_pickup') {
                     try {
-                        // Check if order already has a courier assigned
-                        if (empty($order['curior_id'])) {
-                            // Get seller city from order items
-                            $sellerCity = $this->db->query(
-                                "SELECT DISTINCT s.id as seller_id, s.name as seller_name, s.city 
-                                 FROM order_items oi
-                                 INNER JOIN products p ON oi.product_id = p.id
-                                 INNER JOIN sellers s ON p.seller_id = s.id
-                                 WHERE oi.order_id = ? AND s.city IS NOT NULL AND TRIM(s.city) != ''
-                                 LIMIT 1",
-                                [$id]
-                            )->single();
-                            
-                            $city = !empty($sellerCity['city']) ? trim($sellerCity['city']) : null;
-                            
-                            if ($city) {
-                                error_log("Seller Order Update: Order #{$id} - Seller city found: '{$city}' (Seller: {$sellerCity['seller_name']}, ID: {$sellerCity['seller_id']})");
-                            } else {
-                                error_log("Seller Order Update: Order #{$id} - No seller city found. Seller data: " . json_encode($sellerCity));
-                            }
-                            
-                            if ($city) {
-                                // Find courier with matching city (case-insensitive)
-                                $matchingCurior = $this->db->query(
-                                    "SELECT id, name, city FROM curiors 
-                                     WHERE status = 'active' 
-                                     AND LOWER(TRIM(city)) = LOWER(TRIM(?))
-                                     ORDER BY id ASC 
-                                     LIMIT 1",
-                                    [$city]
-                                )->single();
-                                
-                                if ($matchingCurior && !empty($matchingCurior['id'])) {
-                                    $this->orderModel->assignCuriorToOrder($id, $matchingCurior['id'], false);
-                                    error_log("Seller Order Update: Auto-assigned courier #{$matchingCurior['id']} ({$matchingCurior['name']}, city: {$matchingCurior['city']}) to order #{$id} when status changed to ready_for_pickup (seller city: {$city})");
+                        // Ensure order status is set to ready_for_pickup first
+                        $this->orderModel->update($id, ['status' => 'ready_for_pickup']);
+                        
+                        $alreadyAssigned = !empty($order['curior_id']);
+                        $assignedCourier = $this->orderAssign->assignForSeller($id, $this->sellerId);
+                        
+                        if ($assignedCourier && !empty($assignedCourier['id'])) {
+                            // Verify assignment was successful
+                            $updatedOrder = $this->orderModel->find($id);
+                            if ($updatedOrder['curior_id'] == $assignedCourier['id'] && $updatedOrder['status'] === 'ready_for_pickup') {
+                                if ($alreadyAssigned) {
+                                    error_log("Seller Order Update: Order #{$id} already assigned to courier #{$assignedCourier['id']} ({$assignedCourier['name']}).");
                                 } else {
-                                    // Debug: Log available couriers for troubleshooting
-                                    $allCouriers = $this->db->query(
-                                        "SELECT id, name, city, status FROM curiors WHERE status = 'active'"
-                                    )->all();
-                                    error_log("Seller Order Update: No courier found with city '{$city}'. Available couriers: " . json_encode($allCouriers));
-                                    
-                                    // Fallback: find any available active courier
-                                    $availableCurior = $this->db->query(
-                                        "SELECT id, name, city FROM curiors WHERE status = 'active' ORDER BY id ASC LIMIT 1"
-                                    )->single();
-                                    
-                                    if ($availableCurior && !empty($availableCurior['id'])) {
-                                        $this->orderModel->assignCuriorToOrder($id, $availableCurior['id'], false);
-                                        error_log("Seller Order Update: Auto-assigned courier #{$availableCurior['id']} ({$availableCurior['name']}, city: {$availableCurior['city']}) to order #{$id} (no city match, fallback)");
-                                    } else {
-                                        error_log("Seller Order Update: No available courier found for order #{$id}");
-                                    }
+                                    error_log("Seller Order Update: ✅ Auto-assigned courier #{$assignedCourier['id']} ({$assignedCourier['name']}, city: {$assignedCourier['city']}) to order #{$id} when status changed to ready_for_pickup.");
                                 }
                             } else {
-                                // No seller city, find any available active courier
-                                $availableCurior = $this->db->query(
-                                    "SELECT id FROM curiors WHERE status = 'active' ORDER BY id ASC LIMIT 1"
-                                )->single();
-                                
-                                if ($availableCurior && !empty($availableCurior['id'])) {
-                                    $this->orderModel->assignCuriorToOrder($id, $availableCurior['id'], false);
-                                    error_log("Seller Order Update: Auto-assigned courier #{$availableCurior['id']} (no seller city) to order #{$id}");
-                                } else {
-                                    error_log("Seller Order Update: No available courier found for order #{$id}");
-                                }
+                                error_log("Seller Order Update: ⚠️ Assignment verification failed for order #{$id}. Courier ID: {$updatedOrder['curior_id']}, Status: {$updatedOrder['status']}");
                             }
+                        } else {
+                            error_log("Seller Order Update: ❌ No courier available for order #{$id} (ready_for_pickup). Seller city check needed.");
                         }
                     } catch (\Exception $e) {
                         error_log("Seller Order Update: Error auto-assigning courier to order #{$id}: " . $e->getMessage());
-                        // Don't fail the status update if auto-assignment fails
+                        error_log("Seller Order Update: Stack trace: " . $e->getTraceAsString());
                     }
                 }
                 

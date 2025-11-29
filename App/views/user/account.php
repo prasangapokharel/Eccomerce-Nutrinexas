@@ -38,9 +38,7 @@ $primaryLinks = [
     ['label' => 'My Profile', 'hint' => 'Personal info', 'href' => \App\Core\View::url('user/profile'), 'icon' => 'user'],
     ['label' => 'My Orders', 'hint' => 'Track purchases', 'href' => \App\Core\View::url('orders'), 'icon' => 'bag'],
     ['label' => 'Saved Addresses', 'hint' => 'Delivery locations', 'href' => \App\Core\View::url('user/addresses'), 'icon' => 'map'],
-    ['label' => 'Payment Methods', 'hint' => 'Secure payments', 'href' => \App\Core\View::url('user/payments'), 'icon' => 'card'],
-    ['label' => 'My Balance', 'hint' => 'View earnings', 'href' => \App\Core\View::url('user/balance'), 'icon' => 'wallet'],
-    ['label' => 'Withdraw', 'hint' => 'Request withdrawal', 'href' => \App\Core\View::url('user/withdraw'), 'icon' => 'withdraw']
+    ['label' => 'My Balance', 'hint' => 'View earnings', 'href' => \App\Core\View::url('user/balance'), 'icon' => 'wallet']
 ];
 
 $supportLinks = [

@@ -299,6 +299,13 @@ overflow: hidden;
   cursor: not-allowed;
 }
 
+/* Small button size */
+.btn-sm {
+  height: 2.25rem; /* 36px */
+  padding: 0 0.75rem;
+  font-size: 0.8125rem; /* 13px */
+}
+
 .background{
     background-image: url('<?= ASSETS_URL ?>/images/screen/loginbg.png');
 }

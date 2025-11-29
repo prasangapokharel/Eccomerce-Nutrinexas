@@ -232,30 +232,36 @@ class OAuthService
         // Check if user exists by email
         $existingUser = $this->userModel->findByEmail($userInfo['email']);
         
+        $fullName = trim($userInfo['name'] ?? ($userInfo['first_name'] . ' ' . $userInfo['last_name']));
         if ($existingUser) {
             // Update existing user with OAuth info
             $updateData = [
                 'oauth_provider' => $provider,
                 'oauth_provider_id' => $userInfo['provider_id'],
                 'avatar' => $userInfo['avatar'],
+                'first_name' => $userInfo['first_name'] ?: ($existingUser['first_name'] ?? ''),
+                'last_name' => $userInfo['last_name'] ?: ($existingUser['last_name'] ?? ''),
+                'full_name' => $fullName ?: ($existingUser['full_name'] ?? $existingUser['first_name'] ?? ''),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
             
             $this->userModel->update($existingUser['id'], $updateData);
-            return $existingUser;
+            return $this->userModel->find($existingUser['id']);
         } else {
             // Create new user
             $userData = [
-                'first_name' => $userInfo['first_name'],
-                'last_name' => $userInfo['last_name'],
+                'first_name' => $userInfo['first_name'] ?: ($fullName ?: 'Customer'),
+                'last_name' => $userInfo['last_name'] ?? '',
+                'full_name' => $fullName ?: trim(($userInfo['first_name'] ?? '') . ' ' . ($userInfo['last_name'] ?? '')),
                 'email' => $userInfo['email'],
                 'username' => $this->generateUsername($userInfo['email']),
                 'password' => password_hash(bin2hex(random_bytes(16)), PASSWORD_DEFAULT), // Random password
+                'role' => 'customer',
+                'status' => 'active',
                 'oauth_provider' => $provider,
                 'oauth_provider_id' => $userInfo['provider_id'],
                 'avatar' => $userInfo['avatar'],
                 'email_verified' => 1, // OAuth emails are considered verified
-                'status' => 'active',
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s')
             ];
@@ -290,9 +296,15 @@ class OAuthService
     public function loginUser($user)
     {
         Session::set('user_id', $user['id']);
+        $fullName = trim(($user['first_name'] ?? '') . ' ' . ($user['last_name'] ?? ''));
         Session::set('user_email', $user['email']);
-        Session::set('user_name', $user['first_name'] . ' ' . $user['last_name']);
+        Session::set('user_name', $fullName ?: ($user['full_name'] ?? $user['email']));
+        Session::set('user_avatar', $user['avatar'] ?? null);
+        Session::set('user_first_name', $user['first_name'] ?? '');
+        Session::set('user_last_name', $user['last_name'] ?? '');
+        Session::set('user_role', $user['role'] ?? 'customer');
         Session::set('is_logged_in', true);
+        Session::set('logged_in', true);
         Session::set('oauth_login', true);
         
         // Update last login

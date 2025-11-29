@@ -1,13 +1,22 @@
-<?php ob_start(); ?>
+<?php 
+ob_start(); 
+$googleConfig = \App\Config\OAuthConfig::getProvider('google');
+$googleEnabled = $googleConfig 
+    && !empty($googleConfig['client_id']) 
+    && !str_contains($googleConfig['client_id'], 'your_') 
+    && !empty($googleConfig['client_secret']) 
+    && !str_contains($googleConfig['client_secret'], 'your_');
+$auth0Enabled = defined('AUTH0_ENABLED') && constant('AUTH0_ENABLED');
+?>
 
 <!-- Login Page with Normal Form and Optional Auth0 -->
-<div class="min-h-screen relative flex items-center justify-center px-4 py-2 login-page fixed login-bg">
+<div class="min-h-screen relative flex items-center justify-center px-4 py-2 login-page login-bg">
     
     <!-- Overlay for better text readability -->
     <div class="absolute inset-0 bg-white bg-opacity-20"></div>
     
     <!-- Login Container -->
-    <div class="relative z-5 w-full max-w-md mx-auto mb-40 fixed overflow-hidden">
+    <div class="relative z-5 w-full max-w-md mx-auto mb-40 overflow-hidden">
         <!-- Header -->
         <div class="text-center mb-8">
             <h1 class="text-3xl font-bold text-primary mb-2">Welcome Back</h1>
@@ -89,7 +98,7 @@
                 </button>
             </form>
 
-            <!-- Auth0 Login Button (Always shown below Sign In) -->
+            <?php if ($googleEnabled): ?>
             <div class="mt-4">
                 <a href="<?= \App\Core\View::url('auth/google') ?>" 
                    class="w-full flex items-center justify-center px-6 py-3 bg-white border-2 border-gray-300 text-gray-700 rounded-2xl font-semibold text-sm shadow-sm hover:bg-gray-50 hover:border-gray-400 transition-all">
@@ -102,8 +111,9 @@
                     <span>Sign in with Google</span>
                 </a>
             </div>
+            <?php endif; ?>
 
-            <?php if (defined('AUTH0_ENABLED') && AUTH0_ENABLED): ?>
+            <?php if ($auth0Enabled): ?>
             <div class="mt-3">
             <a href="<?= \App\Core\View::url('auth0/login') ?>" 
                    class="w-full flex items-center justify-center px-6 py-4 bg-[#EB5424] text-white font-semibold rounded-xl shadow-sm hover:bg-[#D4461F] transition-all">

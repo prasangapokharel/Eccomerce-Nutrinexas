@@ -6,9 +6,12 @@
             <form action="<?= \App\Core\View::url('seller/login') ?>" method="POST" class="space-y-6">
                 <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
 
-                <div class="text-center mb-10">
-                    <h1 class="text-3xl font-semibold text-primary">Seller Login</h1>
-                    <p class="text-gray-600 text-sm mt-4">Sign in to manage products, orders, ads, and more.</p>
+                <div class="flex items-center justify-center gap-3 mb-8">
+                    <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg" alt="NutriNexus" class="w-12 h-12 rounded-full border border-primary/20">
+                    <div class="text-left">
+                        <h1 class="text-2xl font-semibold text-primary">Seller Login</h1>
+                        <p class="text-gray-600 text-xs">Sign in to manage products, orders, ads, and more.</p>
+                    </div>
                 </div>
 
                 <?php if (isset($_SESSION['flash_message'])): ?>
@@ -67,9 +70,19 @@
             </form>
         </div>
 
-        <div class="max-lg:hidden">
+        <div class="max-lg:hidden space-y-4">
             <div class="rounded-3xl overflow-hidden shadow-[0_20px_45px_-15px_rgba(15,23,42,0.35)] border border-primary/10">
                 <img src="<?= ASSETS_URL ?>/images/screen/seller/login.png" alt="Seller workspace" class="w-full h-full object-cover">
+            </div>
+            <div class="bg-white border border-neutral-200 rounded-2xl p-4 shadow-sm">
+                <h3 class="text-lg font-semibold text-foreground mb-1">Become a seller, boost your business with NX</h3>
+                <p class="text-sm text-neutral-600 mb-3">We aim to grow fitness in Nepal with trusted sellers across the country.</p>
+                <a href="<?= \App\Core\View::url('guide') ?>" class="inline-flex items-center gap-2 text-primary font-semibold text-sm hover:text-primary-dark">
+                    View Seller Guide
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </a>
             </div>
         </div>
     </div>

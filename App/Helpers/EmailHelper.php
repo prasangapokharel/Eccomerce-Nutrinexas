@@ -595,6 +595,19 @@ class EmailHelper
             $orderItemsHtml = self::generateOrderItemsHtml($orderItems);
             $templateData['order_items'] = $orderItemsHtml;
 
+            // Add digital product download link if order has digital products and is paid
+            $templateData['digital_download_section'] = '';
+            if (isset($order['payment_status']) && $order['payment_status'] === 'paid') {
+                $digitalService = new \App\Services\DigitalProductService();
+                if ($digitalService->hasDigitalProducts(['items' => $orderItems])) {
+                    $orderId = $order['id'] ?? $order['order_id'] ?? null;
+                    if ($orderId) {
+                        $downloadUrl = self::getBaseUrl() . '/products/digitaldownload/' . $orderId;
+                        $templateData['digital_download_section'] = self::generateDigitalDownloadSection($downloadUrl);
+                    }
+                }
+            }
+
             // Send email using template
             $subject = 'Order Confirmation - #' . $templateData['order_number'];
             $result = self::sendTemplate($user['email'], $subject, 'order', $templateData, $templateData['customer_name']);
@@ -720,6 +733,32 @@ class EmailHelper
         }
 
         return $html;
+    }
+
+    /**
+     * Generate digital download section HTML for email
+     */
+    private static function generateDigitalDownloadSection($downloadUrl)
+    {
+        return '<tr>
+            <td style="padding: 0 30px 20px 30px;">
+                <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #e6f2ff; border-radius: 8px; border: 1px solid #1976D2;">
+                    <tr>
+                        <td align="center" style="padding: 25px 20px;">
+                            <h3 style="color: #1976D2; margin: 0 0 15px 0; font-size: 20px;">📥 Your Digital Products Are Ready!</h3>
+                            <p style="color: #333; margin: 0 0 20px 0; font-size: 14px; line-height: 1.6;">Your digital products are now available for download. Click the button below to access your files.</p>
+                            <a href="' . htmlspecialchars($downloadUrl, ENT_QUOTES, 'UTF-8') . '" 
+                               style="display: inline-block; padding: 14px 35px; background-color: #1976D2; color: #ffffff; text-decoration: none; border-radius: 5px; font-weight: bold; font-size: 16px;">
+                                Download Your Files
+                            </a>
+                            <p style="color: #666; margin: 20px 0 0 0; font-size: 12px; line-height: 1.5;">
+                                <strong>Important:</strong> Download link expires in 30 days. Each file can be downloaded up to 5 times.
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>';
     }
 
     /**

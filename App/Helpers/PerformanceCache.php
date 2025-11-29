@@ -86,7 +86,7 @@ class PerformanceCache
     }
     
     /**
-     * Cache database query results
+     * Cache database query results with compression
      */
     public static function cacheDatabaseQuery($query, $params, $result, $ttl = 1800)
     {
@@ -98,15 +98,17 @@ class PerformanceCache
             'params' => $params,
             'result' => $result,
             'timestamp' => time(),
-            'ttl' => $ttl
+            'ttl' => $ttl,
+            'compressed' => true
         ];
         
-        file_put_contents($cacheFile, serialize($data));
+        $compressed = gzcompress(serialize($data), 9);
+        file_put_contents($cacheFile, $compressed);
         chmod($cacheFile, 0644);
     }
     
     /**
-     * Get cached database query
+     * Get cached database query with decompression
      */
     public static function getCachedDatabaseQuery($query, $params)
     {
@@ -117,7 +119,13 @@ class PerformanceCache
             return false;
         }
         
-        $data = unserialize(file_get_contents($cacheFile));
+        $compressed = file_get_contents($cacheFile);
+        $data = unserialize(gzuncompress($compressed));
+        
+        if (!isset($data['timestamp']) || !isset($data['ttl'])) {
+            unlink($cacheFile);
+            return false;
+        }
         
         if (time() - $data['timestamp'] > $data['ttl']) {
             unlink($cacheFile);
@@ -270,6 +278,75 @@ class PerformanceCache
                 }
             }
         }
+    }
+    
+    /**
+     * Clear cache by pattern
+     */
+    public static function clearCachePattern($pattern, $type = 'database')
+    {
+        $dir = self::$cacheDir . $type . '/';
+        if (!is_dir($dir)) {
+            return 0;
+        }
+        
+        $files = glob($dir . $pattern);
+        $deleted = 0;
+        
+        foreach ($files as $file) {
+            if (is_file($file) && unlink($file)) {
+                $deleted++;
+            }
+        }
+        
+        return $deleted;
+    }
+    
+    /**
+     * Clear expired cache entries
+     */
+    public static function clearExpiredCache()
+    {
+        $dirs = [
+            'static' => self::$cacheDir . 'static/',
+            'database' => self::$cacheDir . 'database/',
+            'views' => self::$cacheDir . 'views/'
+        ];
+        
+        $cleaned = 0;
+        $now = time();
+        
+        foreach ($dirs as $type => $dir) {
+            if (!is_dir($dir)) {
+                continue;
+            }
+            
+            $files = glob($dir . '*.cache');
+            foreach ($files as $file) {
+                try {
+                    $content = file_get_contents($file);
+                    if ($type === 'static' || $type === 'views') {
+                        $data = unserialize(gzuncompress($content));
+                    } else {
+                        $data = unserialize(gzuncompress($content));
+                    }
+                    
+                    if (isset($data['timestamp']) && isset($data['ttl'])) {
+                        if ($now - $data['timestamp'] > $data['ttl']) {
+                            if (unlink($file)) {
+                                $cleaned++;
+                            }
+                        }
+                    }
+                } catch (\Exception $e) {
+                    // If file is corrupted, delete it
+                    @unlink($file);
+                    $cleaned++;
+                }
+            }
+        }
+        
+        return $cleaned;
     }
     
     /**

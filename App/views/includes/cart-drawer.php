@@ -34,7 +34,7 @@
                     <span id="cart-drawer-subtotal">रु0</span>
                 </div>
                 <div class="flex justify-between text-sm">
-                    <span>Tax (12%):</span>
+                    <span id="cart-drawer-tax-label">Tax:</span>
                     <span id="cart-drawer-tax">रु0</span>
                 </div>
                 <div class="flex justify-between text-sm">
@@ -158,10 +158,12 @@ function updateCartDrawerContent(cartData) {
     }
     
     // Update totals
-    document.getElementById('cart-drawer-subtotal').textContent = `रु${cartData.total || 0}`;
-    document.getElementById('cart-drawer-tax').textContent = `रु${cartData.tax || 0}`;
-    document.getElementById('cart-drawer-delivery').textContent = `रु${cartData.delivery || 0}`;
-    document.getElementById('cart-drawer-total').textContent = `रु${cartData.finalTotal || 0}`;
+    const taxRate = cartData.taxRate || 12;
+    document.getElementById('cart-drawer-tax-label').textContent = `Tax (${taxRate}%):`;
+    document.getElementById('cart-drawer-subtotal').textContent = `रु${(cartData.total || 0).toFixed(2)}`;
+    document.getElementById('cart-drawer-tax').textContent = `रु${(cartData.tax || 0).toFixed(2)}`;
+    document.getElementById('cart-drawer-delivery').textContent = `रु${(cartData.delivery || 0).toFixed(2)}`;
+    document.getElementById('cart-drawer-total').textContent = `रु${(cartData.finalTotal || 0).toFixed(2)}`;
 }
 
 function removeFromCartDrawer(productId) {

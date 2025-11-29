@@ -1,15 +1,56 @@
 <?php ob_start(); ?>
 
 <div class="space-y-6">
-    <!-- Page Header -->
-    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <!-- Standard Action Row: Title Left, Search/Filter/Add Button Right -->
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
         <div>
-            <h1 class="text-2xl lg:text-3xl font-bold text-gray-900">Manage Products</h1>
+            <h1 class="text-2xl font-bold text-gray-900">Manage Products</h1>
             <p class="mt-1 text-sm text-gray-500">Manage your product inventory and details</p>
         </div>
-        <div class="flex flex-col sm:flex-row gap-3">
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+            <!-- Search Input -->
+            <div class="relative flex-1 sm:flex-initial sm:w-64">
+                <input type="text" 
+                       id="searchInput" 
+                       placeholder="Search products..." 
+                       class="input native-input pr-10">
+                <button id="searchButton" 
+                        class="absolute inset-y-0 left-0 pl-3 flex items-center text-gray-400">
+                    <i class="fas fa-times text-sm hidden" id="clearSearch"></i>
+                </button>
+                <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i class="fas fa-search text-gray-400 text-sm"></i>
+                </div>
+            </div>
+            
+            <!-- Category Filter -->
+            <select id="categoryFilter" 
+                    class="input native-input sm:w-48">
+                <option value="">All Categories</option>
+                <?php 
+                $categories = array_unique(array_column($products, 'category'));
+                foreach ($categories as $category): 
+                    if (!empty($category)):
+                ?>
+                    <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
+                <?php 
+                    endif;
+                endforeach; 
+                ?>
+            </select>
+
+            <!-- Status Filter -->
+            <select id="statusFilter"
+                    class="input native-input sm:w-40">
+                <?php $currentStatus = $_GET['status'] ?? ''; ?>
+                <option value="" <?= $currentStatus === '' ? 'selected' : '' ?>>All Statuses</option>
+                <option value="active" <?= $currentStatus === 'active' ? 'selected' : '' ?>>Active</option>
+                <option value="inactive" <?= $currentStatus === 'inactive' ? 'selected' : '' ?>>Inactive</option>
+            </select>
+            
+            <!-- Add Button -->
             <a href="<?= \App\Core\View::url('admin/addProduct') ?>" 
-               class="btn">
+               class="btn btn-primary">
                 <i class="fas fa-plus mr-2"></i>
                 Add Product
             </a>
@@ -21,14 +62,14 @@
         <div class="flex items-center justify-between">
             <div class="flex items-center space-x-4">
                 <span class="text-sm text-gray-600" id="selected-count">0 products selected</span>
-                <div class="flex space-x-2">
-                    <button onclick="bulkUpdateStatus('active')" class="px-3 py-1 bg-green-100 text-green-700 rounded text-sm hover:bg-green-200">
+                <div class="flex gap-2">
+                    <button onclick="bulkUpdateStatus('active')" class="btn btn-sm btn-primary">
                         <i class="fas fa-check mr-1"></i>Activate
                     </button>
-                    <button onclick="bulkUpdateStatus('inactive')" class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded text-sm hover:bg-yellow-200">
+                    <button onclick="bulkUpdateStatus('inactive')" class="btn btn-sm btn-outline">
                         <i class="fas fa-pause mr-1"></i>Deactivate
                     </button>
-                    <button onclick="bulkDelete()" class="px-3 py-1 bg-red-100 text-red-700 rounded text-sm hover:bg-red-200">
+                    <button onclick="bulkDelete()" class="btn btn-sm btn-delete">
                         <i class="fas fa-trash mr-1"></i>Delete
                     </button>
                 </div>
@@ -100,52 +141,7 @@
     <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
         <!-- Table Header -->
         <div class="p-6 border-b border-gray-100">
-            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                <h2 class="text-lg font-semibold text-gray-900">Product List</h2>
-                
-                <!-- Search and Filters -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    <div class="relative">
-                        <input type="text" 
-                               id="searchInput" 
-                               placeholder="Search products..." 
-                               class="w-full sm:w-64 pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                               style="-webkit-appearance: none; appearance: none; -webkit-border-radius: 0.5rem; border-radius: 0.5rem;">
-                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                            <i class="fas fa-search text-gray-400 text-sm"></i>
-                        </div>
-                        <button id="searchButton" 
-                                class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-primary transition-colors">
-                            <i class="fas fa-times text-sm hidden" id="clearSearch"></i>
-                        </button>
-                    </div>
-                    
-                    <select id="categoryFilter" 
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                            style="-webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>'); background-repeat: no-repeat; background-position: right 0.7rem center; background-size: 0.65rem auto; padding-right: 2.5rem;">
-                        <option value="">All Categories</option>
-                        <?php 
-                        $categories = array_unique(array_column($products, 'category'));
-                        foreach ($categories as $category): 
-                            if (!empty($category)):
-                        ?>
-                            <option value="<?= htmlspecialchars($category) ?>"><?= htmlspecialchars($category) ?></option>
-                        <?php 
-                            endif;
-                        endforeach; 
-                        ?>
-                    </select>
-
-                    <select id="statusFilter"
-                            class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors"
-                            style="-webkit-appearance: none; appearance: none; background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 4 5\'><path fill=\'%23666\' d=\'M2 0L0 2h4zm0 5L0 3h4z\'/></svg>'); background-repeat: no-repeat; background-position: right 0.7rem center; background-size: 0.65rem auto; padding-right: 2.5rem;">
-                        <?php $currentStatus = $_GET['status'] ?? ''; ?>
-                        <option value="" <?= $currentStatus === '' ? 'selected' : '' ?>>All Statuses</option>
-                        <option value="active" <?= $currentStatus === 'active' ? 'selected' : '' ?>>Active</option>
-                        <option value="inactive" <?= $currentStatus === 'inactive' ? 'selected' : '' ?>>Inactive</option>
-                    </select>
-                </div>
-            </div>
+            <h2 class="text-lg font-semibold text-gray-900">Product List</h2>
         </div>
 
         <!-- Table Content -->
@@ -399,28 +395,25 @@
 </div>
 
 <!-- Delete Confirmation Modal -->
-<div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full hidden z-50">
-    <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-lg bg-white">
-        <div class="mt-3 text-center">
-            <div class="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-red-100">
+<div id="deleteModal" class="modal-overlay hidden">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h3 class="modal-title">Delete Product</h3>
+            <button id="cancelDeleteBtn" class="modal-close">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="flex items-center justify-center h-12 w-12 rounded-full bg-red-100 mx-auto mb-4">
                 <i class="fas fa-exclamation-triangle text-red-600"></i>
             </div>
-            <h3 class="text-lg font-medium text-gray-900 mt-4">Delete Product</h3>
-            <div class="mt-2 px-7 py-3">
-                <p class="text-sm text-gray-500">
-                    Are you sure you want to delete this product? This action cannot be undone and will remove all associated images and data.
-                </p>
-            </div>
-            <div class="items-center px-4 py-3">
-                <button id="confirmDeleteBtn" 
-                        class="btn">
-                    Delete
-                </button>
-                <button id="cancelDeleteBtn" 
-                        class="btn">
-                    Cancel
-                </button>
-            </div>
+            <p class="text-sm text-gray-500 text-center">
+                Are you sure you want to delete this product? This action cannot be undone and will remove all associated images and data.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button id="cancelDeleteBtn2" class="btn btn-outline">Cancel</button>
+            <button id="confirmDeleteBtn" class="btn btn-delete">Delete</button>
         </div>
     </div>
 </div>
@@ -567,6 +560,14 @@ document.addEventListener('DOMContentLoaded', function() {
         deleteModal.classList.add('hidden');
         productToDelete = null;
     });
+    
+    const cancelDeleteBtn2 = document.getElementById('cancelDeleteBtn2');
+    if (cancelDeleteBtn2) {
+        cancelDeleteBtn2.addEventListener('click', function() {
+            deleteModal.classList.add('hidden');
+            productToDelete = null;
+        });
+    }
     
     // Close modal on outside click
     deleteModal.addEventListener('click', function(e) {
@@ -939,37 +940,35 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!-- Stock Update Modal -->
-<div id="stock-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
-    <div class="bg-white rounded-lg shadow-xl p-6 max-w-md w-full mx-4">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="text-lg font-bold text-gray-900">Update Stock</h3>
-            <button onclick="closeStockModal()" class="text-gray-400 hover:text-gray-600">
+<div id="stock-modal" class="modal-overlay hidden">
+    <div class="modal-panel">
+        <div class="modal-header">
+            <h3 class="modal-title">Update Stock</h3>
+            <button onclick="closeStockModal()" class="modal-close">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <div class="mb-4">
-            <p class="text-sm text-gray-600 mb-2">Product: <span id="stock-modal-product-name" class="font-medium text-gray-900"></span></p>
-            <p class="text-sm text-gray-600">Current Stock: <span id="stock-modal-current" class="font-medium text-gray-900"></span></p>
+        <div class="modal-body">
+            <div class="mb-4">
+                <p class="text-sm text-gray-600 mb-2">Product: <span id="stock-modal-product-name" class="font-medium text-gray-900"></span></p>
+                <p class="text-sm text-gray-600">Current Stock: <span id="stock-modal-current" class="font-medium text-gray-900"></span></p>
+            </div>
+            
+            <div>
+                <label for="stock-modal-quantity" class="block text-sm font-medium text-gray-700 mb-2">
+                    New Stock Quantity
+                </label>
+                <input type="number" id="stock-modal-quantity" min="0" step="1"
+                       class="input native-input"
+                       placeholder="Enter new quantity">
+                <input type="hidden" id="stock-modal-product-id">
+            </div>
         </div>
         
-        <div class="mb-6">
-            <label for="stock-modal-quantity" class="block text-sm font-medium text-gray-700 mb-2">
-                New Stock Quantity
-            </label>
-            <input type="number" id="stock-modal-quantity" min="0" step="1"
-                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary focus:border-primary"
-                   placeholder="Enter new quantity">
-            <input type="hidden" id="stock-modal-product-id">
-        </div>
-        
-        <div class="flex justify-end space-x-3">
-            <button onclick="closeStockModal()" 
-                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors">
-                Cancel
-            </button>
-            <button onclick="updateStock()" 
-                    class="px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-dark transition-colors">
+        <div class="modal-footer">
+            <button onclick="closeStockModal()" class="btn btn-outline">Cancel</button>
+            <button onclick="updateStock()" class="btn btn-primary">
                 <i class="fas fa-save mr-2"></i>
                 Update Stock
             </button>

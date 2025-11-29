@@ -17,25 +17,49 @@
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                 <h2 class="text-lg font-semibold text-gray-900">Cancellation List</h2>
                 
-                <!-- Status Filter Pills -->
-                <div class="flex flex-wrap gap-2">
-                    <a href="<?= \App\Core\View::url('seller/cancellations') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= !isset($statusFilter) || $statusFilter === '' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
-                        All
-                    </a>
-                    <a href="<?= \App\Core\View::url('seller/cancellations?status=processing') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'processing' ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
-                        Processing
-                    </a>
-                    <a href="<?= \App\Core\View::url('seller/cancellations?status=refunded') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'refunded' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
-                        Refunded
-                    </a>
-                    <a href="<?= \App\Core\View::url('seller/cancellations?status=failed') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'failed' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
-                        Failed
-                    </a>
+                <!-- Standard Top Bar: Search, Filter, Button -->
+                <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative flex-1 sm:flex-initial sm:w-64">
+                        <input type="text" 
+                               id="searchInput" 
+                               placeholder="Search by order ID, invoice..." 
+                               class="input native-input pr-10">
+                        <div class="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                            <i class="fas fa-search text-gray-400 text-sm"></i>
+                        </div>
+                    </div>
+                    
+                    <!-- Status Filter Dropdown -->
+                    <select id="statusFilter"
+                            class="input native-input sm:w-40"
+                            onchange="window.location.href = this.value ? '<?= \App\Core\View::url('seller/cancellations') ?>?status=' + this.value : '<?= \App\Core\View::url('seller/cancellations') ?>'">
+                        <option value="" <?= !isset($statusFilter) || $statusFilter === '' ? 'selected' : '' ?>>All Statuses</option>
+                        <option value="processing" <?= isset($statusFilter) && $statusFilter === 'processing' ? 'selected' : '' ?>>Processing</option>
+                        <option value="refunded" <?= isset($statusFilter) && $statusFilter === 'refunded' ? 'selected' : '' ?>>Refunded</option>
+                        <option value="failed" <?= isset($statusFilter) && $statusFilter === 'failed' ? 'selected' : '' ?>>Failed</option>
+                    </select>
                 </div>
+            </div>
+            
+            <!-- Status Filter Pills (below search bar) -->
+            <div class="flex flex-wrap gap-2 mt-4">
+                <a href="<?= \App\Core\View::url('seller/cancellations') ?>" 
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= !isset($statusFilter) || $statusFilter === '' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                    All
+                </a>
+                <a href="<?= \App\Core\View::url('seller/cancellations?status=processing') ?>" 
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'processing' ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                    Processing
+                </a>
+                <a href="<?= \App\Core\View::url('seller/cancellations?status=refunded') ?>" 
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'refunded' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                    Refunded
+                </a>
+                <a href="<?= \App\Core\View::url('seller/cancellations?status=failed') ?>" 
+                   class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'failed' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                    Failed
+                </a>
             </div>
         </div>
 

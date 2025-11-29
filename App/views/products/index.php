@@ -211,63 +211,70 @@ function formatProductName($name) {
 </div>
 
 
-<!-- Filter Modal -->
-<div id="filterModal" class="hidden bg-primary">
-    <div class="flex items-end justify-center min-h-screen px-3 pt-4 pb-20 text-center sm:block sm:p-0">
-        <div class="modal-content px-3 pt-4 pb-3 text-left sm:p-4">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="text-base font-medium text-gray-900">Filter Products</h3>
-                <button onclick="closeFilterModal()" class="text-gray-400 hover:text-gray-600">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
+<!-- Filter Drawer -->
+<div id="filterModal" class="fixed inset-0 hidden z-50">
+    <div class="absolute inset-0 bg-black/40" data-filter-overlay="true"></div>
+    <div id="filterDrawer" class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 shadow-xl">
+        <div class="w-12 h-1.5 bg-neutral-200 rounded-full mx-auto mb-3"></div>
+        <div class="flex justify-between items-center mb-3">
+            <h3 class="text-base font-medium text-gray-900">Filter Products</h3>
+            <button onclick="closeFilterModal()" class="text-gray-400 hover:text-gray-600">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <form id="filterForm" class="space-y-3">
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Price Range</label>
+                <div class="flex gap-2">
+                    <input type="number" name="min_price" placeholder="Min" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                    <input type="number" name="max_price" placeholder="Max" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary">
+                </div>
             </div>
             
-            <form id="filterForm" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Price Range</label>
-                    <div class="flex gap-2">
-                        <input type="number" name="min_price" placeholder="Min" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary">
-                        <input type="number" name="max_price" placeholder="Max" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary">
-                    </div>
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Sort By</label>
-                    <select name="sort" class="w-full px-2 py-1.5 border border-gray-300 rounded text-sm focus:outline-none focus:ring-1 focus:ring-primary">
-                        <option value="newest">Newest First</option>
-                        <option value="price_low">Price: Low to High</option>
-                        <option value="price_high">Price: High to Low</option>
-                        <option value="name">Name A-Z</option>
-                        <option value="popular">Most Popular</option>
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Sort By</label>
+                <div class="relative">
+                    <select name="sort" class="w-full px-3 py-2.5 border border-gray-300 rounded-lg text-sm text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-colors appearance-none cursor-pointer pr-8">
+                        <option value="newest" <?= $activeSort === 'newest' ? 'selected' : '' ?>>Newest First</option>
+                        <option value="price_low" <?= $activeSort === 'price_low' ? 'selected' : '' ?>>Price: Low to High</option>
+                        <option value="price_high" <?= $activeSort === 'price_high' ? 'selected' : '' ?>>Price: High to Low</option>
+                        <option value="name" <?= $activeSort === 'name' ? 'selected' : '' ?>>Name A-Z</option>
+                        <option value="popular" <?= $activeSort === 'popular' ? 'selected' : '' ?>>Most Popular</option>
                     </select>
-                </div>
-                
-                <div>
-                    <label class="block text-xs font-medium text-gray-700 mb-1">Availability</label>
-                    <div class="space-y-1">
-                        <label class="flex items-center">
-                            <input type="checkbox" name="in_stock" class="rounded border-gray-300 text-primary focus:ring-primary">
-                            <span class="ml-2 text-xs text-gray-700">In Stock Only</span>
-                        </label>
-                        <label class="flex items-center">
-                            <input type="checkbox" name="low_stock" class="rounded border-gray-300 text-primary focus:ring-primary">
-                            <span class="ml-2 text-xs text-gray-700">Low Stock</span>
-                        </label>
+                    <div class="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
+                        <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
                     </div>
                 </div>
-                
-                <div class="flex gap-2 pt-3">
-                    <button type="button" onclick="resetFilters()" class="flex-1 px-3 py-2 border border-gray-300 rounded text-xs text-gray-700 hover:bg-gray-50 active:scale-95 transition">
-                        Reset
-                    </button>
-                    <button type="submit" class="flex-1 px-3 py-2 bg-primary text-white rounded text-xs active:scale-95 transition">
-                        Apply Filters
-                    </button>
+            </div>
+            
+            <div>
+                <label class="block text-xs font-medium text-gray-700 mb-1">Availability</label>
+                <div class="space-y-1">
+                    <label class="flex items-center">
+                        <input type="checkbox" name="in_stock" class="rounded border-gray-300 text-primary focus:ring-primary">
+                        <span class="ml-2 text-xs text-gray-700">In Stock Only</span>
+                    </label>
+                    <label class="flex items-center">
+                        <input type="checkbox" name="low_stock" class="rounded border-gray-300 text-primary focus:ring-primary">
+                        <span class="ml-2 text-xs text-gray-700">Low Stock</span>
+                    </label>
                 </div>
-            </form>
-        </div>
+            </div>
+            
+            <div class="flex gap-2 pt-3">
+                <button type="button" onclick="resetFilters()" class="flex-1 px-3 py-2 border border-gray-300 rounded text-xs text-gray-700 hover:bg-gray-50">
+                    Reset
+                </button>
+                <button type="submit" class="flex-1 px-3 py-2 bg-primary text-white rounded text-xs">
+                    Apply Filters
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 
@@ -314,19 +321,28 @@ function applyQuickFilter(sortValue) {
     window.location.href = currentUrl.toString();
 }
 
+const filterModal = document.getElementById('filterModal');
+const filterDrawer = document.getElementById('filterDrawer');
+
 function openFilterModal() {
-    document.getElementById('filterModal').classList.remove('hidden');
+    if (!filterModal) return;
+    filterModal.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
 }
 
 function closeFilterModal() {
-    document.getElementById('filterModal').classList.add('hidden');
+    if (!filterModal) return;
+    filterModal.classList.add('hidden');
+    document.body.classList.remove('overflow-hidden');
 }
 
 function resetFilters() {
     document.getElementById('filterForm').reset();
 }
 
-document.getElementById('filterForm').addEventListener('submit', function(e) {
+const filterForm = document.getElementById('filterForm');
+if (filterForm) {
+filterForm.addEventListener('submit', function(e) {
     e.preventDefault();
     const formData = new FormData(this);
     const params = new URLSearchParams();
@@ -344,12 +360,15 @@ document.getElementById('filterForm').addEventListener('submit', function(e) {
     
     window.location.href = '<?= \App\Core\View::url('products') ?>?' + params.toString();
 });
+}
 
-document.getElementById('filterModal').addEventListener('click', function(e) {
-    if (e.target === this) {
-        closeFilterModal();
-    }
-});
+if (filterModal) {
+    filterModal.addEventListener('click', function(e) {
+        if (e.target.hasAttribute('data-filter-overlay')) {
+            closeFilterModal();
+        }
+    });
+}
 
 // Wishlist functions
 if (typeof addToWishlist === 'undefined') {
