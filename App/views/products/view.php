@@ -218,20 +218,53 @@ include __DIR__ . '/../seo/product-seo.php';
                 
                 <!-- Product Image/Video -->
                 <div class="p-4 lg:p-6">
+                    <?php 
+                    // Get all images/videos from product_images table FIRST
+                    $additionalMedia = [];
+                    if (isset($product['id'])) {
+                        $productImageModel = new \App\Models\ProductImage();
+                        $allMedia = $productImageModel->getByProductId($product['id']);
+                        
+                        // Process all media URLs to ensure they're properly formatted
+                        foreach ($allMedia as $media) {
+                            $mediaUrl = $media['image_url'] ?? '';
+                            if (!empty($mediaUrl)) {
+                                // If already absolute URL (http/https), use as-is
+                                if (filter_var($mediaUrl, FILTER_VALIDATE_URL)) {
+                                    $media['image_url'] = $mediaUrl;
+                                } else {
+                                    // Convert relative to absolute URL
+                                    $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+                                    if (strpos($mediaUrl, '/') === 0) {
+                                        $media['image_url'] = $baseUrl . $mediaUrl;
+                                    } else {
+                                        $media['image_url'] = ASSETS_URL . '/uploads/images/' . $mediaUrl;
+                                    }
+                                }
+                                $additionalMedia[] = $media;
+                            }
+                        }
+                    }
+                    
+                    // If no media found, add main image
+                    if (empty($additionalMedia) && !empty($mainImageUrl)) {
+                        $additionalMedia[] = [
+                            'image_url' => $mainImageUrl,
+                            'is_primary' => 1
+                        ];
+                    }
+                    
+                    // Use all media for slider
+                    $allMediaForSlider = $additionalMedia;
+                    ?>
                     <!-- Main Product Media Slider -->
                     <div id="product-media-slider" class="aspect-square overflow-hidden rounded-2xl bg-gray-50 shadow-sm mb-4 relative touch-pan-y">
                         <div id="product-media-track" class="flex h-full transition-transform duration-300 ease-out" style="transform: translateX(0%);">
                             <?php 
-                            // Include all media in slider
-                            $allMediaForSlider = [];
-                            if (!empty($additionalMedia)) {
-                                $allMediaForSlider = $additionalMedia;
-                            } else {
-                                $allMediaForSlider[] = [
-                                    'image_url' => $mainImageUrl,
-                                    'is_primary' => 1
-                                ];
-                            }
+                            foreach ($allMediaForSlider as $index => $media): 
+                                $mediaUrl = $media['image_url'] ?? '';
+                                $isMediaVideo = \App\Helpers\MediaHelper::isVideo($mediaUrl);
+                            ?>
                             
                             foreach ($allMediaForSlider as $index => $media): 
                                 $mediaUrl = $media['image_url'] ?? '';
@@ -270,53 +303,19 @@ include __DIR__ . '/../seo/product-seo.php';
                     </div>
 
                     <!-- Thumbnail Gallery -->
-                    <?php 
-                    // Get all images/videos from product_images table including main image
-                    $additionalMedia = [];
-                    if (isset($product['id'])) {
-                        $productImageModel = new \App\Models\ProductImage();
-                        $allMedia = $productImageModel->getByProductId($product['id']);
-                        
-                        // Process all media URLs to ensure they're properly formatted
-                        foreach ($allMedia as $media) {
-                            $mediaUrl = $media['image_url'] ?? '';
-                            if (!empty($mediaUrl)) {
-                                // If already absolute URL (http/https), use as-is
-                                if (filter_var($mediaUrl, FILTER_VALIDATE_URL)) {
-                                    $media['image_url'] = $mediaUrl;
-                                } else {
-                                    // Convert relative to absolute URL
-                                    $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
-                                    if (strpos($mediaUrl, '/') === 0) {
-                                        $media['image_url'] = $baseUrl . $mediaUrl;
-                                    } else {
-                                        $media['image_url'] = ASSETS_URL . '/uploads/images/' . $mediaUrl;
-                                    }
-                                }
-                                $additionalMedia[] = $media;
-                            }
-                        }
-                        
-                        // If no media found, add main image as thumbnail
-                        if (empty($additionalMedia) && !empty($mainImageUrl)) {
-                            $additionalMedia[] = [
-                                'image_url' => $mainImageUrl,
-                                'is_primary' => 1
-                            ];
-                        }
-                    }
-                    ?>
-                    <?php if (!empty($additionalMedia)): ?>
+                    <?php if (!empty($allMediaForSlider)): ?>
                     <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                        <?php foreach (array_slice($additionalMedia, 0, 4) as $index => $media): ?>
-                            <?php 
+                        <?php 
+                        // Show all thumbnails (up to 4 visible, but use same list as slider)
+                        foreach ($allMediaForSlider as $index => $media): 
                             $thumbnailUrl = $media['image_url'] ?? '';
                             $isThumbnailVideo = \App\Helpers\MediaHelper::isVideo($thumbnailUrl);
                             $isPrimary = !empty($media['is_primary']);
-                            ?>
-                            <div class="aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-200 <?= $isPrimary ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300' ?> cursor-pointer product-thumbnail relative" 
+                        ?>
+                            <div class="aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-200 <?= $index === 0 ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300' ?> cursor-pointer product-thumbnail relative" 
                                  data-image-url="<?= htmlspecialchars($thumbnailUrl) ?>"
-                                 data-media-type="<?= $isThumbnailVideo ? 'video' : 'image' ?>">
+                                 data-media-type="<?= $isThumbnailVideo ? 'video' : 'image' ?>"
+                                 data-slide-index="<?= $index ?>">
                                 <?php if ($isThumbnailVideo): ?>
                                     <video src="<?= htmlspecialchars($thumbnailUrl) ?>" 
                                            class="w-full h-full object-cover transition-all duration-200 hover:scale-110" 
@@ -1552,29 +1551,43 @@ document.addEventListener('DOMContentLoaded', function() {
     const productSlider = document.getElementById('product-media-slider');
     const productTrack = document.getElementById('product-media-track');
     const productSlides = document.querySelectorAll('.product-media-slide');
+    const thumbnails = document.querySelectorAll('.product-thumbnail');
     let productCurrentIndex = 0;
     let productStartX = 0;
     let productCurrentX = 0;
     let productIsDragging = false;
     
-    if (productSlider && productTrack && productSlides.length > 1) {
-        function updateProductSlider() {
-            const translateX = -productCurrentIndex * 100;
-            productTrack.style.transform = `translateX(${translateX}%)`;
-            
-            // Update dots
-            const dots = document.querySelectorAll('.product-slider-dot');
-            dots.forEach((dot, index) => {
-                if (index === productCurrentIndex) {
-                    dot.classList.remove('bg-white/50', 'w-2');
-                    dot.classList.add('bg-white', 'w-6');
-                } else {
-                    dot.classList.remove('bg-white', 'w-6');
-                    dot.classList.add('bg-white/50', 'w-2');
-                }
-            });
-        }
+    function updateProductSlider() {
+        if (!productTrack) return;
+        const translateX = -productCurrentIndex * 100;
+        productTrack.style.transform = `translateX(${translateX}%)`;
         
+        // Update dots
+        const dots = document.querySelectorAll('.product-slider-dot');
+        dots.forEach((dot, index) => {
+            if (index === productCurrentIndex) {
+                dot.classList.remove('bg-white/50', 'w-2');
+                dot.classList.add('bg-white', 'w-6');
+            } else {
+                dot.classList.remove('bg-white', 'w-6');
+                dot.classList.add('bg-white/50', 'w-2');
+            }
+        });
+        
+        // Update thumbnail borders
+        thumbnails.forEach(t => {
+            const tIndex = parseInt(t.getAttribute('data-slide-index') || '0');
+            if (tIndex === productCurrentIndex) {
+                t.classList.remove('border-gray-200');
+                t.classList.add('border-primary', 'shadow-md');
+            } else {
+                t.classList.remove('border-primary', 'shadow-md');
+                t.classList.add('border-gray-200');
+            }
+        });
+    }
+    
+    if (productSlider && productTrack && productSlides.length > 1) {
         // Dot click handlers
         document.querySelectorAll('.product-slider-dot').forEach((dot, index) => {
             dot.addEventListener('click', () => {
@@ -1655,23 +1668,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Image/Video thumbnail functionality - update slider instead of replacing media
-    const thumbnails = document.querySelectorAll('.product-thumbnail');
-    
     if (thumbnails.length > 0 && productSlides.length > 0) {
-        thumbnails.forEach((thumbnail, index) => {
+        thumbnails.forEach((thumbnail) => {
             thumbnail.addEventListener('click', function() {
-                if (productCurrentIndex !== index) {
-                    productCurrentIndex = index;
+                const slideIndex = parseInt(this.getAttribute('data-slide-index') || '0');
+                
+                if (productCurrentIndex !== slideIndex && slideIndex < productSlides.length) {
+                    productCurrentIndex = slideIndex;
                     updateProductSlider();
                 }
-                
-                // Update active thumbnail
-                thumbnails.forEach(t => {
-                    t.classList.remove('border-primary', 'shadow-md');
-                    t.classList.add('border-gray-200');
-                });
-                this.classList.remove('border-gray-200');
-                this.classList.add('border-primary', 'shadow-md');
             });
         });
     }
