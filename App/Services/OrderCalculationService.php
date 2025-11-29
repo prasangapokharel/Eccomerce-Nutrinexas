@@ -65,9 +65,8 @@ class OrderCalculationService
             elseif (isset($item['product_id']) && $productModel) {
                 $product = $productModel->find($item['product_id']);
                 if ($product) {
-                    $currentPrice = ($product['sale_price'] > 0 && $product['sale_price'] < $product['price']) 
-                        ? $product['sale_price'] 
-                        : $product['price'];
+                    $priceData = \App\Helpers\SaleHelper::calculateProductPrice($product);
+                    $currentPrice = $priceData['final_price'];
                     $quantity = (int)($item['quantity'] ?? 0);
                     $total += $currentPrice * $quantity;
                 }

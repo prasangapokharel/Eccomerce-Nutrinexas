@@ -20,39 +20,39 @@
                 <!-- Status Filter Pills -->
                 <div class="flex flex-wrap gap-2">
                     <a href="<?= \App\Core\View::url('seller/orders') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium <?= !isset($statusFilter) || $statusFilter === '' ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= !isset($statusFilter) || $statusFilter === '' ? 'btn-primary' : 'btn-outline' ?>">
                         All Orders
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?payment_type=cod') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($_GET['payment_type']) && $_GET['payment_type'] === 'cod' ? 'bg-orange-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($_GET['payment_type']) && $_GET['payment_type'] === 'cod' ? 'btn-primary' : 'btn-outline' ?>">
                         COD
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?payment_type=prepaid') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($_GET['payment_type']) && $_GET['payment_type'] === 'prepaid' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($_GET['payment_type']) && $_GET['payment_type'] === 'prepaid' ? 'btn-primary' : 'btn-outline' ?>">
                         Prepaid
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?status=pending') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'pending' ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($statusFilter) && $statusFilter === 'pending' ? 'btn-primary' : 'btn-outline' ?>">
                         Pending
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?status=confirmed') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'confirmed' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($statusFilter) && $statusFilter === 'confirmed' ? 'btn-primary' : 'btn-outline' ?>">
                         Confirmed
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?status=processing') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'processing' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($statusFilter) && $statusFilter === 'processing' ? 'btn-primary' : 'btn-outline' ?>">
                         Processing
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?status=shipped') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'shipped' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($statusFilter) && $statusFilter === 'shipped' ? 'btn-primary' : 'btn-outline' ?>">
                         Shipped
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?status=delivered') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'delivered' ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($statusFilter) && $statusFilter === 'delivered' ? 'btn-primary' : 'btn-outline' ?>">
                         Delivered
                     </a>
                     <a href="<?= \App\Core\View::url('seller/orders?status=cancelled') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($statusFilter) && $statusFilter === 'cancelled' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($statusFilter) && $statusFilter === 'cancelled' ? 'btn-primary' : 'btn-outline' ?>">
                         Cancelled
                     </a>
                 </div>

@@ -28,10 +28,11 @@ html { scroll-behavior: smooth; }
     }
 }
 .line-clamp-2 { display: -webkit-box; -webkit-line-clamp: 2; line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.btn-wishlist { background: rgba(255,255,255,.9); border: 1px solid #e5e7eb; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; cursor: pointer; outline: none; }
+.btn-wishlist { background: rgba(255,255,255,.9); border: 1px solid #e5e7eb; border-radius: 50%; width: 28px; height: 28px; min-width: 28px; min-height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; outline: none; }
 .btn-wishlist:focus { outline: none; }
+.btn-wishlist i { width: 14px; height: 14px; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; }
 .wishlist-active { background: rgba(239,68,68,.1)!important; border-color: #ef4444!important; }
-.wishlist-active i { color: #ef4444!important; font-weight: 900; }
+.wishlist-active i { color: #ef4444!important; }
 .product-card, .productclip { content-visibility: auto; contain-intrinsic-size: 220px 300px; cursor: pointer; }
 @media (min-width: 768px) {
     .add-to-cart-form { display: flex; flex: 1; min-width: 0; }
@@ -87,7 +88,13 @@ function addToWishlist(productId) {
     const button = document.querySelector('[data-product-id="' + productId + '"]');
     if (button) {
         button.classList.add('wishlist-active');
-        button.innerHTML = '<i class="fas fa-heart text-sm"></i>';
+        const icon = button.querySelector('i');
+        if (icon) {
+            icon.classList.remove('far', 'text-gray-600');
+            icon.classList.add('fas', 'text-red-500');
+        } else {
+            button.innerHTML = '<i class="fas fa-heart text-sm w-3.5 h-3.5 flex items-center justify-center text-red-500"></i>';
+        }
         button.setAttribute('onclick', 'event.stopPropagation(); removeFromWishlist(' + productId + ')');
         updateWishlistCache(productId, true);
     }
@@ -116,7 +123,13 @@ function removeFromWishlist(productId) {
     const button = document.querySelector('[data-product-id="' + productId + '"]');
     if (button) {
         button.classList.remove('wishlist-active');
-        button.innerHTML = '<i class="far fa-heart text-sm"></i>';
+        const icon = button.querySelector('i');
+        if (icon) {
+            icon.classList.remove('fas', 'text-red-500');
+            icon.classList.add('far', 'text-gray-600');
+        } else {
+            button.innerHTML = '<i class="far fa-heart text-sm w-3.5 h-3.5 flex items-center justify-center text-gray-600"></i>';
+        }
         button.setAttribute('onclick', 'event.stopPropagation(); addToWishlist(' + productId + ')');
         updateWishlistCache(productId, false);
     }
@@ -138,7 +151,13 @@ function revertWishlistState(productId) {
     const button = document.querySelector('[data-product-id="' + productId + '"]');
     if (!button) return;
     button.classList.remove('wishlist-active');
-    button.innerHTML = '<i class="far fa-heart text-sm"></i>';
+    const icon = button.querySelector('i');
+    if (icon) {
+        icon.classList.remove('fas', 'text-red-500');
+        icon.classList.add('far', 'text-gray-600');
+    } else {
+        button.innerHTML = '<i class="far fa-heart text-sm w-3.5 h-3.5 flex items-center justify-center text-gray-600"></i>';
+    }
     button.setAttribute('onclick', 'event.stopPropagation(); addToWishlist(' + productId + ')');
     updateWishlistCache(productId, false);
 }
@@ -279,9 +298,9 @@ function updateWishlistCache(productId, add) {
                     ${discount > 0 ? `<span class="bg-white text-primary px-1.5 py-0.5 rounded-full text-xs font-semibold shadow-sm">-${discount}%</span>` : ''}
                 </div>
                 <button onclick="event.stopPropagation(); ${inWishlist ? 'removeFromWishlist' : 'addToWishlist'}(${product.id})" 
-                        class="absolute top-2 right-2 btn-wishlist ${inWishlist ? 'wishlist-active' : ''} z-10 bg-white/80 hover:bg-white rounded-full p-1.5 transition-colors"
+                        class="absolute top-2 right-2 btn-wishlist ${inWishlist ? 'wishlist-active' : ''} z-10 bg-white/80 hover:bg-white rounded-full w-7 h-7 flex items-center justify-center transition-colors"
                         data-product-id="${product.id}">
-                    <i class="${inWishlist ? 'fas' : 'far'} fa-heart text-sm ${inWishlist ? 'text-red-500' : 'text-gray-600'}"></i>
+                    <i class="${inWishlist ? 'fas' : 'far'} fa-heart text-sm w-3.5 h-3.5 flex items-center justify-center ${inWishlist ? 'text-red-500' : 'text-gray-600'}"></i>
                 </button>
             </div>
             <div class="p-3">

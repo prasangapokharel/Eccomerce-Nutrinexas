@@ -43,7 +43,7 @@ $primaryLinks = [
 
 $supportLinks = [
     ['label' => 'Invite Friends', 'hint' => 'Share & earn', 'href' => \App\Core\View::url('user/invite'), 'icon' => 'gift'],
-    ['label' => 'Help & Support', 'hint' => 'FAQ & chat', 'href' => \App\Core\View::url('support'), 'icon' => 'help'],
+    ['label' => 'Help & Support', 'hint' => 'FAQ & chat', 'href' => \App\Core\View::url('support'), 'icon' => 'bag'],
     ['label' => 'Settings', 'hint' => 'Notifications, security', 'href' => \App\Core\View::url('user/settings'), 'icon' => 'settings']
 ];
 

@@ -46,7 +46,7 @@ $themes = [
     'light' => [
         'card' => 'block bg-white border border-gray-100 rounded-2xl overflow-hidden relative product-card hover:shadow-md transition-shadow',
         'image' => 'relative aspect-square bg-gray-50 p-2 rounded-2xl overflow-hidden',
-        'title' => 'text-sm font-semibold text-gray-900 mb-2 truncate',
+        'title' => 'text-sm font-semibold text-foreground mb-2 truncate',
         'ratingText' => 'text-xs text-gray-600',
         'priceWrap' => 'text-lg font-bold text-primary',
         'priceStrike' => 'text-xs text-gray-500 line-through',
@@ -80,14 +80,31 @@ $adId = $isSponsored || $hasAdId ? ($product['ad_id'] ?? null) : null;
      onclick="redirectToProduct('<?= $cardUrl ?>', <?= $adId ? $adId : 'null' ?>)"
      <?php if ($adId): ?>data-ad-id="<?= $adId ?>"<?php endif; ?>>
     <div class="<?= $theme['image'] ?>">
-        <img src="<?= htmlspecialchars($mainImageUrl) ?>"
-             alt="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>"
-             class="w-full h-full object-cover rounded-2xl"
-             loading="lazy"
-             <?php if ($adId): ?>
-             onload="<?= \App\Helpers\AdTrackingHelper::getReachTrackingJS($adId) ?>"
-             <?php endif; ?>
-             onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'">
+        <?php 
+        $isVideo = \App\Helpers\MediaHelper::isVideo($mainImageUrl);
+        if ($isVideo): 
+        ?>
+            <video src="<?= htmlspecialchars($mainImageUrl) ?>"
+                   class="w-full h-full object-cover rounded-2xl"
+                   muted
+                   loop
+                   playsinline
+                   preload="metadata"
+                   poster="<?= \App\Core\View::asset('images/products/default.jpg') ?>"
+                   <?php if ($adId): ?>
+                   onloadedmetadata="<?= \App\Helpers\AdTrackingHelper::getReachTrackingJS($adId) ?>"
+                   <?php endif; ?>>
+            </video>
+        <?php else: ?>
+            <img src="<?= htmlspecialchars($mainImageUrl) ?>"
+                 alt="<?= htmlspecialchars($product['product_name'] ?? 'Product') ?>"
+                 class="w-full h-full object-cover rounded-2xl"
+                 loading="lazy"
+                 <?php if ($adId): ?>
+                 onload="<?= \App\Helpers\AdTrackingHelper::getReachTrackingJS($adId) ?>"
+                 <?php endif; ?>
+                 onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'">
+        <?php endif; ?>
 
         <div class="absolute top-1.5 left-1.5 z-10 flex flex-col gap-1">
             <?php if ($discountPercent > 0): ?>
@@ -127,9 +144,9 @@ $adId = $isSponsored || $hasAdId ? ($product['ad_id'] ?? null) : null;
         $wishlistActive = !empty($product['in_wishlist']);
         ?>
         <button onclick="event.stopPropagation(); <?= $wishlistActive ? "removeFromWishlist({$productId})" : "addToWishlist({$productId})" ?>" 
-                class="absolute top-2 right-2 btn-wishlist <?= $wishlistActive ? 'wishlist-active' : '' ?> z-10 bg-white/80 hover:bg-white rounded-full p-1.5 transition-colors"
+                class="absolute top-2 right-2 btn-wishlist <?= $wishlistActive ? 'wishlist-active' : '' ?> z-10"
                 data-product-id="<?= $productId ?>">
-            <i class="<?= $wishlistActive ? 'fas' : 'far' ?> fa-heart text-sm <?= $wishlistActive ? 'text-red-500' : 'text-gray-600' ?>"></i>
+            <i class="<?= $wishlistActive ? 'fas' : 'far' ?> fa-heart"></i>
         </button>
 
         <?php if (!empty($topRightBadge['label'])): ?>

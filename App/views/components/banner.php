@@ -40,6 +40,7 @@ if (empty($activeBanners)) {
                              style="aspect-ratio: 2.6 / 1; max-height: 493px;"
                              loading="lazy"
                              decoding="async"
+                             fetchpriority="low"
                              onload="this.classList.add('opacity-100'); this.parentElement.parentElement.querySelector('.banner-preloader').style.display='none'; trackBannerView(<?= $banner['id'] ?>);"
                              onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'; this.classList.add('opacity-100'); this.parentElement.parentElement.querySelector('.banner-preloader').style.display='none';">
                     </a>
@@ -51,6 +52,7 @@ if (empty($activeBanners)) {
                              style="aspect-ratio: 2.6 / 1; max-height: 493px;"
                              loading="lazy"
                              decoding="async"
+                             fetchpriority="low"
                              onload="this.classList.add('opacity-100'); this.parentElement.querySelector('.banner-preloader').style.display='none'; trackBannerView(<?= $banner['id'] ?>);"
                              onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'; this.classList.add('opacity-100'); this.parentElement.querySelector('.banner-preloader').style.display='none';">
                     </div>

@@ -99,13 +99,12 @@ if (!defined('CACHE_ENABLED')) {
     define('CACHE_ENABLED', true);
 }
 
-// Define cache directory with shared hosting compatibility
+// Define cache directory - prioritize App/storage/cache
 $cachePaths = [
+    PROJECT_ROOT . '/App/storage/cache',
     PROJECT_ROOT . '/storage/cache',
     PROJECT_ROOT . '/Storage/cache', // Capital S
     PROJECT_ROOT . '/STORAGE/cache', // All caps
-    PROJECT_ROOT . '/cache',
-    PROJECT_ROOT . '/Cache',
     PROJECT_ROOT . '/tmp/cache',
     sys_get_temp_dir() . '/nutrinexus_cache' // System temp as last resort
 ];

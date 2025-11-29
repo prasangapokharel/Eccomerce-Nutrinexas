@@ -52,7 +52,7 @@ foreach ($preparedSlides as $slideMeta) {
 <div class="app-hero" style="background: transparent !important;">
     <div class="app-hero__viewport" id="app-hero">
         <?php foreach ($preparedSlides as $index => $slide): ?>
-            <?php $imageTag = '<img src="' . htmlspecialchars($slide['image']) . '" alt="' . htmlspecialchars($slide['alt']) . '" loading="lazy" decoding="async" fetchpriority="' . ($index === 0 ? 'high' : 'low') . '">'; ?>
+            <?php $imageTag = '<img src="' . htmlspecialchars($slide['image']) . '" alt="' . htmlspecialchars($slide['alt']) . '" loading="' . ($index === 0 ? 'eager' : 'lazy') . '" decoding="async" fetchpriority="' . ($index === 0 ? 'high' : 'low') . '">'; ?>
             <article class="app-hero__card<?= $index === 0 ? ' is-active' : '' ?>">
                 <?php if (!empty($slide['link'])): ?>
                     <a href="<?= htmlspecialchars($slide['link']) ?>" class="app-hero__media-link" aria-label="<?= htmlspecialchars($slide['alt']) ?>">

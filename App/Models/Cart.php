@@ -232,17 +232,18 @@ class Cart extends Model
     {
         $cacheKey = $this->cachePrefix . 'total_' . $userId;
         return $this->cache->remember($cacheKey, function () use ($userId) {
-            $sql = "SELECT COALESCE(SUM(
-                        CASE 
-                            WHEN p.sale_price > 0 AND p.sale_price < p.price THEN c.quantity * p.sale_price
-                            ELSE c.quantity * p.price
-                        END
-                    ), 0) as total
+            $sql = "SELECT c.product_id, c.quantity, p.price, p.sale_price, p.sale
                     FROM {$this->table} c
                     LEFT JOIN products p ON c.product_id = p.id
                     WHERE c.user_id = ? AND 1=1";
-            $result = $this->db->query($sql, [$userId])->single();
-            return $result ? (float)$result['total'] : 0;
+            $items = $this->db->query($sql, [$userId])->all();
+            $total = 0;
+            foreach ($items as $item) {
+                $product = ['price' => $item['price'], 'sale_price' => $item['sale_price'], 'sale' => $item['sale'] ?? 'off'];
+                $priceData = \App\Helpers\SaleHelper::calculateProductPrice($product);
+                $total += $priceData['final_price'] * (int)$item['quantity'];
+            }
+            return $total;
         }, $this->cacheTTL);
     }
 

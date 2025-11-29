@@ -88,8 +88,7 @@ class Product extends Model
             $sql = "SELECT id, product_name, slug, description, short_description, price, sale_price, 
                            stock_quantity, category, image, is_featured, status, created_at, updated_at,
                            is_scheduled, scheduled_date, scheduled_duration, scheduled_message,
-                           sale_start_date, sale_end_date, sale_discount_percent, is_on_sale,
-                           is_digital, colors, product_type_main, product_type, seller_id
+                           sale, is_digital, colors, product_type_main, product_type, seller_id
                     FROM {$this->table} 
                     WHERE id = ?";
             $product = $this->db->query($sql, [$id])->single();
@@ -104,33 +103,12 @@ class Product extends Model
     }
     
     /**
-     * Apply sale price calculation
+     * Apply sale price calculation (legacy - now handled by SaleHelper)
      */
     public function applySalePrice($product)
     {
-        $now = date('Y-m-d H:i:s');
-        
-        // Check if product is on sale
-        if (!empty($product['is_on_sale']) && 
-            !empty($product['sale_start_date']) && 
-            !empty($product['sale_end_date']) &&
-            $product['sale_start_date'] <= $now && 
-            $product['sale_end_date'] >= $now &&
-            !empty($product['sale_discount_percent']) &&
-            $product['sale_discount_percent'] > 0) {
-            
-            // Calculate sale price from discount percent
-            $originalPrice = floatval($product['price']);
-            $discountPercent = floatval($product['sale_discount_percent']);
-            $discountAmount = ($originalPrice * $discountPercent) / 100;
-            $calculatedSalePrice = $originalPrice - $discountAmount;
-            
-            // Use calculated sale price if no manual sale_price set, or if calculated is better
-            if (empty($product['sale_price']) || $calculatedSalePrice < floatval($product['sale_price'])) {
-                $product['sale_price'] = $calculatedSalePrice;
-            }
-        }
-        
+        // Pricing is now handled by SaleHelper in views
+        // This method kept for backward compatibility
         return $product;
     }
     
@@ -171,7 +149,7 @@ class Product extends Model
     {
         $cacheKey = $this->cachePrefix . 'slug_' . $slug;
         return $this->cache->remember($cacheKey, function () use ($slug) {
-            $sql = "SELECT id, product_name, slug, description, short_description, price, sale_price, 
+            $sql = "SELECT id, product_name, slug, description, short_description, price, sale_price, sale,
                            stock_quantity, category, image, is_featured, status, created_at, updated_at,
                            is_digital, colors, product_type_main, product_type
                     FROM {$this->table} 
@@ -212,7 +190,7 @@ class Product extends Model
             }
             
             $sql = "SELECT id, product_name, slug, description, short_description, price, sale_price, 
-                           stock_quantity, category, image, is_featured, status, created_at, updated_at
+                           stock_quantity, category, image, is_featured, status, created_at, updated_at, sale
                     FROM {$this->table} 
                     WHERE category = ? AND status = 'active' 
                     AND (approval_status = 'approved' OR approval_status IS NULL OR seller_id IS NULL OR seller_id = 0)
@@ -312,7 +290,7 @@ class Product extends Model
         $cacheKey = $this->cachePrefix . 'related_' . $productId . '_' . $categoryName . '_' . $limit;
         return $this->cache->remember($cacheKey, function () use ($productId, $categoryName, $limit) {
             $sql = "SELECT id, product_name, slug, description, short_description, price, sale_price, 
-                           stock_quantity, category, image, is_featured, status, created_at, updated_at
+                           stock_quantity, category, image, is_featured, status, created_at, updated_at, sale
                     FROM {$this->table} 
                     WHERE id != ? AND category = ? AND status = 'active' 
                     AND (approval_status = 'approved' OR approval_status IS NULL OR seller_id IS NULL OR seller_id = 0)
@@ -565,7 +543,7 @@ class Product extends Model
         $fields = ['product_name', 'slug', 'description', 'short_description', 'price', 'sale_price',
                    'stock_quantity', 'category', 'subtype', 'image', 'tags',
                    'is_featured', 'status', 'approval_status', 'meta_title', 'meta_description', 'seller_id',
-                   'is_scheduled', 'scheduled_date', 'scheduled_end_date', 'scheduled_duration', 'scheduled_message'];
+                   'is_scheduled', 'scheduled_date', 'scheduled_end_date', 'scheduled_duration', 'scheduled_message', 'sale'];
         $placeholders = [];
         $values = [];
         
@@ -658,6 +636,7 @@ class Product extends Model
             'short_description',
             'price',
             'sale_price',
+            'sale',
             'stock_quantity',
             'category',
             'subtype',
@@ -1051,8 +1030,7 @@ class Product extends Model
                        is_digital, product_type_main, product_type, colors, size_available, weight, serving,
                        flavor, material, ingredients, optimal_weight, serving_size, capsule, cost_price, 
                        compare_price, commission_rate, meta_title, meta_description, tags, is_scheduled,
-                       scheduled_date, scheduled_duration, scheduled_message, is_on_sale, sale_start_date,
-                       sale_end_date, sale_discount_percent, seller_id
+                       scheduled_date, scheduled_duration, scheduled_message, sale, seller_id
                 FROM {$this->table} 
                 WHERE slug = ? AND status = 'active'";
         
@@ -1072,8 +1050,7 @@ class Product extends Model
                        is_digital, product_type_main, product_type, colors, size_available, weight, serving,
                        flavor, material, ingredients, optimal_weight, serving_size, capsule, cost_price, 
                        compare_price, commission_rate, meta_title, meta_description, tags, is_scheduled,
-                       scheduled_date, scheduled_duration, scheduled_message, is_on_sale, sale_start_date,
-                       sale_end_date, sale_discount_percent, seller_id
+                       scheduled_date, scheduled_duration, scheduled_message, sale, seller_id
                 FROM {$this->table} 
                 WHERE id = ?";
         

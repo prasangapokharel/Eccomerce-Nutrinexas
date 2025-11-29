@@ -88,7 +88,6 @@ overflow: hidden;
      font-size: 0.875rem; /* shadcn default font size */
      font-weight: 600;
      border-radius: 12px;
-     background-color: #1F2937;
      color: #FFFFFF;
      border: 1px solid transparent;
      cursor: pointer;
@@ -164,7 +163,6 @@ overflow: hidden;
     font-size: 0.875rem;
     font-weight: 600;
     border-radius: 12px;
-    background-color: #1F2937;
     color: #FFFFFF;
     border: 1px solid transparent;
     cursor: pointer;
@@ -173,7 +171,6 @@ overflow: hidden;
     line-height: 1.1;
    }
    .btn-primary:hover {
-     background-color: #111827;
    }
 .btn-sale {
     
@@ -189,8 +186,6 @@ overflow: hidden;
             cursor: pointer;
             width: 90%;
             font-size: 10px;
-            /* Updated clip-path for a more subtle clipped corner effect */
-            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
             position: relative;
             overflow: hidden;
 }
@@ -209,45 +204,57 @@ overflow: hidden;
             cursor: pointer;
             width: 100%;
             font-size: 14px;
-            /* Updated clip-path for a more subtle clipped corner effect */
-            clip-path: polygon(8px 0%, 100% 0%, 100% calc(100% - 8px), calc(100% - 8px) 100%, 0% 100%, 0% 8px);
+         
             position: relative;
             overflow: hidden;
 }
 
 
-/* Wishlist Heart Icon Button */
+/* Wishlist Heart Icon Button - Standardized across all pages */
 .btn-wishlist {
-    background: none;
-    /* border: 2px solid #e5e7eb; */
-    border-radius: 8px;
-    color: gray;
-    padding: 1px;
-    cursor: pointer;
+    background: rgba(255,255,255,.9);
+    border: 1px solid #e5e7eb;
+    border-radius: 50%;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    min-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: all 0.3s ease;
-    width: auto;
-    min-width: 10px;
-    height: 30px;
-    display:fixed;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    transition: all 0.2s ease;
 }
-
+.btn-wishlist:focus {
+    outline: none;
+}
 .btn-wishlist:hover {
-    border-color: #DC143C;
-    background-color: none;
+    background: rgba(255,255,255,1);
+    border-color: #d1d5db;
 }
-
-.btn-wishlist.wishlist-active {
-    background-color: #DC143C;
-    border-color: #DC143C;
-    color: white;
+.btn-wishlist i {
+    width: 14px;
+    height: 14px;
+    min-width: 14px;
+    min-height: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    line-height: 1;
+    color: #6b7280;
 }
-
-.btn-wishlist.wishlist-active:hover {
-    background-color: var(--destructive-dark-color, #B91C3C);
-    border-color: var(--destructive-dark-color, #B91C3C);
+.wishlist-active {
+    background: rgba(239,68,68,.1)!important;
+    border-color: #ef4444!important;
+}
+.wishlist-active:hover {
+    background: rgba(239,68,68,.15)!important;
+}
+.wishlist-active i {
+    color: #ef4444!important;
 }
 
 .btn-normal{
@@ -259,7 +266,6 @@ overflow: hidden;
   font-size: 0.875rem; /* shadcn default font size */
   font-weight: 600;
   border-radius: 12px;
-  background-color: #1F2937;
   color: #FFFFFF;
   border: none;
   cursor: pointer;

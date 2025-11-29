@@ -26,7 +26,7 @@ use App\Helpers\CurrencyHelper;
                                 <div class="bg-gray-100 rounded-2xl p-4 sm:p-6 space-y-6">
                                     <div class="flex flex-col gap-3">
                                         <div class="flex flex-wrap items-center justify-between gap-4">
-                                            <h3 class="text-lg font-semibold text-slate-900">Your Cart</h3>
+                                            <h3 class="text-lg font-semibold text-foreground">Your Cart</h3>
                                             <div class="flex items-center gap-3">
                                                 <div class="flex items-center">
                                                     <input type="checkbox" id="selectAll" class="w-5 h-5 text-primary bg-white border-2 border-gray-300 rounded focus:ring-2 focus:ring-primary focus:ring-offset-0">
@@ -650,24 +650,33 @@ function updateCartItem(productId, action) {
     })
     .then(data => {
         if (data.success) {
-            const cartCountElements = document.querySelectorAll('.cart-count');
-            cartCountElements.forEach(element => {
-                element.textContent = data.cart_count || 0;
-            });
+            // Update cart count via CartNotifier (handles cookie and badge updates)
+            if (typeof CartNotifier !== 'undefined') {
+                CartNotifier.setCount(data.cart_count || 0);
+            } else {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = data.cart_count || 0;
+                });
+                document.cookie = `cart_count=${data.cart_count || 0}; path=/; max-age=86400`;
+            }
+            document.cookie = `cart_total=${data.cart_total || 0}; path=/; max-age=86400`;
             
             const quantityDisplays = document.querySelectorAll(`[data-product-id="${productId}"].quantity-display, [data-product-id="${productId}"].quantity-display-main`);
             quantityDisplays.forEach(display => {
                 display.textContent = data.item_quantity || 0;
             });
             
-            document.cookie = `cart_count=${data.cart_count || 0}; path=/; max-age=86400`;
-            document.cookie = `cart_total=${data.cart_total || 0}; path=/; max-age=86400`;
-            
             if (data.item_quantity === 0 || !data.item_quantity) {
                 removeCartItemFromDOM(productId);
+                // Trigger cart:removed event after DOM update
+                document.dispatchEvent(new CustomEvent('cart:removed', { detail: { count: data.cart_count || 0 } }));
                 if (data.cart_count === 0) {
                     setTimeout(() => location.reload(), 500);
                 }
+            } else {
+                // Trigger cart:updated event
+                document.dispatchEvent(new CustomEvent('cart:updated', { detail: { count: data.cart_count || 0 } }));
             }
 
             refreshTotalsFromResponse(data);
@@ -712,17 +721,26 @@ function removeCartItem(cartItemId, productId) {
     })
     .then(data => {
         if (data.success) {
-            const cartCountElements = document.querySelectorAll('.cart-count');
-            cartCountElements.forEach(element => {
-                element.textContent = data.cart_count || 0;
-            });
-            
-            document.cookie = `cart_count=${data.cart_count || 0}; path=/; max-age=86400`;
+            // Update cart count via CartNotifier (handles cookie and badge updates)
+            if (typeof CartNotifier !== 'undefined') {
+                CartNotifier.setCount(data.cart_count || 0);
+            } else {
+                const cartCountElements = document.querySelectorAll('.cart-count');
+                cartCountElements.forEach(element => {
+                    element.textContent = data.cart_count || 0;
+                });
+                document.cookie = `cart_count=${data.cart_count || 0}; path=/; max-age=86400`;
+            }
             document.cookie = `cart_total=${data.cart_total || 0}; path=/; max-age=86400`;
             
+            // Remove item from DOM first
             removeCartItemFromDOM(productId);
-
+            
+            // Refresh totals
             refreshTotalsFromResponse(data);
+            
+            // Trigger cart:removed event after DOM update
+            document.dispatchEvent(new CustomEvent('cart:removed', { detail: { count: data.cart_count || 0 } }));
             
             if (data.cart_count === 0 || !data.cart_count) {
                 setTimeout(() => location.reload(), 500);

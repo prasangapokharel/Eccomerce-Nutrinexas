@@ -2,7 +2,7 @@
 <div class="lg:hidden bg-primary px-3 py-2.5 sticky top-0 z-50">
     <div class="flex items-center gap-2.5">
         <a href="<?= URLROOT ?>" class="flex-shrink-0" aria-label="Home">
-            <img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg" alt="Nutri Nexas" class="w-9 h-9 rounded-full" loading="lazy" />
+            <img src="<?= \App\Core\View::asset('images/logo/logo.png') ?>" alt="Nutri Nexas" class="w-9 h-9 rounded-full" loading="lazy" onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'" />
         </a>
         <div class="flex-1 relative min-w-0">
             <form action="<?= \App\Core\View::url('products/search') ?>" method="get" id="mobileSearchForm" class="w-full">
@@ -29,10 +29,11 @@
                 </div>
             </div>
         </div>
-        <a href="<?= URLROOT ?>/guide" class="flex-shrink-0 text-white p-1.5" aria-label="Guide">
+        <a href="<?= \App\Core\View::url('cart') ?>" class="flex-shrink-0 text-white p-1.5 relative" aria-label="Cart">
             <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+                <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
             </svg>
+            <span class="cart-count absolute -top-1 -right-1 bg-white text-primary rounded-full text-[10px] font-bold w-4 h-4 flex items-center justify-center">0</span>
         </a>
     </div>
 </div>

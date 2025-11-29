@@ -483,13 +483,13 @@ use App\Helpers\CategoryHelper;
                         <div id="urlTabContent" class="p-6 hidden">
                             <div class="space-y-4">
                                 <div>
-                                    <label for="image_urls" class="block text-sm font-medium text-gray-700 mb-2">Image URLs</label>
+                                    <label for="image_urls" class="block text-sm font-medium text-gray-700 mb-2">Media URLs (Images/Videos)</label>
                                     <textarea id="image_urls" 
                                               name="image_urls" 
                                               rows="6"
                                               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary text-sm resize-none"
-                                              placeholder="Enter image URLs, one per line:&#10;https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"><?= htmlspecialchars($data['image_urls'] ?? '') ?></textarea>
-                                    <p class="text-sm text-gray-500 mt-2">Enter one URL per line. Make sure URLs are publicly accessible.</p>
+                                              placeholder="Enter image/video URLs, one per line:&#10;https://example.com/image1.jpg&#10;https://example.com/video.mp4&#10;https://example.com/image2.jpg"><?= htmlspecialchars($data['image_urls'] ?? '') ?></textarea>
+                                    <p class="text-sm text-gray-500 mt-2">Enter one URL per line. Supports images (.jpg, .png, .webp) and videos (.mp4, .webm, .ogg). Make sure URLs are publicly accessible.</p>
                                     <p class="text-xs text-blue-600 mt-1">
                                         <i class="fas fa-info-circle"></i> 
                                         For Accessories, default images will be used if none provided.

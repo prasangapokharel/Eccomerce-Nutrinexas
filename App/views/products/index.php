@@ -66,7 +66,7 @@ function formatProductName($name) {
 
         <!-- Filter Tags -->
         <div class="flex gap-2 mb-4 overflow-x-auto pb-2">
-            <button onclick="openFilterModal()" class="btn text-xs px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
+            <button onclick="openFilterModal()" class="btn-primary bg-primary text-xs px-3 py-1.5 rounded-full whitespace-nowrap flex items-center gap-1">
                 <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.414A1 1 0 013 6.707V4z"></path>
                 </svg>
@@ -217,7 +217,7 @@ function formatProductName($name) {
     <div id="filterDrawer" class="absolute bottom-0 left-0 right-0 bg-white rounded-t-2xl p-4 shadow-xl">
         <div class="w-12 h-1.5 bg-neutral-200 rounded-full mx-auto mb-3"></div>
         <div class="flex justify-between items-center mb-3">
-            <h3 class="text-base font-medium text-gray-900">Filter Products</h3>
+            <h3 class="text-base font-medium text-foreground">Filter Products</h3>
             <button onclick="closeFilterModal()" class="text-gray-400 hover:text-gray-600">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

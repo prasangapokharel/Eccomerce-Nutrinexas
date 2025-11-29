@@ -798,9 +798,8 @@ class CheckoutController extends Controller
                 $primaryImage = $this->productImageModel->getPrimaryImage($product['id']);
                 $product['image_url'] = $this->getProductImageUrl($product, $primaryImage);
                 
-                $currentPrice = ($product['sale_price'] > 0 && $product['sale_price'] < $product['price']) 
-                    ? $product['sale_price'] 
-                    : $product['price'];
+                $priceData = \App\Helpers\SaleHelper::calculateProductPrice($product);
+                $currentPrice = $priceData['final_price'];
                 
                 $subtotal = $currentPrice * $item['quantity'];
                 $total += $subtotal;

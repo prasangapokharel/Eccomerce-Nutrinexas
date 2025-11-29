@@ -608,14 +608,28 @@ class CartController extends Controller
             $isGuest = $cartMiddleware->isGuest();
             
             if ($isGuest) {
-                // Remove from guest cart
-                $guestCart = $cartMiddleware->getCartData();
+                // Remove from guest cart - handle both key formats (productId and productId_color_size)
+                $guestCart = $_SESSION['guest_cart'] ?? [];
                 $productIdKey = (int)$productId;
+                
+                // Remove by exact productId key
                 if (isset($guestCart[$productIdKey])) {
                     unset($guestCart[$productIdKey]);
-                    $_SESSION['guest_cart'] = $guestCart;
-                    $_SESSION['cart_count'] = array_sum(array_column($guestCart, 'quantity'));
+                } else {
+                    // Remove by productId_color_size pattern
+                    foreach ($guestCart as $key => $item) {
+                        if (isset($item['product_id']) && (int)$item['product_id'] === $productIdKey) {
+                            unset($guestCart[$key]);
+                            break;
+                        } elseif (strpos($key, (string)$productIdKey . '_') === 0) {
+                            unset($guestCart[$key]);
+                            break;
+                        }
+                    }
                 }
+                
+                $_SESSION['guest_cart'] = $guestCart;
+                $_SESSION['cart_count'] = array_sum(array_column($guestCart, 'quantity'));
             } else {
                 $userId = Session::get('user_id');
 

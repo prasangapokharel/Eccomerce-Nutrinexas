@@ -79,6 +79,7 @@ if (defined('DEBUG') && DEBUG) {
     </script>
     <link rel="stylesheet" href="<?= \App\Core\View::asset('css/tailwind.css') ?>">
     <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/app.css">
+    <link rel="stylesheet" href="<?= ASSETS_URL ?>/css/image-performance.css">
     <link rel="icon" href="https://nutrinexas.shop/favicon.ico" type="image/x-icon">
     <link rel="icon" type="image/png" sizes="32x32" href="https://nutrinexas.shop/favicon-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="<?= ASSETS_URL ?>/images/favicon/apple-touch-icon.png">
@@ -201,7 +202,9 @@ if (defined('DEBUG') && DEBUG) {
         // Footer visibility handled by CSS media queries
     </script>
     
-    <script src="<?= ASSETS_URL ?>/js/loader.js"></script>
+        <script src="<?= ASSETS_URL ?>/js/loader.js"></script>
+        <script src="<?= ASSETS_URL ?>/js/image-performance.js"></script>
+        <script src="<?= ASSETS_URL ?>/js/cartNotifier.js"></script>
     
     <?php if (isset($extraScripts)): ?>
         <?= $extraScripts ?>

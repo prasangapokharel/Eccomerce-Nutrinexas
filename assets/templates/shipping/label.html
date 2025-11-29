@@ -176,22 +176,21 @@
     <div class="label-container">
         <table>
             <tr class="header-section">
-                <td class="logo-box" style="width: 10%;">P</td>
+                <td class="logo-box" style="width: 10%;">{{priority_indicator}}</td>
                 <td style="width: 50%;">
                     <div class="return-address">
-                        **Return Address:**<br>
-                        1234 Elm Street, Apt 56, Springfield, IL, 62704, USA
+                        <strong>Return Address:</strong><br>
+                        {{sender_address_full}}
                     </div>
                 </td>
                 <td class="fragile-box" style="width: 40%;">
-                    <strong style="font-size: 24px;">FRAGILE</strong>
-                    <span>PLEASE HANDLE WITH CARE</span>
+                    {{fragile_section}}
                 </td>
             </tr>
 
             <tr class="priority-mail-row">
-                <td colspan="2" class="priority-mail-title">PRIORITY MAIL</td>
-                <td class="date-cell">Date: Nov 29, 2025</td>
+                <td colspan="2" class="priority-mail-title">{{mail_type}}</td>
+                <td class="date-cell">Date: {{shipping_date}}</td>
             </tr>
             
             <tr>
@@ -203,9 +202,9 @@
                                     <tr>
                                         <td style="width: 15%; border: none;" class="address-title">From :</td>
                                         <td style="width: 85%; border: none;" class="address-details">
-                                            **John Doe**<br>
-                                            1234 Elm Street, Apt 56, Springfield, IL, 62704, USA<br>
-                                            Phone: (555) 123-4567
+                                            <strong>{{sender_name}}</strong><br>
+                                            {{sender_address}}<br>
+                                            {{sender_phone}}
                                         </td>
                                     </tr>
                                 </table>
@@ -216,9 +215,9 @@
                                     <tr>
                                         <td style="width: 15%; border: none;" class="address-title">To :</td>
                                         <td style="width: 85%; border: none;" class="recipient-address">
-                                            **Jane Smith**<br>
-                                            7890 Maple Avenue, Suite 101, Metropolis, NY 10001, USA<br>
-                                            Phone: (555) 987-6543
+                                            <strong>{{recipient_name}}</strong><br>
+                                            {{recipient_address}}<br>
+                                            {{recipient_phone}}
                                         </td>
                                     </tr>
                                 </table>
@@ -226,8 +225,8 @@
                         </tr>
                         <tr>
                             <td colspan="2" style="border-bottom: none; padding-top: 5px;">
-                                **Additional Information:**<br>
-                                <span style="font-size: 10px;">Insurance: Yes | Signature Required: No | Special Instructions: Leave at the front desk.</span>
+                                <strong>Additional Information:</strong><br>
+                                <span style="font-size: 10px;">{{additional_info}}</span>
                             </td>
                         </tr>
                     </table>
@@ -240,11 +239,11 @@
                         <tr>
                             <td style="width: 50%;" class="tracking-number-text">
                                 Tracking Number : 
-                                <span>9400 1112 3456 7890 1234 56</span>
+                                <span>{{tracking_no}}</span>
                             </td>
                             <td style="width: 50%; border-right: none;" class="barcode-area">
-                                <img src="[URL_TO_BARCODE_IMAGE]" alt="Barcode Placeholder">
-                                <div style="font-size: 10px; font-weight: bold;">2408119644726511</div>
+                                <img src="{{barcode_url}}" alt="Barcode">
+                                <div style="font-size: 10px; font-weight: bold;">{{tracking_no}}</div>
                             </td>
                         </tr>
                     </table>

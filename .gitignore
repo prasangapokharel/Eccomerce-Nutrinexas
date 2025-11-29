@@ -27,8 +27,10 @@ package-lock.json
 /storage/cache
 /storage/cache/**
 App/storage/cache/**
+App/storage/cache/
 /tmp
 /cache
+cache/
 *.cache
 
 # IDE files
@@ -79,6 +81,7 @@ ngrok
 !robots.txt
 *.dat
 *.bat
+login_attempts.dat
 get_ngrok_url.py
 clear_ad_click_logs.php
 .trae/

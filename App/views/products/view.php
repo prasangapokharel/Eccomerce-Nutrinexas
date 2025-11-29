@@ -191,97 +191,9 @@ if (!empty($reviews) && is_array($reviews)) {
 }
 
 ob_start();
+// Include comprehensive SEO meta tags with all structured data
+include __DIR__ . '/../seo/product-seo.php';
 ?>
-
-<!-- Essential SEO Meta Tags -->
-<meta name="title" content="<?= $seoTitle ?>">
-<meta name="description" content="<?= $seoDescription ?>">
-<meta name="keywords" content="<?= htmlspecialchars($productName . ', ' . $productCategory . ', supplements Nepal, buy online, NutriNexus', ENT_QUOTES, 'UTF-8') ?>">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="<?= $absoluteProductUrl ?>">
-
-<!-- Open Graph Meta Tags (Facebook, LinkedIn, etc.) -->
-<meta property="og:type" content="product">
-<meta property="og:title" content="<?= $seoTitle ?>">
-<meta property="og:description" content="<?= $seoDescription ?>">
-<meta property="og:url" content="<?= $absoluteProductUrl ?>">
-<meta property="og:image" content="<?= htmlspecialchars($mainImageUrl, ENT_QUOTES, 'UTF-8') ?>">
-<meta property="og:image:secure_url" content="<?= htmlspecialchars(str_replace('http://', 'https://', $mainImageUrl), ENT_QUOTES, 'UTF-8') ?>">
-<meta property="og:image:type" content="image/jpeg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:site_name" content="NutriNexus Nepal">
-<meta property="og:locale" content="en_US">
-
-<!-- Product-specific Open Graph Tags -->
-<meta property="product:price:amount" content="<?= number_format($finalPrice, 2, '.', '') ?>">
-<meta property="product:price:currency" content="<?= $productCurrency ?>">
-<meta property="product:availability" content="<?= $productAvailability ?>">
-<?php if (!empty($product['brand'])): ?>
-<meta property="product:brand" content="<?= htmlspecialchars($product['brand'], ENT_QUOTES, 'UTF-8') ?>">
-<?php endif; ?>
-<?php if (!empty($productSku)): ?>
-<meta property="product:retailer_item_id" content="<?= htmlspecialchars($productSku, ENT_QUOTES, 'UTF-8') ?>">
-<?php endif; ?>
-
-<!-- Twitter Card Meta Tags -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="<?= $seoTitle ?>">
-<meta name="twitter:description" content="<?= $seoDescription ?>">
-<meta name="twitter:image" content="<?= htmlspecialchars($mainImageUrl, ENT_QUOTES, 'UTF-8') ?>">
-<meta name="twitter:image:alt" content="<?= htmlspecialchars($productName, ENT_QUOTES, 'UTF-8') ?>">
-<meta name="twitter:site" content="@nutrinexus">
-<meta name="twitter:creator" content="@nutrinexus">
-
-<!-- Enhanced Product Schema (JSON-LD) -->
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Product",
-    "name": <?= json_encode($productName, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-    "description": <?= json_encode($seoDescription, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-    "image": <?= json_encode(count($additionalImages) > 1 ? $additionalImages : [$mainImageUrl], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-    "sku": <?= json_encode($productSku, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-    "brand": {
-        "@type": "Brand",
-        "name": <?= json_encode($productBrand, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
-    },
-    "offers": {
-        "@type": "Offer",
-        "price": "<?= number_format($finalPrice, 2, '.', '') ?>",
-        "priceCurrency": "<?= $productCurrency ?>",
-        "availability": "https://schema.org/<?= $productAvailability ?>",
-        "url": <?= json_encode($absoluteProductUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-        "priceValidUntil": "<?= date('Y-m-d', strtotime('+1 year')) ?>",
-        "itemCondition": "https://schema.org/NewCondition"
-        <?php if ($finalPrice < $originalPrice): ?>,
-        "priceSpecification": {
-            "@type": "UnitPriceSpecification",
-            "price": "<?= number_format($finalPrice, 2, '.', '') ?>",
-            "priceCurrency": "<?= $productCurrency ?>",
-            "referenceQuantity": {
-                "@type": "QuantitativeValue",
-                "value": 1
-            }
-        }
-        <?php endif; ?>
-    },
-    "category": <?= json_encode($productCategory, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-    <?php if (!empty($averageRating) && $averageRating > 0): ?>
-    "aggregateRating": {
-        "@type": "AggregateRating",
-        "ratingValue": "<?= number_format($averageRating, 1) ?>",
-        "reviewCount": "<?= (int)($reviewCount ?? 0) ?>",
-        "bestRating": "5",
-        "worstRating": "1"
-    },
-    <?php endif; ?>
-    <?php if (!empty($reviewSchema)): ?>
-    "review": <?= json_encode($reviewSchema, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>,
-    <?php endif; ?>
-    "url": <?= json_encode($absoluteProductUrl, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES) ?>
-}
-</script>
 
 <div class="bg-gray-50 min-h-screen pb-20">
     <!-- Breadcrumb - Desktop Only -->
@@ -304,36 +216,92 @@ ob_start();
         <div class="bg-white rounded-2xl shadow-sm overflow-hidden">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8">
                 
-                <!-- Product Image -->
+                <!-- Product Image/Video -->
                 <div class="p-4 lg:p-6">
-                    <!-- Main Product Image -->
+                    <!-- Main Product Media -->
                     <div class="aspect-square overflow-hidden rounded-2xl bg-gray-50 shadow-sm mb-4">
-                        <img id="main-product-image" 
-                             src="<?= htmlspecialchars($mainImageUrl) ?>" 
-                             alt="<?= $productName ?>" 
-                             class="w-full h-full object-contain transition-all duration-300 hover:scale-105"
-                             onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                        <?php 
+                        $isVideo = \App\Helpers\MediaHelper::isVideo($mainImageUrl);
+                        if ($isVideo): 
+                        ?>
+                            <video id="main-product-media" 
+                                   src="<?= htmlspecialchars($mainImageUrl) ?>" 
+                                   class="w-full h-full object-contain"
+                                   controls
+                                   preload="metadata"
+                                   poster="<?= \App\Core\View::asset('images/products/default.jpg') ?>">
+                                Your browser does not support the video tag.
+                            </video>
+                        <?php else: ?>
+                            <img id="main-product-media" 
+                                 src="<?= htmlspecialchars($mainImageUrl) ?>" 
+                                 alt="<?= $productName ?>" 
+                                 class="w-full h-full object-contain transition-all duration-300 hover:scale-105"
+                                 onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                        <?php endif; ?>
                     </div>
 
                     <!-- Thumbnail Gallery -->
                     <?php 
-                    // Get additional images from product_images table
-                    $additionalImages = [];
+                    // Get all images/videos from product_images table including main image
+                    $additionalMedia = [];
                     if (isset($product['id'])) {
                         $productImageModel = new \App\Models\ProductImage();
-                        $additionalImages = $productImageModel->getByProductId($product['id']);
+                        $allMedia = $productImageModel->getByProductId($product['id']);
+                        
+                        // Process all media URLs to ensure they're properly formatted
+                        foreach ($allMedia as $media) {
+                            $mediaUrl = $media['image_url'] ?? '';
+                            if (!empty($mediaUrl)) {
+                                // If already absolute URL (http/https), use as-is
+                                if (filter_var($mediaUrl, FILTER_VALIDATE_URL)) {
+                                    $media['image_url'] = $mediaUrl;
+                                } else {
+                                    // Convert relative to absolute URL
+                                    $baseUrl = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'];
+                                    if (strpos($mediaUrl, '/') === 0) {
+                                        $media['image_url'] = $baseUrl . $mediaUrl;
+                                    } else {
+                                        $media['image_url'] = ASSETS_URL . '/uploads/images/' . $mediaUrl;
+                                    }
+                                }
+                                $additionalMedia[] = $media;
+                            }
+                        }
+                        
+                        // If no media found, add main image as thumbnail
+                        if (empty($additionalMedia) && !empty($mainImageUrl)) {
+                            $additionalMedia[] = [
+                                'image_url' => $mainImageUrl,
+                                'is_primary' => 1
+                            ];
+                        }
                     }
                     ?>
-                    <?php if (!empty($additionalImages) && count($additionalImages) > 1): ?>
+                    <?php if (!empty($additionalMedia)): ?>
                     <div class="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                        <?php foreach (array_slice($additionalImages, 0, 4) as $index => $image): ?>
-                            <?php $thumbnailUrl = filter_var($image['image_url'], FILTER_VALIDATE_URL) ? $image['image_url'] : ASSETS_URL . '/uploads/images/' . $image['image_url']; ?>
-                            <div class="aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-200 <?= $image['is_primary'] ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300' ?> cursor-pointer product-thumbnail" 
-                                 data-image-url="<?= htmlspecialchars($thumbnailUrl) ?>">
-                                <img src="<?= htmlspecialchars($thumbnailUrl) ?>" 
-                                     alt="<?= $productName ?> - Image <?= $index + 1 ?>" 
-                                     class="w-full h-full object-cover transition-all duration-200 hover:scale-110"
-                                     onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                        <?php foreach (array_slice($additionalMedia, 0, 4) as $index => $media): ?>
+                            <?php 
+                            $thumbnailUrl = $media['image_url'] ?? '';
+                            $isThumbnailVideo = \App\Helpers\MediaHelper::isVideo($thumbnailUrl);
+                            $isPrimary = !empty($media['is_primary']);
+                            ?>
+                            <div class="aspect-square rounded-2xl overflow-hidden border-2 transition-all duration-200 <?= $isPrimary ? 'border-primary shadow-md' : 'border-gray-200 hover:border-gray-300' ?> cursor-pointer product-thumbnail relative" 
+                                 data-image-url="<?= htmlspecialchars($thumbnailUrl) ?>"
+                                 data-media-type="<?= $isThumbnailVideo ? 'video' : 'image' ?>">
+                                <?php if ($isThumbnailVideo): ?>
+                                    <video src="<?= htmlspecialchars($thumbnailUrl) ?>" 
+                                           class="w-full h-full object-cover transition-all duration-200 hover:scale-110" 
+                                           preload="metadata" muted></video>
+                                    <div class="absolute inset-0 flex items-center justify-center bg-black/30 text-white text-xl">
+                                        <i class="fas fa-play"></i>
+                                    </div>
+                                <?php else: ?>
+                                    <img src="<?= htmlspecialchars($thumbnailUrl) ?>" 
+                                         alt="<?= $productName ?> - Image <?= $index + 1 ?>" 
+                                         class="w-full h-full object-cover transition-all duration-200 hover:scale-110"
+                                         onerror="this.src='<?= ASSETS_URL ?>/images/products/default.jpg'">
+                                <?php endif; ?>
                             </div>
                         <?php endforeach; ?>
                     </div>
@@ -393,47 +361,22 @@ ob_start();
                     <!-- Price -->
                     <div class="mb-4">
                         <?php 
-                        // Check for sale price (from site-wide sale or manual sale_price)
-                        $hasSale = false;
-                        $salePrice = null;
-                        $originalPrice = floatval($product['price'] ?? 0);
-                        
-                        // Check if product is on site-wide sale
-                        if (!empty($product['is_on_sale']) && 
-                            !empty($product['sale_start_date']) && 
-                            !empty($product['sale_end_date']) &&
-                            !empty($product['sale_discount_percent']) &&
-                            $product['sale_discount_percent'] > 0) {
-                            $now = date('Y-m-d H:i:s');
-                            if ($product['sale_start_date'] <= $now && $product['sale_end_date'] >= $now) {
-                                $discountPercent = floatval($product['sale_discount_percent']);
-                                $salePrice = $originalPrice - (($originalPrice * $discountPercent) / 100);
-                                $hasSale = true;
-                            }
-                        }
-                        
-                        // Check manual sale_price
-                        if (!empty($product['sale_price']) && $product['sale_price'] < $originalPrice) {
-                            if (!$hasSale || $product['sale_price'] < $salePrice) {
-                                $salePrice = floatval($product['sale_price']);
-                                $hasSale = true;
-                            }
-                        }
+                        // Use pricingHelper for consistent sale calculation
+                        $pricing = $pricingHelper($product);
+                        $hasSale = $pricing['hasSale'];
+                        $currentPrice = $pricing['current'];
+                        $originalPrice = $pricing['original'];
+                        $discountPercent = $pricing['discountPercent'];
                         ?>
                         
-                        <?php if (!$isScheduled && $hasSale && $salePrice < $originalPrice): ?>
+                        <?php if (!$isScheduled && $hasSale && $currentPrice < $originalPrice): ?>
                             <div class="flex items-baseline gap-2 flex-wrap">
-                                <span class="text-xl font-bold text-primary"><?= CurrencyHelper::format($salePrice) ?></span>
+                                <span class="text-xl font-bold text-primary"><?= CurrencyHelper::format($currentPrice) ?></span>
                                 <span class="text-sm text-gray-500 line-through"><?= CurrencyHelper::format($originalPrice) ?></span>
                                 <span class="px-2 py-1 bg-red-100 text-red-700 text-xs font-medium rounded">
-                                    <?= round((($originalPrice - $salePrice) / $originalPrice) * 100) ?>% OFF
+                                    <?= $discountPercent ?>% OFF
                                 </span>
                             </div>
-                            <?php if (!empty($product['sale_end_date'])): ?>
-                                <div class="text-xs text-gray-600 mt-1">
-                                    Sale ends: <?= date('M j, Y', strtotime($product['sale_end_date'])) ?>
-                                </div>
-                            <?php endif; ?>
                         <?php elseif (!$isScheduled): ?>
                             <span class="text-xl font-bold text-primary"><?= CurrencyHelper::format($originalPrice) ?></span>
                         <?php endif; ?>
@@ -1577,26 +1520,71 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Image thumbnail functionality
+    // Image/Video thumbnail functionality
     const thumbnails = document.querySelectorAll('.product-thumbnail');
-    const mainImage = document.getElementById('main-product-image');
     
-    thumbnails.forEach(thumbnail => {
-        thumbnail.addEventListener('click', function() {
-            const imageUrl = this.getAttribute('data-image-url');
-            if (mainImage && imageUrl) {
-                mainImage.src = imageUrl;
+    if (thumbnails.length > 0) {
+        thumbnails.forEach(thumbnail => {
+            thumbnail.addEventListener('click', function() {
+                const mediaUrl = this.getAttribute('data-image-url');
+                const mediaType = this.getAttribute('data-media-type') || 'image';
                 
-                // Update active thumbnail
-                thumbnails.forEach(t => {
-                    t.classList.remove('border-primary', 'shadow-md');
-                    t.classList.add('border-gray-200');
-                });
-                this.classList.remove('border-gray-200');
-                this.classList.add('border-primary', 'shadow-md');
-            }
+                if (mediaUrl) {
+                    // Update main media (image or video)
+                    const mainMedia = document.getElementById('main-product-media');
+                    if (mainMedia) {
+                        if (mediaType === 'video') {
+                            // If main media is image, replace with video
+                            if (mainMedia.tagName === 'IMG') {
+                                const video = document.createElement('video');
+                                video.id = 'main-product-media';
+                                video.src = mediaUrl;
+                                video.className = 'w-full h-full object-contain';
+                                video.controls = true;
+                                video.autoplay = true;
+                                video.muted = true;
+                                video.loop = true;
+                                video.playsInline = true;
+                                video.preload = 'metadata';
+                                video.poster = '<?= \App\Core\View::asset('images/products/default.jpg') ?>';
+                                video.onerror = function() {
+                                    this.src = '<?= ASSETS_URL ?>/images/products/default.jpg';
+                                };
+                                mainMedia.parentNode.replaceChild(video, mainMedia);
+                            } else {
+                                // Main media is already video, just update src
+                                mainMedia.src = mediaUrl;
+                            }
+                        } else {
+                            // If main media is video, replace with image
+                            if (mainMedia.tagName === 'VIDEO') {
+                                const img = document.createElement('img');
+                                img.id = 'main-product-media';
+                                img.src = mediaUrl;
+                                img.alt = '<?= htmlspecialchars($productName) ?>';
+                                img.className = 'w-full h-full object-contain transition-all duration-300 hover:scale-105';
+                                img.onerror = function() {
+                                    this.src = '<?= ASSETS_URL ?>/images/products/default.jpg';
+                                };
+                                mainMedia.parentNode.replaceChild(img, mainMedia);
+                            } else {
+                                // Main media is already image, just update src
+                                mainMedia.src = mediaUrl;
+                            }
+                        }
+                    }
+                    
+                    // Update active thumbnail
+                    thumbnails.forEach(t => {
+                        t.classList.remove('border-primary', 'shadow-md');
+                        t.classList.add('border-gray-200');
+                    });
+                    this.classList.remove('border-gray-200');
+                    this.classList.add('border-primary', 'shadow-md');
+                }
+            });
         });
-    });
+    }
     
     // Add to cart functionality
     document.querySelectorAll('.add-to-cart').forEach(button => {
@@ -1681,11 +1669,18 @@ document.addEventListener('DOMContentLoaded', function() {
                         notyf.success(data.message || 'Product added to cart!');
                     }
                     
-                    // Update cart count
-                    const cartCountElements = document.querySelectorAll('.cart-count');
-                    cartCountElements.forEach(element => {
-                        element.textContent = data.cart_count || 0;
-                    });
+                    // Update cart count via CartNotifier
+                    if (typeof CartNotifier !== 'undefined') {
+                        CartNotifier.setCount(data.cart_count || 0);
+                    } else {
+                        const cartCountElements = document.querySelectorAll('.cart-count');
+                        cartCountElements.forEach(element => {
+                            element.textContent = data.cart_count || 0;
+                        });
+                    }
+                    
+                    // Trigger cart:added event
+                    document.dispatchEvent(new CustomEvent('cart:added', { detail: { count: data.cart_count || 0 } }));
                     
                     // Show green tick icon instead of redirecting
                     setTimeout(() => {
@@ -1898,15 +1893,51 @@ document.addEventListener('DOMContentLoaded', function() {
     function openShareDrawer() {
         const drawer = document.getElementById('share-drawer');
         const overlay = document.getElementById('share-drawer-overlay');
-        const drawerImage = document.getElementById('share-drawer-image');
-        if (drawerImage && productImageShare) {
-            drawerImage.src = productImageShare.value;
-            drawerImage.alt = productNameShare.value || drawerImage.alt;
+        const mediaContainer = document.getElementById('share-drawer-media-container');
+        if (mediaContainer && productImageShare) {
+            const mediaUrl = productImageShare.value;
+            const isVideo = /\.(mp4|webm|ogg|mov|avi)$/i.test(mediaUrl);
+            
+            // Clear container
+            mediaContainer.innerHTML = '';
+            
+            if (isVideo) {
+                const video = document.createElement('video');
+                video.id = 'share-drawer-media';
+                video.src = mediaUrl;
+                video.className = 'w-full h-full object-contain';
+                video.controls = true;
+                mediaContainer.appendChild(video);
+            } else {
+                const img = document.createElement('img');
+                img.id = 'share-drawer-media';
+                img.src = mediaUrl;
+                img.alt = productNameShare.value || 'Product';
+                img.className = 'w-full h-full object-contain';
+                mediaContainer.appendChild(img);
+            }
         }
         if (drawer && overlay) {
             drawer.classList.remove('translate-y-full');
             overlay.classList.remove('hidden');
             document.body.style.overflow = 'hidden';
+        }
+    }
+    
+    function changeMainMedia(url, type) {
+        const mainMedia = document.getElementById('main-product-media');
+        const mediaContainer = mainMedia?.parentElement;
+        if (!mediaContainer) return;
+        
+        if (type === 'video') {
+            mediaContainer.innerHTML = '<video id="main-product-media" src="' + url + '" class="w-full h-full object-contain" controls preload="metadata" poster="<?= \App\Core\View::asset('images/products/default.jpg') ?>">Your browser does not support the video tag.</video>';
+        } else {
+            mediaContainer.innerHTML = '<img id="main-product-media" src="' + url + '" alt="<?= htmlspecialchars($productName) ?>" class="w-full h-full object-contain transition-all duration-300 hover:scale-105" onerror="this.src=\'<?= ASSETS_URL ?>/images/products/default.jpg\'">';
+        }
+        
+        // Update share drawer media URL
+        if (productImageShare) {
+            productImageShare.value = url;
         }
     }
     
@@ -2314,10 +2345,16 @@ document.addEventListener('DOMContentLoaded', function() {
             </button>
         </div>
         
-        <!-- Product Image -->
+        <!-- Product Media -->
         <div class="mb-6">
             <div class="aspect-square overflow-hidden rounded-2xl bg-gray-50">
-                <img id="share-drawer-image" src="<?= htmlspecialchars($mainImageUrl) ?>" alt="<?= htmlspecialchars($productName) ?>" class="w-full h-full object-contain">
+                <div id="share-drawer-media-container">
+                    <?php if (\App\Helpers\MediaHelper::isVideo($mainImageUrl)): ?>
+                        <video id="share-drawer-media" src="<?= htmlspecialchars($mainImageUrl) ?>" class="w-full h-full object-contain" controls></video>
+                    <?php else: ?>
+                        <img id="share-drawer-media" src="<?= htmlspecialchars($mainImageUrl) ?>" alt="<?= htmlspecialchars($productName) ?>" class="w-full h-full object-contain">
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
         

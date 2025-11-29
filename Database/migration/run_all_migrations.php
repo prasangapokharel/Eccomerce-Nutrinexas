@@ -170,6 +170,10 @@ try {
     echo "<span class='info'>[4/4] Running other migrations...</span>\n";
 
     $migrationFiles = [
+        'create_site_wide_sales_table.sql',
+        'add_sale_column_to_products.sql',
+        'add_sale_percent_to_site_wide_sales.sql',
+        'fix_site_wide_sales_discount_percent.sql',
         'add_subtype_column.sql',
         'add_is_digital_and_colors_columns.sql',
         'add_auth0_id_column.sql',

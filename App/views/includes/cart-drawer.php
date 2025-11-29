@@ -7,7 +7,7 @@
     <div class="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-xl transform transition-transform duration-300 ease-in-out translate-x-full" id="cart-drawer-content">
         <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-900">Shopping Cart</h3>
+            <h3 class="text-lg font-semibold text-foreground">Shopping Cart</h3>
             <button onclick="closeCartDrawer()" class="p-2 hover:bg-gray-100 rounded-full transition-colors">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

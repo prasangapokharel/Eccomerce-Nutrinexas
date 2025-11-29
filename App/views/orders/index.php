@@ -32,7 +32,7 @@
             <?php else: ?>
                 <div class="flex flex-wrap justify-between items-center gap-6">
                     <div class="max-w-96">
-                        <h2 class="text-slate-900 text-2xl font-bold mb-3">Order History</h2>
+                        <h2 class="text-foreground text-2xl font-bold mb-3">Order History</h2>
                         <p class="text-base text-slate-600">View and manage your past orders</p>
                     </div>
                     <div class="w-full sm:w-auto">
@@ -282,10 +282,10 @@ document.addEventListener('DOMContentLoaded', function() {
     function setActiveButton(activeBtn) {
         filterButtons.forEach(btn => {
             btn.classList.add('btn-outline');
-            btn.classList.remove('active');
+            btn.classList.remove('active', 'btn-primary');
         });
         activeBtn.classList.remove('btn-outline');
-        activeBtn.classList.add('active');
+        activeBtn.classList.add('active', 'btn-primary');
     }
 
     filterButtons.forEach(btn => {
@@ -312,6 +312,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+
+
 
 <?php $content = ob_get_clean(); ?>
 <?php include dirname(dirname(__FILE__)) . '/layouts/main.php'; ?>

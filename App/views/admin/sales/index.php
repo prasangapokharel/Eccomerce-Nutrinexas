@@ -24,7 +24,7 @@
                         Active Sale: <?= htmlspecialchars($activeSale['sale_name']) ?>
                     </h3>
                     <p class="mt-1 text-sm text-green-700">
-                        <?= number_format($activeSale['discount_percent'], 0) ?>% OFF - 
+                        <?= number_format($activeSale['sale_percent'] ?? $activeSale['discount_percent'] ?? 0, 0) ?>% OFF - 
                         Ends: <?= date('M j, Y g:i A', strtotime($activeSale['end_date'])) ?>
                     </p>
                 </div>
@@ -72,7 +72,7 @@
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span class="px-2 py-1 bg-red-100 text-red-800 text-sm font-medium rounded">
-                                        <?= number_format($sale['discount_percent'], 0) ?>% OFF
+                                        <?= number_format($sale['sale_percent'] ?? $sale['discount_percent'] ?? 0, 0) ?>% OFF
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
@@ -84,10 +84,12 @@
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <?php
                                     $now = date('Y-m-d H:i:s');
-                                    $isActive = $sale['is_active'] && 
+                                    $isActive = !empty($sale['is_active']) && 
+                                               !empty($sale['start_date']) &&
+                                               !empty($sale['end_date']) &&
                                                $sale['start_date'] <= $now && 
                                                $sale['end_date'] >= $now;
-                                    $isExpired = $sale['end_date'] < $now;
+                                    $isExpired = !empty($sale['end_date']) && $sale['end_date'] < $now;
                                     ?>
                                     <span class="px-2 py-1 rounded-full text-xs font-medium <?= 
                                         $isActive ? 'bg-green-100 text-green-800' : 

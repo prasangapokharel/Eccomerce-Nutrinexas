@@ -2,7 +2,7 @@
         <div class="flex flex-wrap justify-between gap-10">
             <div class="max-w-md">
                 <a href='<?= URLROOT ?>'>
-<img src="https://qkjsnpejxzujoaktpgpq.supabase.co/storage/v1/object/public/nutrinexas/logo.svg" alt="Nutri Nexas" class='w-16 h-16 sm:w-20 sm:h-20 rounded-full' />
+                    <img src="<?= \App\Core\View::asset('images/logo/logo.png') ?>" alt="Nutri Nexas" class='w-16 h-16 sm:w-20 sm:h-20 rounded-full' onerror="this.src='<?= \App\Core\View::asset('images/products/default.jpg') ?>'" />
                 </a>
                 <div class="mt-6">
                     <p class="text-gray-300 leading-relaxed text-sm">Nutri Nexas is your trusted source for premium quality supplements. We offer a wide range of products to support your health and fitness journey, from protein powders to vitamins and everything in between.</p>

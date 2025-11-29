@@ -1,0 +1,110 @@
+/**
+ * Image Performance & Caching Optimizations
+ * Prevents reloading images that are already loaded
+ */
+
+/* Image caching - prevent reloading */
+img {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: optimize-contrast;
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+    will-change: auto;
+}
+
+/* Cache loaded images */
+img[src] {
+    content-visibility: auto;
+}
+
+/* Prevent layout shift */
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Lazy loading optimization */
+img[loading="lazy"] {
+    content-visibility: auto;
+    contain-intrinsic-size: 1px 1000px;
+}
+
+/* Preload critical images */
+img[loading="eager"] {
+    fetchpriority: high;
+}
+
+/* Slider images - prevent reload */
+.app-hero__media img,
+.app-hero__media-link img {
+    will-change: transform;
+    -webkit-transform: translateZ(0);
+    transform: translateZ(0);
+}
+
+/* Product card images */
+.product-card img {
+    will-change: transform;
+    transition: transform 0.3s ease;
+}
+
+/* Banner images */
+.banner-image {
+    will-change: opacity;
+}
+
+/* Prevent image flicker on reload */
+img[data-loaded="true"] {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
+/* Image container optimization */
+.image-container {
+    position: relative;
+    overflow: hidden;
+    background-color: #f3f4f6;
+}
+
+.image-container img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Skeleton loader for images */
+.image-skeleton {
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s ease-in-out infinite;
+}
+
+@keyframes loading {
+    0% {
+        background-position: 200% 0;
+    }
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive image optimization */
+@media (max-width: 768px) {
+    img {
+        image-rendering: -webkit-optimize-contrast;
+    }
+}
+
+/* Print optimization */
+@media print {
+    img {
+        page-break-inside: avoid;
+    }
+}
+

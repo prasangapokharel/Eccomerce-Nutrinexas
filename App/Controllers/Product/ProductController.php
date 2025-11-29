@@ -655,8 +655,10 @@ class ProductController extends Controller
                 return;
             }
             
-            // Apply sale price calculation if product is on sale
-            $product = $this->applyProductSalePrice($product);
+            // Ensure sale column is included
+            if (!isset($product['sale'])) {
+                $product['sale'] = 'off';
+            }
 
             $primaryImage = $this->productImageModel->getPrimaryImage($product['id']);
             $product['image_url'] = $this->getProductImageUrl($product, $primaryImage);
@@ -1268,36 +1270,7 @@ class ProductController extends Controller
          * @param int $limit
          * @return array
          */
-        /**
-         * Apply sale price to product
-         */
-        private function applyProductSalePrice($product)
-        {
-            if (empty($product)) return $product;
-            
-            $now = date('Y-m-d H:i:s');
-            $originalPrice = floatval($product['price'] ?? 0);
-            
-            // Check if product is on site-wide sale
-            if (!empty($product['is_on_sale']) && 
-                !empty($product['sale_start_date']) && 
-                !empty($product['sale_end_date']) &&
-                !empty($product['sale_discount_percent']) &&
-                $product['sale_discount_percent'] > 0) {
-                
-                if ($product['sale_start_date'] <= $now && $product['sale_end_date'] >= $now) {
-                    $discountPercent = floatval($product['sale_discount_percent']);
-                    $calculatedSalePrice = $originalPrice - (($originalPrice * $discountPercent) / 100);
-                    
-                    // Use calculated sale price if no manual sale_price set, or if calculated is better
-                    if (empty($product['sale_price']) || $calculatedSalePrice < floatval($product['sale_price'])) {
-                        $product['sale_price'] = $calculatedSalePrice;
-                    }
-                }
-            }
-            
-            return $product;
-        }
+        // Sale price calculation is now handled by SaleHelper in views
 
         private function getLocalRecommendations($productId, $limit = 4)
         {

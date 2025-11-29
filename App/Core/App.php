@@ -245,6 +245,7 @@ class App
         
         // Cart routes
         $this->router->get('cart', 'Cart\CartController@index');
+        $this->router->get('cart/count', 'Cart\CartController@count');
         $this->router->post('cart/add', 'Cart\CartController@add');
         $this->router->post('cart/update', 'Cart\CartController@update');
         $this->router->get('cart/remove/{id}', 'Cart\CartController@remove');
@@ -349,14 +350,15 @@ class App
         
         // Admin routes
         $this->router->get('admin', 'Admin\AdminController@index');
-        $this->router->get('admin/products', 'Admin\AdminController@products');
-        $this->router->post('admin/products/updateStock', 'Admin\AdminController@updateStock');
-        $this->router->get('admin/addProduct', 'Admin\AdminController@addProduct');
-        $this->router->post('admin/addProduct', 'Admin\AdminController@addProduct');
-        $this->router->get('admin/editProduct/{id}', 'Admin\AdminController@editProduct');
-        $this->router->post('admin/editProduct/{id}', 'Admin\AdminController@editProduct');
-        $this->router->post('admin/updateProduct/{id}', 'Admin\AdminController@updateProduct');
-        $this->router->post('admin/deleteProduct/{id}', 'Admin\AdminController@deleteProduct');
+        // Admin Product routes - Using AdminProductController
+        $this->router->get('admin/products', 'Admin\AdminProductController@index');
+        $this->router->post('admin/products/updateStock', 'Admin\AdminProductController@updateStock');
+        $this->router->get('admin/addProduct', 'Admin\AdminProductController@create');
+        $this->router->post('admin/addProduct', 'Admin\AdminProductController@create');
+        $this->router->get('admin/editProduct/{id}', 'Admin\AdminProductController@edit');
+        $this->router->post('admin/editProduct/{id}', 'Admin\AdminProductController@update');
+        $this->router->post('admin/updateProduct/{id}', 'Admin\AdminProductController@update');
+        $this->router->post('admin/deleteProduct/{id}', 'Admin\AdminProductController@delete');
         $this->router->get('admin/orders', 'Admin\AdminController@orders');
         // Admin: Create Order page
         $this->router->get('admin/orders/create', 'Admin\AdminController@createOrder');
@@ -533,8 +535,8 @@ class App
         $this->router->get('admin/withdrawal/user/{id}', 'Withdraw\WithdrawController@userWithdrawals');
         
         // Admin Product Image Management routes
-        $this->router->post('admin/deleteProductImage/{id}', 'Admin\AdminController@deleteProductImage');
-        $this->router->post('admin/setPrimaryImage/{id}', 'Admin\AdminController@setPrimaryImage');
+        $this->router->post('admin/deleteProductImage/{id}', 'Admin\AdminProductController@deleteImage');
+        $this->router->post('admin/setPrimaryImage/{id}', 'Admin\AdminProductController@setPrimaryImage');
         
         // Admin Coupon Management routes
         $this->router->get('admin/coupons', 'Admin\AdminController@coupons');
@@ -653,7 +655,7 @@ class App
         $this->router->get('admin/settings/download-backup', 'Admin\AdminSettingController@downloadBackup');
         $this->router->get('admin/settings/export-db-xls', 'Admin\AdminSettingController@exportDbXls');
         $this->router->get('admin/analytics', 'Admin\AdminController@analytics');
-        $this->router->get('admin/reports/best-selling', 'Admin\AdminController@bestSellingProducts');
+        $this->router->get('admin/reports/best-selling', 'Admin\AdminProductController@bestSelling');
         $this->router->get('admin/reports/low-stock', 'Admin\AdminController@lowStockAlerts');
         $this->router->get('admin/reports', 'Admin\AdminController@reports');
         $this->router->get('admin/notifications', 'Admin\AdminController@notifications');
@@ -665,7 +667,8 @@ class App
         
         // Bulk operations routes
         $this->router->post('admin/orders/bulkUpdate', 'Admin\AdminController@bulkUpdateOrders');
-        $this->router->post('admin/products/bulkUpdate', 'Admin\AdminController@bulkUpdateProducts');
+        $this->router->post('admin/products/bulkUpdate', 'Admin\AdminProductController@bulkUpdate');
+        $this->router->post('admin/products/bulkDelete', 'Admin\AdminProductController@bulkDelete');
         $this->router->post('admin/users/bulkUpdate', 'Admin\AdminController@bulkUpdateUsers');
         $this->router->get('admin/editUser/{id}', 'Admin\AdminController@editUser');
         $this->router->post('admin/editUser/{id}', 'Admin\AdminController@updateUser');
@@ -673,9 +676,9 @@ class App
         
         // Export/Import routes
         $this->router->get('admin/export/orders', 'Admin\AdminController@exportOrders');
-        $this->router->get('admin/export/products', 'Admin\AdminController@exportProducts');
+        $this->router->get('admin/export/products', 'Admin\AdminProductController@export');
         $this->router->get('admin/export/users', 'Admin\AdminController@exportUsers');
-        $this->router->post('admin/import/products', 'Admin\AdminController@importProducts');
+        $this->router->post('admin/import/products', 'Admin\AdminProductController@import');
         
         // Additional order management routes
         $this->router->get('admin/orders/search', 'Admin\AdminController@searchOrders');

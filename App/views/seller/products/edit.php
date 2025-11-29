@@ -82,11 +82,26 @@
                     <div class="grid-col-span-2">
                         <label>Current Images</label>
                         <div class="grid grid-cols-4 gap-4">
-                            <?php foreach ($images as $image): ?>
+                            <?php foreach ($images as $image): 
+                                $isVideo = \App\Helpers\MediaHelper::isVideo($image['image_url']);
+                            ?>
                                 <div class="relative group" data-image-id="<?= (int)($image['id'] ?? 0) ?>">
-                                    <img src="<?= htmlspecialchars($image['image_url']) ?>" 
-                                         alt="Product Image"
-                                         style="width: 100%; height: 6rem; object-fit: cover; border-radius: 0.5rem; border: 1px solid var(--gray-200);">
+                                    <?php if ($isVideo): ?>
+                                        <video src="<?= htmlspecialchars($image['image_url']) ?>" 
+                                               style="width: 100%; height: 6rem; object-fit: cover; border-radius: 0.5rem; border: 1px solid var(--gray-200);"
+                                               muted
+                                               preload="none">
+                                        </video>
+                                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                            <svg class="w-4 h-4 text-white drop-shadow-lg" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 5v14l11-7z"/>
+                                            </svg>
+                                        </div>
+                                    <?php else: ?>
+                                        <img src="<?= htmlspecialchars($image['image_url']) ?>" 
+                                             alt="Product Media"
+                                             style="width: 100%; height: 6rem; object-fit: cover; border-radius: 0.5rem; border: 1px solid var(--gray-200);">
+                                    <?php endif; ?>
                                     <?php if (!empty($image['is_primary'])): ?>
                                         <span class="badge badge-info absolute top-1 right-1">Primary</span>
                                     <?php endif; ?>
@@ -103,15 +118,15 @@
                 <?php endif; ?>
 
                 <div class="grid-col-span-2">
-                    <label for="image_url">Update Primary Image URL (CDN)</label>
-                    <input type="url" id="image_url" name="image_url" class="input native-input" placeholder="https://example.com/image.jpg">
-                    <p class="text-xs text-gray-600 mt-1">Enter new CDN URL to replace primary image</p>
+                    <label for="image_url">Update Primary Media URL (CDN)</label>
+                    <input type="url" id="image_url" name="image_url" class="input native-input" placeholder="https://example.com/image.jpg or https://example.com/video.mp4">
+                    <p class="text-xs text-gray-600 mt-1">Enter CDN URL for image (.jpg, .png, .webp) or video (.mp4, .webm, .ogg)</p>
                 </div>
 
                 <div class="grid-col-span-2">
-                    <label for="additional_images">Add Additional Image URLs</label>
-                    <textarea id="additional_images" name="additional_images" rows="3" class="input native-input" placeholder="https://example.com/image1.jpg, https://example.com/image2.jpg"></textarea>
-                    <p class="text-xs text-gray-600 mt-1">Enter multiple image URLs separated by commas</p>
+                    <label for="additional_images">Add Additional Media URLs</label>
+                    <textarea id="additional_images" name="additional_images" rows="3" class="input native-input" placeholder="https://example.com/image1.jpg, https://example.com/video.mp4"></textarea>
+                    <p class="text-xs text-gray-600 mt-1">Enter multiple image/video URLs separated by commas</p>
                 </div>
             </div>
 

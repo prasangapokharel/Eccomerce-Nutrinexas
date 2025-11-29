@@ -76,7 +76,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
                     <div class="w-8 h-8 bg-primary text-white rounded-full flex items-center justify-center text-sm font-semibold">
                         1
                     </div>
-                    <span class="text-sm font-medium text-gray-900">Checkout</span>
+                    <span class="text-sm font-medium text-foreground">Checkout</span>
                 </div>
                 <div class="flex items-center space-x-2">
                     <div class="w-8 h-8 bg-gray-200 text-gray-500 rounded-full flex items-center justify-center text-sm font-semibold">
@@ -104,7 +104,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
             <input type="hidden" name="_csrf_token" value="<?= \App\Helpers\SecurityHelper::generateCSRFToken() ?>">
             <!-- Shipping Information -->
             <div class="px-4 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Shipping Information</h2>
+                <h2 class="text-lg font-semibold text-foreground mb-4">Shipping Information</h2>
                 
                 <div class="space-y-4">
                     <div>
@@ -168,7 +168,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
             <!-- Optional Account Creation -->
             <?php if (!$userId): ?>
                 <div class="px-4 py-4 border-b border-gray-200">
-                    <h2 class="text-lg font-semibold text-gray-900 mb-4">Account Options</h2>
+                    <h2 class="text-lg font-semibold text-foreground mb-4">Account Options</h2>
                     
                     <div class="p-3 bg-primary/10 border border-primary/20 rounded-lg mb-4">
                         <label class="flex items-center cursor-pointer">
@@ -196,7 +196,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
 
             <!-- Payment Method -->
             <div class="px-4 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Payment Method</h2>
+                <h2 class="text-lg font-semibold text-foreground mb-4">Payment Method</h2>
                 
                 <div class="space-y-3">
                     <?php foreach ($paymentGateways as $gateway): ?>
@@ -368,7 +368,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
 
             <!-- Order Notes -->
             <div class="px-4 py-4 border-b border-gray-200">
-                <h2 class="text-lg font-semibold text-gray-900 mb-4">Order Notes (Optional)</h2>
+                <h2 class="text-lg font-semibold text-foreground mb-4">Order Notes (Optional)</h2>
                 <textarea name="order_notes" id="order_notes" rows="3"
                           class="w-full px-2 py-2 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:ring-2 focus:ring-primary focus:border-primary"
                           placeholder="Any special instructions for your order..."></textarea>
@@ -380,7 +380,7 @@ if (isset($_COOKIE['guest_postal_code'])) {
     <aside class="bg-gray-100 rounded-2xl p-6 flex-1 md:order-2 md:min-w-[360px] md:max-w-[420px] md:sticky md:top-6">
         <div class="space-y-6">
             <div>
-                <h2 class="text-lg font-semibold text-slate-900">Order Details</h2>
+                <h2 class="text-lg font-semibold text-foreground">Order Details</h2>
                 <p class="text-sm text-slate-500">Review items and totals before placing your order</p>
             </div>
 

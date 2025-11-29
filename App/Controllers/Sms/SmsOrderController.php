@@ -105,21 +105,38 @@ class SmsOrderController extends Controller
                 return false;
             }
 
+            $hasDigitalProducts = $this->db->query(
+                "SELECT COUNT(*) as count 
+                 FROM order_items oi
+                 INNER JOIN products p ON oi.product_id = p.id
+                 INNER JOIN digital_product dp ON p.id = dp.product_id
+                 WHERE oi.order_id = ?",
+                [$orderId]
+            )->single()['count'] ?? 0;
+
+            if ($hasDigitalProducts > 0) {
+                error_log("SmsOrderController: Skipping SMS for order #{$orderId} - contains digital products");
+                return false;
+            }
+
             $phoneNumber = $this->formatPhoneNumber($order['contact_no']);
-            $orderInvoice = $order['invoice'] ?? '#' . $orderId;
+            $orderInvoice = $order['invoice'] ?? 'NTX' . $orderId;
             $customerName = $order['customer_name'] ?? 'Customer';
 
+            // Only send SMS for: processing, shipped, delivered
+            $allowedStatuses = ['processing', 'shipped', 'delivered'];
+            if (!in_array($newStatus, $allowedStatuses)) {
+                error_log("SmsOrderController: Skipping SMS for status '{$newStatus}' (only sending for: processing, shipped, delivered)");
+                return false;
+            }
+
             $messages = [
-                'pending' => "Dear {$customerName}, your order {$orderInvoice} has been placed and is being processed. Thank you!",
-                'confirmed' => "Dear {$customerName}, your order {$orderInvoice} has been confirmed. We'll update you soon.",
-                'processing' => "Dear {$customerName}, your order {$orderInvoice} is now being processed.",
-                'shipped' => "Dear {$customerName}, your order {$orderInvoice} has been shipped and is on its way.",
-                'in_transit' => "Dear {$customerName}, your order {$orderInvoice} is in transit. Expected delivery soon.",
-                'delivered' => "Dear {$customerName}, your order {$orderInvoice} has been delivered successfully. Thank you for shopping with us!",
-                'cancelled' => "Dear {$customerName}, your order {$orderInvoice} has been cancelled. If you have any questions, please contact us."
+                'processing' => "Dear {$customerName}, your order #{$orderInvoice} is now being processed.",
+                'shipped' => "Dear {$customerName}, your order #{$orderInvoice} has been shipped and is on its way.",
+                'delivered' => "Dear {$customerName}, your order #{$orderInvoice} has been delivered successfully. Thank you for shopping with us!"
             ];
 
-            $message = $messages[$newStatus] ?? "Dear {$customerName}, your order {$orderInvoice} status has been updated to {$newStatus}.";
+            $message = $messages[$newStatus] ?? "Dear {$customerName}, your order #{$orderInvoice} status has been updated to {$newStatus}.";
 
             return $this->sendSms($phoneNumber, $message);
         } catch (Exception $e) {
@@ -291,6 +308,69 @@ class SmsOrderController extends Controller
             return $this->sendSmsInternal($formattedPhone, $message);
         } catch (Exception $e) {
             error_log("SmsOrderController: Error sending SMS: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Send payment confirmation SMS with digital product link if applicable
+     * 
+     * @param int $orderId Order ID
+     * @return bool
+     */
+    public function sendPaymentConfirmationSms($orderId)
+    {
+        if (!$this->isSmsEnabled()) {
+            error_log("SmsOrderController: SMS notifications are disabled for payment confirmation on order #{$orderId}");
+            return false;
+        }
+
+        try {
+            $order = $this->db->query(
+                "SELECT invoice, contact_no, customer_name, total_amount, payment_status FROM orders WHERE id = ?",
+                [$orderId]
+            )->single();
+
+            if (!$order || empty($order['contact_no'])) {
+                error_log("SmsOrderController: Order #{$orderId} not found or no contact number");
+                return false;
+            }
+
+            if ($order['payment_status'] !== 'paid') {
+                error_log("SmsOrderController: Order #{$orderId} payment status is not 'paid', skipping SMS");
+                return false;
+            }
+
+            $phoneNumber = $this->formatPhoneNumber($order['contact_no']);
+            $orderInvoice = $order['invoice'] ?? 'NTX' . $orderId;
+            $customerName = $order['customer_name'] ?? 'Customer';
+            $amount = number_format($order['total_amount'], 2);
+
+            // Check if order has digital products
+            $digitalProducts = $this->db->query(
+                "SELECT dp.file_download_link, p.product_name
+                 FROM order_items oi
+                 INNER JOIN products p ON oi.product_id = p.id
+                 INNER JOIN digital_product dp ON p.id = dp.product_id
+                 WHERE oi.order_id = ? AND p.is_digital = 1
+                 LIMIT 1",
+                [$orderId]
+            )->single();
+
+            $baseUrl = defined('BASE_URL') ? BASE_URL : (defined('URLROOT') ? URLROOT : 'http://localhost:8000');
+            $downloadUrl = $baseUrl . '/products/digitaldownload/' . $orderId;
+
+            // Build message
+            $message = "Dear {$customerName}, your order #{$orderInvoice} amount रु {$amount} is confirmed.";
+
+            // Add digital product download link if applicable
+            if ($digitalProducts) {
+                $message .= " Download: {$downloadUrl}";
+            }
+
+            return $this->sendSms($phoneNumber, $message);
+        } catch (Exception $e) {
+            error_log("SmsOrderController: Error sending payment confirmation SMS: " . $e->getMessage());
             return false;
         }
     }

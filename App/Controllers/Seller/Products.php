@@ -253,6 +253,9 @@ class Products extends BaseSellerController
                 // Handle digital product record
                 $this->handleDigitalProduct($productId, $data['is_digital'] ?? 0);
                 
+                // Generate sitemaps automatically for SEO
+                $this->generateSitemaps();
+                
                 // Clear product caches
                 $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');
                 $this->cache->delete('seller_product_count_' . $this->sellerId);
@@ -348,6 +351,9 @@ class Products extends BaseSellerController
                 
                 // Handle digital product record
                 $this->handleDigitalProduct($id, $data['is_digital'] ?? 0);
+                
+                // Generate sitemaps automatically for SEO
+                $this->generateSitemaps();
                 
                 // Clear product caches
                 $this->cache->deletePattern('seller_products_' . $this->sellerId . '_*');

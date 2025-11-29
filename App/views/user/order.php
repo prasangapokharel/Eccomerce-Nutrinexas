@@ -11,7 +11,7 @@
             <div class="p-6 border-b border-gray-200">
                 <div class="flex flex-col sm:flex-row sm:items-center justify-between">
                     <div>
-                        <h1 class="text-2xl font-bold text-gray-900">
+                        <h1 class="text-2xl font-bold text-foreground">
                             Order <?= $order['invoice'] ?>
                         </h1>
                         <p class="mt-1 text-sm text-gray-500">
@@ -41,7 +41,7 @@
             
             <!-- Order Details -->
             <div class="p-6 border-b border-gray-200">
-                <h2 class="text-lg font-medium text-gray-900 mb-4">Order Details</h2>
+                <h2 class="text-lg font-medium text-foreground mb-4">Order Details</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                         <h3 class="text-sm font-medium text-gray-700 mb-2">Customer Information</h3>
@@ -57,7 +57,7 @@
             
             <!-- Order Items -->
             <div class="p-6">
-                <h2 class="text-lg font-medium text-gray-900 mb-4">Order Items</h2>
+                <h2 class="text-lg font-medium text-foreground mb-4">Order Items</h2>
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">

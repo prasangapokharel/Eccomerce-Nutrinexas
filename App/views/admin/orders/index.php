@@ -120,31 +120,31 @@
                 <!-- Status Filter Pills -->
                 <div class="flex flex-wrap gap-2">
                     <a href="<?= \App\Core\View::url('admin/orders') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= !isset($status) ? 'bg-primary text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= !isset($status) ? 'btn-primary' : 'btn-outline' ?>">
                         All Orders
                     </a>
                     <a href="<?= \App\Core\View::url('admin/orders?status=pending') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($status) && $status === 'pending' ? 'bg-yellow-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($status) && $status === 'pending' ? 'btn-primary' : 'btn-outline' ?>">
                         Pending
                     </a>
                     <a href="<?= \App\Core\View::url('admin/orders?status=processing') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($status) && $status === 'processing' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($status) && $status === 'processing' ? 'btn-primary' : 'btn-outline' ?>">
                         Processing
                     </a>
                     <a href="<?= \App\Core\View::url('admin/orders?status=paid') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($status) && $status === 'paid' ? 'bg-green-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($status) && $status === 'paid' ? 'btn-primary' : 'btn-outline' ?>">
                         Paid
                     </a>
                     <a href="<?= \App\Core\View::url('admin/orders?status=shipped') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($status) && $status === 'shipped' ? 'bg-purple-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($status) && $status === 'shipped' ? 'btn-primary' : 'btn-outline' ?>">
                         Shipped
                     </a>
                     <a href="<?= \App\Core\View::url('admin/orders?status=delivered') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($status) && $status === 'delivered' ? 'bg-green-700 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($status) && $status === 'delivered' ? 'btn-primary' : 'btn-outline' ?>">
                         Delivered
                     </a>
                     <a href="<?= \App\Core\View::url('admin/orders?status=cancelled') ?>" 
-                       class="px-3 py-2 rounded-lg text-sm font-medium transition-colors <?= isset($status) && $status === 'cancelled' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' ?>">
+                       class="btn <?= isset($status) && $status === 'cancelled' ? 'btn-primary' : 'btn-outline' ?>">
                         Cancelled
                     </a>
                 </div>

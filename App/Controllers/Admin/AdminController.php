@@ -159,6 +159,7 @@ class AdminController extends Controller
 
     /**
      * Add product form
+     * @deprecated Use AdminProductController::create() instead
      */
     public function addProduct()
     {
@@ -359,6 +360,7 @@ class AdminController extends Controller
 
     /**
      * Edit product
+     * @deprecated Use AdminProductController::edit() instead
      */
     public function editProduct($id = null)
     {
